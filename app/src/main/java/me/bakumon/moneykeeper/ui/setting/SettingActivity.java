@@ -86,6 +86,8 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_money)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)));
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive())));
+
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_backup)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_setting_go_backup_content))));
@@ -106,25 +108,25 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                 case 1:
                     goTypeManage();
                     break;
-                case 3:
+                case 4:
                     showBackupDialog();
                     break;
-                case 4:
+                case 5:
                     showRestoreDialog();
                     break;
-                case 7:
+                case 8:
                     goAbout();
                     break;
-                case 8:
+                case 9:
                     market();
                     break;
-                case 9:
+                case 10:
                     alipay();
                     break;
-                case 10:
+                case 11:
                     goOpenSource();
                     break;
-                case 11:
+                case 12:
                     CustomTabsUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
                     break;
                 default:
@@ -134,7 +136,10 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         // Switch
         mAdapter.setOnItemChildClickListener((adapter12, view, position) -> {
             switch (position) {
-                case 5:
+                case 2:
+                    switchSuccessive();
+                    break;
+                case 6:
                     switchAutoBackup(position);
                     break;
                 default:
@@ -142,6 +147,11 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
             }
         });
         mBinding.rvSetting.setAdapter(mAdapter);
+    }
+
+    private void switchSuccessive() {
+        boolean oldIsConfigOpen = ConfigManager.isSuccessive();
+        ConfigManager.setIsSuccessive(!oldIsConfigOpen);
     }
 
     private void switchAutoBackup(int position) {

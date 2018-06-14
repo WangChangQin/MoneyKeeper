@@ -51,6 +51,7 @@ public class Router {
      * floo 传递数据使用的 key
      */
     public static class ExtraKey {
+        public static final String KEY_IS_SUCCESSIVE = "key_is_successive";
         public static final String KEY_RECORD_BEAN = "key_record_bean";
         public static final String KEY_TYPE = "key_type";
         public static final String KEY_TYPE_BEAN = "key_type_bean";

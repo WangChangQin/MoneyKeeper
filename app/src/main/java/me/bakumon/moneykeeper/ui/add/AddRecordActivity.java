@@ -64,6 +64,10 @@ public class AddRecordActivity extends BaseActivity {
     private int mCurrentType;
 
     private RecordWithType mRecord;
+    /**
+     * 连续记账
+     */
+    private boolean mIsSuccessive;
 
     @Override
     protected int getLayoutId() {
@@ -86,6 +90,7 @@ public class AddRecordActivity extends BaseActivity {
 
     private void initView() {
         mRecord = (RecordWithType) getIntent().getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN);
+        mIsSuccessive = getIntent().getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false);
 
         mBinding.titleBar.ibtClose.setBackgroundResource(R.drawable.ic_close);
         mBinding.titleBar.ibtClose.setOnClickListener(v -> finish());
@@ -98,7 +103,7 @@ public class AddRecordActivity extends BaseActivity {
 
         if (mRecord == null) {
             mCurrentType = RecordType.TYPE_OUTLAY;
-            mBinding.titleBar.setTitle(getString(R.string.text_add_record));
+            mBinding.titleBar.setTitle(getString(mIsSuccessive ? R.string.text_add_record_successive : R.string.text_add_record));
         } else {
             mCurrentType = mRecord.mRecordTypes.get(0).type;
             mBinding.titleBar.setTitle(getString(R.string.text_modify_record));
@@ -156,12 +161,12 @@ public class AddRecordActivity extends BaseActivity {
         mDisposable.add(mViewModel.insertRecord(record)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::finish,
+                .subscribe(this::insertRecordDone,
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
                                 ToastUtils.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（新增记录失败的时候）", throwable);
-                                finish();
+                                insertRecordDone();
                             } else {
                                 Log.e(TAG, "新增记录失败", throwable);
                                 mBinding.keyboard.setAffirmEnable(true);
@@ -169,6 +174,21 @@ public class AddRecordActivity extends BaseActivity {
                             }
                         }
                 ));
+    }
+
+    /**
+     * 新增记账记录完成
+     */
+    private void insertRecordDone() {
+        if (mIsSuccessive) {
+            // 继续记账，清空输入
+            mBinding.keyboard.setText("");
+            mBinding.edtRemark.setText("");
+            mBinding.keyboard.setAffirmEnable(true);
+            ToastUtils.show(R.string.toast_success_record);
+        } else {
+            finish();
+        }
     }
 
     private void modifyRecord(String text) {

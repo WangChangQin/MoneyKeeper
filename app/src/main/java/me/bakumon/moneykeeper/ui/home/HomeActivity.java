@@ -106,6 +106,21 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         Floo.navigation(this, Router.Url.URL_ADD_RECORD).start();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ConfigManager.isSuccessive()) {
+            mBinding.btnAddRecord.setOnLongClickListener(v -> {
+                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
+                        .start();
+                return false;
+            });
+        } else {
+            mBinding.btnAddRecord.setOnLongClickListener(null);
+        }
+    }
+
     private void showOperateDialog(RecordWithType record) {
         new AlertDialog.Builder(this)
                 .setItems(new String[]{getString(R.string.text_modify), getString(R.string.text_delete)}, (dialog, which) -> {

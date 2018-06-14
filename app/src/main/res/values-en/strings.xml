@@ -45,6 +45,7 @@
     <string name="toast_backup_success">Backup was successful</string>
     <string name="toast_backup_fail">Backup failed</string>
     <string name="toast_open_auto_backup">Automatic backup is turned off. You can go to settings to reopen</string>
+    <string name="toast_success_record">Accounting success</string>
 
     <string name="hint_enter_money">Enter the amount</string>
     <string name="hint_enter_remark">Enter a note</string>
@@ -55,6 +56,7 @@
     <string name="text_symbol_income">+</string>
     <string name="text_home_footer_tip">Statistics page can view previous month records</string>
     <string name="text_add_record">Record</string>
+    <string name="text_add_record_successive">Record(continuous)</string>
     <string name="text_modify_record">Modify</string>
     <string name="text_done">Done</string>
     <string name="text_title_drag_sort">Long press item to sort</string>
@@ -144,4 +146,6 @@
     <string name="text_share_to">Share to</string>
     <string name="text_app_slogan">Simple, pure accounting application</string>
     <string name="text_share_content">I found a simple, pure billing application, click on the link to download https://github.com/Bakumon/MoneyKeeper/releases/latest</string>
+    <string name="text_successive_record">Continuous accounting</string>
+    <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
 </resources>

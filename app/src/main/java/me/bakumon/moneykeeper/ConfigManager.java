@@ -26,13 +26,28 @@ import me.bakumon.moneykeeper.utill.SPUtils;
 public class ConfigManager {
     private static final String SP_NAME = "config";
     private static final String KEY_AUTO_BACKUP = "auto_backup";
+    private static final String KEY_SUCCESSIVE = "successive";
 
+    /**
+     * 自动备份
+     */
     public static boolean setIsAutoBackup(boolean isAutoBackup) {
         return SPUtils.getInstance(SP_NAME).put(KEY_AUTO_BACKUP, isAutoBackup);
     }
 
     public static boolean isAutoBackup() {
         return SPUtils.getInstance(SP_NAME).getBoolean(KEY_AUTO_BACKUP, true);
+    }
+
+    /**
+     * 连续记账
+     */
+    public static boolean setIsSuccessive(boolean isAutoBackup) {
+        return SPUtils.getInstance(SP_NAME).put(KEY_SUCCESSIVE, isAutoBackup);
+    }
+
+    public static boolean isSuccessive() {
+        return SPUtils.getInstance(SP_NAME).getBoolean(KEY_SUCCESSIVE, true);
     }
 
 }

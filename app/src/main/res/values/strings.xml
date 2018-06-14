@@ -43,6 +43,7 @@
     <string name="toast_restore_fail">恢复备份失败</string>
     <string name="toast_backup_list_fail">备份文件列表获取失败</string>
     <string name="toast_open_auto_backup">自动备份已关闭，设置界面可重新打开</string>
+    <string name="toast_success_record">记账成功</string>
 
     <string name="hint_enter_money">输入金额</string>
     <string name="hint_enter_remark">输入备注</string>
@@ -53,6 +54,7 @@
     <string name="text_symbol_income">+</string>
     <string name="text_home_footer_tip">统计页面可以查看往月记录</string>
     <string name="text_add_record">记一笔</string>
+    <string name="text_add_record_successive">记一笔(连续)</string>
     <string name="text_modify_record">修改</string>
     <string name="text_done">完成</string>
     <string name="text_title_drag_sort">长按拖动排序</string>
@@ -144,4 +146,6 @@
     <string name="text_share_to">分享到</string>
     <string name="text_app_slogan">简单、纯粹的记账应用</string>
     <string name="text_share_content">我发现了一个简单、纯粹的记账应用，点击链接下载 https://github.com/Bakumon/MoneyKeeper/releases/latest</string>
+    <string name="text_successive_record">连续记账</string>
+    <string name="text_successive_record_tip">长按首页添加按钮，连续记账</string>
 </resources>

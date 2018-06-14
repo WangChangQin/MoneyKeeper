@@ -145,6 +145,7 @@
             tools:listitem="@layout/item_home" />
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_add_record"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom|center"
