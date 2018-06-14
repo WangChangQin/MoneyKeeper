@@ -28,6 +28,7 @@ import java.util.Arrays;
 
 import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.ui.add.AddRecordActivity;
+import me.bakumon.moneykeeper.ui.statistics.StatisticsActivity;
 
 /**
  * Shortcut 工具类
@@ -39,16 +40,25 @@ public class ShortcutUtil {
     public static void addRecordShortcut(Context context) {
         try {
             ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
-            Intent intent = new Intent(context, AddRecordActivity.class);
-            intent.setAction("LOCATION_SHORTCUT");
-            ShortcutInfo shortcut = new ShortcutInfo.Builder(context, "add")
+            Intent intentAdd = new Intent(context, AddRecordActivity.class);
+            intentAdd.setAction("LOCATION_SHORTCUT");
+            ShortcutInfo shortcutAdd = new ShortcutInfo.Builder(context, "add")
                     .setShortLabel(context.getString(R.string.shortcuts_add_short))
                     .setLongLabel(context.getString(R.string.shortcuts_add_long))
-                    .setIcon(Icon.createWithResource(context, R.drawable.shortcutse_add))
-                    .setIntent(intent)
+                    .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_add))
+                    .setIntent(intentAdd)
+                    .build();
+
+            Intent intentStatistics = new Intent(context, StatisticsActivity.class);
+            intentStatistics.setAction("LOCATION_SHORTCUT");
+            ShortcutInfo shortcutStatistics = new ShortcutInfo.Builder(context, "statistics")
+                    .setShortLabel(context.getString(R.string.shortcuts_statistics_short))
+                    .setLongLabel(context.getString(R.string.shortcuts_statistics_long))
+                    .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_statistics))
+                    .setIntent(intentStatistics)
                     .build();
             if (shortcutManager != null) {
-                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcutAdd, shortcutStatistics));
             }
         } catch (Exception e) {
             e.printStackTrace();

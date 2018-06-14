@@ -51,10 +51,8 @@
     <string name="hint_enter_remark">Enter a note</string>
     <string name="hint_enter_type_name">Please enter the type name</string>
 
-    <string name="shortcuts_add_disable">add(disable)</string>
     <string name="shortcuts_add_short">add</string>
     <string name="shortcuts_add_long">add</string>
-    <string name="shortcuts_statistics_disable">statistics(disable)</string>
     <string name="shortcuts_statistics_short">statistics</string>
     <string name="shortcuts_statistics_long">statistics</string>
 
