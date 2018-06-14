@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import me.bakumon.moneykeeper.App;
+import me.bakumon.moneykeeper.BuildConfig;
 import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.database.AppDatabase;
 import me.bakumon.moneykeeper.ui.setting.BackupBean;
@@ -36,9 +37,9 @@ import me.bakumon.moneykeeper.ui.setting.BackupBean;
  * @author Bakumon https:/bakumon.me
  */
 public class BackupUtil {
-    public static final String BACKUP_DIR = "backup_moneykeeper";
-    public static final String AUTO_BACKUP_PREFIX = "MoneyKeeperBackupAuto";
-    public static final String USER_BACKUP_PREFIX = "MoneyKeeperBackupUser";
+    public static final String BACKUP_DIR = BuildConfig.DEBUG ? "backup_moneykeeper_debug" : "backup_moneykeeper";
+    public static final String AUTO_BACKUP_PREFIX = BuildConfig.DEBUG ? "MoneyKeeperBackupAutoDebug" : "MoneyKeeperBackupAuto";
+    public static final String USER_BACKUP_PREFIX = BuildConfig.DEBUG ? "MoneyKeeperBackupUserDebug" : "MoneyKeeperBackupUser";
     public static final String SUFFIX = ".db";
     public static final String BACKUP_SUFFIX = App.getINSTANCE().getString(R.string.text_before_reverting);
 
