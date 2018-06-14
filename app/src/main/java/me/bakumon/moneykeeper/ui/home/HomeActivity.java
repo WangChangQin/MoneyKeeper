@@ -42,6 +42,7 @@ import me.bakumon.moneykeeper.database.entity.SumMoneyBean;
 import me.bakumon.moneykeeper.databinding.ActivityHomeBinding;
 import me.bakumon.moneykeeper.datasource.BackupFailException;
 import me.bakumon.moneykeeper.utill.BigDecimalUtil;
+import me.bakumon.moneykeeper.utill.ShortcutUtil;
 import me.bakumon.moneykeeper.utill.ToastUtils;
 import me.bakumon.moneykeeper.viewmodel.ViewModelFactory;
 import me.drakeet.floo.Floo;
@@ -167,8 +168,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         mDisposable.add(mViewModel.initRecordTypes()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                        },
+                .subscribe(() -> ShortcutUtil.addRecordShortcut(this),
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
                                 ToastUtils.show(throwable.getMessage());

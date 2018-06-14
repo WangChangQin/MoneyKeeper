@@ -51,6 +51,13 @@
     <string name="hint_enter_remark">Enter a note</string>
     <string name="hint_enter_type_name">Please enter the type name</string>
 
+    <string name="shortcuts_add_disable">add(disable)</string>
+    <string name="shortcuts_add_short">add</string>
+    <string name="shortcuts_add_long">add</string>
+    <string name="shortcuts_statistics_disable">statistics(disable)</string>
+    <string name="shortcuts_statistics_short">statistics</string>
+    <string name="shortcuts_statistics_long">statistics</string>
+
     <string name="text_affirm">OK</string>
     <string name="text_symbol_outlay">-</string>
     <string name="text_symbol_income">+</string>
@@ -141,6 +148,7 @@
     <string name="text_more">More</string>
     <string name="text_dev_designer">Developer &amp; Designer</string>
     <string name="text_designer">Designer</string>
+    <string name="text_launcher_designer">Launcher icon design</string>
     <string name="text_developer_designer">Developer &amp; Designer</string>
     <string name="text_icon_launcher">Want a designer to design an application launch icon</string>
     <string name="text_share_to">Share to</string>

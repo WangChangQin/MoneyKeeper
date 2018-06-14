@@ -1,0 +1,20 @@
+<!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<vector android:height="24dp" android:viewportHeight="1024"
+    android:viewportWidth="1024" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#bfbfbf" android:pathData="M314.88,691.2L314.88,296.96c0,-10.24 -7.68,-15.36 -17.92,-15.36 -10.24,0 -15.36,7.68 -15.36,15.36L281.6,709.12c0,10.24 7.68,20.48 20.48,20.48h448c10.24,0 20.48,-7.68 20.48,-20.48s-10.24,-17.92 -23.04,-17.92L314.88,691.2zM0,512C0,230.4 230.4,0 512,0s512,230.4 512,512 -230.4,512 -512,512S0,793.6 0,512zM486.4,281.6c-15.36,0 -25.6,10.24 -25.6,25.6v332.8c0,15.36 10.24,25.6 25.6,25.6s25.6,-10.24 25.6,-25.6L512,307.2c0,-15.36 -10.24,-25.6 -25.6,-25.6zM384,435.2c-15.36,0 -25.6,10.24 -25.6,25.6v179.2c0,15.36 10.24,25.6 25.6,25.6s25.6,-10.24 25.6,-25.6v-179.2c0,-15.36 -10.24,-25.6 -25.6,-25.6zM588.8,486.4c-15.36,0 -25.6,10.24 -25.6,25.6v128c0,15.36 10.24,25.6 25.6,25.6s25.6,-10.24 25.6,-25.6v-128c0,-15.36 -10.24,-25.6 -25.6,-25.6zM691.2,384c-15.36,0 -25.6,10.24 -25.6,25.6v230.4c0,15.36 10.24,25.6 25.6,25.6s25.6,-10.24 25.6,-25.6v-230.4c0,-15.36 -10.24,-25.6 -25.6,-25.6z"/>
+</vector>

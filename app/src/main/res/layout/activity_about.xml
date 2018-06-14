@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,11 +40,11 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/ic_launcher" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,10 +91,10 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="5dp"
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="35dp"
@@ -134,10 +133,52 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="5dp"
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
-                    android:paddingTop="10dp">
+                    android:paddingTop="5dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@mipmap/avatar_liangyue" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="3dp"
+                            android:text="梁月"
+                            android:textColor="@color/colorTextWhite"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_launcher_designer"
+                            android:textColor="@color/colorTextWhite3"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="35dp"
@@ -171,20 +212,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingEnd="20dp"
-                    android:paddingStart="20dp"
-                    android:text="@string/text_icon_launcher"
-                    android:textColor="@color/colorTextWhite3"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
-                    android:paddingTop="30dp"
+                    android:paddingTop="20dp"
                     android:text="@string/text_more"
                     android:textColor="@color/colorTextWhite3"
                     android:textSize="15sp" />

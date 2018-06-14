@@ -49,6 +49,13 @@
     <string name="hint_enter_remark">输入备注</string>
     <string name="hint_enter_type_name">请输入类型名称</string>
 
+    <string name="shortcuts_add_disable">记一笔（不可用）</string>
+    <string name="shortcuts_add_short">记一笔</string>
+    <string name="shortcuts_add_long">记一笔</string>
+    <string name="shortcuts_statistics_disable">统计（不可用）</string>
+    <string name="shortcuts_statistics_short">历史统计</string>
+    <string name="shortcuts_statistics_long">历史统计</string>
+
     <string name="text_affirm">确定</string>
     <string name="text_symbol_outlay">-</string>
     <string name="text_symbol_income">+</string>
@@ -141,6 +148,7 @@
     <string name="text_more">更多</string>
     <string name="text_dev_designer">设计和开发</string>
     <string name="text_designer">总体设计</string>
+    <string name="text_launcher_designer">启动图标设计</string>
     <string name="text_developer_designer">开发和部分设计</string>
     <string name="text_icon_launcher">默默地求一波启动图设计</string>
     <string name="text_share_to">分享到</string>
