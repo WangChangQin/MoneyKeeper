@@ -151,7 +151,7 @@
     <string name="text_icon_launcher">Want a designer to design an application launch icon</string>
     <string name="text_share_to">Share to</string>
     <string name="text_app_slogan">Simple, pure accounting application</string>
-    <string name="text_share_content">I found a simple, pure billing application, click on the link to download https://github.com/Bakumon/MoneyKeeper/releases/latest</string>
+    <string name="text_share_content">I found a simple, pure billing application, click on the link to download https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>
     <string name="text_successive_record">Continuous accounting</string>
     <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
 </resources>

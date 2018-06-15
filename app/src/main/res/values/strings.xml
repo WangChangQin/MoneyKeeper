@@ -151,7 +151,7 @@
     <string name="text_icon_launcher">默默地求一波启动图设计</string>
     <string name="text_share_to">分享到</string>
     <string name="text_app_slogan">简单、纯粹的记账应用</string>
-    <string name="text_share_content">我发现了一个简单、纯粹的记账应用，点击链接下载 https://github.com/Bakumon/MoneyKeeper/releases/latest</string>
+    <string name="text_share_content">我发现了一个简单、纯粹的记账应用，点击链接下载 https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>
     <string name="text_successive_record">连续记账</string>
     <string name="text_successive_record_tip">长按首页添加按钮，连续记账</string>
 </resources>
