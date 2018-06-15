@@ -38,6 +38,9 @@ import me.bakumon.moneykeeper.ui.statistics.StatisticsActivity;
 public class ShortcutUtil {
     @TargetApi(Build.VERSION_CODES.N_MR1)
     public static void addRecordShortcut(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
+            return;
+        }
         try {
             ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
             Intent intentAdd = new Intent(context, AddRecordActivity.class);
