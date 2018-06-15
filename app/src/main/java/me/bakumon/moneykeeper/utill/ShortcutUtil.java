@@ -41,30 +41,26 @@ public class ShortcutUtil {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             return;
         }
-        try {
-            ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
-            Intent intentAdd = new Intent(context, AddRecordActivity.class);
-            intentAdd.setAction("LOCATION_SHORTCUT");
-            ShortcutInfo shortcutAdd = new ShortcutInfo.Builder(context, "add")
-                    .setShortLabel(context.getString(R.string.shortcuts_add_short))
-                    .setLongLabel(context.getString(R.string.shortcuts_add_long))
-                    .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_add))
-                    .setIntent(intentAdd)
-                    .build();
+        ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+        Intent intentAdd = new Intent(context, AddRecordActivity.class);
+        intentAdd.setAction("LOCATION_SHORTCUT");
+        ShortcutInfo shortcutAdd = new ShortcutInfo.Builder(context, "add")
+                .setShortLabel(context.getString(R.string.shortcuts_add_short))
+                .setLongLabel(context.getString(R.string.shortcuts_add_long))
+                .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_add))
+                .setIntent(intentAdd)
+                .build();
 
-            Intent intentStatistics = new Intent(context, StatisticsActivity.class);
-            intentStatistics.setAction("LOCATION_SHORTCUT");
-            ShortcutInfo shortcutStatistics = new ShortcutInfo.Builder(context, "statistics")
-                    .setShortLabel(context.getString(R.string.shortcuts_statistics_short))
-                    .setLongLabel(context.getString(R.string.shortcuts_statistics_long))
-                    .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_statistics))
-                    .setIntent(intentStatistics)
-                    .build();
-            if (shortcutManager != null) {
-                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcutAdd, shortcutStatistics));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Intent intentStatistics = new Intent(context, StatisticsActivity.class);
+        intentStatistics.setAction("LOCATION_SHORTCUT");
+        ShortcutInfo shortcutStatistics = new ShortcutInfo.Builder(context, "statistics")
+                .setShortLabel(context.getString(R.string.shortcuts_statistics_short))
+                .setLongLabel(context.getString(R.string.shortcuts_statistics_long))
+                .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_statistics))
+                .setIntent(intentStatistics)
+                .build();
+        if (shortcutManager != null) {
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcutAdd, shortcutStatistics));
         }
     }
 }

@@ -28,8 +28,8 @@ android {
         applicationId "me.bakumon.moneykeeper"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 4
-        versionName "1.1.0"
+        versionCode 5
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // 指定room.schemaLocation生成的文件路径
         javaCompileOptions {
