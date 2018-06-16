@@ -8,3 +8,5 @@
 
 1. 收支类型的图片是打包到 apk 中的，不支持用户自定义。
 2. 用户可以设计和应用风格一致的图标，并且发给我，我将增加到下一个版本中。
+
+本应用『遵循[《Android绿色应用公约》](https://green-android.org/)(Comply to “Convention of Green Apps for Android”)』
