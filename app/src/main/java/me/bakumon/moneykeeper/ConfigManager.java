@@ -27,6 +27,8 @@ public class ConfigManager {
     private static final String SP_NAME = "config";
     private static final String KEY_AUTO_BACKUP = "auto_backup";
     private static final String KEY_SUCCESSIVE = "successive";
+    private static final String KEY_FAST = "fast";
+    private static final String KEY_BUDGET = "budget";
 
     /**
      * 自动备份
@@ -40,6 +42,17 @@ public class ConfigManager {
     }
 
     /**
+     * 快速记账
+     */
+    public static boolean setIsFast(boolean isFast) {
+        return SPUtils.getInstance(SP_NAME).put(KEY_FAST, isFast);
+    }
+
+    public static boolean isFast() {
+        return SPUtils.getInstance(SP_NAME).getBoolean(KEY_FAST, false);
+    }
+
+    /**
      * 连续记账
      */
     public static boolean setIsSuccessive(boolean isAutoBackup) {
@@ -50,4 +63,14 @@ public class ConfigManager {
         return SPUtils.getInstance(SP_NAME).getBoolean(KEY_SUCCESSIVE, true);
     }
 
+    /**
+     * 月预算
+     */
+    public static boolean setBudget(int budget) {
+        return SPUtils.getInstance(SP_NAME).put(KEY_BUDGET, budget);
+    }
+
+    public static int getBudget() {
+        return SPUtils.getInstance(SP_NAME).getInt(KEY_BUDGET, 0);
+    }
 }

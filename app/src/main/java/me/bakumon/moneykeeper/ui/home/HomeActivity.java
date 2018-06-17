@@ -80,6 +80,11 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         initView();
         initData();
         checkPermissionForBackup();
+
+        // 快速记账
+        if (ConfigManager.isFast()) {
+            Floo.navigation(this, Router.Url.URL_ADD_RECORD).start();
+        }
     }
 
     private void initView() {

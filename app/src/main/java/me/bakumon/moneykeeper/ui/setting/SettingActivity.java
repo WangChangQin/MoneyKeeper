@@ -85,7 +85,10 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         List<SettingSectionEntity> list = new ArrayList<>();
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_money)));
+        String budget = ConfigManager.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.getBudget();
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_monty_budget), budget)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)));
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast())));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive())));
 
 
@@ -105,28 +108,28 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
 
         mAdapter.setOnItemClickListener((adapter1, view, position) -> {
             switch (position) {
-                case 1:
+                case 2:
                     goTypeManage();
                     break;
-                case 4:
+                case 6:
                     showBackupDialog();
                     break;
-                case 5:
+                case 7:
                     showRestoreDialog();
                     break;
-                case 8:
+                case 10:
                     goAbout();
                     break;
-                case 9:
+                case 11:
                     market();
                     break;
-                case 10:
+                case 12:
                     alipay();
                     break;
-                case 11:
+                case 13:
                     goOpenSource();
                     break;
-                case 12:
+                case 14:
                     CustomTabsUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
                     break;
                 default:
@@ -136,10 +139,13 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         // Switch
         mAdapter.setOnItemChildClickListener((adapter12, view, position) -> {
             switch (position) {
-                case 2:
+                case 3:
+                    switchFast();
+                    break;
+                case 4:
                     switchSuccessive();
                     break;
-                case 6:
+                case 8:
                     switchAutoBackup(position);
                     break;
                 default:
@@ -147,6 +153,11 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
             }
         });
         mBinding.rvSetting.setAdapter(mAdapter);
+    }
+
+    private void switchFast() {
+        boolean oldIsConfigOpen = ConfigManager.isFast();
+        ConfigManager.setIsFast(!oldIsConfigOpen);
     }
 
     private void switchSuccessive() {
