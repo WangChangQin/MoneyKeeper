@@ -130,4 +130,58 @@ public class BindAdapter {
             textView.setText(inComeStr);
         }
     }
+
+    @BindingAdapter("text_statistics_outlay")
+    public static void setMonthStatisticsOutlay(TextView textView, List<SumMoneyBean> sumMoneyBean) {
+        String prefix = textView.getContext().getString(R.string.text_month_outlay_symbol);
+        String outlay = prefix + "0";
+        if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
+            for (SumMoneyBean bean : sumMoneyBean) {
+                if (bean.type == RecordType.TYPE_OUTLAY) {
+                    outlay = prefix + BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                }
+            }
+        }
+        textView.setText(outlay);
+    }
+
+    @BindingAdapter("text_statistics_income")
+    public static void setMonthStatisticsIncome(TextView textView, List<SumMoneyBean> sumMoneyBean) {
+        String prefix = textView.getContext().getString(R.string.text_month_income_symbol);
+        String income = prefix + "0";
+        if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
+            for (SumMoneyBean bean : sumMoneyBean) {
+                if (bean.type == RecordType.TYPE_INCOME) {
+                    income = prefix + BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                }
+            }
+        }
+        textView.setText(income);
+    }
+
+    @BindingAdapter("text_statistics_overage")
+    public static void setMonthStatisticsOverage(TextView textView, List<SumMoneyBean> sumMoneyBean) {
+        BigDecimal outlayBd = new BigDecimal(0);
+        BigDecimal incomeBd = new BigDecimal(0);
+        // 是否显示结余
+        boolean isShowOverage = false;
+        if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
+            for (SumMoneyBean bean : sumMoneyBean) {
+                if (bean.type == RecordType.TYPE_OUTLAY) {
+                    outlayBd = bean.sumMoney;
+                } else if (bean.type == RecordType.TYPE_INCOME) {
+                    isShowOverage = bean.sumMoney.compareTo(new BigDecimal(0)) > 0;
+                    incomeBd = bean.sumMoney;
+                }
+            }
+        }
+        if (isShowOverage) {
+            textView.setVisibility(View.VISIBLE);
+            String prefix = textView.getContext().getString(R.string.text_month_overage);
+            String overage = prefix + BigDecimalUtil.fen2Yuan(incomeBd.subtract(outlayBd));
+            textView.setText(overage);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
+    }
 }

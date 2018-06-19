@@ -105,6 +105,7 @@
     <string name="text_month_outlay_symbol">Pay&#160;$</string>
     <string name="text_month_income_symbol">Earn&#160;$</string>
     <string name="text_month_remaining_budget">Remaining budget($)</string>
+    <string name="text_month_overage">Lave&#160;¥</string>
     <string name="text_unit_account"></string>
     <string name="text_day">&#160;</string>
     <string name="text_choose_month">Select month</string>

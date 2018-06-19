@@ -42,11 +42,9 @@ import me.bakumon.moneykeeper.base.BaseFragment;
 import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean;
 import me.bakumon.moneykeeper.database.entity.RecordType;
 import me.bakumon.moneykeeper.database.entity.RecordWithType;
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean;
 import me.bakumon.moneykeeper.databinding.FragmentBillBinding;
 import me.bakumon.moneykeeper.datasource.BackupFailException;
 import me.bakumon.moneykeeper.ui.home.HomeAdapter;
-import me.bakumon.moneykeeper.utill.BigDecimalUtil;
 import me.bakumon.moneykeeper.utill.DateUtils;
 import me.bakumon.moneykeeper.utill.ToastUtils;
 import me.bakumon.moneykeeper.view.BarChartMarkerView;
@@ -98,7 +96,7 @@ public class BillFragment extends BaseFragment {
 
         initBarChart();
 
-        mBinding.rgType.setOnCheckedChangeListener((group, checkedId) -> {
+        mBinding.layoutSumMoney.rgType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_outlay) {
                 mType = RecordType.TYPE_OUTLAY;
             } else {
@@ -224,7 +222,7 @@ public class BillFragment extends BaseFragment {
 
     @Override
     protected void lazyInitData() {
-        mBinding.rgType.check(R.id.rb_outlay);
+        mBinding.layoutSumMoney.rgType.check(R.id.rb_outlay);
     }
 
     private void getOrderData() {
@@ -258,21 +256,7 @@ public class BillFragment extends BaseFragment {
         mDisposable.add(mViewModel.getMonthSumMoney(mYear, mMonth)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(sumMoneyBean -> {
-                            String outlay = getString(R.string.text_month_outlay_symbol) + "0";
-                            String income = getString(R.string.text_month_income_symbol) + "0";
-                            if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
-                                for (SumMoneyBean bean : sumMoneyBean) {
-                                    if (bean.type == RecordType.TYPE_OUTLAY) {
-                                        outlay = getString(R.string.text_month_outlay_symbol) + BigDecimalUtil.fen2Yuan(bean.sumMoney);
-                                    } else if (bean.type == RecordType.TYPE_INCOME) {
-                                        income = getString(R.string.text_month_income_symbol) + BigDecimalUtil.fen2Yuan(bean.sumMoney);
-                                    }
-                                }
-                            }
-                            mBinding.rbOutlay.setText(outlay);
-                            mBinding.rbIncome.setText(income);
-                        },
+                .subscribe(sumMoneyBean -> mBinding.layoutSumMoney.setSumMoneyBeanList(sumMoneyBean),
                         throwable -> {
                             ToastUtils.show(R.string.toast_get_month_summary_fail);
                             Log.e(TAG, "获取该月汇总数据失败", throwable);

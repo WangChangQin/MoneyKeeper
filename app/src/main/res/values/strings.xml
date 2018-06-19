@@ -103,6 +103,7 @@
     <string name="text_money_symbol">¥</string>
     <string name="text_month_outlay_symbol">支出&#160;¥</string>
     <string name="text_month_income_symbol">收入&#160;¥</string>
+    <string name="text_month_overage">结余&#160;¥</string>
     <string name="text_unit_account">笔</string>
     <string name="text_day">日&#160;</string>
     <string name="text_choose_month">选择月份</string>
