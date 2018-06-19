@@ -25,7 +25,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,7 @@ import me.bakumon.moneykeeper.base.BaseActivity;
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding;
 import me.bakumon.moneykeeper.utill.AlipayZeroSdk;
 import me.bakumon.moneykeeper.utill.CustomTabsUtil;
+import me.bakumon.moneykeeper.utill.SoftInputUtils;
 import me.bakumon.moneykeeper.utill.ToastUtils;
 import me.drakeet.floo.Floo;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -105,9 +110,16 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_help))));
 
         mAdapter.setNewData(list);
+        addListener();
+        mBinding.rvSetting.setAdapter(mAdapter);
+    }
 
+    private void addListener() {
         mAdapter.setOnItemClickListener((adapter1, view, position) -> {
             switch (position) {
+                case 1:
+                    setBudget(position);
+                    break;
                 case 2:
                     goTypeManage();
                     break;
@@ -152,7 +164,31 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                     break;
             }
         });
-        mBinding.rvSetting.setAdapter(mAdapter);
+    }
+
+    private void setBudget(int position) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View contentView = layoutInflater.inflate(R.layout.dialog_input_budget, null, false);
+        EditText editText = contentView.findViewById(R.id.edt_budget);
+        editText.setText(ConfigManager.getBudget() == 0 ? null : String.valueOf(ConfigManager.getBudget()));
+        editText.setSelection(editText.getText().length());
+        new AlertDialog.Builder(this)
+                .setView(contentView)
+                .setTitle(R.string.text_set_budget)
+                .setPositiveButton(R.string.text_affirm, (dialogInterface, i) -> {
+                    String text = editText.getText().toString();
+                    if (!TextUtils.isEmpty(text)) {
+                        ConfigManager.setBudget(Integer.parseInt(text));
+                    } else {
+                        ConfigManager.setBudget(0);
+                    }
+                    mAdapter.getData().get(position).t.content = ConfigManager.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.getBudget();
+                    mAdapter.notifyItemChanged(position);
+                    SoftInputUtils.hideSoftInput(editText);
+                })
+                .setNegativeButton(R.string.text_button_cancel, (dialogInterface, i) -> SoftInputUtils.hideSoftInput(editText))
+                .create()
+                .show();
     }
 
     private void switchFast() {

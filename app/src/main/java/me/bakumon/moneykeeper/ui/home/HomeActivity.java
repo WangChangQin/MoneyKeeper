@@ -36,12 +36,9 @@ import me.bakumon.moneykeeper.Injection;
 import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.Router;
 import me.bakumon.moneykeeper.base.BaseActivity;
-import me.bakumon.moneykeeper.database.entity.RecordType;
 import me.bakumon.moneykeeper.database.entity.RecordWithType;
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean;
 import me.bakumon.moneykeeper.databinding.ActivityHomeBinding;
 import me.bakumon.moneykeeper.datasource.BackupFailException;
-import me.bakumon.moneykeeper.utill.BigDecimalUtil;
 import me.bakumon.moneykeeper.utill.ShortcutUtil;
 import me.bakumon.moneykeeper.utill.ToastUtils;
 import me.bakumon.moneykeeper.viewmodel.ViewModelFactory;
@@ -115,6 +112,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
     @Override
     protected void onResume() {
         super.onResume();
+        getCurrentMontySumMonty();
         if (ConfigManager.isSuccessive()) {
             mBinding.btnAddRecord.setOnLongClickListener(v -> {
                 Floo.navigation(this, Router.Url.URL_ADD_RECORD)
@@ -166,7 +164,6 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
     private void initData() {
         initRecordTypes();
         getCurrentMonthRecords();
-        getCurrentMontySumMonty();
     }
 
     private void initRecordTypes() {
@@ -189,21 +186,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         mDisposable.add(mViewModel.getCurrentMonthSumMoney()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(sumMoneyBean -> {
-                            String outlay = "0";
-                            String inCome = "0";
-                            if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
-                                for (SumMoneyBean bean : sumMoneyBean) {
-                                    if (bean.type == RecordType.TYPE_OUTLAY) {
-                                        outlay = BigDecimalUtil.fen2Yuan(bean.sumMoney);
-                                    } else if (bean.type == RecordType.TYPE_INCOME) {
-                                        inCome = BigDecimalUtil.fen2Yuan(bean.sumMoney);
-                                    }
-                                }
-                            }
-                            mBinding.tvMonthOutlay.setText(outlay);
-                            mBinding.tvMonthIncome.setText(inCome);
-                        },
+                .subscribe(sumMoneyBeans -> mBinding.setSumMoneyBeanList(sumMoneyBeans),
                         throwable -> {
                             ToastUtils.show(R.string.toast_current_sum_money_fail);
                             Log.e(TAG, "本月支出收入总数获取失败", throwable);

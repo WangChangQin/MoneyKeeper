@@ -104,6 +104,7 @@
     <string name="text_money_symbol">$</string>
     <string name="text_month_outlay_symbol">Pay&#160;$</string>
     <string name="text_month_income_symbol">Earn&#160;$</string>
+    <string name="text_month_remaining_budget">Remaining budget($)</string>
     <string name="text_unit_account"></string>
     <string name="text_day">&#160;</string>
     <string name="text_choose_month">Select month</string>
@@ -158,4 +159,5 @@
     <string name="text_monty_budget">Monthly budget</string>
     <string name="text_fast_accounting">Quick accounting</string>
     <string name="text_fast_tip">Open APP directly bookkeeping</string>
+    <string name="text_set_budget">Set a budget</string>
 </resources>

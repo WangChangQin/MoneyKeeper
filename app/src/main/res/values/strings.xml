@@ -71,6 +71,7 @@
     <string name="text_title_setting">设置</string>
     <string name="text_month_outlay">本月支出(¥)</string>
     <string name="text_month_income">本月收入(¥)</string>
+    <string name="text_month_remaining_budget">剩余预算(¥)</string>
     <string name="text_today">今天</string>
     <string name="text_yesterday">昨天</string>
     <string name="text_type_eat">餐饮</string>
@@ -158,4 +159,5 @@
     <string name="text_monty_budget">月预算</string>
     <string name="text_fast_accounting">快速记账</string>
     <string name="text_fast_tip">打开APP直接记账</string>
+    <string name="text_set_budget">设置预算</string>
 </resources>
