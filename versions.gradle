@@ -22,21 +22,21 @@ versions.gradle_plugin = "3.0.1"
 versions.AndResGuard_gradle_plugin = "1.2.13"
 // test
 versions.junit = "4.12"
-versions.test_runner = "1.0.1"
-versions.espresso = "3.0.1"
+versions.test_runner = "1.0.2"
+versions.espresso = "3.0.2"
 // 支持库
-versions.support = "27.0.2"
+versions.support = "27.1.1"
 // ViewModel and LiveData
-versions.lifecycle = "1.0.0"
+versions.lifecycle = "1.1.1"
 // Room
-versions.room = "1.0.0"
+versions.room = "1.1.1"
 // rxjava2
-versions.rxjava2 = "2.1.3"
-versions.rxandroid = "2.0.1"
+versions.rxjava2 = "2.1.14"
+versions.rxandroid = "2.0.2"
 // BaseRecyclerViewAdapterHelper
-versions.BRVAH = "2.9.34"
+versions.BRVAH = "2.9.40"
 versions.floo = "1.1.0"
-versions.datetimepicker = "3.5.1"
+versions.datetimepicker = "3.6.0"
 versions.MPChart = "v3.0.3"
 versions.leakcanary = "1.5.4"
 versions.permission = "1.2.0"
@@ -109,7 +109,7 @@ def static uniformSupportVersion(ConfigurationContainer configurations) {
             def requested = details.requested
             if (requested.group == 'com.android.support') {
                 if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '27.0.2'
+                    details.useVersion '27.1.1'
                 }
             }
 
