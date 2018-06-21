@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'AndResGuard'
 
 /*
@@ -150,6 +151,8 @@ dependencies {
     testImplementation deps.junit
     androidTestImplementation deps.test_runner
     androidTestImplementation deps.spresso_core
+    // kotlin
+    implementation deps.kotlin.stdlib
     // 支持库
     implementation deps.support.app_compat
     implementation deps.support.design
