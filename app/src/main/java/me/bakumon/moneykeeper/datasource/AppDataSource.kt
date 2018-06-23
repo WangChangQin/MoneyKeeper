@@ -16,17 +16,11 @@
 
 package me.bakumon.moneykeeper.datasource
 
-import java.util.Date
-
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean
-import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
+import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
+import java.util.*
 
 /**
  * 数据源
@@ -34,24 +28,6 @@ import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
  * @author Bakumon https://bakumon.me
  */
 interface AppDataSource {
-    /**
-     * 获取所有记账类型数据
-     *
-     * @return 所有记账类型数据
-     */
-    val allRecordType: Flowable<List<RecordType>>
-
-    /**
-     * 获取当前月份的记账记录数据
-     *
-     * @return 当前月份的记录数据的 Flowable 对象
-     */
-    val currentMonthRecordWithTypes: Flowable<List<RecordWithType>>
-
-    /**
-     * 获取本月支出和收入总数
-     */
-    val currentMonthSumMoney: Flowable<List<SumMoneyBean>>
 
     /**
      * 初始化默认的记账类型
@@ -59,25 +35,67 @@ interface AppDataSource {
     fun initRecordTypes(): Completable
 
     /**
-     * 根据类型获取某段时间的记账记录数据
+     * 添加记账类型
      *
-     * @return 包含记录数据的 Flowable 对象
+     * @param type    类型
+     * @param imgName 图片
+     * @param name    类型名称
+     * @see RecordType.TYPE_OUTLAY
+     *
+     * @see RecordType.TYPE_INCOME
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>>
+    fun addRecordType(type: Int, imgName: String, name: String): Completable
 
     /**
-     * 获取某一类型某段时间的记账记录数据
+     * 修改记账类型
      *
-     * @return 包含记录数据的 Flowable 对象
+     * @param oldRecordType 修改之前的 RecordType
+     * @param recordType    修改的 RecordType
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun updateRecordType(oldRecordType: RecordType, recordType: RecordType): Completable
 
     /**
-     * 获取某一类型某段时间的记账记录数据，money 排序
+     * 删除记账类型
      *
-     * @return 包含记录数据的 Flowable 对象
+     * @param recordType 要删除的记账类型对象
      */
-    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun deleteRecordType(recordType: RecordType): Completable
+
+    /**
+     * 获取所有记账类型数据
+     *
+     * @return 所有记账类型数据
+     */
+    fun getAllRecordType(): Flowable<List<RecordType>>
+
+    /**
+     * 获取指出或收入记账类型数据
+     *
+     * @param type 类型
+     * @return 记账类型数据
+     * @see RecordType.TYPE_OUTLAY
+     *
+     * @see RecordType.TYPE_INCOME
+     */
+    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+
+    /**
+     * 记账类型排序
+     *
+     * @param recordTypes 记账类型对象
+     */
+    fun sortRecordTypes(recordTypes: List<RecordType>): Completable
+
+    /**
+     * 获取类型图片数据
+     *
+     * @param type 收入或支出类型
+     * @return 所有获取类型图片数据
+     * @see RecordType.TYPE_OUTLAY
+     *
+     * @see RecordType.TYPE_INCOME
+     */
+    fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>>
 
     /**
      * 新增一条记账记录
@@ -101,63 +119,40 @@ interface AppDataSource {
     fun deleteRecord(record: Record): Completable
 
     /**
-     * 记账类型排序
+     * 获取当前月份的记账记录数据
      *
-     * @param recordTypes 记账类型对象
+     * @return 当前月份的记录数据的 Flowable 对象
      */
-    fun sortRecordTypes(recordTypes: List<RecordType>): Completable
+    fun getCurrentMonthRecordWithTypes(): Flowable<List<RecordWithType>>
 
     /**
-     * 删除记账类型
+     * 根据类型获取某段时间的记账记录数据
      *
-     * @param recordType 要删除的记账类型对象
+     * @return 包含记录数据的 Flowable 对象
      */
-    fun deleteRecordType(recordType: RecordType): Completable
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>>
 
     /**
-     * 获取指出或收入记账类型数据
+     * 获取某一类型某段时间的记账记录数据
      *
-     * @param type 类型
-     * @return 记账类型数据
-     * @see RecordType.TYPE_OUTLAY
-     *
-     * @see RecordType.TYPE_INCOME
+     * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
 
     /**
-     * 获取类型图片数据
+     * 获取某一类型某段时间的记账记录数据，money 排序
      *
-     * @param type 收入或支出类型
-     * @return 所有获取类型图片数据
-     * @see RecordType.TYPE_OUTLAY
-     *
-     * @see RecordType.TYPE_INCOME
+     * @return 包含记录数据的 Flowable 对象
      */
-    fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>>
-
-    /**
-     * 添加一个记账类型
-     *
-     * @param type    类型
-     * @param imgName 图片
-     * @param name    类型名称
-     * @see RecordType.TYPE_OUTLAY
-     *
-     * @see RecordType.TYPE_INCOME
-     */
-    fun addRecordType(type: Int, imgName: String, name: String): Completable
-
-    /**
-     * 修改记账类型
-     *
-     * @param oldRecordType 修改之前的 RecordType
-     * @param recordType    修改的 RecordType
-     */
-    fun updateRecordType(oldRecordType: RecordType, recordType: RecordType): Completable
+    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
 
     /**
      * 获取本月支出和收入总数
+     */
+    fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>>
+
+    /**
+     * 获取某月支出和收入总数
      */
     fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>>
 

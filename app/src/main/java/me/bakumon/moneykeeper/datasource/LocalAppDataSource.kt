@@ -17,10 +17,6 @@
 package me.bakumon.moneykeeper.datasource
 
 import android.text.TextUtils
-
-import java.util.ArrayList
-import java.util.Date
-
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -28,15 +24,11 @@ import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.AppDatabase
-import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean
-import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
+import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.DateUtils
+import java.util.*
 
 /**
  * 数据源本地实现类
@@ -44,23 +36,6 @@ import me.bakumon.moneykeeper.utill.DateUtils
  * @author Bakumon https://bakumon.me
  */
 class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource {
-
-    override val allRecordType: Flowable<List<RecordType>>
-        get() = mAppDatabase.recordTypeDao().allRecordTypes
-
-    override val currentMonthRecordWithTypes: Flowable<List<RecordWithType>>
-        get() {
-            val dateFrom = DateUtils.getCurrentMonthStart()
-            val dateTo = DateUtils.getCurrentMonthEnd()
-            return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
-        }
-
-    override val currentMonthSumMoney: Flowable<List<SumMoneyBean>>
-        get() {
-            val dateFrom = DateUtils.getCurrentMonthStart()
-            val dateTo = DateUtils.getCurrentMonthEnd()
-            return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
-        }
 
     /**
      * 自动备份
@@ -76,7 +51,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
     }
 
     /**
-     * 自动备份
+     * 自动备份 for first
      */
     @Throws(Exception::class)
     private fun autoBackupForNecessary() {
@@ -96,80 +71,6 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                 autoBackupForNecessary()
             }
         }
-    }
-
-    override fun deleteRecord(record: Record): Completable {
-        return Completable.fromAction {
-            mAppDatabase.recordDao().deleteRecord(record)
-            autoBackup()
-        }
-    }
-
-    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>> {
-        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type)
-    }
-
-    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
-        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type, typeId)
-    }
-
-    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
-        return mAppDatabase.recordDao().getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId)
-    }
-
-    override fun insertRecord(record: Record): Completable {
-        return Completable.fromAction {
-            mAppDatabase.recordDao().insertRecord(record)
-            autoBackup()
-        }
-    }
-
-    override fun updateRecord(record: Record): Completable {
-        return Completable.fromAction {
-            mAppDatabase.recordDao().updateRecords(record)
-            autoBackup()
-        }
-    }
-
-    override fun sortRecordTypes(recordTypes: List<RecordType>): Completable {
-        return Completable.fromAction {
-            if (recordTypes.size > 1) {
-                val sortTypes = ArrayList<RecordType>()
-                for (i in recordTypes.indices) {
-                    val type = recordTypes[i]
-                    if (type.ranking != i.toLong()) {
-                        type.ranking = i.toLong()
-                        sortTypes.add(type)
-                    }
-                }
-                mAppDatabase.recordTypeDao().updateRecordTypes(*sortTypes.toTypedArray())
-                autoBackup()
-            }
-        }
-    }
-
-    override fun deleteRecordType(recordType: RecordType): Completable {
-        return Completable.fromAction {
-            if (mAppDatabase.recordDao().getRecordCountWithTypeId(recordType.id) > 0) {
-                recordType.state = RecordType.STATE_DELETED
-                mAppDatabase.recordTypeDao().updateRecordTypes(recordType)
-            } else {
-                mAppDatabase.recordTypeDao().deleteRecordType(recordType)
-            }
-            autoBackup()
-        }
-    }
-
-    override fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
-        return mAppDatabase.recordTypeDao().getRecordTypes(type)
-    }
-
-    override fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>> {
-        return Flowable.create({ e ->
-            val beans = TypeImgListCreator.createTypeImgBeanData(type)
-            e.onNext(beans)
-            e.onComplete()
-        }, BackpressureStrategy.BUFFER)
     }
 
     override fun addRecordType(type: Int, imgName: String, name: String): Completable {
@@ -239,6 +140,96 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
             }
             autoBackup()
         }
+    }
+
+    override fun deleteRecordType(recordType: RecordType): Completable {
+        return Completable.fromAction {
+            if (mAppDatabase.recordDao().getRecordCountWithTypeId(recordType.id) > 0) {
+                recordType.state = RecordType.STATE_DELETED
+                mAppDatabase.recordTypeDao().updateRecordTypes(recordType)
+            } else {
+                mAppDatabase.recordTypeDao().deleteRecordType(recordType)
+            }
+            autoBackup()
+        }
+    }
+
+    override fun getAllRecordType(): Flowable<List<RecordType>> {
+        return mAppDatabase.recordTypeDao().allRecordTypes
+    }
+
+    override fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
+        return mAppDatabase.recordTypeDao().getRecordTypes(type)
+    }
+
+    override fun sortRecordTypes(recordTypes: List<RecordType>): Completable {
+        return Completable.fromAction {
+            if (recordTypes.size > 1) {
+                val sortTypes = ArrayList<RecordType>()
+                for (i in recordTypes.indices) {
+                    val type = recordTypes[i]
+                    if (type.ranking != i.toLong()) {
+                        type.ranking = i.toLong()
+                        sortTypes.add(type)
+                    }
+                }
+                mAppDatabase.recordTypeDao().updateRecordTypes(*sortTypes.toTypedArray())
+                autoBackup()
+            }
+        }
+    }
+
+    override fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>> {
+        return Flowable.create({ e ->
+            val beans = TypeImgListCreator.createTypeImgBeanData(type)
+            e.onNext(beans)
+            e.onComplete()
+        }, BackpressureStrategy.BUFFER)
+    }
+
+    override fun insertRecord(record: Record): Completable {
+        return Completable.fromAction {
+            mAppDatabase.recordDao().insertRecord(record)
+            autoBackup()
+        }
+    }
+
+    override fun updateRecord(record: Record): Completable {
+        return Completable.fromAction {
+            mAppDatabase.recordDao().updateRecords(record)
+            autoBackup()
+        }
+    }
+
+    override fun deleteRecord(record: Record): Completable {
+        return Completable.fromAction {
+            mAppDatabase.recordDao().deleteRecord(record)
+            autoBackup()
+        }
+    }
+
+    override fun getCurrentMonthRecordWithTypes(): Flowable<List<RecordWithType>> {
+        val dateFrom = DateUtils.getCurrentMonthStart()
+        val dateTo = DateUtils.getCurrentMonthEnd()
+        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
+    }
+
+    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type)
+    }
+
+    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type, typeId)
+    }
+
+    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId)
+    }
+
+    override fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>> {
+        val dateFrom = DateUtils.getCurrentMonthStart()
+        val dateTo = DateUtils.getCurrentMonthEnd()
+        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
     }
 
     override fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>> {
