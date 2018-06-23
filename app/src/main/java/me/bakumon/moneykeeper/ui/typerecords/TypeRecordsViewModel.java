@@ -37,8 +37,8 @@ public class TypeRecordsViewModel extends BaseViewModel {
     }
 
     public Flowable<List<RecordWithType>> getRecordWithTypes(int sortType, int type, int typeId, int year, int month) {
-        Date dateFrom = DateUtils.getMonthStart(year, month);
-        Date dateTo = DateUtils.getMonthEnd(year, month);
+        Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
+        Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
         if (sortType == TypeRecordsFragment.SORT_TIME) {
             return mDataSource.getRecordWithTypes(dateFrom, dateTo, type, typeId);
         } else {

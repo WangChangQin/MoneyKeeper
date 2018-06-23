@@ -14,24 +14,24 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper;
+package me.bakumon.moneykeeper
 
-import me.bakumon.moneykeeper.database.AppDatabase;
-import me.bakumon.moneykeeper.datasource.AppDataSource;
-import me.bakumon.moneykeeper.datasource.LocalAppDataSource;
-import me.bakumon.moneykeeper.viewmodel.ViewModelFactory;
+import me.bakumon.moneykeeper.database.AppDatabase
+import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.datasource.LocalAppDataSource
+import me.bakumon.moneykeeper.viewmodel.ViewModelFactory
 
 /**
  * @author Bakumon https://bakumon.me
  */
-public class Injection {
-    public static AppDataSource provideUserDataSource() {
-        AppDatabase database = AppDatabase.getInstance();
-        return new LocalAppDataSource(database);
+object Injection {
+    fun provideUserDataSource(): AppDataSource {
+        val database = AppDatabase.getInstance()
+        return LocalAppDataSource(database)
     }
 
-    public static ViewModelFactory provideViewModelFactory() {
-        AppDataSource dataSource = provideUserDataSource();
-        return new ViewModelFactory(dataSource);
+    fun provideViewModelFactory(): ViewModelFactory {
+        val dataSource = provideUserDataSource()
+        return ViewModelFactory(dataSource)
     }
 }

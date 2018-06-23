@@ -46,7 +46,7 @@ public class HomeAdapter extends BaseDataBindingAdapter<RecordWithType> {
         helper.addOnLongClickListener(R.id.ll_item_click);
         binding.setVariable(BR.recordWithType, item);
         boolean isDataShow = helper.getAdapterPosition() == 0 ||
-                !DateUtils.isSameDay(item.time, getData().get(helper.getAdapterPosition() - 1).time);
+                !DateUtils.INSTANCE.isSameDay(item.time, getData().get(helper.getAdapterPosition() - 1).time);
         binding.setVariable(BR.isDataShow, isDataShow);
         binding.executePendingBindings();
     }

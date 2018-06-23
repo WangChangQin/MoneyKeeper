@@ -45,7 +45,7 @@ public class BarEntryConverter {
             for (int i = 0; i < count; i++) {
                 for (int j = 0; j < daySumMoneyBeans.size(); j++) {
                     if (i + 1 == daySumMoneyBeans.get(j).time.getDate()) {
-                        BigDecimal money = BigDecimalUtil.fen2YuanBD(daySumMoneyBeans.get(j).daySumMoney);
+                        BigDecimal money = BigDecimalUtil.INSTANCE.fen2YuanBD(daySumMoneyBeans.get(j).daySumMoney);
                         // 这里的 y 由于是 float，所以数值很大的话，还是会出现科学计数法
                         barEntry = new BarEntry(i + 1, money.floatValue());
                         entryList.add(barEntry);

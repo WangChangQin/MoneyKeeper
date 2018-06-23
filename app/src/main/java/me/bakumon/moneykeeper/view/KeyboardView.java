@@ -36,7 +36,6 @@ import me.bakumon.moneykeeper.App;
 import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.databinding.LayoutKeyboardBinding;
 import me.bakumon.moneykeeper.utill.SoftInputUtils;
-import me.bakumon.moneykeeper.utill.ToastUtils;
 
 /**
  * 自定义键盘
@@ -84,7 +83,7 @@ public class KeyboardView extends LinearLayout {
     public void setText(String text) {
         mBinding.editInput.setText(text);
         mBinding.editInput.setSelection(mBinding.editInput.getText().length());
-        SoftInputUtils.hideSoftInput(mBinding.editInput);
+        SoftInputUtils.INSTANCE.hideSoftInput(mBinding.editInput);
         if (!mBinding.editInput.isFocused()) {
             mBinding.editInput.requestFocus();
         }
@@ -103,7 +102,7 @@ public class KeyboardView extends LinearLayout {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_keyboard, this, true);
         mBinding.editInput.requestFocus();
         mBinding.editInput.setOnTouchListener((v, event) -> {
-            SoftInputUtils.hideSoftInput(mBinding.editInput);
+            SoftInputUtils.INSTANCE.hideSoftInput(mBinding.editInput);
             mBinding.editInput.requestFocus();
             // 返回 true，拦截了默认的点击和长按操作，这是一个妥协的做法
             // 不再考虑多选粘贴的情况
@@ -125,7 +124,7 @@ public class KeyboardView extends LinearLayout {
                         && !TextUtils.equals("0", text)
                         && !TextUtils.equals("0.", text);
                 if (!isDigital) {
-                    Animation animation = AnimationUtils.loadAnimation(App.getINSTANCE(), R.anim.shake);
+                    Animation animation = AnimationUtils.loadAnimation(App.Companion.getInstance(), R.anim.shake);
                     mBinding.editInput.startAnimation(animation);
                 } else {
                     mOnAffirmClickListener.onAffirmClick(text);

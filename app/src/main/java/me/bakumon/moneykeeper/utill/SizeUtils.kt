@@ -14,24 +14,18 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.utill;
+package me.bakumon.moneykeeper.utill
 
-import android.content.Context;
-import android.graphics.Color;
-import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
+import me.bakumon.moneykeeper.App
 
 /**
- * Chrome CustomTabs 工具类
+ * 尺寸转换工具类
  *
- * @author Baumon https://bakumon.me
+ * @author Bakumon https://bakumon.me
  */
-public class CustomTabsUtil {
-    public static void openWeb(Context context, String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        // github 黑色把
-        builder.setToolbarColor(Color.parseColor("#ff24292d"));
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
+object SizeUtils {
+    fun dp2px(dpValue: Float): Int {
+        val scale = App.instance?.resources!!.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
     }
 }

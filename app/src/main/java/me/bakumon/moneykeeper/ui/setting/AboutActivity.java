@@ -25,7 +25,6 @@ import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.base.BaseActivity;
 import me.bakumon.moneykeeper.databinding.ActivityAboutBinding;
 import me.bakumon.moneykeeper.utill.AndroidUtil;
-import me.bakumon.moneykeeper.utill.CustomTabsUtil;
 
 /**
  * 关于
@@ -55,14 +54,14 @@ public class AboutActivity extends BaseActivity {
     }
 
     public void goPrivacy(View view) {
-        CustomTabsUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/PrivacyPolicy.md");
+        AndroidUtil.INSTANCE.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/PrivacyPolicy.md");
     }
 
     public void share(View view) {
-        AndroidUtil.share(this, getString(R.string.text_share_content));
+        AndroidUtil.INSTANCE.share(this, getString(R.string.text_share_content));
     }
 
     public void goHelp(View view) {
-        CustomTabsUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
+        AndroidUtil.INSTANCE.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
     }
 }

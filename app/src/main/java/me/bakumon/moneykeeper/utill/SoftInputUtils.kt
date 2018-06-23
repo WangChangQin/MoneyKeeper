@@ -14,25 +14,25 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.utill;
+package me.bakumon.moneykeeper.utill
 
-import android.support.annotation.StringRes;
-import android.widget.Toast;
-
-import me.bakumon.moneykeeper.App;
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 
 /**
- * Toast 工具类
+ * 软键盘工具类
  *
  * @author Bakumon https://bakumon.me
  */
-public class ToastUtils {
-
-    public static void show(@StringRes int resId) {
-        Toast.makeText(App.getINSTANCE(), resId, Toast.LENGTH_SHORT).show();
-    }
-
-    public static void show(String msg) {
-        Toast.makeText(App.getINSTANCE(), msg, Toast.LENGTH_SHORT).show();
+object SoftInputUtils {
+    /**
+     * 隐藏软键盘
+     *
+     * @param view 当前屏幕中任意一个 view
+     */
+    fun hideSoftInput(view: View) {
+        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

@@ -44,7 +44,7 @@ public class ChooseMonthDialog implements DialogInterface.OnDismissListener {
      * 添加记账记录时，选时间 dialog 最小可选的年份是 1900
      */
     private static final int MIN_YEAR = 1900;
-    private static final int MAX_YEAR = DateUtils.getCurrentYear();
+    private static final int MAX_YEAR = DateUtils.INSTANCE.getCurrentYear();
 
     private Context mContext;
     private RecyclerView mRvMonth;
@@ -55,8 +55,8 @@ public class ChooseMonthDialog implements DialogInterface.OnDismissListener {
     private OnDismissListener mOnDismissListener;
     private AlertDialog.Builder builder;
 
-    private int mYear = DateUtils.getCurrentYear();
-    private int mMonth = DateUtils.getCurrentMonth();
+    private int mYear = DateUtils.INSTANCE.getCurrentYear();
+    private int mMonth = DateUtils.INSTANCE.getCurrentMonth();
 
     public ChooseMonthDialog(Context context) {
         mContext = context;
@@ -137,7 +137,7 @@ public class ChooseMonthDialog implements DialogInterface.OnDismissListener {
     private void setMonthAdapter() {
         List<Integer> monthList = new ArrayList<>();
         // 当前年，月份最大是当前月
-        int maxMonth = mYear == DateUtils.getCurrentYear() ? DateUtils.getCurrentMonth() : 12;
+        int maxMonth = mYear == DateUtils.INSTANCE.getCurrentYear() ? DateUtils.INSTANCE.getCurrentMonth() : 12;
         for (int i = 1; i <= maxMonth; i++) {
             monthList.add(i);
         }

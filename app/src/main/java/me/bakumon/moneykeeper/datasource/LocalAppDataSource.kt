@@ -42,7 +42,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
      */
     @Throws(Exception::class)
     private fun autoBackup() {
-        if (ConfigManager.isAutoBackup()) {
+        if (ConfigManager.isAutoBackup) {
             val isSuccess = BackupUtil.autoBackup()
             if (!isSuccess) {
                 throw BackupFailException()
@@ -55,7 +55,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
      */
     @Throws(Exception::class)
     private fun autoBackupForNecessary() {
-        if (ConfigManager.isAutoBackup()) {
+        if (ConfigManager.isAutoBackup) {
             val isSuccess = BackupUtil.autoBackupForNecessary()
             if (!isSuccess) {
                 throw BackupFailException()
@@ -86,7 +86,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                     mAppDatabase.recordTypeDao().updateRecordTypes(recordType)
                 } else {
                     // 提示用户该类型已经存在
-                    throw IllegalStateException(name + App.getINSTANCE().getString(R.string.toast_type_is_exist))
+                    throw IllegalStateException(name + App.instance?.getString(R.string.toast_type_is_exist))
                 }
             } else {
                 // 不存在，直接新增
@@ -130,7 +130,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                         mAppDatabase.recordTypeDao().deleteRecordType(oldRecordType)
                     } else {
                         // 提示用户该类型已经存在
-                        throw IllegalStateException(recordType.name + App.getINSTANCE().getString(R.string.toast_type_is_exist))
+                        throw IllegalStateException(recordType.name + App.instance?.getString(R.string.toast_type_is_exist))
                     }
                 } else {
                     mAppDatabase.recordTypeDao().updateRecordTypes(recordType)

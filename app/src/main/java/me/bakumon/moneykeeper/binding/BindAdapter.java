@@ -55,7 +55,7 @@ public class BindAdapter {
         } else {
             marginParams = new ViewGroup.MarginLayoutParams(layoutParams);
         }
-        marginParams.bottomMargin = SizeUtils.dp2px(bottomMargin);
+        marginParams.bottomMargin = SizeUtils.INSTANCE.dp2px(bottomMargin);
     }
 
     @BindingAdapter("text_check_null")
@@ -76,19 +76,19 @@ public class BindAdapter {
 
     @BindingAdapter("text_money")
     public static void setMoneyText(TextView textView, BigDecimal bigDecimal) {
-        textView.setText(BigDecimalUtil.fen2Yuan(bigDecimal));
+        textView.setText(BigDecimalUtil.INSTANCE.fen2Yuan(bigDecimal));
     }
 
     @BindingAdapter("text_money_with_prefix")
     public static void setMoneyTextWithPrefix(TextView textView, BigDecimal bigDecimal) {
         String symbol = textView.getResources().getString(R.string.text_money_symbol);
-        textView.setText(symbol + BigDecimalUtil.fen2Yuan(bigDecimal));
+        textView.setText(symbol + BigDecimalUtil.INSTANCE.fen2Yuan(bigDecimal));
     }
 
     @BindingAdapter("text_income_or_budget")
     public static void setTitleIncomeOrBudget(TextView textView, List<SumMoneyBean> list) {
         // 显示剩余预算或本月收入
-        if (ConfigManager.getBudget() > 0) {
+        if (ConfigManager.INSTANCE.getBudget() > 0) {
             textView.setText(R.string.text_month_remaining_budget);
         } else {
             textView.setText(R.string.text_month_income);
@@ -101,7 +101,7 @@ public class BindAdapter {
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
                 if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlay = BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                    outlay = BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
                 }
             }
         }
@@ -117,14 +117,14 @@ public class BindAdapter {
                 if (bean.type == RecordType.TYPE_OUTLAY) {
                     outlay = bean.sumMoney;
                 } else if (bean.type == RecordType.TYPE_INCOME) {
-                    inComeStr = BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                    inComeStr = BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
                 }
             }
         }
         // 显示剩余预算或本月收入
-        int budget = ConfigManager.getBudget();
+        int budget = ConfigManager.INSTANCE.getBudget();
         if (budget > 0) {
-            String budgetStr = BigDecimalUtil.fen2Yuan(new BigDecimal(ConfigManager.getBudget()).multiply(new BigDecimal(100)).subtract(outlay));
+            String budgetStr = BigDecimalUtil.INSTANCE.fen2Yuan(new BigDecimal(ConfigManager.INSTANCE.getBudget()).multiply(new BigDecimal(100)).subtract(outlay));
             textView.setText(budgetStr);
         } else {
             textView.setText(inComeStr);
@@ -138,7 +138,7 @@ public class BindAdapter {
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
                 if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlay = prefix + BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                    outlay = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
                 }
             }
         }
@@ -152,7 +152,7 @@ public class BindAdapter {
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
                 if (bean.type == RecordType.TYPE_INCOME) {
-                    income = prefix + BigDecimalUtil.fen2Yuan(bean.sumMoney);
+                    income = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
                 }
             }
         }
@@ -178,7 +178,7 @@ public class BindAdapter {
         if (isShowOverage) {
             textView.setVisibility(View.VISIBLE);
             String prefix = textView.getContext().getString(R.string.text_month_overage);
-            String overage = prefix + BigDecimalUtil.fen2Yuan(incomeBd.subtract(outlayBd));
+            String overage = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(incomeBd.subtract(outlayBd));
             textView.setText(overage);
         } else {
             textView.setVisibility(View.GONE);

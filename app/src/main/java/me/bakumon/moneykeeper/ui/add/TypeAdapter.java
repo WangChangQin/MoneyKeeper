@@ -72,7 +72,7 @@ public class TypeAdapter extends BaseDataBindingAdapter<RecordType> {
                 }
             }
             // 增加设置 item， type == -1 表示是设置 item
-            RecordType settingItem = new RecordType(App.getINSTANCE().getString(R.string.text_setting), "type_item_setting", -1);
+            RecordType settingItem = new RecordType(App.Companion.getInstance().getString(R.string.text_setting), "type_item_setting", -1);
             result.add(settingItem);
             // 找出上次选中的 item
             int checkPosition = 0;

@@ -14,30 +14,25 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.utill;
+package me.bakumon.moneykeeper.utill
 
-import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.StringRes
+import android.widget.Toast
 
-import me.bakumon.moneykeeper.R;
+import me.bakumon.moneykeeper.App
 
 /**
- * AndroidUtil
+ * Toast 工具类
  *
  * @author Bakumon https://bakumon.me
  */
-public class AndroidUtil {
-    /**
-     * 使用系统发送分享数据
-     *
-     * @param context 上下文
-     * @param text    要分享的文本
-     */
-    public static void share(Context context, String text) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
-        sendIntent.setType("text/plain");
-        context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.text_share_to)));
+object ToastUtils {
+
+    fun show(@StringRes resId: Int) {
+        Toast.makeText(App.instance, resId, Toast.LENGTH_SHORT).show()
+    }
+
+    fun show(msg: String) {
+        Toast.makeText(App.instance, msg, Toast.LENGTH_SHORT).show()
     }
 }

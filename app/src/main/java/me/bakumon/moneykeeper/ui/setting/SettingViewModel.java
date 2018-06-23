@@ -34,14 +34,14 @@ public class SettingViewModel extends ViewModel {
 
     public Flowable<List<BackupBean>> getBackupFiles() {
         return Flowable.create(e -> {
-            e.onNext(BackupUtil.getBackupFiles());
+            e.onNext(BackupUtil.INSTANCE.getBackupFiles());
             e.onComplete();
         }, BackpressureStrategy.BUFFER);
     }
 
     public Completable backupDB() {
         return Completable.create(e -> {
-            boolean result = BackupUtil.userBackup();
+            boolean result = BackupUtil.INSTANCE.userBackup();
             if (result) {
                 e.onComplete();
             } else {
@@ -52,7 +52,7 @@ public class SettingViewModel extends ViewModel {
 
     public Completable restoreDB(String restoreFile) {
         return Completable.create(e -> {
-            boolean result = BackupUtil.restoreDB(restoreFile);
+            boolean result = BackupUtil.INSTANCE.restoreDB(restoreFile);
             if (result) {
                 e.onComplete();
             } else {

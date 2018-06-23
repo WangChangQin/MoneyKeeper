@@ -37,8 +37,8 @@ public class StatisticsActivity extends BaseActivity {
     private ActivityStatisticsBinding mBinding;
     private BillFragment mBillFragment;
     private ReportsFragment mReportsFragment;
-    private int mCurrentYear = DateUtils.getCurrentYear();
-    private int mCurrentMonth = DateUtils.getCurrentMonth();
+    private int mCurrentYear = DateUtils.INSTANCE.getCurrentYear();
+    private int mCurrentMonth = DateUtils.INSTANCE.getCurrentMonth();
 
     @Override
     protected int getLayoutId() {
@@ -53,7 +53,7 @@ public class StatisticsActivity extends BaseActivity {
     }
 
     private void initView() {
-        String title = DateUtils.getCurrentYearMonth();
+        String title = DateUtils.INSTANCE.getCurrentYearMonth();
         mBinding.titleBar.setTitle(title);
         mBinding.titleBar.ivTitle.setVisibility(View.VISIBLE);
         mBinding.titleBar.llTitle.setOnClickListener(v -> chooseMonth());
@@ -90,7 +90,7 @@ public class StatisticsActivity extends BaseActivity {
         chooseMonthDialog.setOnChooseAffirmListener((year, month) -> {
             mCurrentYear = year;
             mCurrentMonth = month;
-            String title = DateUtils.getYearMonthFormatString(year, month);
+            String title = DateUtils.INSTANCE.getYearMonthFormatString(year, month);
             mBinding.titleBar.setTitle(title);
             mBillFragment.setYearMonth(year, month);
             mReportsFragment.setYearMonth(year, month);

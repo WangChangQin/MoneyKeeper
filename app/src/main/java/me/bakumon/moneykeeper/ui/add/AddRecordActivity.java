@@ -59,7 +59,7 @@ public class AddRecordActivity extends BaseActivity {
 
     private AddRecordViewModel mViewModel;
 
-    private Date mCurrentChooseDate = DateUtils.getTodayDate();
+    private Date mCurrentChooseDate = DateUtils.INSTANCE.getTodayDate();
     private Calendar mCurrentChooseCalendar = Calendar.getInstance();
     private int mCurrentType;
 
@@ -77,7 +77,7 @@ public class AddRecordActivity extends BaseActivity {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddRecordViewModel.class);
 
         initView();
@@ -96,7 +96,7 @@ public class AddRecordActivity extends BaseActivity {
         mBinding.titleBar.ibtClose.setOnClickListener(v -> finish());
 
         mBinding.edtRemark.setOnEditorActionListener((v, actionId, event) -> {
-            SoftInputUtils.hideSoftInput(mBinding.typePageOutlay);
+            SoftInputUtils.INSTANCE.hideSoftInput(mBinding.typePageOutlay);
             mBinding.keyboard.setEditTextFocus();
             return false;
         });
@@ -108,10 +108,10 @@ public class AddRecordActivity extends BaseActivity {
             mCurrentType = mRecord.mRecordTypes.get(0).type;
             mBinding.titleBar.setTitle(getString(R.string.text_modify_record));
             mBinding.edtRemark.setText(mRecord.remark);
-            mBinding.keyboard.setText(BigDecimalUtil.fen2Yuan(mRecord.money));
+            mBinding.keyboard.setText(BigDecimalUtil.INSTANCE.fen2Yuan(mRecord.money));
             mCurrentChooseDate = mRecord.time;
             mCurrentChooseCalendar.setTime(mCurrentChooseDate);
-            mBinding.qmTvDate.setText(DateUtils.getWordTime(mCurrentChooseDate));
+            mBinding.qmTvDate.setText(DateUtils.INSTANCE.getWordTime(mCurrentChooseDate));
         }
 
         mBinding.keyboard.setAffirmClickListener(text -> {
@@ -125,9 +125,9 @@ public class AddRecordActivity extends BaseActivity {
         mBinding.qmTvDate.setOnClickListener(v -> {
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     (view, year, monthOfYear, dayOfMonth) -> {
-                        mCurrentChooseDate = DateUtils.getDate(year, monthOfYear + 1, dayOfMonth);
+                        mCurrentChooseDate = DateUtils.INSTANCE.getDate(year, monthOfYear + 1, dayOfMonth);
                         mCurrentChooseCalendar.setTime(mCurrentChooseDate);
-                        mBinding.qmTvDate.setText(DateUtils.getWordTime(mCurrentChooseDate));
+                        mBinding.qmTvDate.setText(DateUtils.INSTANCE.getWordTime(mCurrentChooseDate));
                     }, mCurrentChooseCalendar);
             dpd.setMaxDate(Calendar.getInstance());
             dpd.show(getFragmentManager(), TAG_PICKER_DIALOG);
@@ -151,7 +151,7 @@ public class AddRecordActivity extends BaseActivity {
         // 防止重复提交
         mBinding.keyboard.setAffirmEnable(false);
         Record record = new Record();
-        record.money = BigDecimalUtil.yuan2FenBD(text);
+        record.money = BigDecimalUtil.INSTANCE.yuan2FenBD(text);
         record.remark = mBinding.edtRemark.getText().toString().trim();
         record.time = mCurrentChooseDate;
         record.createTime = new Date();
@@ -164,13 +164,13 @@ public class AddRecordActivity extends BaseActivity {
                 .subscribe(this::insertRecordDone,
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（新增记录失败的时候）", throwable);
                                 insertRecordDone();
                             } else {
                                 Log.e(TAG, "新增记录失败", throwable);
                                 mBinding.keyboard.setAffirmEnable(true);
-                                ToastUtils.show(R.string.toast_add_record_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_add_record_fail);
                             }
                         }
                 ));
@@ -185,7 +185,7 @@ public class AddRecordActivity extends BaseActivity {
             mBinding.keyboard.setText("");
             mBinding.edtRemark.setText("");
             mBinding.keyboard.setAffirmEnable(true);
-            ToastUtils.show(R.string.toast_success_record);
+            ToastUtils.INSTANCE.show(R.string.toast_success_record);
         } else {
             finish();
         }
@@ -194,7 +194,7 @@ public class AddRecordActivity extends BaseActivity {
     private void modifyRecord(String text) {
         // 防止重复提交
         mBinding.keyboard.setAffirmEnable(false);
-        mRecord.money = BigDecimalUtil.yuan2FenBD(text);
+        mRecord.money = BigDecimalUtil.INSTANCE.yuan2FenBD(text);
         mRecord.remark = mBinding.edtRemark.getText().toString().trim();
         mRecord.time = mCurrentChooseDate;
         mRecord.recordTypeId = mCurrentType == RecordType.TYPE_OUTLAY ?
@@ -206,13 +206,13 @@ public class AddRecordActivity extends BaseActivity {
                 .subscribe(this::finish,
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（记录修改失败的时候）", throwable);
                                 finish();
                             } else {
                                 Log.e(TAG, "记录修改失败", throwable);
                                 mBinding.keyboard.setAffirmEnable(true);
-                                ToastUtils.show(R.string.toast_modify_record_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_modify_record_fail);
                             }
                         }
                 ));
@@ -235,7 +235,7 @@ public class AddRecordActivity extends BaseActivity {
                     }
 
                 }, throwable -> {
-                    ToastUtils.show(R.string.toast_get_types_fail);
+                    ToastUtils.INSTANCE.show(R.string.toast_get_types_fail);
                     Log.e(TAG, "获取类型数据失败", throwable);
                 }));
     }

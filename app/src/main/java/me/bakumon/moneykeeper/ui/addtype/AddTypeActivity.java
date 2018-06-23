@@ -64,7 +64,7 @@ public class AddTypeActivity extends BaseActivity {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTypeViewModel.class);
 
         initView();
@@ -119,7 +119,7 @@ public class AddTypeActivity extends BaseActivity {
                         }
                     }
                 }, throwable -> {
-                    ToastUtils.show(R.string.toast_type_img_fail);
+                    ToastUtils.INSTANCE.show(R.string.toast_type_img_fail);
                     Log.e(TAG, "类型图片获取失败", throwable);
                 }));
     }
@@ -128,7 +128,7 @@ public class AddTypeActivity extends BaseActivity {
         mBinding.titleBar.tvRight.setEnabled(false);
         String text = mBinding.edtTypeName.getText().toString().trim();
         if (TextUtils.isEmpty(text)) {
-            Animation animation = AnimationUtils.loadAnimation(App.getINSTANCE(), R.anim.shake);
+            Animation animation = AnimationUtils.loadAnimation(App.Companion.getInstance(), R.anim.shake);
             mBinding.edtTypeName.startAnimation(animation);
             mBinding.titleBar.tvRight.setEnabled(true);
             return;
@@ -139,13 +139,13 @@ public class AddTypeActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::finish, throwable -> {
                     if (throwable instanceof BackupFailException) {
-                        ToastUtils.show(throwable.getMessage());
+                        ToastUtils.INSTANCE.show(throwable.getMessage());
                         Log.e(TAG, "备份失败（类型保存失败的时候）", throwable);
                         finish();
                     } else {
                         mBinding.titleBar.tvRight.setEnabled(true);
                         String failTip = TextUtils.isEmpty(throwable.getMessage()) ? getString(R.string.toast_type_save_fail) : throwable.getMessage();
-                        ToastUtils.show(failTip);
+                        ToastUtils.INSTANCE.show(failTip);
                         Log.e(TAG, "类型保存失败", throwable);
                     }
                 }));

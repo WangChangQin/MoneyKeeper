@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@{DateUtils.date2MonthDay(recordWithType.time)}"
+            android:text="@{DateUtils.INSTANCE.date2MonthDay(recordWithType.time)}"
             android:textColor="@color/colorTextGray"
             android:visibility="@{isDataShow}"
             tools:text="4月11日" />

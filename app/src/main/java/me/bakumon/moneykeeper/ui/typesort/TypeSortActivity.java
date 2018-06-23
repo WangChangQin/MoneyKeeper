@@ -62,7 +62,7 @@ public class TypeSortActivity extends BaseActivity {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(TypeSortViewModel.class);
 
         initView();
@@ -95,12 +95,12 @@ public class TypeSortActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::finish, throwable -> {
                     if (throwable instanceof BackupFailException) {
-                        ToastUtils.show(throwable.getMessage());
+                        ToastUtils.INSTANCE.show(throwable.getMessage());
                         Log.e(TAG, "备份失败（类型排序失败的时候）", throwable);
                         finish();
                     } else {
                         mBinding.titleBar.tvRight.setEnabled(true);
-                        ToastUtils.show(R.string.toast_sort_fail);
+                        ToastUtils.INSTANCE.show(R.string.toast_sort_fail);
                         Log.e(TAG, "类型排序失败", throwable);
                     }
                 }));
@@ -111,7 +111,7 @@ public class TypeSortActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((recordTypes) -> mAdapter.setNewData(recordTypes),
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_types_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_types_fail);
                             Log.e(TAG, "获取类型数据失败", throwable);
                         }));
     }

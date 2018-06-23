@@ -76,9 +76,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (views == null || views.length < 1) {
             return;
         }
-        StatusBarUtil.immersive(this);
+        StatusBarUtil.INSTANCE.immersive(this);
         for (View view : views) {
-            StatusBarUtil.setPaddingSmart(this, view);
+            StatusBarUtil.INSTANCE.setPaddingSmart(this, view);
         }
     }
 

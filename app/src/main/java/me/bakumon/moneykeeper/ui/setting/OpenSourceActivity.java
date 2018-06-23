@@ -26,7 +26,7 @@ import java.util.List;
 import me.bakumon.moneykeeper.R;
 import me.bakumon.moneykeeper.base.BaseActivity;
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding;
-import me.bakumon.moneykeeper.utill.CustomTabsUtil;
+import me.bakumon.moneykeeper.utill.AndroidUtil;
 
 /**
  * 开源许可证
@@ -56,7 +56,7 @@ public class OpenSourceActivity extends BaseActivity {
         OpenSourceAdapter adapter = new OpenSourceAdapter(null);
         mBinding.rvSetting.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) ->
-                CustomTabsUtil.openWeb(this, adapter.getData().get(position).url));
+                AndroidUtil.INSTANCE.openWeb(this, adapter.getData().get(position).url));
 
         List<OpenSourceBean> list = new ArrayList<>();
         OpenSourceBean support = new OpenSourceBean("android support libraries - Google",

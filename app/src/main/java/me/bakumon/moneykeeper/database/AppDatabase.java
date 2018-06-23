@@ -46,7 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(App.getINSTANCE(),
+                    INSTANCE = Room.databaseBuilder(App.Companion.getInstance(),
                             AppDatabase.class, DB_NAME)
                             .build();
                 }

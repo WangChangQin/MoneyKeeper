@@ -37,14 +37,14 @@ public class ReportsViewModel extends BaseViewModel {
     }
 
     public Flowable<List<SumMoneyBean>> getMonthSumMoney(int year, int month) {
-        Date dateFrom = DateUtils.getMonthStart(year, month);
-        Date dateTo = DateUtils.getMonthEnd(year, month);
+        Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
+        Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
         return mDataSource.getMonthSumMoney(dateFrom, dateTo);
     }
 
     public Flowable<List<TypeSumMoneyBean>> getTypeSumMoney(int year, int month, int type) {
-        Date dateFrom = DateUtils.getMonthStart(year, month);
-        Date dateTo = DateUtils.getMonthEnd(year, month);
+        Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
+        Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
         return mDataSource.getTypeSumMoney(dateFrom, dateTo, type);
     }
 

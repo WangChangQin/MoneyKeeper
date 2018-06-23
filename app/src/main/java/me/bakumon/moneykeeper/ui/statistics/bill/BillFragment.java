@@ -75,11 +75,11 @@ public class BillFragment extends BaseFragment {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(BillViewModel.class);
 
-        mYear = DateUtils.getCurrentYear();
-        mMonth = DateUtils.getCurrentMonth();
+        mYear = DateUtils.INSTANCE.getCurrentYear();
+        mMonth = DateUtils.INSTANCE.getCurrentMonth();
         mType = RecordType.TYPE_OUTLAY;
 
         initView();
@@ -161,10 +161,10 @@ public class BillFragment extends BaseFragment {
                         },
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable);
                             } else {
-                                ToastUtils.show(R.string.toast_record_delete_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_record_delete_fail);
                                 Log.e(TAG, "删除记账记录失败", throwable);
                             }
                         }));
@@ -178,7 +178,7 @@ public class BillFragment extends BaseFragment {
             mBinding.barChart.setVisibility(View.VISIBLE);
         }
 
-        int count = DateUtils.getDayCount(mYear, mMonth);
+        int count = DateUtils.INSTANCE.getDayCount(mYear, mMonth);
         List<BarEntry> barEntries = BarEntryConverter.getBarEntryList(count, daySumMoneyBeans);
 
         BarDataSet set1;
@@ -236,7 +236,7 @@ public class BillFragment extends BaseFragment {
                             }
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_records_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_records_fail);
                             Log.e(TAG, "获取记录列表失败", throwable);
                         }));
     }
@@ -247,7 +247,7 @@ public class BillFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setChartData,
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_statistics_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_statistics_fail);
                             Log.e(TAG, "获取统计数据失败", throwable);
                         }));
     }
@@ -258,7 +258,7 @@ public class BillFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sumMoneyBean -> mBinding.layoutSumMoney.setSumMoneyBeanList(sumMoneyBean),
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_month_summary_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_month_summary_fail);
                             Log.e(TAG, "获取该月汇总数据失败", throwable);
                         }));
     }

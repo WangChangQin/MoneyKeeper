@@ -73,11 +73,11 @@ public class ReportsFragment extends BaseFragment {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportsViewModel.class);
 
-        mYear = DateUtils.getCurrentYear();
-        mMonth = DateUtils.getCurrentMonth();
+        mYear = DateUtils.INSTANCE.getCurrentYear();
+        mMonth = DateUtils.INSTANCE.getCurrentMonth();
         mType = RecordType.TYPE_OUTLAY;
 
         initView();
@@ -221,7 +221,7 @@ public class ReportsFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sumMoneyBean -> mBinding.layoutSumMoney.setSumMoneyBeanList(sumMoneyBean),
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_month_summary_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_month_summary_fail);
                             Log.e(TAG, "获取该月汇总数据失败", throwable);
                         }));
     }
@@ -238,7 +238,7 @@ public class ReportsFragment extends BaseFragment {
                             }
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_type_summary_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_type_summary_fail);
                             Log.e(TAG, "获取类型汇总数据失败", throwable);
                         }));
     }

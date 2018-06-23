@@ -14,53 +14,51 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.utill;
+package me.bakumon.moneykeeper.utill
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
-import android.os.Build;
-
-import java.util.Arrays;
-
-import me.bakumon.moneykeeper.R;
-import me.bakumon.moneykeeper.ui.add.AddRecordActivity;
-import me.bakumon.moneykeeper.ui.statistics.StatisticsActivity;
+import android.annotation.TargetApi
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
+import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.ui.add.AddRecordActivity
+import me.bakumon.moneykeeper.ui.statistics.StatisticsActivity
+import java.util.*
 
 /**
  * Shortcut 工具类
  *
  * @author Bakumon https://bakumon.me
  */
-public class ShortcutUtil {
+object ShortcutUtil {
     @TargetApi(Build.VERSION_CODES.N_MR1)
-    public static void addRecordShortcut(Context context) {
+    fun addRecordShortcut(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
-            return;
+            return
         }
-        ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
-        Intent intentAdd = new Intent(context, AddRecordActivity.class);
-        intentAdd.setAction("LOCATION_SHORTCUT");
-        ShortcutInfo shortcutAdd = new ShortcutInfo.Builder(context, "add")
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        val intentAdd = Intent(context, AddRecordActivity::class.java)
+        intentAdd.action = "LOCATION_SHORTCUT"
+        val shortcutAdd = ShortcutInfo.Builder(context, "add")
                 .setShortLabel(context.getString(R.string.shortcuts_add_short))
                 .setLongLabel(context.getString(R.string.shortcuts_add_long))
                 .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_add))
                 .setIntent(intentAdd)
-                .build();
+                .build()
 
-        Intent intentStatistics = new Intent(context, StatisticsActivity.class);
-        intentStatistics.setAction("LOCATION_SHORTCUT");
-        ShortcutInfo shortcutStatistics = new ShortcutInfo.Builder(context, "statistics")
+        val intentStatistics = Intent(context, StatisticsActivity::class.java)
+        intentStatistics.action = "LOCATION_SHORTCUT"
+        val shortcutStatistics = ShortcutInfo.Builder(context, "statistics")
                 .setShortLabel(context.getString(R.string.shortcuts_statistics_short))
                 .setLongLabel(context.getString(R.string.shortcuts_statistics_long))
                 .setIcon(Icon.createWithResource(context, R.drawable.shortcuts_statistics))
                 .setIntent(intentStatistics)
-                .build();
+                .build()
         if (shortcutManager != null) {
-            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcutAdd, shortcutStatistics));
+            shortcutManager.dynamicShortcuts = Arrays.asList(shortcutAdd, shortcutStatistics)
         }
     }
 }

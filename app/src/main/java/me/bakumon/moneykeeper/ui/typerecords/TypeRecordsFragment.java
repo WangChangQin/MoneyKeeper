@@ -79,7 +79,7 @@ public class TypeRecordsFragment extends BaseFragment {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(TypeRecordsViewModel.class);
 
         Bundle bundle = getArguments();
@@ -148,10 +148,10 @@ public class TypeRecordsFragment extends BaseFragment {
                         },
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable);
                             } else {
-                                ToastUtils.show(R.string.toast_record_delete_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_record_delete_fail);
                                 Log.e(TAG, "删除记账记录失败", throwable);
                             }
                         }));
@@ -180,7 +180,7 @@ public class TypeRecordsFragment extends BaseFragment {
                             }
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_records_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_records_fail);
                             Log.e(TAG, "获取记录列表失败", throwable);
                         }));
     }

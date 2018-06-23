@@ -14,18 +14,22 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.utill;
+package me.bakumon.moneykeeper
 
-import me.bakumon.moneykeeper.App;
+import me.drakeet.floo.Chain
+import me.drakeet.floo.Interceptor
 
 /**
- * 尺寸转换工具类
- *
+ * Floo 路由 scheme 拦截器，修正 debug 下的 scheme
  * @author Bakumon https://bakumon.me
  */
-public class SizeUtils {
-    public static int dp2px(final float dpValue) {
-        final float scale = App.getINSTANCE().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+class PureSchemeInterceptor(private val scheme: String) : Interceptor {
+
+    override fun intercept(chain: Chain): Chain {
+        return if (BuildConfig.DEBUG && Router.SCHEME == chain.request().scheme) {
+            Chain(chain.request().buildUpon().scheme(scheme).build())
+        } else {
+            chain
+        }
     }
 }

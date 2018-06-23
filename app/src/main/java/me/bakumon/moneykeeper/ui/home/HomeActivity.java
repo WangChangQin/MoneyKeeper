@@ -71,7 +71,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
 
         initView();
@@ -79,7 +79,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         checkPermissionForBackup();
 
         // 快速记账
-        if (ConfigManager.isFast()) {
+        if (ConfigManager.INSTANCE.isFast()) {
             Floo.navigation(this, Router.Url.URL_ADD_RECORD).start();
         }
     }
@@ -113,7 +113,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
     protected void onResume() {
         super.onResume();
         getCurrentMontySumMonty();
-        if (ConfigManager.isSuccessive()) {
+        if (ConfigManager.INSTANCE.isSuccessive()) {
             mBinding.btnAddRecord.setOnLongClickListener(v -> {
                 Floo.navigation(this, Router.Url.URL_ADD_RECORD)
                         .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
@@ -152,10 +152,10 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
                         },
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable);
                             } else {
-                                ToastUtils.show(R.string.toast_record_delete_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_record_delete_fail);
                                 Log.e(TAG, "删除记账记录失败", throwable);
                             }
                         }));
@@ -170,13 +170,13 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
         mDisposable.add(mViewModel.initRecordTypes()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> ShortcutUtil.addRecordShortcut(this),
+                .subscribe(() -> ShortcutUtil.INSTANCE.addRecordShortcut(this),
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（初始化类型数据失败的时候）", throwable);
                             } else {
-                                ToastUtils.show(R.string.toast_init_types_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_init_types_fail);
                                 Log.e(TAG, "初始化类型数据失败", throwable);
                             }
                         }));
@@ -188,7 +188,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(sumMoneyBeans -> mBinding.setSumMoneyBeanList(sumMoneyBeans),
                         throwable -> {
-                            ToastUtils.show(R.string.toast_current_sum_money_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_current_sum_money_fail);
                             Log.e(TAG, "本月支出收入总数获取失败", throwable);
                         }));
     }
@@ -204,7 +204,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
                             }
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_records_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_records_fail);
                             Log.e(TAG, "获取记录列表失败", throwable);
                         }));
     }
@@ -249,7 +249,7 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
     }
 
     private void checkPermissionForBackup() {
-        if (!ConfigManager.isAutoBackup()) {
+        if (!ConfigManager.INSTANCE.isAutoBackup()) {
             return;
         }
         if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -266,10 +266,10 @@ public class HomeActivity extends BaseActivity implements StackCallback, EasyPer
 
     public void updateConfig(boolean isAutoBackup) {
         if (isAutoBackup) {
-            ConfigManager.setIsAutoBackup(true);
+            ConfigManager.INSTANCE.setIsAutoBackup(true);
         } else {
-            if (ConfigManager.setIsAutoBackup(false)) {
-                ToastUtils.show(R.string.toast_open_auto_backup);
+            if (ConfigManager.INSTANCE.setIsAutoBackup(false)) {
+                ToastUtils.INSTANCE.show(R.string.toast_open_auto_backup);
             }
         }
     }

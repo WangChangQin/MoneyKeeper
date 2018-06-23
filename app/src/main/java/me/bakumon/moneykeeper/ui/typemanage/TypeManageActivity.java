@@ -64,7 +64,7 @@ public class TypeManageActivity extends BaseActivity {
     @Override
     protected void onInit(@Nullable Bundle savedInstanceState) {
         mBinding = getDataBinding();
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.INSTANCE.provideViewModelFactory();
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(TypeManageViewModel.class);
 
         initView();
@@ -89,7 +89,7 @@ public class TypeManageActivity extends BaseActivity {
             if (adapter.getData().size() > 1) {
                 showDeleteDialog(mAdapter.getData().get(position));
             } else {
-                ToastUtils.show(R.string.toast_least_one_type);
+                ToastUtils.INSTANCE.show(R.string.toast_least_one_type);
             }
             return true;
         });
@@ -132,10 +132,10 @@ public class TypeManageActivity extends BaseActivity {
                         },
                         throwable -> {
                             if (throwable instanceof BackupFailException) {
-                                ToastUtils.show(throwable.getMessage());
+                                ToastUtils.INSTANCE.show(throwable.getMessage());
                                 Log.e(TAG, "备份失败（类型删除失败的时候）", throwable);
                             } else {
-                                ToastUtils.show(R.string.toast_delete_fail);
+                                ToastUtils.INSTANCE.show(R.string.toast_delete_fail);
                                 Log.e(TAG, "类型删除失败", throwable);
                             }
                         }
@@ -152,7 +152,7 @@ public class TypeManageActivity extends BaseActivity {
                             mBinding.typeChoice.rgType.check(id);
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_get_types_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_get_types_fail);
                             Log.e(TAG, "获取类型数据失败", throwable);
                         }));
     }

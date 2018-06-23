@@ -42,7 +42,7 @@ import me.bakumon.moneykeeper.Router;
 import me.bakumon.moneykeeper.base.BaseActivity;
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding;
 import me.bakumon.moneykeeper.utill.AlipayZeroSdk;
-import me.bakumon.moneykeeper.utill.CustomTabsUtil;
+import me.bakumon.moneykeeper.utill.AndroidUtil;
 import me.bakumon.moneykeeper.utill.SoftInputUtils;
 import me.bakumon.moneykeeper.utill.ToastUtils;
 import me.drakeet.floo.Floo;
@@ -90,17 +90,17 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         List<SettingSectionEntity> list = new ArrayList<>();
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_money)));
-        String budget = ConfigManager.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.getBudget();
+        String budget = ConfigManager.INSTANCE.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.INSTANCE.getBudget();
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_monty_budget), budget)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)));
-        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast())));
-        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive())));
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.INSTANCE.isFast())));
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.INSTANCE.isSuccessive())));
 
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_backup)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_setting_go_backup_content))));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_restore), getString(R.string.text_setting_restore_content))));
-        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_auto_backup), getString(R.string.text_setting_auto_backup_content), ConfigManager.isAutoBackup())));
+        list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_setting_auto_backup), getString(R.string.text_setting_auto_backup_content), ConfigManager.INSTANCE.isAutoBackup())));
 
         list.add(new SettingSectionEntity(getString(R.string.text_setting_about_and_help)));
         list.add(new SettingSectionEntity(new SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))));
@@ -142,7 +142,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                     goOpenSource();
                     break;
                 case 14:
-                    CustomTabsUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
+                    AndroidUtil.INSTANCE.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md");
                     break;
                 default:
                     break;
@@ -170,7 +170,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View contentView = layoutInflater.inflate(R.layout.dialog_input_budget, null, false);
         EditText editText = contentView.findViewById(R.id.edt_budget);
-        editText.setText(ConfigManager.getBudget() == 0 ? null : String.valueOf(ConfigManager.getBudget()));
+        editText.setText(ConfigManager.INSTANCE.getBudget() == 0 ? null : String.valueOf(ConfigManager.INSTANCE.getBudget()));
         editText.setSelection(editText.getText().length());
         new AlertDialog.Builder(this)
                 .setView(contentView)
@@ -178,27 +178,27 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                 .setPositiveButton(R.string.text_affirm, (dialogInterface, i) -> {
                     String text = editText.getText().toString();
                     if (!TextUtils.isEmpty(text)) {
-                        ConfigManager.setBudget(Integer.parseInt(text));
+                        ConfigManager.INSTANCE.setBudget(Integer.parseInt(text));
                     } else {
-                        ConfigManager.setBudget(0);
+                        ConfigManager.INSTANCE.setBudget(0);
                     }
-                    mAdapter.getData().get(position).t.content = ConfigManager.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.getBudget();
+                    mAdapter.getData().get(position).t.content = ConfigManager.INSTANCE.getBudget() == 0 ? getString(R.string.text_no_budget) : getString(R.string.text_money_symbol) + ConfigManager.INSTANCE.getBudget();
                     mAdapter.notifyItemChanged(position);
-                    SoftInputUtils.hideSoftInput(editText);
+                    SoftInputUtils.INSTANCE.hideSoftInput(editText);
                 })
-                .setNegativeButton(R.string.text_button_cancel, (dialogInterface, i) -> SoftInputUtils.hideSoftInput(editText))
+                .setNegativeButton(R.string.text_button_cancel, (dialogInterface, i) -> SoftInputUtils.INSTANCE.hideSoftInput(editText))
                 .create()
                 .show();
     }
 
     private void switchFast() {
-        boolean oldIsConfigOpen = ConfigManager.isFast();
-        ConfigManager.setIsFast(!oldIsConfigOpen);
+        boolean oldIsConfigOpen = ConfigManager.INSTANCE.isFast();
+        ConfigManager.INSTANCE.setIsFast(!oldIsConfigOpen);
     }
 
     private void switchSuccessive() {
-        boolean oldIsConfigOpen = ConfigManager.isSuccessive();
-        ConfigManager.setIsSuccessive(!oldIsConfigOpen);
+        boolean oldIsConfigOpen = ConfigManager.INSTANCE.isSuccessive();
+        ConfigManager.INSTANCE.setIsSuccessive(!oldIsConfigOpen);
     }
 
     private void switchAutoBackup(int position) {
@@ -214,7 +214,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                     .show();
         } else {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ConfigManager.setIsAutoBackup(true);
+                ConfigManager.INSTANCE.setIsAutoBackup(true);
                 initView();
                 return;
             }
@@ -231,7 +231,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
         switch (requestCode) {
             case 11:
-                ConfigManager.setIsAutoBackup(true);
+                ConfigManager.INSTANCE.setIsAutoBackup(true);
                 initView();
                 break;
             case 12:
@@ -267,7 +267,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
     }
 
     private void setAutoBackup(int position, boolean isBackup) {
-        ConfigManager.setIsAutoBackup(isBackup);
+        ConfigManager.INSTANCE.setIsAutoBackup(isBackup);
         mAdapter.getData().get(position).t.isConfigOpen = isBackup;
         mAdapter.notifyDataSetChanged();
     }
@@ -290,16 +290,15 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                 .setTitle(R.string.text_backup)
                 .setMessage(R.string.text_backup_save)
                 .setNegativeButton(R.string.text_button_cancel, null)
-                .setPositiveButton(R.string.text_affirm, (dialog, which) -> {
-                    mDisposable.add(mViewModel.backupDB()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(() -> ToastUtils.show(R.string.toast_backup_success),
-                                    throwable -> {
-                                        ToastUtils.show(R.string.toast_backup_fail);
-                                        Log.e(TAG, "备份失败", throwable);
-                                    }));
-                })
+                .setPositiveButton(R.string.text_affirm, (dialog, which) ->
+                        mDisposable.add(mViewModel.backupDB()
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> ToastUtils.INSTANCE.show(R.string.toast_backup_success),
+                                        throwable -> {
+                                            ToastUtils.INSTANCE.show(R.string.toast_backup_fail);
+                                            Log.e(TAG, "备份失败", throwable);
+                                        })))
                 .create()
                 .show();
     }
@@ -327,7 +326,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                             dialog.show();
                         },
                         throwable -> {
-                            ToastUtils.show(R.string.toast_backup_list_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_backup_list_fail);
                             Log.e(TAG, "备份文件列表获取失败", throwable);
                         }));
     }
@@ -341,7 +340,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
                                 .result("refresh")
                                 .start(),
                         throwable -> {
-                            ToastUtils.show(R.string.toast_restore_fail);
+                            ToastUtils.INSTANCE.show(R.string.toast_restore_fail);
                             Log.e(TAG, "恢复备份失败", throwable);
                         }));
     }
@@ -367,7 +366,7 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
             intent.setData(Uri.parse("market://details?id=" + getPackageName()));
             startActivity(intent);
         } catch (Exception e) {
-            ToastUtils.show(R.string.toast_not_install_market);
+            ToastUtils.INSTANCE.show(R.string.toast_not_install_market);
             e.printStackTrace();
         }
     }
@@ -376,10 +375,10 @@ public class SettingActivity extends BaseActivity implements EasyPermissions.Per
         // https://fama.alipay.com/qrcode/qrcodelist.htm?qrCodeType=P  二维码地址
         // http://cli.im/deqr/ 解析二维码
         // aex01251c8foqaprudcp503
-        if (AlipayZeroSdk.hasInstalledAlipayClient(this)) {
-            AlipayZeroSdk.startAlipayClient(this, "aex01251c8foqaprudcp503");
+        if (AlipayZeroSdk.INSTANCE.hasInstalledAlipayClient(this)) {
+            AlipayZeroSdk.INSTANCE.startAlipayClient(this, "aex01251c8foqaprudcp503");
         } else {
-            ToastUtils.show(R.string.toast_not_install_alipay);
+            ToastUtils.INSTANCE.show(R.string.toast_not_install_alipay);
         }
     }
 }
