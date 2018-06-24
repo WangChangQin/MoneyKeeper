@@ -14,38 +14,39 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.database.entity;
+package me.bakumon.moneykeeper.database.entity
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import android.arch.persistence.room.*
+import java.io.Serializable
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * 记账记录
  *
  * @author bakumon https://bakumon.me
  */
-@Entity(foreignKeys = @ForeignKey(entity = RecordType.class, parentColumns = "id", childColumns = "record_type_id"),
-        indices = {@Index(value = {"record_type_id", "time", "money", "create_time"})})
-public class Record implements Serializable {
+@Entity(
+        foreignKeys = [ForeignKey(
+                entity = RecordType::class,
+                parentColumns = ["id"],
+                childColumns = ["record_type_id"]
+        )],
+        indices = [(Index(value = arrayOf("record_type_id", "time", "money", "create_time")))]
+)
+open class Record : Serializable {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    var id: Int = 0
 
-    public BigDecimal money;
+    var money: BigDecimal? = null
 
-    public String remark;
+    var remark: String? = null
 
-    public Date time;
+    var time: Date? = null
 
     @ColumnInfo(name = "create_time")
-    public Date createTime;
+    var createTime: Date? = null
 
     @ColumnInfo(name = "record_type_id")
-    public int recordTypeId;
+    var recordTypeId: Int = 0
 }

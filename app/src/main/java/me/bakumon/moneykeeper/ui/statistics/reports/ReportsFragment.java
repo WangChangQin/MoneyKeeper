@@ -78,7 +78,7 @@ public class ReportsFragment extends BaseFragment {
 
         mYear = DateUtils.INSTANCE.getCurrentYear();
         mMonth = DateUtils.INSTANCE.getCurrentMonth();
-        mType = RecordType.TYPE_OUTLAY;
+        mType = RecordType.Companion.getTYPE_OUTLAY();
 
         initView();
     }
@@ -89,16 +89,16 @@ public class ReportsFragment extends BaseFragment {
         mBinding.rvRecordReports.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             TypeSumMoneyBean bean = mAdapter.getData().get(position);
-            navTypeRecords(bean.typeName, bean.typeId);
+            navTypeRecords(bean.getTypeName(), bean.getTypeId());
         });
 
         initPieChart();
 
         mBinding.layoutSumMoney.rgType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_outlay) {
-                mType = RecordType.TYPE_OUTLAY;
+                mType = RecordType.Companion.getTYPE_OUTLAY();
             } else {
-                mType = RecordType.TYPE_INCOME;
+                mType = RecordType.Companion.getTYPE_INCOME();
             }
             getTypeSumMoney();
             getMonthSumMoney();
@@ -128,8 +128,8 @@ public class ReportsFragment extends BaseFragment {
         mBinding.pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                String typeName = ((TypeSumMoneyBean) e.getData()).typeName;
-                int typeId = ((TypeSumMoneyBean) e.getData()).typeId;
+                String typeName = ((TypeSumMoneyBean) e.getData()).getTypeName();
+                int typeId = ((TypeSumMoneyBean) e.getData()).getTypeId();
                 navTypeRecords(typeName, typeId);
             }
 

@@ -56,7 +56,7 @@ public class TypeManageAdapter extends BaseDataBindingAdapter<RecordType> {
         if (data != null && data.size() > 0) {
             List<RecordType> result = new ArrayList<>();
             for (int i = 0; i < data.size(); i++) {
-                if (data.get(i).type == type) {
+                if (data.get(i).getType() == type) {
                     result.add(data.get(i));
                 }
             }

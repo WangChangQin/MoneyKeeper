@@ -102,14 +102,14 @@ public class AddRecordActivity extends BaseActivity {
         });
 
         if (mRecord == null) {
-            mCurrentType = RecordType.TYPE_OUTLAY;
+            mCurrentType = RecordType.Companion.getTYPE_OUTLAY();
             mBinding.titleBar.setTitle(getString(mIsSuccessive ? R.string.text_add_record_successive : R.string.text_add_record));
         } else {
-            mCurrentType = mRecord.mRecordTypes.get(0).type;
+            mCurrentType = mRecord.getMRecordTypes().get(0).getType();
             mBinding.titleBar.setTitle(getString(R.string.text_modify_record));
-            mBinding.edtRemark.setText(mRecord.remark);
-            mBinding.keyboard.setText(BigDecimalUtil.INSTANCE.fen2Yuan(mRecord.money));
-            mCurrentChooseDate = mRecord.time;
+            mBinding.edtRemark.setText(mRecord.getRemark());
+            mBinding.keyboard.setText(BigDecimalUtil.INSTANCE.fen2Yuan(mRecord.getMoney()));
+            mCurrentChooseDate = mRecord.getTime();
             mCurrentChooseCalendar.setTime(mCurrentChooseDate);
             mBinding.qmTvDate.setText(DateUtils.INSTANCE.getWordTime(mCurrentChooseDate));
         }
@@ -135,11 +135,11 @@ public class AddRecordActivity extends BaseActivity {
         mBinding.typeChoice.rgType.setOnCheckedChangeListener((group, checkedId) -> {
 
             if (checkedId == R.id.rb_outlay) {
-                mCurrentType = RecordType.TYPE_OUTLAY;
+                mCurrentType = RecordType.Companion.getTYPE_OUTLAY();
                 mBinding.typePageOutlay.setVisibility(View.VISIBLE);
                 mBinding.typePageIncome.setVisibility(View.GONE);
             } else {
-                mCurrentType = RecordType.TYPE_INCOME;
+                mCurrentType = RecordType.Companion.getTYPE_INCOME();
                 mBinding.typePageOutlay.setVisibility(View.GONE);
                 mBinding.typePageIncome.setVisibility(View.VISIBLE);
             }
@@ -151,12 +151,12 @@ public class AddRecordActivity extends BaseActivity {
         // 防止重复提交
         mBinding.keyboard.setAffirmEnable(false);
         Record record = new Record();
-        record.money = BigDecimalUtil.INSTANCE.yuan2FenBD(text);
-        record.remark = mBinding.edtRemark.getText().toString().trim();
-        record.time = mCurrentChooseDate;
-        record.createTime = new Date();
-        record.recordTypeId = mCurrentType == RecordType.TYPE_OUTLAY ?
-                mBinding.typePageOutlay.getCurrentItem().id : mBinding.typePageIncome.getCurrentItem().id;
+        record.setMoney(BigDecimalUtil.INSTANCE.yuan2FenBD(text));
+        record.setRemark(mBinding.edtRemark.getText().toString().trim());
+        record.setTime(mCurrentChooseDate);
+        record.setCreateTime(new Date());
+        record.setRecordTypeId(mCurrentType == RecordType.Companion.getTYPE_OUTLAY() ?
+                mBinding.typePageOutlay.getCurrentItem().getId() : mBinding.typePageIncome.getCurrentItem().getId());
 
         mDisposable.add(mViewModel.insertRecord(record)
                 .subscribeOn(Schedulers.io())
@@ -194,11 +194,11 @@ public class AddRecordActivity extends BaseActivity {
     private void modifyRecord(String text) {
         // 防止重复提交
         mBinding.keyboard.setAffirmEnable(false);
-        mRecord.money = BigDecimalUtil.INSTANCE.yuan2FenBD(text);
-        mRecord.remark = mBinding.edtRemark.getText().toString().trim();
-        mRecord.time = mCurrentChooseDate;
-        mRecord.recordTypeId = mCurrentType == RecordType.TYPE_OUTLAY ?
-                mBinding.typePageOutlay.getCurrentItem().id : mBinding.typePageIncome.getCurrentItem().id;
+        mRecord.setMoney(BigDecimalUtil.INSTANCE.yuan2FenBD(text));
+        mRecord.setRemark(mBinding.edtRemark.getText().toString().trim());
+        mRecord.setTime(mCurrentChooseDate);
+        mRecord.setRecordTypeId(mCurrentType == RecordType.Companion.getTYPE_OUTLAY() ?
+                mBinding.typePageOutlay.getCurrentItem().getId() : mBinding.typePageIncome.getCurrentItem().getId());
 
         mDisposable.add(mViewModel.updateRecord(mRecord)
                 .subscribeOn(Schedulers.io())
@@ -223,10 +223,10 @@ public class AddRecordActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((recordTypes) -> {
-                    mBinding.typePageOutlay.setNewData(recordTypes, RecordType.TYPE_OUTLAY);
-                    mBinding.typePageIncome.setNewData(recordTypes, RecordType.TYPE_INCOME);
+                    mBinding.typePageOutlay.setNewData(recordTypes, RecordType.Companion.getTYPE_OUTLAY());
+                    mBinding.typePageIncome.setNewData(recordTypes, RecordType.Companion.getTYPE_INCOME());
 
-                    if (mCurrentType == RecordType.TYPE_OUTLAY) {
+                    if (mCurrentType == RecordType.Companion.getTYPE_OUTLAY()) {
                         mBinding.typeChoice.rgType.check(R.id.rb_outlay);
                         mBinding.typePageOutlay.initCheckItem(mRecord);
                     } else {

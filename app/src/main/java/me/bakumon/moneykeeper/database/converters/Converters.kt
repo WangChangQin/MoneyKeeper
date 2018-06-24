@@ -14,36 +14,40 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.database.converters;
+package me.bakumon.moneykeeper.database.converters
 
-import android.arch.persistence.room.TypeConverter;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import android.arch.persistence.room.TypeConverter
+import java.math.BigDecimal
+import java.util.*
 
 /**
  * 数据库类型转换器
  *
  * @author Bakumon https://bakumon.me
  */
-public class Converters {
+object Converters {
+
     @TypeConverter
-    public static Date fromTimestamp(Long value) {
-        return value == null ? null : new Date(value);
+    @JvmStatic
+    fun fromTimestamp(value: Long?): Date? {
+        return if (value == null) null else Date(value)
     }
 
     @TypeConverter
-    public static Long dateToTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+    @JvmStatic
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
     }
 
     @TypeConverter
-    public static BigDecimal stringToBig(int intDecimal) {
-        return new BigDecimal(intDecimal);
+    @JvmStatic
+    fun stringToBig(intDecimal: Int): BigDecimal {
+        return BigDecimal(intDecimal)
     }
 
     @TypeConverter
-    public static int bigToString(BigDecimal bigDecimal) {
-        return bigDecimal.intValue();
+    @JvmStatic
+    fun bigToString(bigDecimal: BigDecimal): Int {
+        return bigDecimal.toInt()
     }
 }

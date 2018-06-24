@@ -35,7 +35,7 @@ class SPUtils private constructor(spName: String) {
 
         fun getInstance(spName: String): SPUtils? {
             if (INSTANCE == null) {
-                synchronized(SPUtils::class.java) {
+                synchronized(SPUtils::class) {
                     if (INSTANCE == null) {
                         INSTANCE = SPUtils(if (TextUtils.isEmpty(spName)) "spUtils" else spName)
                     }

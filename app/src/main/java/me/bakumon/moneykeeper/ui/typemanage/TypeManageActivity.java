@@ -72,7 +72,7 @@ public class TypeManageActivity extends BaseActivity {
     }
 
     private void initView() {
-        mCurrentType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY);
+        mCurrentType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.Companion.getTYPE_OUTLAY());
         mBinding.titleBar.tvRight.setText(R.string.text_button_sort);
         mBinding.titleBar.ibtClose.setOnClickListener(v -> finish());
         mBinding.titleBar.setTitle(getString(R.string.text_title_type_manage));
@@ -101,7 +101,7 @@ public class TypeManageActivity extends BaseActivity {
                         .start());
 
         mBinding.typeChoice.rgType.setOnCheckedChangeListener((group, checkedId) -> {
-            mCurrentType = checkedId == R.id.rb_outlay ? RecordType.TYPE_OUTLAY : RecordType.TYPE_INCOME;
+            mCurrentType = checkedId == R.id.rb_outlay ? RecordType.Companion.getTYPE_OUTLAY() : RecordType.Companion.getTYPE_INCOME();
             mAdapter.setNewData(mRecordTypes, mCurrentType);
             int visibility = mAdapter.getData().size() > 1 ? View.VISIBLE : View.INVISIBLE;
             mBinding.titleBar.tvRight.setVisibility(visibility);
@@ -111,7 +111,7 @@ public class TypeManageActivity extends BaseActivity {
 
     private void showDeleteDialog(RecordType recordType) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.text_dialog_delete) + recordType.name)
+        builder.setTitle(getString(R.string.text_dialog_delete) + recordType.getName())
                 .setMessage(R.string.text_delete_type_note)
                 .setNegativeButton(R.string.text_button_cancel, null)
                 .setPositiveButton(R.string.text_button_affirm_delete, (dialog, which) -> deleteType(recordType))
@@ -147,7 +147,7 @@ public class TypeManageActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((recordTypes) -> {
                             mRecordTypes = recordTypes;
-                            int id = mCurrentType == RecordType.TYPE_OUTLAY ? R.id.rb_outlay : R.id.rb_income;
+                            int id = mCurrentType == RecordType.Companion.getTYPE_OUTLAY() ? R.id.rb_outlay : R.id.rb_income;
                             mBinding.typeChoice.rgType.clearCheck();
                             mBinding.typeChoice.rgType.check(id);
                         },

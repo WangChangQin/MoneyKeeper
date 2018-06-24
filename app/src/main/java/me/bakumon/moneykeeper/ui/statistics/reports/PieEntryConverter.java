@@ -39,8 +39,8 @@ public class PieEntryConverter {
     public static List<PieEntry> getBarEntryList(List<TypeSumMoneyBean> typeSumMoneyBeans) {
         List<PieEntry> entryList = new ArrayList<>();
         for (int i = 0; i < typeSumMoneyBeans.size(); i++) {
-            BigDecimal typeMoney = typeSumMoneyBeans.get(i).typeSumMoney;
-            entryList.add(new PieEntry(typeMoney.intValue(), typeSumMoneyBeans.get(i).typeName, typeSumMoneyBeans.get(i)));
+            BigDecimal typeMoney = typeSumMoneyBeans.get(i).getTypeSumMoney();
+            entryList.add(new PieEntry(typeMoney.intValue(), typeSumMoneyBeans.get(i).getTypeName(), typeSumMoneyBeans.get(i)));
         }
         return entryList;
     }

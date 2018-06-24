@@ -70,7 +70,7 @@ public class TypeSortActivity extends BaseActivity {
     }
 
     private void initView() {
-        mType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY);
+        mType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.Companion.getTYPE_OUTLAY());
 
         mBinding.titleBar.ibtClose.setOnClickListener(v -> finish());
         mBinding.titleBar.setTitle(getString(R.string.text_title_drag_sort));

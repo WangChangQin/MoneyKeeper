@@ -80,7 +80,7 @@ public class BillFragment extends BaseFragment {
 
         mYear = DateUtils.INSTANCE.getCurrentYear();
         mMonth = DateUtils.INSTANCE.getCurrentMonth();
-        mType = RecordType.TYPE_OUTLAY;
+        mType = RecordType.Companion.getTYPE_OUTLAY();
 
         initView();
     }
@@ -98,9 +98,9 @@ public class BillFragment extends BaseFragment {
 
         mBinding.layoutSumMoney.rgType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_outlay) {
-                mType = RecordType.TYPE_OUTLAY;
+                mType = RecordType.Companion.getTYPE_OUTLAY();
             } else {
-                mType = RecordType.TYPE_INCOME;
+                mType = RecordType.Companion.getTYPE_INCOME();
             }
             getOrderData();
             getDaySumData();

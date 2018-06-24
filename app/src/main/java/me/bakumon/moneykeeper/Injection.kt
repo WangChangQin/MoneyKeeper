@@ -26,7 +26,7 @@ import me.bakumon.moneykeeper.viewmodel.ViewModelFactory
  */
 object Injection {
     fun provideUserDataSource(): AppDataSource {
-        val database = AppDatabase.getInstance()
+        val database = AppDatabase.instance!!
         return LocalAppDataSource(database)
     }
 

@@ -14,27 +14,19 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.database.entity;
+package me.bakumon.moneykeeper.database.entity
 
-import java.math.BigDecimal;
+import java.math.BigDecimal
 
 /**
- * 支出或收入的总和
+ * 类型汇总实体
  *
  * @author Bakumon https://bakumon.me
  */
-public class SumMoneyBean {
-    /**
-     * 类型
-     * 0：支出
-     * 1：收入
-     *
-     * @see RecordType#TYPE_OUTLAY
-     * @see RecordType#TYPE_INCOME
-     */
-    public int type;
-    /**
-     * 支出或收入的总和
-     */
-    public BigDecimal sumMoney;
-}
+data class TypeSumMoneyBean(
+        val imgName: String,
+        val typeName: String,
+        val typeSumMoney: BigDecimal,
+        val typeId: Int,
+        val count: Int
+)

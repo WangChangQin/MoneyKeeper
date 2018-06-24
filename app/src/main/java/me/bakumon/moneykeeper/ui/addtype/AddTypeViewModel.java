@@ -52,8 +52,8 @@ public class AddTypeViewModel extends BaseViewModel {
             return mDataSource.addRecordType(type, imgName, name);
         } else {
             // 修改
-            RecordType updateType = new RecordType(recordType.id, name, imgName, recordType.type, recordType.ranking);
-            updateType.state = recordType.state;
+            RecordType updateType = new RecordType(recordType.getId(), name, imgName, recordType.getType(), recordType.getRanking());
+            updateType.setState(recordType.getState());
             return mDataSource.updateRecordType(recordType, updateType);
         }
     }

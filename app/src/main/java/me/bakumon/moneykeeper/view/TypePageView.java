@@ -125,7 +125,7 @@ public class TypePageView extends LinearLayout {
             int size = mAdapter.getData().size();
             if (record != null && size > 0) {
                 for (int i = 0; i < size; i++) {
-                    if (record.mRecordTypes.get(0).id == mAdapter.getData().get(i).id) {
+                    if (record.getMRecordTypes().get(0).getId() == mAdapter.getData().get(i).getId()) {
                         mCurrentTypeIndex = i;
                         isTypeExist++;
                         break;

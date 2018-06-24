@@ -65,7 +65,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
 
     override fun initRecordTypes(): Completable {
         return Completable.fromAction {
-            if (mAppDatabase.recordTypeDao().recordTypeCount < 1) {
+            if (mAppDatabase.recordTypeDao().getRecordTypeCount() < 1) {
                 // 没有记账类型数据记录，插入默认的数据类型
                 mAppDatabase.recordTypeDao().insertRecordTypes(*RecordTypeInitCreator.createRecordTypeData())
                 autoBackupForNecessary()
@@ -102,7 +102,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
             val oldName = oldRecordType.name
             val oldImgName = oldRecordType.imgName
             if (!TextUtils.equals(oldName, recordType.name)) {
-                val recordTypeFromDb = mAppDatabase.recordTypeDao().getTypeByName(recordType.type, recordType.name)
+                val recordTypeFromDb = mAppDatabase.recordTypeDao().getTypeByName(recordType.type, recordType.name!!)
                 if (recordTypeFromDb != null) {
                     if (recordTypeFromDb.state == RecordType.STATE_DELETED) {
 
@@ -155,7 +155,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
     }
 
     override fun getAllRecordType(): Flowable<List<RecordType>> {
-        return mAppDatabase.recordTypeDao().allRecordTypes
+        return mAppDatabase.recordTypeDao().getAllRecordTypes()
     }
 
     override fun getRecordTypes(type: Int): Flowable<List<RecordType>> {

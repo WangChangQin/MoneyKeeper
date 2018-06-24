@@ -14,30 +14,16 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.database.entity;
+package me.bakumon.moneykeeper.database.entity
 
-import java.math.BigDecimal;
-import java.util.Date;
+import android.arch.persistence.room.Relation
 
 /**
- * 某天的支出或收入总和
+ * 包含 RecordType 的 Record
  *
  * @author Bakumon https://bakumon.me
  */
-public class DaySumMoneyBean {
-    /**
-     * 类型
-     * 0：支出
-     * 1：收入
-     *
-     * @see RecordType#TYPE_OUTLAY
-     * @see RecordType#TYPE_INCOME
-     */
-    public int type;
-
-    public Date time;
-    /**
-     * 支出或收入的总和
-     */
-    public BigDecimal daySumMoney;
+class RecordWithType : Record() {
+    @Relation(parentColumn = "record_type_id", entityColumn = "id", entity = RecordType::class)
+    var mRecordTypes: List<RecordType>? = null
 }

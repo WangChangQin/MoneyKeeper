@@ -72,13 +72,13 @@ public class AddTypeActivity extends BaseActivity {
     }
 
     private void initView() {
-        mType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY);
+        mType = getIntent().getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.Companion.getTYPE_OUTLAY());
         mRecordType = (RecordType) getIntent().getSerializableExtra(Router.ExtraKey.KEY_TYPE_BEAN);
 
         String prefix = mRecordType == null ? getString(R.string.text_add) : getString(R.string.text_modify);
-        String type = mType == RecordType.TYPE_OUTLAY ? getString(R.string.text_outlay_type) : getString(R.string.text_income_type);
+        String type = mType == RecordType.Companion.getTYPE_OUTLAY() ? getString(R.string.text_outlay_type) : getString(R.string.text_income_type);
 
-        mBinding.edtTypeName.setText(mRecordType == null ? "" : mRecordType.name);
+        mBinding.edtTypeName.setText(mRecordType == null ? "" : mRecordType.getName());
         mBinding.edtTypeName.setSelection(mBinding.edtTypeName.getText().length());
 
         mBinding.titleBar.setTitle(prefix + type);
@@ -112,7 +112,7 @@ public class AddTypeActivity extends BaseActivity {
                         checkItem(0);
                     } else {
                         for (int i = 0; i < typeImgBeans.size(); i++) {
-                            if (TextUtils.equals(mRecordType.imgName, typeImgBeans.get(i).imgName)) {
+                            if (TextUtils.equals(mRecordType.getImgName(), typeImgBeans.get(i).imgName)) {
                                 checkItem(i);
                                 return;
                             }

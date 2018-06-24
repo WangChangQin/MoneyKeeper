@@ -100,8 +100,8 @@ public class BindAdapter {
         String outlay = "0";
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
-                if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlay = BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
+                if (bean.getType() == RecordType.Companion.getTYPE_OUTLAY()) {
+                    outlay = BigDecimalUtil.INSTANCE.fen2Yuan(bean.getSumMoney());
                 }
             }
         }
@@ -114,10 +114,10 @@ public class BindAdapter {
         String inComeStr = "0";
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
-                if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlay = bean.sumMoney;
-                } else if (bean.type == RecordType.TYPE_INCOME) {
-                    inComeStr = BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
+                if (bean.getType() == RecordType.Companion.getTYPE_OUTLAY()) {
+                    outlay = bean.getSumMoney();
+                } else if (bean.getType() == RecordType.Companion.getTYPE_INCOME()) {
+                    inComeStr = BigDecimalUtil.INSTANCE.fen2Yuan(bean.getSumMoney());
                 }
             }
         }
@@ -137,8 +137,8 @@ public class BindAdapter {
         String outlay = prefix + "0";
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
-                if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlay = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
+                if (bean.getType() == RecordType.Companion.getTYPE_OUTLAY()) {
+                    outlay = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.getSumMoney());
                 }
             }
         }
@@ -151,8 +151,8 @@ public class BindAdapter {
         String income = prefix + "0";
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
-                if (bean.type == RecordType.TYPE_INCOME) {
-                    income = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.sumMoney);
+                if (bean.getType() == RecordType.Companion.getTYPE_INCOME()) {
+                    income = prefix + BigDecimalUtil.INSTANCE.fen2Yuan(bean.getSumMoney());
                 }
             }
         }
@@ -167,11 +167,11 @@ public class BindAdapter {
         boolean isShowOverage = false;
         if (sumMoneyBean != null && sumMoneyBean.size() > 0) {
             for (SumMoneyBean bean : sumMoneyBean) {
-                if (bean.type == RecordType.TYPE_OUTLAY) {
-                    outlayBd = bean.sumMoney;
-                } else if (bean.type == RecordType.TYPE_INCOME) {
-                    isShowOverage = bean.sumMoney.compareTo(new BigDecimal(0)) > 0;
-                    incomeBd = bean.sumMoney;
+                if (bean.getType() == RecordType.Companion.getTYPE_OUTLAY()) {
+                    outlayBd = bean.getSumMoney();
+                } else if (bean.getType() == RecordType.Companion.getTYPE_INCOME()) {
+                    isShowOverage = bean.getSumMoney().compareTo(new BigDecimal(0)) > 0;
+                    incomeBd = bean.getSumMoney();
                 }
             }
         }

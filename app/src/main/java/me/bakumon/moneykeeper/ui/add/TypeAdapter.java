@@ -67,7 +67,7 @@ public class TypeAdapter extends BaseDataBindingAdapter<RecordType> {
         if (data != null && data.size() > 0) {
             List<RecordType> result = new ArrayList<>();
             for (int i = 0; i < data.size(); i++) {
-                if (data.get(i).type == type) {
+                if (data.get(i).getType() == type) {
                     result.add(data.get(i));
                 }
             }
@@ -76,9 +76,9 @@ public class TypeAdapter extends BaseDataBindingAdapter<RecordType> {
             result.add(settingItem);
             // 找出上次选中的 item
             int checkPosition = 0;
-            if (result.get(0).type != -1) {
+            if (result.get(0).getType() != -1) {
                 for (int i = 0; i < result.size(); i++) {
-                    if (result.get(i).id == mCurrentCheckId) {
+                    if (result.get(i).getId() == mCurrentCheckId) {
                         checkPosition = i;
                         break;
                     }
@@ -101,7 +101,7 @@ public class TypeAdapter extends BaseDataBindingAdapter<RecordType> {
     public void clickItem(int position) {
         // 点击设置 item
         RecordType item = getItem(position);
-        if (item != null && item.type == -1) {
+        if (item != null && item.getType() == -1) {
             Floo.navigation(mContext, Router.Url.URL_TYPE_MANAGE)
                     .putExtra(Router.ExtraKey.KEY_TYPE, mType)
                     .start();
@@ -111,12 +111,12 @@ public class TypeAdapter extends BaseDataBindingAdapter<RecordType> {
         RecordType temp;
         for (int i = 0; i < getData().size(); i++) {
             temp = getData().get(i);
-            if (temp != null && temp.type != -1) {
-                temp.isChecked = i == position;
+            if (temp != null && temp.getType() != -1) {
+                temp.setChecked(i == position);
             }
         }
         mCurrentCheckPosition = position;
-        mCurrentCheckId = getCurrentItem().id;
+        mCurrentCheckId = getCurrentItem().getId();
         notifyDataSetChanged();
     }
 
