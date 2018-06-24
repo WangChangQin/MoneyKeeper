@@ -319,9 +319,9 @@ object DateUtils {
         val oneDayMillis = todayEndMillis - todayStartMillis + 1
 
         return if (dateMillis in todayStartMillis..todayEndMillis) {
-            App.instance?.resources!!.getString(R.string.text_today)
+            App.instance.resources.getString(R.string.text_today)
         } else if (dateMillis >= todayStartMillis - oneDayMillis && dateMillis <= todayEndMillis - oneDayMillis) {
-            App.instance?.resources!!.getString(R.string.text_yesterday)
+            App.instance.resources.getString(R.string.text_yesterday)
         } else if (cal.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)) {
             date2String(date, MONTH_DAY_FORMAT)
         } else {

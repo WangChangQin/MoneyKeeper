@@ -25,7 +25,7 @@ import me.bakumon.moneykeeper.App
  */
 object SizeUtils {
     fun dp2px(dpValue: Float): Int {
-        val scale = App.instance?.resources!!.displayMetrics.density
+        val scale = App.instance.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
 }

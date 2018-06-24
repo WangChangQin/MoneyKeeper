@@ -35,10 +35,10 @@ public class TypeManageViewModel extends BaseViewModel {
     }
 
     public Flowable<List<RecordType>> getAllRecordTypes() {
-        return mDataSource.getAllRecordType();
+        return getMDataSource().getAllRecordType();
     }
 
     public Completable deleteRecordType(RecordType recordType) {
-        return mDataSource.deleteRecordType(recordType);
+        return getMDataSource().deleteRecordType(recordType);
     }
 }

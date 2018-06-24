@@ -36,14 +36,14 @@ public class AddRecordViewModel extends BaseViewModel {
     }
 
     public Flowable<List<RecordType>> getAllRecordTypes() {
-        return mDataSource.getAllRecordType();
+        return getMDataSource().getAllRecordType();
     }
 
     public Completable insertRecord(Record record) {
-        return mDataSource.insertRecord(record);
+        return getMDataSource().insertRecord(record);
     }
 
     public Completable updateRecord(Record record) {
-        return mDataSource.updateRecord(record);
+        return getMDataSource().updateRecord(record);
     }
 }

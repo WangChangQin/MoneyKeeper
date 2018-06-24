@@ -40,14 +40,14 @@ public class TypeRecordsViewModel extends BaseViewModel {
         Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
         Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
         if (sortType == TypeRecordsFragment.SORT_TIME) {
-            return mDataSource.getRecordWithTypes(dateFrom, dateTo, type, typeId);
+            return getMDataSource().getRecordWithTypes(dateFrom, dateTo, type, typeId);
         } else {
-            return mDataSource.getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId);
+            return getMDataSource().getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId);
         }
     }
 
     public Completable deleteRecord(RecordWithType record) {
-        return mDataSource.deleteRecord(record);
+        return getMDataSource().deleteRecord(record);
     }
 
 }

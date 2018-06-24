@@ -32,7 +32,7 @@ object ToastUtils {
         Toast.makeText(App.instance, resId, Toast.LENGTH_SHORT).show()
     }
 
-    fun show(msg: String) {
+    fun show(msg: String?) {
         Toast.makeText(App.instance, msg, Toast.LENGTH_SHORT).show()
     }
 }

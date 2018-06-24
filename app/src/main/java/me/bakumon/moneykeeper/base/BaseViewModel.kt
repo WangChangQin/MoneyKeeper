@@ -14,27 +14,16 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui;
+package me.bakumon.moneykeeper.base
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.arch.lifecycle.ViewModel
 
-import me.bakumon.moneykeeper.Router;
-import me.drakeet.floo.Floo;
+import me.bakumon.moneykeeper.datasource.AppDataSource
 
 /**
- * LauncherActivity
+ * ViewModel基类
+ * 包含 AppDataSource 数据源
  *
- * @author bakumon https://bakumon.me
- * @date 2018/5/2
+ * @author Bakumon https://bakumon
  */
-public class LauncherActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Floo.navigation(this, Router.Url.URL_HOME).start();
-        finish();
-    }
-}
+open class BaseViewModel(protected var mDataSource: AppDataSource) : ViewModel()

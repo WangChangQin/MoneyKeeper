@@ -35,7 +35,7 @@ public class AddTypeViewModel extends BaseViewModel {
     }
 
     public Flowable<List<TypeImgBean>> getAllTypeImgBeans(int type) {
-        return mDataSource.getAllTypeImgBeans(type);
+        return getMDataSource().getAllTypeImgBeans(type);
     }
 
     /**
@@ -49,12 +49,12 @@ public class AddTypeViewModel extends BaseViewModel {
     public Completable saveRecordType(RecordType recordType, int type, String imgName, String name) {
         if (recordType == null) {
             // 添加
-            return mDataSource.addRecordType(type, imgName, name);
+            return getMDataSource().addRecordType(type, imgName, name);
         } else {
             // 修改
             RecordType updateType = new RecordType(recordType.getId(), name, imgName, recordType.getType(), recordType.getRanking());
             updateType.setState(recordType.getState());
-            return mDataSource.updateRecordType(recordType, updateType);
+            return getMDataSource().updateRecordType(recordType, updateType);
         }
     }
 }

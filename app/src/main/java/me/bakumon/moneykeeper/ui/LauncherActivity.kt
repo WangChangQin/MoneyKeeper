@@ -14,22 +14,25 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.base;
+package me.bakumon.moneykeeper.ui
 
-import android.arch.lifecycle.ViewModel;
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
-import me.bakumon.moneykeeper.datasource.AppDataSource;
+import me.bakumon.moneykeeper.Router
+import me.drakeet.floo.Floo
 
 /**
- * ViewModel基类
- * 包含 AppDataSource 数据源
+ * LauncherActivity
  *
- * @author Bakumon https://bakumon
+ * @author bakumon https://bakumon.me
+ * @date 2018/5/2
  */
-public class BaseViewModel extends ViewModel {
-    protected AppDataSource mDataSource;
+class LauncherActivity : AppCompatActivity() {
 
-    public BaseViewModel(AppDataSource dataSource) {
-        mDataSource = dataSource;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Floo.navigation(this, Router.Url.URL_HOME).start()
+        finish()
     }
 }

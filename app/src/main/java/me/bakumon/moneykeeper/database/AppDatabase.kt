@@ -60,7 +60,7 @@ abstract class AppDatabase : RoomDatabase() {
                 if (INSTANCE == null) {
                     synchronized(AppDatabase::class) {
                         if (INSTANCE == null) {
-                            INSTANCE = Room.databaseBuilder(App.instance!!, AppDatabase::class.java, DB_NAME)
+                            INSTANCE = Room.databaseBuilder(App.instance, AppDatabase::class.java, DB_NAME)
                                     .build()
                         }
                     }

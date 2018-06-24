@@ -38,7 +38,7 @@ interface RecordTypeDao {
     fun getRecordTypes(type: Int): Flowable<List<RecordType>>
 
     @Query("SELECT * FROM RecordType WHERE type = :type AND name = :name")
-    fun getTypeByName(type: Int, name: String): RecordType
+    fun getTypeByName(type: Int, name: String): RecordType?
 
     @Insert
     fun insertRecordTypes(vararg recordTypes: RecordType)

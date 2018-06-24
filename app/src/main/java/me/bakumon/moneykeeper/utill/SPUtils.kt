@@ -27,7 +27,7 @@ import me.bakumon.moneykeeper.App
  * @author Bakumon https://bakumon.me
  */
 class SPUtils private constructor(spName: String) {
-    private val sp: SharedPreferences = App.instance!!.getSharedPreferences(spName, Context.MODE_PRIVATE)
+    private val sp: SharedPreferences = App.instance.getSharedPreferences(spName, Context.MODE_PRIVATE)
 
     companion object {
         @Volatile

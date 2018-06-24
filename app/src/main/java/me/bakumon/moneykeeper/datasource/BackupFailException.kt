@@ -24,4 +24,4 @@ import me.bakumon.moneykeeper.R
  *
  * @author Bakumon https://bakumon.me
  */
-class BackupFailException : Exception(App.instance!!.getString(R.string.text_tip_backup_fail))
+class BackupFailException : Exception(App.instance.getString(R.string.text_tip_backup_fail))

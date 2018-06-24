@@ -35,10 +35,10 @@ public class TypeSortViewModel extends BaseViewModel {
     }
 
     public Flowable<List<RecordType>> getRecordTypes(int type) {
-        return mDataSource.getRecordTypes(type);
+        return getMDataSource().getRecordTypes(type);
     }
 
     public Completable sortRecordTypes(List<RecordType> recordTypes) {
-        return mDataSource.sortRecordTypes(recordTypes);
+        return getMDataSource().sortRecordTypes(recordTypes);
     }
 }

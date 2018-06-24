@@ -72,7 +72,7 @@ interface RecordDao {
     fun getRecordCountWithTypeId(typeId: Int): Long
 
     @Query("SELECT * FROM Record WHERE record_type_id = :typeId")
-    fun getRecordsWithTypeId(typeId: Int): List<Record>
+    fun getRecordsWithTypeId(typeId: Int): List<Record>?
 
     /**
      * 尽量使用 Flowable 返回，因为当数据库数据改变时，会自动回调

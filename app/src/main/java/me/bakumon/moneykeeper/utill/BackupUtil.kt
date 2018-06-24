@@ -35,7 +35,7 @@ object BackupUtil {
     private val BACKUP_DIR = if (BuildConfig.DEBUG) "backup_moneykeeper_debug" else "backup_moneykeeper"
     private val AUTO_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupAutoDebug" else "MoneyKeeperBackupAuto"
     private val USER_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug" else "MoneyKeeperBackupUser"
-    private val BACKUP_SUFFIX = App.instance?.getString(R.string.text_before_reverting)
+    private val BACKUP_SUFFIX = App.instance.getString(R.string.text_before_reverting)
     private const val SUFFIX = ".db"
 
     fun getBackupFiles(): List<BackupBean> {
@@ -73,7 +73,7 @@ object BackupUtil {
             // 创建空文件，在模拟器上测试，如果没有这个文件，复制的时候会报 FileNotFound
             storage.createFile(filePath, "")
         }
-        return storage.copy(App.instance?.getDatabasePath(AppDatabase.DB_NAME)?.path, path + File.separator + fileName)
+        return storage.copy(App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path, path + File.separator + fileName)
     }
 
     fun autoBackup(): Boolean {
@@ -96,7 +96,7 @@ object BackupUtil {
         if (!storage.isFileExist(filePath)) {
             // 创建空文件，在模拟器上测试，如果没有这个文件，复制的时候会报 FileNotFound
             storage.createFile(filePath, "")
-            return storage.copy(App.instance?.getDatabasePath(AppDatabase.DB_NAME)?.path, path + File.separator + fileName)
+            return storage.copy(App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path, path + File.separator + fileName)
         }
         return true
     }
@@ -112,7 +112,7 @@ object BackupUtil {
             // 恢复之前，备份一下最新数据
             val fileName = "MoneyKeeperBackup" + DateUtils.getCurrentDateString() + BACKUP_SUFFIX + SUFFIX
             val isBackupSuccess = backupDB(fileName)
-            val isRestoreSuccess = storage.copy(restoreFile, App.instance?.getDatabasePath(AppDatabase.DB_NAME)?.path)
+            val isRestoreSuccess = storage.copy(restoreFile, App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path)
             return isBackupSuccess && isRestoreSuccess
         }
         return false

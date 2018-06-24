@@ -86,7 +86,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                     mAppDatabase.recordTypeDao().updateRecordTypes(recordType)
                 } else {
                     // 提示用户该类型已经存在
-                    throw IllegalStateException(name + App.instance?.getString(R.string.toast_type_is_exist))
+                    throw IllegalStateException(name + App.instance.getString(R.string.toast_type_is_exist))
                 }
             } else {
                 // 不存在，直接新增
@@ -120,7 +120,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                         mAppDatabase.recordTypeDao().updateRecordTypes(recordTypeFromDb)
 
                         val recordsWithOldType = mAppDatabase.recordDao().getRecordsWithTypeId(oldRecordType.id)
-                        if (recordsWithOldType != null && recordsWithOldType.size > 0) {
+                        if (recordsWithOldType != null && recordsWithOldType.isNotEmpty()) {
                             for (record in recordsWithOldType) {
                                 record.recordTypeId = recordTypeFromDb.id
                             }
@@ -130,7 +130,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                         mAppDatabase.recordTypeDao().deleteRecordType(oldRecordType)
                     } else {
                         // 提示用户该类型已经存在
-                        throw IllegalStateException(recordType.name + App.instance?.getString(R.string.toast_type_is_exist))
+                        throw IllegalStateException(recordType.name + App.instance.getString(R.string.toast_type_is_exist))
                     }
                 } else {
                     mAppDatabase.recordTypeDao().updateRecordTypes(recordType)

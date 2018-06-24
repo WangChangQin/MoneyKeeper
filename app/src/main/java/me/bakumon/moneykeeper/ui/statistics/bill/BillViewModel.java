@@ -41,21 +41,21 @@ public class BillViewModel extends BaseViewModel {
     public Flowable<List<RecordWithType>> getRecordWithTypes(int year, int month, int type) {
         Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
         Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
-        return mDataSource.getRecordWithTypes(dateFrom, dateTo, type);
+        return getMDataSource().getRecordWithTypes(dateFrom, dateTo, type);
     }
 
     public Flowable<List<DaySumMoneyBean>> getDaySumMoney(int year, int month, int type) {
-        return mDataSource.getDaySumMoney(year, month, type);
+        return getMDataSource().getDaySumMoney(year, month, type);
     }
 
     public Flowable<List<SumMoneyBean>> getMonthSumMoney(int year, int month) {
         Date dateFrom = DateUtils.INSTANCE.getMonthStart(year, month);
         Date dateTo = DateUtils.INSTANCE.getMonthEnd(year, month);
-        return mDataSource.getMonthSumMoney(dateFrom, dateTo);
+        return getMDataSource().getMonthSumMoney(dateFrom, dateTo);
     }
 
     public Completable deleteRecord(RecordWithType record) {
-        return mDataSource.deleteRecord(record);
+        return getMDataSource().deleteRecord(record);
     }
 
 }

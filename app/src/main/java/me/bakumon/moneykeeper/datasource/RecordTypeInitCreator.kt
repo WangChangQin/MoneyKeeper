@@ -33,7 +33,7 @@ object RecordTypeInitCreator {
 
         val list = ArrayList<RecordType>()
 
-        val res = App.instance!!.resources
+        val res = App.instance.resources
 
         var type: RecordType
 
