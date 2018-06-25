@@ -1,0 +1,200 @@
+/*
+ * Copyright 2018 Bakumon. https://github.com/Bakumon
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package me.bakumon.moneykeeper.ui.statistics.reports
+
+import android.content.Context
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+
+import java.util.ArrayList
+
+import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
+import me.bakumon.moneykeeper.utill.DateUtils
+import me.bakumon.moneykeeper.view.PickerLayoutManager
+
+/**
+ * 选择月份
+ *
+ * @author Bakumon https://bakumon
+ */
+class ChooseMonthDialog : DialogInterface.OnDismissListener {
+
+    private var mContext: Context? = null
+    private var mRvMonth: RecyclerView? = null
+    private var mYearAdapter: PickerAdapter? = null
+    private var mMonthAdapter: PickerAdapter? = null
+
+    private var mOnChooseAffirmListener: OnChooseAffirmListener? = null
+    private var mOnDismissListener: OnDismissListener? = null
+    private var builder: AlertDialog.Builder? = null
+
+    private var mYear = DateUtils.getCurrentYear()
+    private var mMonth = DateUtils.getCurrentMonth()
+
+    constructor(context: Context) {
+        mContext = context
+        setupDialog()
+    }
+
+    constructor(context: Context, year: Int, month: Int) {
+        mContext = context
+        mYear = year
+        mMonth = month
+        setupDialog()
+    }
+
+    private fun setupDialog() {
+        val layoutInflater = LayoutInflater.from(mContext)
+        val contentView = layoutInflater.inflate(R.layout.dialog_choose_month, null, false)
+        val rvYear = contentView.findViewById<RecyclerView>(R.id.rv_year)
+        mRvMonth = contentView.findViewById(R.id.rv_month)
+
+        // 设置 pickerLayoutManage
+        val lmYear = PickerLayoutManager(mContext, rvYear, PickerLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        rvYear.layoutManager = lmYear
+        val lmMonth = PickerLayoutManager(mContext, mRvMonth, PickerLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        mRvMonth!!.layoutManager = lmMonth
+
+        mYearAdapter = PickerAdapter(null)
+        rvYear.adapter = mYearAdapter
+        mMonthAdapter = PickerAdapter(null)
+        mRvMonth!!.adapter = mMonthAdapter
+
+        setYearAdapter()
+
+        lmYear.OnSelectedViewListener { view, position ->
+            mYear = mYearAdapter!!.data[position]
+            // 重新设置月份数据
+            setMonthAdapter()
+        }
+        // 选中对于年
+        for (i in mYearAdapter!!.data.size - 1 downTo 0) {
+            if (mYearAdapter!!.data[i] == mYear) {
+                rvYear.scrollToPosition(i)
+                break
+            }
+        }
+
+        setMonthAdapter()
+
+        lmMonth.OnSelectedViewListener { view, position -> mMonth = mMonthAdapter!!.data[position] }
+        // 选中对于月份
+        for (i in 0 until mMonthAdapter!!.data.size) {
+            if (mMonthAdapter!!.data[i] == mMonth) {
+                mRvMonth!!.scrollToPosition(i)
+                break
+            }
+        }
+
+        builder = AlertDialog.Builder(mContext!!)
+                .setTitle(R.string.text_choose_month)
+                .setView(contentView)
+                .setNegativeButton(R.string.text_button_cancel, null)
+                .setPositiveButton(R.string.text_affirm) { dialog, which ->
+                    if (mOnChooseAffirmListener != null) {
+                        mOnChooseAffirmListener!!.onClick(mYear, mMonth)
+                    }
+                }
+        builder!!.setOnDismissListener(this)
+
+    }
+
+    private fun setYearAdapter() {
+        val yearList = ArrayList<Int>()
+        for (i in MIN_YEAR..MAX_YEAR) {
+            yearList.add(i)
+        }
+        mYearAdapter!!.setNewData(yearList)
+    }
+
+    private fun setMonthAdapter() {
+        val monthList = ArrayList<Int>()
+        // 当前年，月份最大是当前月
+        val maxMonth = if (mYear == DateUtils.getCurrentYear()) DateUtils.getCurrentMonth() else 12
+        for (i in 1..maxMonth) {
+            monthList.add(i)
+        }
+        val lastData = mMonthAdapter!!.data
+        if (lastData.size > monthList.size) {
+            mMonthAdapter!!.setNewData(monthList)
+            // 修正月份
+            mMonth = 1
+            mRvMonth!!.scrollToPosition(0)
+        } else {
+            mMonthAdapter!!.setNewData(monthList)
+        }
+    }
+
+    fun show() {
+        builder!!.create().show()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        if (mOnDismissListener != null) {
+            mOnDismissListener!!.onDismiss()
+        }
+    }
+
+    fun setOnDismissListener(onDismissListener: OnDismissListener) {
+        mOnDismissListener = onDismissListener
+    }
+
+    interface OnDismissListener {
+        /**
+         * dialog 取消
+         */
+        fun onDismiss()
+    }
+
+    fun setOnChooseAffirmListener(onChooseAffirmListener: OnChooseAffirmListener) {
+        mOnChooseAffirmListener = onChooseAffirmListener
+    }
+
+    /**
+     * 选择完成月份后，点击确定按钮监听
+     */
+    interface OnChooseAffirmListener {
+        /**
+         * 确定按钮点击事件
+         *
+         * @param year  选择的年份
+         * @param month 选择的月份
+         */
+        fun onClick(year: Int, month: Int)
+    }
+
+    internal inner class PickerAdapter(data: List<Int>?) : BaseDataBindingAdapter<Int>(R.layout.item_picker, data) {
+
+        override fun convert(helper: BaseDataBindingAdapter.DataBindingViewHolder, item: Int?) {
+            helper.setText(R.id.tv_text, item!!.toString() + "")
+        }
+    }
+
+    companion object {
+
+        /**
+         * 为什么是 1900
+         * 添加记账记录时，选时间 dialog 最小可选的年份是 1900
+         */
+        private const val MIN_YEAR = 1900
+        private val MAX_YEAR = DateUtils.getCurrentYear()
+    }
+}

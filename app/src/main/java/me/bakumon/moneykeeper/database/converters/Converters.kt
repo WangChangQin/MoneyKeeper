@@ -26,27 +26,26 @@ import java.util.*
  * @author Bakumon https://bakumon.me
  */
 object Converters {
-
-    @TypeConverter
     @JvmStatic
+    @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
         return if (value == null) null else Date(value)
     }
 
-    @TypeConverter
     @JvmStatic
+    @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
     }
 
-    @TypeConverter
     @JvmStatic
+    @TypeConverter
     fun stringToBig(intDecimal: Int): BigDecimal {
         return BigDecimal(intDecimal)
     }
 
-    @TypeConverter
     @JvmStatic
+    @TypeConverter
     fun bigToString(bigDecimal: BigDecimal): Int {
         return bigDecimal.toInt()
     }

@@ -54,9 +54,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     private lateinit var mAdapter: HomeAdapter
     private var isUserFirst: Boolean = false
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_home
-    }
+    override val layoutId: Int
+        get() = R.layout.activity_home
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
@@ -173,7 +172,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         mDisposable.add(mViewModel.currentMonthSumMoney
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ sumMoneyBeans -> mBinding.sumMoneyBeanList = sumMoneyBeans }
+                .subscribe({ mBinding.sumMoneyBeanList = it }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_current_sum_money_fail)
                     Log.e(TAG, "本月支出收入总数获取失败", throwable)

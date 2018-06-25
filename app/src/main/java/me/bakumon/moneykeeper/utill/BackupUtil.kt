@@ -48,11 +48,12 @@ object BackupUtil {
         val prettyTime = PrettyTime()
         for (i in files.indices) {
             fileTemp = files[i]
-            bean = BackupBean()
-            bean.file = fileTemp
-            bean.name = fileTemp.name
-            bean.size = storage.getReadableSize(fileTemp)
-            bean.time = prettyTime.format(Date(fileTemp.lastModified()))
+            bean = BackupBean(
+                    fileTemp,
+                    fileTemp.name,
+                    storage.getReadableSize(fileTemp),
+                    prettyTime.format(Date(fileTemp.lastModified()))
+            )
             backupBeans.add(bean)
         }
         return backupBeans
