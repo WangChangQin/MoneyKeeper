@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
@@ -83,17 +84,17 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         }
     }
 
-    fun settingClick() {
+    fun settingClick(view: View) {
         Floo.navigation(this, Router.Url.URL_SETTING)
                 .start()
     }
 
-    fun statisticsClick() {
+    fun statisticsClick(view: View) {
         Floo.navigation(this, Router.Url.URL_STATISTICS)
                 .start()
     }
 
-    fun addRecordClick() {
+    fun addRecordClick(view: View) {
         Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
     }
 
