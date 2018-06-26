@@ -59,9 +59,8 @@ class BillFragment : BaseFragment() {
     private var mMonth: Int = 0
     private var mType: Int = 0
 
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_bill
-    }
+    override val layoutId: Int
+        get() = R.layout.fragment_bill
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()

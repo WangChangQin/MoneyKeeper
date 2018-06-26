@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.Injection
@@ -33,7 +32,6 @@ import me.bakumon.moneykeeper.databinding.FragmentTypeRecordsBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.home.HomeAdapter
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.bakumon.moneykeeper.viewmodel.ViewModelFactory
 import me.drakeet.floo.Floo
 
 /**
@@ -55,9 +53,8 @@ class TypeRecordsFragment : BaseFragment() {
     private var mYear: Int = 0
     private var mMonth: Int = 0
 
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_type_records
-    }
+    override val layoutId: Int
+        get() = R.layout.fragment_type_records
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
