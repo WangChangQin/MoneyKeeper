@@ -37,14 +37,14 @@
         android:paddingTop="12dp"
         tools:background="@color/colorPrimary">
 
-        <me.bakumon.moneykeeper.view.QMUIAlphaImageButton
+        <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
             android:id="@+id/ibt_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_back"
             android:contentDescription="@string/content_des_close" />
 
-        <me.bakumon.moneykeeper.view.QMUIAlphaLinearLayout
+        <me.bakumon.moneykeeper.view.qmui.QMUIAlphaLinearLayout
             android:id="@+id/ll_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,10 +72,10 @@
                 android:layout_marginStart="5dp"
                 android:src="@drawable/ic_arrow_down"
                 android:visibility="gone" />
-        </me.bakumon.moneykeeper.view.QMUIAlphaLinearLayout>
+        </me.bakumon.moneykeeper.view.qmui.QMUIAlphaLinearLayout>
 
 
-        <me.bakumon.moneykeeper.view.QMUIAlphaTextView
+        <me.bakumon.moneykeeper.view.qmui.QMUIAlphaTextView
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

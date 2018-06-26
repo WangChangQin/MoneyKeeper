@@ -113,7 +113,7 @@ class BillFragment : BaseFragment() {
         xAxis.textColor = resources.getColor(R.color.colorTextGray)
         xAxis.labelCount = 5
 
-        val mv = BarChartMarkerView(context)
+        val mv = BarChartMarkerView(context!!)
         mv.chartView = mBinding.barChart
         mBinding.barChart.marker = mv
     }

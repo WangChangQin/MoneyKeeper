@@ -36,6 +36,7 @@ import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.SoftInputUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.view.KeyboardView
 import java.util.*
 
 /**
@@ -102,13 +103,15 @@ class AddRecordActivity : BaseActivity() {
             mBinding.qmTvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
         }
 
-        mBinding.keyboard.setAffirmClickListener { text ->
-            if (mRecord == null) {
-                insertRecord(text)
-            } else {
-                modifyRecord(text)
+        mBinding.keyboard.setAffirmClickListener(object : KeyboardView.OnAffirmClickListener {
+            override fun onAffirmClick(text: String) {
+                if (mRecord == null) {
+                    insertRecord(text)
+                } else {
+                    modifyRecord(text)
+                }
             }
-        }
+        })
 
         mBinding.qmTvDate.setOnClickListener {
             val dpd = DatePickerDialog.newInstance(
@@ -144,9 +147,9 @@ class AddRecordActivity : BaseActivity() {
         record.time = mCurrentChooseDate
         record.createTime = Date()
         record.recordTypeId = if (mCurrentType == RecordType.TYPE_OUTLAY)
-            mBinding.typePageOutlay.currentItem.id
+            mBinding.typePageOutlay.currentItem!!.id
         else
-            mBinding.typePageIncome.currentItem.id
+            mBinding.typePageIncome.currentItem!!.id
 
         mDisposable.add(mViewModel.insertRecord(record)
                 .subscribeOn(Schedulers.io())
@@ -187,9 +190,9 @@ class AddRecordActivity : BaseActivity() {
         mRecord!!.remark = mBinding.edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
         mRecord!!.recordTypeId = if (mCurrentType == RecordType.TYPE_OUTLAY)
-            mBinding.typePageOutlay.currentItem.id
+            mBinding.typePageOutlay.currentItem!!.id
         else
-            mBinding.typePageIncome.currentItem.id
+            mBinding.typePageIncome.currentItem!!.id
 
         mDisposable.add(mViewModel.updateRecord(mRecord!!)
                 .subscribeOn(Schedulers.io())

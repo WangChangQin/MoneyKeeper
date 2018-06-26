@@ -53,7 +53,7 @@
                 android:id="@+id/iv_check"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_check"
                 android:visibility="@{recordType.isChecked}" />
         </RelativeLayout>

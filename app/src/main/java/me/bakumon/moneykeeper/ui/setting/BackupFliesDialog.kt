@@ -47,8 +47,9 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         val adapter = FilesAdapter(null)
         rvFiles.adapter = adapter
         adapter.setOnItemClickListener { _, _, position ->
-            dismiss()
-            mListen?.invoke(adapter.data[position].file)
+            mDialog.dismiss()
+//            mListen?.invoke(adapter.data[position].file)
+            mOnItemClickListener?.onClick(adapter.data[position].file)
         }
         adapter.setNewData(mBackupBeans)
 
@@ -60,21 +61,25 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         mDialog.show()
     }
 
-    fun dismiss() {
-        mDialog.dismiss()
-    }
-
     fun setListener(listener: (File) -> Unit) {
         this.mListen = listener
+    }
+
+    private var mOnItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onClick(file: File)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mOnItemClickListener = listener
     }
 
     internal inner class FilesAdapter(data: List<BackupBean>?) : BaseDataBindingAdapter<BackupBean>(R.layout.item_backup_files, data) {
 
         override fun convert(helper: BaseDataBindingAdapter.DataBindingViewHolder, item: BackupBean) {
             val binding = helper.binding
-
             binding.setVariable(BR.backupBean, item)
-
             binding.executePendingBindings()
         }
     }

@@ -35,6 +35,7 @@ object BackupUtil {
     private val BACKUP_DIR = if (BuildConfig.DEBUG) "backup_moneykeeper_debug" else "backup_moneykeeper"
     private val AUTO_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupAutoDebug" else "MoneyKeeperBackupAuto"
     private val USER_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug" else "MoneyKeeperBackupUser"
+    private val BEFORE_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupDebug" else "MoneyKeeperBackup"
     private val BACKUP_SUFFIX = App.instance.getString(R.string.text_before_reverting)
     private const val SUFFIX = ".db"
 
@@ -111,7 +112,7 @@ object BackupUtil {
         val storage = Storage(App.instance)
         if (storage.isFileExist(restoreFile)) {
             // 恢复之前，备份一下最新数据
-            val fileName = "MoneyKeeperBackup" + DateUtils.getCurrentDateString() + BACKUP_SUFFIX + SUFFIX
+            val fileName = BEFORE_BACKUP_PREFIX + DateUtils.getCurrentDateString() + BACKUP_SUFFIX + SUFFIX
             val isBackupSuccess = backupDB(fileName)
             val isRestoreSuccess = storage.copy(restoreFile, App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path)
             return isBackupSuccess && isRestoreSuccess

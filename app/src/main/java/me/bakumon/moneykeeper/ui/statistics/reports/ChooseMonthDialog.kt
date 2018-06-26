@@ -19,6 +19,7 @@ package me.bakumon.moneykeeper.ui.statistics.reports
 import android.content.Context
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ import me.bakumon.moneykeeper.view.PickerLayoutManager
  */
 class ChooseMonthDialog : DialogInterface.OnDismissListener {
 
-    private var mContext: Context? = null
+    private var mContext: Context
     private var mRvMonth: RecyclerView? = null
     private var mYearAdapter: PickerAdapter? = null
     private var mMonthAdapter: PickerAdapter? = null
@@ -68,9 +69,9 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
         mRvMonth = contentView.findViewById(R.id.rv_month)
 
         // 设置 pickerLayoutManage
-        val lmYear = PickerLayoutManager(mContext, rvYear, PickerLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        val lmYear = PickerLayoutManager(mContext!!, rvYear, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
         rvYear.layoutManager = lmYear
-        val lmMonth = PickerLayoutManager(mContext, mRvMonth, PickerLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        val lmMonth = PickerLayoutManager(mContext!!, mRvMonth!!, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
         mRvMonth!!.layoutManager = lmMonth
 
         mYearAdapter = PickerAdapter(null)
@@ -80,11 +81,13 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
 
         setYearAdapter()
 
-        lmYear.OnSelectedViewListener { view, position ->
-            mYear = mYearAdapter!!.data[position]
-            // 重新设置月份数据
-            setMonthAdapter()
-        }
+        lmYear.OnSelectedViewListener (object :PickerLayoutManager.OnSelectedViewListener{
+            override fun onSelectedView(view: View, position: Int) {
+                mYear = mYearAdapter!!.data[position]
+                // 重新设置月份数据
+                setMonthAdapter()
+            }
+        })
         // 选中对于年
         for (i in mYearAdapter!!.data.size - 1 downTo 0) {
             if (mYearAdapter!!.data[i] == mYear) {
@@ -95,7 +98,11 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
 
         setMonthAdapter()
 
-        lmMonth.OnSelectedViewListener { view, position -> mMonth = mMonthAdapter!!.data[position] }
+        lmMonth.OnSelectedViewListener(object :PickerLayoutManager.OnSelectedViewListener{
+            override fun onSelectedView(view: View, position: Int) {
+                mMonth = mMonthAdapter!!.data[position]
+            }
+        })
         // 选中对于月份
         for (i in 0 until mMonthAdapter!!.data.size) {
             if (mMonthAdapter!!.data[i] == mMonth) {
@@ -108,7 +115,7 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
                 .setTitle(R.string.text_choose_month)
                 .setView(contentView)
                 .setNegativeButton(R.string.text_button_cancel, null)
-                .setPositiveButton(R.string.text_affirm) { dialog, which ->
+                .setPositiveButton(R.string.text_affirm) { _, _ ->
                     if (mOnChooseAffirmListener != null) {
                         mOnChooseAffirmListener!!.onClick(mYear, mMonth)
                     }
