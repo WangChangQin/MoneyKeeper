@@ -16,7 +16,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="me.bakumon.moneykeeper.ui.setting.AboutActivity">
+    tools:context=".ui.about.AboutActivity">
 
 
     <LinearLayout

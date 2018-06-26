@@ -14,22 +14,10 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.setting
-
-import me.bakumon.moneykeeper.BR
-import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
+package me.bakumon.moneykeeper.ui.opensource
 
 /**
- * 开源许可证数据适配器
- *
+ * 开源许可证
  * @author Bakumon https://bakumon.me
  */
-class OpenSourceAdapter(data: List<OpenSourceBean>?) : BaseDataBindingAdapter<OpenSourceBean>(R.layout.item_open_source, data) {
-
-    override fun convert(helper: BaseDataBindingAdapter.DataBindingViewHolder, item: OpenSourceBean) {
-        val binding = helper.binding
-        binding.setVariable(BR.openSource, item)
-        binding.executePendingBindings()
-    }
-}
+class OpenSourceBean(var title: String, var url: String, var license: String)

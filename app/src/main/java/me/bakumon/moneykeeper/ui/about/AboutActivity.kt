@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.setting
+package me.bakumon.moneykeeper.ui.about
 
 import android.os.Bundle
 import android.view.View

@@ -85,6 +85,8 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter("text_income_or_budget")
     fun setTitleIncomeOrBudget(textView: TextView, list: List<SumMoneyBean>?) {
+        // app:text_income_or_budget="@{sumMoneyBeanList}" 这里传递 sumMoneyBeanList
+        // 在 sumMoneyBeanList 变化的时候才会自动调用本方法
         // 显示剩余预算或本月收入
         if (ConfigManager.budget > 0) {
             textView.setText(R.string.text_month_remaining_budget)

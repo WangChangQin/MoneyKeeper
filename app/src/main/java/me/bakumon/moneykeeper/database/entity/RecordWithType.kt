@@ -20,6 +20,7 @@ import android.arch.persistence.room.Relation
 
 /**
  * 包含 RecordType 的 Record
+ * 用于关联查询
  *
  * @author Bakumon https://bakumon.me
  */

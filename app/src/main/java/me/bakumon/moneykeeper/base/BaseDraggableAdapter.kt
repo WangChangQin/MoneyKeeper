@@ -43,7 +43,6 @@ abstract class BaseDraggableAdapter<T>(layoutResId: Int, data: List<T>?) : BaseI
     }
 
     class DataBindingViewHolder(view: View) : BaseViewHolder(view) {
-
         val binding: ViewDataBinding
             get() = itemView.getTag(R.id.BaseQuickAdapter_databinding_support) as ViewDataBinding
     }

@@ -186,7 +186,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.setting.OpenSourceActivity"
+            android:name="me.bakumon.moneykeeper.ui.opensource.OpenSourceActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -205,7 +205,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.setting.AboutActivity"
+            android:name="me.bakumon.moneykeeper.ui.about.AboutActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"

@@ -84,6 +84,7 @@ abstract class BaseFragment : Fragment() {
      * 如 R.layout.fragment_demo 会创建出 FragmentDemoBinding.java
      * @return T
     </T> */
+    @Suppress("UNCHECKED_CAST")
     protected fun <T : ViewDataBinding> getDataBinding(): T {
         return dataBinding as T
     }
