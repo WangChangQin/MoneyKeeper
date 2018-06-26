@@ -14,8 +14,13 @@
 
 第一个版本开发完成后，已经发布在了酷安上， 后续更新也会在酷安。https://www.coolapk.com/apk/188475
 
+<a href="https://play.google.com/store/apps/details?id=me.bakumon.moneykeeper" target="_blank">
+  <img alt="Get it on Google Play"
+       src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
+</a>
+
 预览：
-![img.png](https://github.com/Bakumon/MoneyKeeper/raw/master/imgs/img.png)
+![img.png](https://ws3.sinaimg.cn/large/006tNc79ly1fsp159i5gxj31kw0sgwl3.jpg)
 
 ## 架构和技术
 
