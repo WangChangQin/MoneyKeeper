@@ -18,12 +18,11 @@ package me.bakumon.moneykeeper.view
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-
+import com.afollestad.materialdialogs.MaterialDialog
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
@@ -133,10 +132,9 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
      * 提示用户该记录的类型已经被删除
      */
     private fun showTypeNotExistTip() {
-        AlertDialog.Builder(context)
-                .setMessage(R.string.text_tip_type_delete)
-                .setPositiveButton(R.string.text_button_know, null)
-                .create()
+        MaterialDialog.Builder(context)
+                .content(R.string.text_tip_type_delete)
+                .positiveText(R.string.text_button_know)
                 .show()
     }
 

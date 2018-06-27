@@ -18,9 +18,9 @@ package me.bakumon.moneykeeper.ui.typerecords
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.Injection
@@ -98,15 +98,15 @@ class TypeRecordsFragment : BaseFragment() {
         if (context == null) {
             return
         }
-        AlertDialog.Builder(context!!)
-                .setItems(arrayOf(getString(R.string.text_modify), getString(R.string.text_delete))) { _, which ->
+        MaterialDialog.Builder(context!!)
+                .items(getString(R.string.text_modify), getString(R.string.text_delete))
+                .itemsCallback({ _, _, which, _ ->
                     if (which == 0) {
                         modifyRecord(record)
                     } else {
                         deleteRecord(record)
                     }
-                }
-                .create()
+                })
                 .show()
     }
 

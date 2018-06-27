@@ -50,6 +50,7 @@
     <string name="hint_enter_money">Enter the amount</string>
     <string name="hint_enter_remark">Enter a note</string>
     <string name="hint_enter_type_name">Please enter the type name</string>
+    <string name="hint_enter_budget">Please enter a budget</string>
 
     <string name="shortcuts_add_short">add</string>
     <string name="shortcuts_add_long">add</string>

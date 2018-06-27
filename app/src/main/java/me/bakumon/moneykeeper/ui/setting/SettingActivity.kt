@@ -21,12 +21,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.EditText
+import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
@@ -36,7 +35,6 @@ import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
 import me.bakumon.moneykeeper.utill.AlipayZeroSdk
 import me.bakumon.moneykeeper.utill.AndroidUtil
-import me.bakumon.moneykeeper.utill.SoftInputUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -133,28 +131,24 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun setBudget(position: Int) {
-        val layoutInflater = LayoutInflater.from(this)
-        val contentView = layoutInflater.inflate(R.layout.dialog_input_budget, null, false)
-        val editText = contentView.findViewById<EditText>(R.id.edt_budget)
-        editText.setText(if (ConfigManager.budget == 0) null else ConfigManager.budget.toString())
-        editText.setSelection(editText.text.length)
-        AlertDialog.Builder(this)
-                .setView(contentView)
-                .setTitle(R.string.text_set_budget)
-                .setPositiveButton(R.string.text_affirm) { _, _ ->
-                    val text = editText.text.toString()
-                    if (!TextUtils.isEmpty(text)) {
-                        ConfigManager.setBudget(Integer.parseInt(text))
-                    } else {
-                        ConfigManager.setBudget(0)
-                    }
-                    mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else getString(R.string.text_money_symbol) + ConfigManager.budget
-                    mAdapter.notifyItemChanged(position)
-                    SoftInputUtils.hideSoftInput(editText)
-                }
-                .setNegativeButton(R.string.text_button_cancel) { _, _ -> SoftInputUtils.hideSoftInput(editText) }
-                .create()
-                .show()
+        val oldBudget = if (ConfigManager.budget == 0) null else ConfigManager.budget.toString()
+        MaterialDialog.Builder(this)
+                .title(R.string.text_set_budget)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .inputRange(0, 8)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_button_cancel)
+                .input(getString(R.string.hint_enter_budget), oldBudget,
+                        { _, input ->
+                            val text = input.toString()
+                            if (!TextUtils.isEmpty(text)) {
+                                ConfigManager.setBudget(Integer.parseInt(text))
+                            } else {
+                                ConfigManager.setBudget(0)
+                            }
+                            mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else getString(R.string.text_money_symbol) + ConfigManager.budget
+                            mAdapter.notifyItemChanged(position)
+                        }).show()
     }
 
     private fun switchFast() {
@@ -170,14 +164,16 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private fun switchAutoBackup(position: Int) {
         val oldIsConfigOpen = mAdapter.data[position].t.isConfigOpen
         if (oldIsConfigOpen) {
-            AlertDialog.Builder(this)
-                    .setCancelable(false)
-                    .setTitle(R.string.text_close_auto_backup)
-                    .setMessage(R.string.text_close_auto_backup_tip)
-                    .setNegativeButton(R.string.text_button_cancel) { _, _ -> mAdapter.notifyDataSetChanged() }
-                    .setPositiveButton(R.string.text_affirm) { _, _ -> setAutoBackup(position, false) }
-                    .create()
+            MaterialDialog.Builder(this)
+                    .cancelable(false)
+                    .title(R.string.text_close_auto_backup)
+                    .content(R.string.text_close_auto_backup_tip)
+                    .positiveText(R.string.text_affirm)
+                    .negativeText(R.string.text_button_cancel)
+                    .onNegative({ _, _ -> mAdapter.notifyDataSetChanged() })
+                    .onPositive({ _, _ -> setAutoBackup(position, false) })
                     .show()
+
         } else {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 ConfigManager.setIsAutoBackup(true)
@@ -245,11 +241,12 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun backupDB() {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.text_backup)
-                .setMessage(R.string.text_backup_save)
-                .setNegativeButton(R.string.text_button_cancel, null)
-                .setPositiveButton(R.string.text_affirm) { _, _ ->
+        MaterialDialog.Builder(this)
+                .title(R.string.text_backup)
+                .content(R.string.text_backup_save)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_button_cancel)
+                .onPositive({ _, _ ->
                     mDisposable.add(mViewModel.backupDB()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -258,8 +255,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                                 ToastUtils.show(R.string.toast_backup_fail)
                                 Log.e(TAG, "备份失败", throwable)
                             })
-                }
-                .create()
+                })
                 .show()
     }
 
@@ -283,7 +279,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .subscribe({ backupBeans ->
                     val dialog = BackupFliesDialog(this, backupBeans)
 //                    dialog.setListener { file -> restoreDB(file.path) }
-                    dialog.setOnItemClickListener(object : BackupFliesDialog.OnItemClickListener{
+                    dialog.setOnItemClickListener(object : BackupFliesDialog.OnItemClickListener {
                         override fun onClick(file: File) {
                             restoreDB(file.path)
                         }

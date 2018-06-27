@@ -18,10 +18,10 @@ package me.bakumon.moneykeeper.ui.statistics.bill
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
 import com.android.databinding.library.baseAdapters.BR
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -121,15 +121,15 @@ class BillFragment : BaseFragment() {
         if (context == null) {
             return
         }
-        AlertDialog.Builder(context!!)
-                .setItems(arrayOf(getString(R.string.text_modify), getString(R.string.text_delete))) { _, which ->
+        MaterialDialog.Builder(context!!)
+                .items(getString(R.string.text_modify), getString(R.string.text_delete))
+                .itemsCallback({ _, _, which, _ ->
                     if (which == 0) {
                         modifyRecord(record)
                     } else {
                         deleteRecord(record)
                     }
-                }
-                .create()
+                })
                 .show()
     }
 

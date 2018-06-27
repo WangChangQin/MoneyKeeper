@@ -18,11 +18,10 @@ package me.bakumon.moneykeeper.ui.typemanage
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-
+import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.Injection
@@ -33,7 +32,6 @@ import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.databinding.ActivityTypeManageBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.bakumon.moneykeeper.viewmodel.ViewModelFactory
 import me.drakeet.floo.Floo
 
 /**
@@ -105,12 +103,12 @@ class TypeManageActivity : BaseActivity() {
     }
 
     private fun showDeleteDialog(recordType: RecordType) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.text_dialog_delete) + recordType.name!!)
-                .setMessage(R.string.text_delete_type_note)
-                .setNegativeButton(R.string.text_button_cancel, null)
-                .setPositiveButton(R.string.text_button_affirm_delete) { _, _ -> deleteType(recordType) }
-                .create()
+        MaterialDialog.Builder(this)
+                .title(getString(R.string.text_dialog_delete) + recordType.name!!)
+                .content(R.string.text_delete_type_note)
+                .positiveText(R.string.text_button_affirm_delete)
+                .negativeText(R.string.text_button_cancel)
+                .onPositive({ _, _ -> deleteType(recordType) })
                 .show()
     }
 

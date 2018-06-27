@@ -20,10 +20,10 @@ import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
@@ -41,6 +41,7 @@ import me.drakeet.floo.StackCallback
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
+
 
 /**
  * HomeActivity
@@ -113,15 +114,15 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     }
 
     private fun showOperateDialog(record: RecordWithType) {
-        AlertDialog.Builder(this)
-                .setItems(arrayOf(getString(R.string.text_modify), getString(R.string.text_delete))) { _, which ->
+        MaterialDialog.Builder(this)
+                .items(getString(R.string.text_modify), getString(R.string.text_delete))
+                .itemsCallback({ _, _, which, _ ->
                     if (which == 0) {
                         modifyRecord(record)
                     } else {
                         deleteRecord(record)
                     }
-                }
-                .create()
+                })
                 .show()
     }
 

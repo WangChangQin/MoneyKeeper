@@ -190,4 +190,6 @@ dependencies {
     implementation deps.prettytime
     // 圆形 ImageView
     implementation deps.circleimageview
+    // 对话框
+    implementation deps.material_dialogs
 }

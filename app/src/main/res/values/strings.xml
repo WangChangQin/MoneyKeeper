@@ -48,6 +48,7 @@
     <string name="hint_enter_money">输入金额</string>
     <string name="hint_enter_remark">输入备注</string>
     <string name="hint_enter_type_name">请输入类型名称</string>
+    <string name="hint_enter_budget">请输入预算</string>
 
     <string name="shortcuts_add_short">记一笔</string>
     <string name="shortcuts_add_long">记一笔</string>

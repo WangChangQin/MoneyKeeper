@@ -45,6 +45,7 @@ versions.permission = "1.2.0"
 versions.storage = "2.1.0"
 versions.prettytime = "4.0.1.Final"
 versions.circleimageview = "2.2.0"
+versions.material_dialogs = "0.9.6.0"
 
 def deps = [:]
 
@@ -95,6 +96,7 @@ deps.permission = "pub.devrel:easypermissions:$versions.permission"
 deps.storage = "com.snatik:storage:$versions.storage"
 deps.prettytime = "org.ocpsoft.prettytime:prettytime:$versions.prettytime"
 deps.circleimageview = "de.hdodenhof:circleimageview:$versions.circleimageview"
+deps.material_dialogs = "com.afollestad.material-dialogs:core:$versions.material_dialogs"
 
 ext.deps = deps
 
