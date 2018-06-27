@@ -12,12 +12,14 @@
 
 ## 下载使用
 
-第一个版本开发完成后，已经发布在了酷安上， 后续更新也会在酷安。https://www.coolapk.com/apk/188475
+已经发布在以下平台：
 
-<a href="https://play.google.com/store/apps/details?id=me.bakumon.moneykeeper" target="_blank">
-  <img alt="Get it on Google Play"
-       src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
-</a>
+| 平台 | 下载地址 |
+| ---- | ---- |
+| Google Play | <a href='https://play.google.com/store/apps/details?id=me.bakumon.moneykeeper&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://i.loli.net/2018/06/27/5b32eac49f930.png' height="60"/>
+</a> |
+| 酷安 | <a href='https://www.coolapk.com/apk/me.bakumon.moneykeeper'><img alt='去酷安下载' src='https://ws4.sinaimg.cn/large/006tNc79ly1fsphx16ybdj30go06st8q.jpg' height="60"/>
+</a> |
 
 预览：
 ![img.png](https://ws3.sinaimg.cn/large/006tNc79ly1fsp159i5gxj31kw0sgwl3.jpg)
