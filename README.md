@@ -1,4 +1,6 @@
-# <img alt='那样记账' src='https://ws4.sinaimg.cn/large/006tNc79ly1fsq4iaiguaj302o02oq2q.jpg' height="40"/> 那样记账
+# 那样记账
+
+<img alt='那样记账' src='https://i.loli.net/2018/06/27/5b33a4e2e7cb0.png' height="70"/>
 
 >生活越复杂，记账越有用。
 
