@@ -56,7 +56,7 @@ class PagerGridLayoutManager
  @param:IntRange(from = 1, to = 100) private val mColumns: Int                           // 列数
  ,
  @param:OrientationType @field:OrientationType
- private var mOrientation: Int                       // 默认水平滚动
+ private var mOrientation: Long                       // 默认水平滚动
 ) : RecyclerView.LayoutManager(), RecyclerView.SmoothScroller.ScrollVectorProvider {
 
     /**
@@ -721,7 +721,7 @@ class PagerGridLayoutManager
      * @return 最终的滚动方向
      */
     @OrientationType
-    fun setOrientationType(@OrientationType orientation: Int): Int {
+    fun setOrientationType(@OrientationType orientation: Long): Long {
         if (mOrientation == orientation || mScrollState != SCROLL_STATE_IDLE) return mOrientation
         mOrientation = orientation
         mItemFrames.clear()
@@ -865,7 +865,7 @@ class PagerGridLayoutManager
     companion object {
         private val TAG = PagerGridLayoutManager::class.java.simpleName
 
-        const val VERTICAL = 0           // 垂直滚动
-        const val HORIZONTAL = 1         // 水平滚动
+        const val VERTICAL: Long = 0           // 垂直滚动
+        const val HORIZONTAL: Long = 1         // 水平滚动
     }
 }

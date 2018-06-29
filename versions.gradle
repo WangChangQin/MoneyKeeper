@@ -27,7 +27,7 @@ versions.junit = "4.12"
 versions.test_runner = "1.0.2"
 versions.espresso = "3.0.2"
 // 支持库
-versions.support = "27.1.1"
+versions.support = "27.0.2"
 // ViewModel and LiveData
 versions.lifecycle = "1.1.1"
 // Room
@@ -124,7 +124,7 @@ def static uniformSupportVersion(ConfigurationContainer configurations) {
             def requested = details.requested
             if (requested.group == 'com.android.support') {
                 if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '27.1.1'
+                    details.useVersion '27.0.2'
                 }
             }
 
