@@ -17,6 +17,7 @@
 package me.bakumon.moneykeeper.ui.setting
 
 import android.text.TextUtils
+import android.widget.LinearLayout
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -29,6 +30,12 @@ import me.bakumon.moneykeeper.R
 class SettingAdapter(data: List<SettingSectionEntity>?) : BaseSectionQuickAdapter<SettingSectionEntity, BaseViewHolder>(R.layout.item_setting, R.layout.item_setting_head, data) {
 
     override fun convertHead(helper: BaseViewHolder, item: SettingSectionEntity) {
+        val llHead = helper.getView<LinearLayout>(R.id.ll_head)
+        if (helper.adapterPosition == 0) {
+            llHead.setPadding(llHead.paddingLeft, 0, llHead.paddingRight, llHead.paddingBottom)
+        } else {
+            llHead.setPadding(llHead.paddingLeft, llHead.paddingTop, llHead.paddingRight, llHead.paddingBottom)
+        }
         helper.setText(R.id.tv_head, item.header)
     }
 
