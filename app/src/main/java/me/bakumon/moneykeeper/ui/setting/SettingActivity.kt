@@ -147,6 +147,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                                 ConfigManager.setBudget(0)
                             }
                             mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else getString(R.string.text_money_symbol) + ConfigManager.budget
+                            mBinding.rvSetting.itemAnimator.changeDuration = 250
                             mAdapter.notifyItemChanged(position)
                         }).show()
     }
@@ -176,8 +177,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         } else {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ConfigManager.setIsAutoBackup(true)
-                initView()
+                setAutoBackup(position, true)
                 return
             }
             EasyPermissions.requestPermissions(
@@ -224,7 +224,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private fun setAutoBackup(position: Int, isBackup: Boolean) {
         ConfigManager.setIsAutoBackup(isBackup)
         mAdapter.data[position].t.isConfigOpen = isBackup
-        mAdapter.notifyDataSetChanged()
+        // 取消 item 动画
+        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun showBackupDialog() {
