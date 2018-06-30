@@ -17,10 +17,12 @@
 package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
 import android.text.TextUtils
@@ -28,6 +30,7 @@ import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
@@ -86,8 +89,8 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
 
         list.add(SettingSectionEntity(getString(R.string.text_setting_backup)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_setting_go_backup_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_restore), getString(R.string.text_setting_restore_content))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_setting_go_backup_content, backupDir))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_restore), getString(R.string.text_setting_restore_content, backupDir))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_auto_backup), getString(R.string.text_setting_auto_backup_content), ConfigManager.isAutoBackup)))
 
         list.add(SettingSectionEntity(getString(R.string.text_setting_about_and_help)))
@@ -245,7 +248,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private fun backupDB() {
         MaterialDialog.Builder(this)
                 .title(R.string.text_backup)
-                .content(R.string.text_backup_save)
+                .content(R.string.text_backup_save, backupFilepath)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_button_cancel)
                 .onPositive({ _, _ ->
@@ -299,6 +302,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    ToastUtils.show(R.string.toast_restore_success)
                     Floo.stack(this)
                             .target(Router.IndexKey.INDEX_KEY_HOME)
                             .result("refresh")
@@ -350,5 +354,10 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     companion object {
         private val TAG = SettingActivity::class.java.simpleName
+        @SuppressLint("SdCardPath")
+        val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
+        @SuppressLint("SdCardPath")
+        val backupFilepath = backupDir + if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug.db" else "MoneyKeeperBackupUser.db"
+
     }
 }

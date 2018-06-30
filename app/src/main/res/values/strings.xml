@@ -41,6 +41,7 @@
     <string name="toast_not_install_alipay">谢谢，您没有安装支付宝客户端</string>
     <string name="toast_is_not_writable_external">备份失败，外部存储不可用</string>
     <string name="toast_restore_fail">恢复备份失败</string>
+    <string name="toast_restore_success">恢复备份成功</string>
     <string name="toast_backup_list_fail">备份文件列表获取失败</string>
     <string name="toast_open_auto_backup">自动备份已关闭，设置界面可重新打开</string>
     <string name="toast_success_record">记账成功</string>
@@ -115,7 +116,7 @@
     <string name="toast_backup_success">备份成功</string>
     <string name="toast_backup_fail">备份失败</string>
     <string name="text_backup">立即备份</string>
-    <string name="text_backup_save">备份文件将保存到/sdcard/backup_moneykeeper/MoneyKeeperBackupUser.db</string>
+    <string name="text_backup_save" formatted="true">备份文件将保存到%1$s</string>
     <string name="text_setting_money">记账</string>
     <string name="text_setting_type_manage">收支类型管理</string>
     <string name="text_setting_backup">备份</string>
@@ -131,13 +132,12 @@
     <string name="text_setting_good_score">给个好评呗</string>
     <string name="text_about_content">了解我们的设计理念</string>
     <string name="text_setting_auto_backup">自动备份</string>
-    <string name="text_setting_go_backup_content">备份文件将保存到/sdcard/backup_moneykeeper</string>
-    <string name="text_setting_restore_content">备份文件将从/sdcard/backup_moneykeeper读取</string>
+    <string name="text_setting_go_backup_content" formatted="true">备份文件将保存到%1$s</string>
+    <string name="text_setting_restore_content" formatted="true">备份文件将从%1$s读取</string>
     <string name="text_setting_auto_backup_content">数据有改变自动备份（建议开启）</string>
     <string name="text_restore">恢复备份</string>
     <string name="text_list_restore">以下是备份文件，点击恢复：</string>
-    <string name="text_restore_tip">备份文件名带有Auto字样表示自动备份，带有User表示点击立即备份按钮手动备份，恢复之前会保存一份恢复之前的数据。</string>
-    <string name="text_before_reverting">_恢复之前</string>
+    <string name="text_restore_tip">备份文件名带有Auto字样表示是自动备份的文件，带有User表示是点击立即备份按钮手动备份的文件。</string>
     <string name="text_storage">开启存储权限</string>
     <string name="text_storage_content">为了自动备份您的记账数据，需要开启存储权限。</string>
     <string name="text_open_permissions">开启权限</string>

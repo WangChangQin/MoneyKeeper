@@ -19,7 +19,6 @@ package me.bakumon.moneykeeper.utill
 import com.snatik.storage.Storage
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.BuildConfig
-import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.AppDatabase
 import me.bakumon.moneykeeper.ui.setting.BackupBean
 import org.ocpsoft.prettytime.PrettyTime
@@ -35,8 +34,6 @@ object BackupUtil {
     private val BACKUP_DIR = if (BuildConfig.DEBUG) "backup_moneykeeper_debug" else "backup_moneykeeper"
     private val AUTO_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupAutoDebug" else "MoneyKeeperBackupAuto"
     private val USER_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug" else "MoneyKeeperBackupUser"
-    private val BEFORE_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupDebug" else "MoneyKeeperBackup"
-    private val BACKUP_SUFFIX = App.instance.getString(R.string.text_before_reverting)
     private const val SUFFIX = ".db"
 
     fun getBackupFiles(): List<BackupBean> {
@@ -83,26 +80,6 @@ object BackupUtil {
         return backupDB(fileName)
     }
 
-    fun autoBackupForNecessary(): Boolean {
-        val fileName = AUTO_BACKUP_PREFIX + SUFFIX
-        val storage = Storage(App.instance)
-        val isWritable = Storage.isExternalWritable()
-        if (!isWritable) {
-            return false
-        }
-        val path = storage.externalStorageDirectory + File.separator + BACKUP_DIR
-        if (!storage.isDirectoryExists(path)) {
-            storage.createDirectory(path)
-        }
-        val filePath = path + File.separator + fileName
-        if (!storage.isFileExist(filePath)) {
-            // 创建空文件，在模拟器上测试，如果没有这个文件，复制的时候会报 FileNotFound
-            storage.createFile(filePath, "")
-            return storage.copy(App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path, path + File.separator + fileName)
-        }
-        return true
-    }
-
     fun userBackup(): Boolean {
         val fileName = USER_BACKUP_PREFIX + SUFFIX
         return backupDB(fileName)
@@ -111,11 +88,7 @@ object BackupUtil {
     fun restoreDB(restoreFile: String): Boolean {
         val storage = Storage(App.instance)
         if (storage.isFileExist(restoreFile)) {
-            // 恢复之前，备份一下最新数据
-            val fileName = BEFORE_BACKUP_PREFIX + DateUtils.getCurrentDateString() + BACKUP_SUFFIX + SUFFIX
-            val isBackupSuccess = backupDB(fileName)
-            val isRestoreSuccess = storage.copy(restoreFile, App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path)
-            return isBackupSuccess && isRestoreSuccess
+            return storage.copy(restoreFile, App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path)
         }
         return false
     }

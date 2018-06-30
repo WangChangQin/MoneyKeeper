@@ -50,25 +50,11 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    /**
-     * 自动备份 for first
-     */
-    @Throws(Exception::class)
-    private fun autoBackupForNecessary() {
-        if (ConfigManager.isAutoBackup) {
-            val isSuccess = BackupUtil.autoBackupForNecessary()
-            if (!isSuccess) {
-                throw BackupFailException()
-            }
-        }
-    }
-
     override fun initRecordTypes(): Completable {
         return Completable.fromAction {
             if (mAppDatabase.recordTypeDao().getRecordTypeCount() < 1) {
                 // 没有记账类型数据记录，插入默认的数据类型
                 mAppDatabase.recordTypeDao().insertRecordTypes(*RecordTypeInitCreator.createRecordTypeData())
-                autoBackupForNecessary()
             }
         }
     }
