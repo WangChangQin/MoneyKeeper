@@ -73,11 +73,35 @@ object TypeImgListCreator {
 
             bean = TypeImgBean("type_train")
             list.add(bean)
+
+            bean = TypeImgBean("type_plain")
+            list.add(bean)
+
+            bean = TypeImgBean("type_bus")
+            list.add(bean)
+
+            bean = TypeImgBean("type_home")
+            list.add(bean)
+
+            bean = TypeImgBean("type_wifi")
+            list.add(bean)
+
+            bean = TypeImgBean("type_insure")
+            list.add(bean)
+
+            bean = TypeImgBean("type_outlay_red")
+            list.add(bean)
         } else {
             bean = TypeImgBean("type_salary")
             list.add(bean)
 
             bean = TypeImgBean("type_pluralism")
+            list.add(bean)
+
+            bean = TypeImgBean("type_wallet")
+            list.add(bean)
+
+            bean = TypeImgBean("type_income_red")
             list.add(bean)
         }
         return list

@@ -120,6 +120,14 @@ andResGuard {
             "R.mipmap.type_sim",
             "R.mipmap.type_study",
             "R.mipmap.type_train",
+            "R.mipmap.type_plain",
+            "R.mipmap.type_bus",
+            "R.mipmap.type_home",
+            "R.mipmap.type_insure",
+            "R.mipmap.type_wifi",
+            "R.mipmap.type_wallet",
+            "R.mipmap.type_income_red",
+            "R.mipmap.type_outlay_red",
     ]
     compressFilePattern = [
             "*.png",
