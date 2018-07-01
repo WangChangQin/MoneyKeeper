@@ -1,0 +1,164 @@
+<!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">那樣記賬</string>
+
+    <string name="content_des_setting">設置</string>
+    <string name="content_des_statistics">統計</string>
+    <string name="content_des_close">關閉</string>
+
+    <string name="toast_add_record_fail">記賬失敗，請重試</string>
+    <string name="toast_modify_record_fail">記錄修改失敗</string>
+    <string name="toast_sort_fail">排序失敗</string>
+    <string name="toast_least_one_type">請至少保留一個類型</string>
+    <string name="toast_delete_fail">刪除失敗</string>
+    <string name="toast_type_img_fail">類型圖片獲取失敗</string>
+    <string name="toast_type_save_fail">類型保存失敗</string>
+    <string name="toast_type_is_exist">&#160;類型已經存在</string>
+    <string name="toast_record_delete_fail">記錄刪除失敗</string>
+    <string name="toast_current_sum_money_fail">本月支出收入總數獲取失敗</string>
+    <string name="toast_records_fail">獲取記錄列表失敗</string>
+    <string name="toast_init_types_fail">初始化類型數據失敗</string>
+    <string name="toast_get_types_fail">獲取類型數據失敗</string>
+    <string name="toast_get_statistics_fail">獲取統計數據失敗</string>
+    <string name="toast_get_month_summary_fail">獲取該月匯總數據失敗</string>
+    <string name="toast_get_type_summary_fail">獲取類型匯總數據失敗</string>
+    <string name="toast_not_install_market">您的手機沒有安裝Android應用市場</string>
+    <string name="toast_not_install_alipay">謝謝，您沒有安裝支付寶客戶端</string>
+    <string name="toast_is_not_writable_external">備份失敗，外部存儲不可用</string>
+    <string name="toast_restore_fail">恢復備份失敗</string>
+    <string name="toast_restore_success">恢復備份成功</string>
+    <string name="toast_backup_list_fail">備份文件列表獲取失敗</string>
+    <string name="toast_open_auto_backup">自動備份已關閉，設置界面可重新打開</string>
+    <string name="toast_success_record">記賬成功</string>
+
+    <string name="hint_enter_money">輸入金額</string>
+    <string name="hint_enter_remark">輸入備註</string>
+    <string name="hint_enter_type_name">請輸入類型名稱</string>
+    <string name="hint_enter_budget">請輸入預算</string>
+
+    <string name="shortcuts_add_short">記一筆</string>
+    <string name="shortcuts_add_long">記一筆</string>
+    <string name="shortcuts_statistics_short">歷史統計</string>
+    <string name="shortcuts_statistics_long">歷史統計</string>
+
+    <string name="text_affirm">確定</string>
+    <string name="text_symbol_outlay">-</string>
+    <string name="text_symbol_income">+</string>
+    <string name="text_home_footer_tip">統計頁面可以查看往月記錄</string>
+    <string name="text_add_record">記一筆</string>
+    <string name="text_add_record_successive">記一筆（連續）</string>
+    <string name="text_modify_record">修改</string>
+    <string name="text_done">完成</string>
+    <string name="text_title_drag_sort">長按拖動排序</string>
+    <string name="text_title_type_manage">分類管理</string>
+    <string name="text_button_sort">排序</string>
+    <string name="text_outlay">支出</string>
+    <string name="text_income">收入</string>
+    <string name="text_setting">設置</string>
+    <string name="text_title_setting">設置</string>
+    <string name="text_month_outlay">本月支出($)</string>
+    <string name="text_month_income">本月收入($)</string>
+    <string name="text_month_remaining_budget">剩餘預算($)</string>
+    <string name="text_today">今天</string>
+    <string name="text_yesterday">昨天</string>
+    <string name="text_type_eat">餐飲</string>
+    <string name="text_type_clothes">衣服</string>
+    <string name="text_type_humanity">禮物</string>
+    <string name="text_type_candy">零食</string>
+    <string name="text_type_3c">電子產品</string>
+    <string name="text_type_pet">寵物</string>
+    <string name="text_type_pill">醫療</string>
+    <string name="text_type_calendar">日用</string>
+    <string name="text_type_pluralism">兼職</string>
+    <string name="text_type_salary">薪資</string>
+    <string name="text_current_month_empty_tip">本月未開始記賬\n\n點擊加號，開始記賬</string>
+    <string name="text_month_empty_tip">每一筆賬單，都是生活的點滴</string>
+    <string name="text_button_cancel">取消</string>
+    <string name="text_button_know">我知道了</string>
+    <string name="text_button_affirm_delete">確認刪除</string>
+    <string name="text_dialog_delete">删除</string>
+    <string name="text_delete_type_note">刪除該分類後，將無法在記賬頁選擇該分類，該分類下原有賬單仍保持不變</string>
+    <string name="text_save">保存</string>
+    <string name="text_add">添加</string>
+    <string name="text_modify">修改</string>
+    <string name="text_outlay_type">支出類型</string>
+    <string name="text_income_type">收入類型</string>
+    <string name="text_delete">删除</string>
+    <string name="text_tip_type_delete">該記錄的類型已經被刪除，已默認選擇了第一個類型</string>
+    <string name="text_order">賬單</string>
+    <string name="text_reports">報表</string>
+    <string name="text_money_symbol">$</string>
+    <string name="text_month_outlay_symbol">支出&#160;$</string>
+    <string name="text_month_income_symbol">收入&#160;$</string>
+    <string name="text_month_overage">結餘&#160;$</string>
+    <string name="text_unit_account">筆</string>
+    <string name="text_day">日&#160;</string>
+    <string name="text_choose_month">選擇月份</string>
+    <string name="text_sort_time">按時間</string>
+    <string name="text_sort_money">按金額</string>
+    <string name="text_title_open_source">開源許可證</string>
+    <string name="text_title_about">關於</string>
+    <string name="toast_backup_success">備份成功</string>
+    <string name="toast_backup_fail">備份失敗</string>
+    <string name="text_backup">立即備份</string>
+    <string name="text_backup_save" formatted="true">備份文件將保存到%1$s</string>
+    <string name="text_setting_money">記賬</string>
+    <string name="text_setting_type_manage">收支類型管理</string>
+    <string name="text_setting_backup">備份</string>
+    <string name="text_go_backup">立即備份</string>
+    <string name="text_setting_restore">恢復備份</string>
+    <string name="text_setting_about_and_help">關於|幫助</string>
+    <string name="text_about">關於</string>
+    <string name="text_setting_score">評分</string>
+    <string name="text_setting_donate">捐贈作者</string>
+    <string name="text_privacy_policy">隱私政策</string>
+    <string name="text_setting_lisence">開源許可證</string>
+    <string name="text_setting_help">幫助</string>
+    <string name="text_setting_good_score">給個好評唄</string>
+    <string name="text_about_content">了解我們的設計理念</string>
+    <string name="text_setting_auto_backup">自動備份</string>
+    <string name="text_setting_go_backup_content" formatted="true">備份文件將保存到%1$s</string>
+    <string name="text_setting_restore_content" formatted="true">備份文件將從%1$s讀取</string>
+    <string name="text_setting_auto_backup_content">數據有改變自動備份（建議開啟）</string>
+    <string name="text_restore">恢復備份</string>
+    <string name="text_list_restore">以下是備份文件，點擊恢復：</string>
+    <string name="text_restore_tip">備份文件名帶有Auto字樣表示是自動備份的文件，帶有User表示是點擊立即備份按鈕手動備份的文件。</string>
+    <string name="text_storage">開啟存儲權限</string>
+    <string name="text_storage_content">為了自動備份您的記賬數據，需要開啟存儲權限。</string>
+    <string name="text_open_permissions">開啟權限</string>
+    <string name="text_storage_permission_tip">備份相關操作需要存儲權限，去設置界面開啟權限</string>
+    <string name="text_close_auto_backup">關閉自動備份</string>
+    <string name="text_close_auto_backup_tip">關閉自動備份後，需要手動點擊「立即備份」來備份數據，可能會丟失部分最新的數據。</string>
+    <string name="text_tip_backup_fail">自動備份失敗</string>
+    <string name="text_share">分享</string>
+    <string name="text_more">更多</string>
+    <string name="text_dev_designer">設計和開發</string>
+    <string name="text_designer">總體設計</string>
+    <string name="text_launcher_designer">啟動圖標設計</string>
+    <string name="text_developer_designer">開發和部分設計</string>
+    <string name="text_share_to">分享到</string>
+    <string name="text_app_slogan">簡單、純粹的記賬應用</string>
+    <string name="text_share_content">我發現了一個簡單、純粹的記賬應用，點擊鏈接下載 https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>
+    <string name="text_successive_record">連續記賬</string>
+    <string name="text_successive_record_tip">長按首頁添加按鈕，連續記賬</string>
+    <string name="text_no_budget">未設置</string>
+    <string name="text_monty_budget">月預算</string>
+    <string name="text_fast_accounting">快速記賬</string>
+    <string name="text_fast_tip">打開APP直接記賬</string>
+    <string name="text_set_budget">設置預算</string>
+</resources>

@@ -107,7 +107,7 @@
     <string name="text_month_outlay_symbol">Pay&#160;$</string>
     <string name="text_month_income_symbol">Earn&#160;$</string>
     <string name="text_month_remaining_budget">Remaining budget($)</string>
-    <string name="text_month_overage">Lave&#160;¥</string>
+    <string name="text_month_overage">Lave&#160;$</string>
     <string name="text_unit_account"></string>
     <string name="text_day">&#160;</string>
     <string name="text_choose_month">Select month</string>
@@ -151,7 +151,6 @@
     <string name="text_designer">Designer</string>
     <string name="text_launcher_designer">Launcher icon design</string>
     <string name="text_developer_designer">Developer &amp; Designer</string>
-    <string name="text_icon_launcher">Want a designer to design an application launch icon</string>
     <string name="text_share_to">Share to</string>
     <string name="text_app_slogan">Simple, pure accounting application</string>
     <string name="text_share_content">I found a simple, pure billing application, click on the link to download https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>

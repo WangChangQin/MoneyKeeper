@@ -68,14 +68,11 @@ android {
             versionNameSuffix ".debug"
             applicationIdSuffix ".debug"
             resValue "string", "scheme", "mk-debug"
-            // 只会给 res/values/string.xml 增加，不会影响其他 values 文件夹
-            resValue "string", "app_name", "那样记账debug"
         }
         release {
             // 签名
             signingConfig signingConfigs.release
             resValue "string", "scheme", "mk"
-            resValue "string", "app_name", "那样记账"
             // Zipalign优化
             zipAlignEnabled true
             // 移除无用的resource文件
