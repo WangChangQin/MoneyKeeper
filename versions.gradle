@@ -35,6 +35,8 @@ versions.room = "1.0.0"
 // rxjava2
 versions.rxjava2 = "2.1.3"
 versions.rxandroid = "2.0.1"
+// retrofit2
+versions.retrofit2 = "2.4.0"
 // BaseRecyclerViewAdapterHelper
 versions.BRVAH = "2.9.34"
 versions.floo = "1.1.0"
@@ -83,8 +85,14 @@ def databinding = [:]
 databinding.compiler = "com.android.databinding:compiler:$versions.gradle_plugin"
 deps.databinding = databinding
 
-deps.rxjava = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+deps.rxjava2 = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
 deps.rxandroid = "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+
+def retrofit2 = [:]
+retrofit2.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit2"
+retrofit2.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit2"
+retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit2"
+deps.retrofit2 = retrofit2
 
 deps.BRVAH = "com.github.CymChad:BaseRecyclerViewAdapterHelper:$versions.BRVAH"
 deps.floo = "me.drakeet.floo:floo:$versions.floo"

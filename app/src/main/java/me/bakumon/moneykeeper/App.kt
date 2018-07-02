@@ -42,7 +42,7 @@ class App : Application() {
         }
         LeakCanary.install(this)
         // Normal app init code...
-        val mappings = HashMap<String, Target>(8)
+        val mappings = HashMap<String, Target>(10)
         mappings[Router.Url.URL_HOME] = Target("mk://bakumon.me/home")
         mappings[Router.Url.URL_ADD_RECORD] = Target("mk://bakumon.me/addRecord")
         mappings[Router.Url.URL_TYPE_MANAGE] = Target("mk://bakumon.me/typeManage")

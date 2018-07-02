@@ -14,38 +14,44 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.statistics.reports
+package me.bakumon.moneykeeper.ui.statistics
 
 import android.content.Context
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
-
-import java.util.ArrayList
-
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.view.PickerLayoutManager
+import java.util.*
 
 /**
  * 选择月份
  *
  * @author Bakumon https://bakumon
  */
-class ChooseMonthDialog : DialogInterface.OnDismissListener {
+class ChooseMonthDialog {
 
     private var mContext: Context
-    private var mRvMonth: RecyclerView? = null
-    private var mYearAdapter: PickerAdapter? = null
-    private var mMonthAdapter: PickerAdapter? = null
+    private lateinit var mRvMonth: RecyclerView
+    private lateinit var mYearAdapter: PickerAdapter
+    private lateinit var mMonthAdapter: PickerAdapter
 
-    private var mOnChooseAffirmListener: OnChooseAffirmListener? = null
-    private var mOnDismissListener: OnDismissListener? = null
-    private var builder: AlertDialog.Builder? = null
+    private lateinit var mBuilder: AlertDialog.Builder
+
+    /**
+     * 选择完成月份后，点击确定按钮监听
+     * Int 1选择的年份
+     * Int 2选择的月份
+     */
+    var mOnChooseListener: ((Int, Int) -> Unit)? = null
+    /**
+     * dismiss 监听
+     */
+    var mOnDismissListener: ((Unit) -> Unit)? = null
 
     private var mYear = DateUtils.getCurrentYear()
     private var mMonth = DateUtils.getCurrentMonth()
@@ -69,28 +75,28 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
         mRvMonth = contentView.findViewById(R.id.rv_month)
 
         // 设置 pickerLayoutManage
-        val lmYear = PickerLayoutManager(mContext!!, rvYear, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        val lmYear = PickerLayoutManager(mContext, rvYear, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
         rvYear.layoutManager = lmYear
-        val lmMonth = PickerLayoutManager(mContext!!, mRvMonth!!, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
-        mRvMonth!!.layoutManager = lmMonth
+        val lmMonth = PickerLayoutManager(mContext, mRvMonth, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
+        mRvMonth.layoutManager = lmMonth
 
         mYearAdapter = PickerAdapter(null)
         rvYear.adapter = mYearAdapter
         mMonthAdapter = PickerAdapter(null)
-        mRvMonth!!.adapter = mMonthAdapter
+        mRvMonth.adapter = mMonthAdapter
 
         setYearAdapter()
 
-        lmYear.OnSelectedViewListener (object :PickerLayoutManager.OnSelectedViewListener{
+        lmYear.OnSelectedViewListener(object : PickerLayoutManager.OnSelectedViewListener {
             override fun onSelectedView(view: View, position: Int) {
-                mYear = mYearAdapter!!.data[position]
+                mYear = mYearAdapter.data[position]
                 // 重新设置月份数据
                 setMonthAdapter()
             }
         })
         // 选中对于年
-        for (i in mYearAdapter!!.data.size - 1 downTo 0) {
-            if (mYearAdapter!!.data[i] == mYear) {
+        for (i in mYearAdapter.data.size - 1 downTo 0) {
+            if (mYearAdapter.data[i] == mYear) {
                 rvYear.scrollToPosition(i)
                 break
             }
@@ -98,30 +104,27 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
 
         setMonthAdapter()
 
-        lmMonth.OnSelectedViewListener(object :PickerLayoutManager.OnSelectedViewListener{
+        lmMonth.OnSelectedViewListener(object : PickerLayoutManager.OnSelectedViewListener {
             override fun onSelectedView(view: View, position: Int) {
-                mMonth = mMonthAdapter!!.data[position]
+                mMonth = mMonthAdapter.data[position]
             }
         })
         // 选中对于月份
-        for (i in 0 until mMonthAdapter!!.data.size) {
-            if (mMonthAdapter!!.data[i] == mMonth) {
-                mRvMonth!!.scrollToPosition(i)
+        for (i in 0 until mMonthAdapter.data.size) {
+            if (mMonthAdapter.data[i] == mMonth) {
+                mRvMonth.scrollToPosition(i)
                 break
             }
         }
 
-        builder = AlertDialog.Builder(mContext!!)
+        mBuilder = AlertDialog.Builder(mContext)
                 .setTitle(R.string.text_choose_month)
                 .setView(contentView)
                 .setNegativeButton(R.string.text_button_cancel, null)
                 .setPositiveButton(R.string.text_affirm) { _, _ ->
-                    if (mOnChooseAffirmListener != null) {
-                        mOnChooseAffirmListener!!.onClick(mYear, mMonth)
-                    }
+                    mOnChooseListener?.invoke(mYear, mMonth)
                 }
-        builder!!.setOnDismissListener(this)
-
+        mBuilder.setOnDismissListener { mOnDismissListener?.invoke(Unit) }
     }
 
     private fun setYearAdapter() {
@@ -129,7 +132,7 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
         for (i in MIN_YEAR..MAX_YEAR) {
             yearList.add(i)
         }
-        mYearAdapter!!.setNewData(yearList)
+        mYearAdapter.setNewData(yearList)
     }
 
     private fun setMonthAdapter() {
@@ -139,53 +142,19 @@ class ChooseMonthDialog : DialogInterface.OnDismissListener {
         for (i in 1..maxMonth) {
             monthList.add(i)
         }
-        val lastData = mMonthAdapter!!.data
+        val lastData = mMonthAdapter.data
         if (lastData.size > monthList.size) {
-            mMonthAdapter!!.setNewData(monthList)
+            mMonthAdapter.setNewData(monthList)
             // 修正月份
             mMonth = 1
-            mRvMonth!!.scrollToPosition(0)
+            mRvMonth.scrollToPosition(0)
         } else {
-            mMonthAdapter!!.setNewData(monthList)
+            mMonthAdapter.setNewData(monthList)
         }
     }
 
     fun show() {
-        builder!!.create().show()
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        if (mOnDismissListener != null) {
-            mOnDismissListener!!.onDismiss()
-        }
-    }
-
-    fun setOnDismissListener(onDismissListener: OnDismissListener) {
-        mOnDismissListener = onDismissListener
-    }
-
-    interface OnDismissListener {
-        /**
-         * dialog 取消
-         */
-        fun onDismiss()
-    }
-
-    fun setOnChooseAffirmListener(onChooseAffirmListener: OnChooseAffirmListener) {
-        mOnChooseAffirmListener = onChooseAffirmListener
-    }
-
-    /**
-     * 选择完成月份后，点击确定按钮监听
-     */
-    interface OnChooseAffirmListener {
-        /**
-         * 确定按钮点击事件
-         *
-         * @param year  选择的年份
-         * @param month 选择的月份
-         */
-        fun onClick(year: Int, month: Int)
+        mBuilder.create().show()
     }
 
     internal inner class PickerAdapter(data: List<Int>?) : BaseDataBindingAdapter<Int>(R.layout.item_picker, data) {

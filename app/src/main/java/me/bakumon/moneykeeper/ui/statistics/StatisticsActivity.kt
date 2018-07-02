@@ -23,7 +23,6 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivityStatisticsBinding
 import me.bakumon.moneykeeper.ui.statistics.bill.BillFragment
-import me.bakumon.moneykeeper.ui.statistics.reports.ChooseMonthDialog
 import me.bakumon.moneykeeper.ui.statistics.reports.ReportsFragment
 import me.bakumon.moneykeeper.utill.DateUtils
 
@@ -82,21 +81,16 @@ class StatisticsActivity : BaseActivity() {
     private fun chooseMonth() {
         mBinding.titleBar?.llTitle?.isEnabled = false
         val chooseMonthDialog = ChooseMonthDialog(this, mCurrentYear, mCurrentMonth)
-        chooseMonthDialog.setOnDismissListener(object : ChooseMonthDialog.OnDismissListener {
-            override fun onDismiss() {
-                mBinding.titleBar?.llTitle?.isEnabled = true
-            }
-        })
-        chooseMonthDialog.setOnChooseAffirmListener(object : ChooseMonthDialog.OnChooseAffirmListener {
-            override fun onClick(year: Int, month: Int) {
-                mCurrentYear = year
-                mCurrentMonth = month
-                val title = DateUtils.getYearMonthFormatString(year, month)
-                mBinding.titleBar?.title = title
-                mBillFragment.setYearMonth(year, month)
-                mReportsFragment.setYearMonth(year, month)
-            }
-        })
+        chooseMonthDialog.mOnDismissListener = {
+            mBinding.titleBar?.llTitle?.isEnabled = true
+        }
+        chooseMonthDialog.mOnChooseListener = { year, month ->
+            mCurrentYear = year
+            mCurrentMonth = month
+            mBinding.titleBar?.title = DateUtils.getYearMonthFormatString(year, month)
+            mBillFragment.setYearMonth(year, month)
+            mReportsFragment.setYearMonth(year, month)
+        }
         chooseMonthDialog.show()
     }
 }
