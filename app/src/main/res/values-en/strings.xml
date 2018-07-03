@@ -38,6 +38,7 @@
     <string name="toast_get_month_summary_fail">Failed to get summary data for the month</string>
     <string name="toast_get_type_summary_fail">Failed to get type summary data</string>
     <string name="toast_not_install_market">Your phone does not have an Android app market installed</string>
+    <string name="toast_not_install_email">Your phone does not have a mail app installed</string>
     <string name="toast_not_install_alipay">Thank you, you did not install Alipay application</string>
     <string name="toast_is_not_writable_external">Backup failed, external storage is unavailable</string>
     <string name="toast_restore_fail">Failed to restore the backup</string>
@@ -127,7 +128,8 @@
     <string name="text_setting_score">Score</string>
     <string name="text_setting_donate">Donate</string>
     <string name="text_privacy_policy">Privacy Policy</string>
-    <string name="text_setting_lisence">Open source license</string>
+    <string name="text_setting_license">Open source license</string>
+    <string name="text_setting_contact_author">Contact author</string>
     <string name="text_setting_help">Help</string>
     <string name="text_setting_good_score">Give a good score,please</string>
     <string name="text_about_content">Understand our design philosophy</string>
@@ -153,7 +155,7 @@
     <string name="text_developer_designer">Developer &amp; Designer</string>
     <string name="text_share_to">Share to</string>
     <string name="text_app_slogan">Simple, pure accounting application</string>
-    <string name="text_share_content">I found a simple, pure billing application, click on the link to download https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>
+    <string name="text_share_content" formatted="true">I found a simple, pure billing application, click on the link to download %1$s</string>
     <string name="text_successive_record">Continuous accounting</string>
     <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
     <string name="text_no_budget">no data</string>
@@ -161,4 +163,9 @@
     <string name="text_fast_accounting">Quick accounting</string>
     <string name="text_fast_tip">Open APP directly bookkeeping</string>
     <string name="text_set_budget">Set a budget</string>
+    <string name="text_feedback">Feedback:</string>
+    <string name="text_phone_brand">phone brand:</string>
+    <string name="text_phone_model">Phone model:</string>
+    <string name="text_system_version">System version:</string>
+    <string name="text_app_version">App version:</string>
 </resources>

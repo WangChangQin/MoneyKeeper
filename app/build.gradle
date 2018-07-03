@@ -174,13 +174,13 @@ dependencies {
     implementation deps.room.rxjava2
     kapt deps.room.compiler
     // 第三方库
-//    implementation deps.rxjava2
+    implementation deps.rxjava2
     implementation deps.rxandroid
     // retrofit2 会自动依赖 okhttp3 okio rxjava2 gson
     // rxjava 版本以上面 deps.rxjava 为准
-    implementation deps.retrofit2.retrofit
-    implementation deps.retrofit2.adapter_rxjava2
-    implementation deps.retrofit2.converter_gson
+//    implementation deps.retrofit2.retrofit
+//    implementation deps.retrofit2.adapter_rxjava2
+//    implementation deps.retrofit2.converter_gson
     // base adapter
     implementation deps.BRVAH
     // 路由

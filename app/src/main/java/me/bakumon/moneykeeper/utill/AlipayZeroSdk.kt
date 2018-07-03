@@ -48,6 +48,9 @@ object AlipayZeroSdk {
      * 旧版支付宝二维码方法，需要使用 https://fama.alipay.com/qrcode/index.htm 网站生成的二维码
      * 这个方法最好，但在 2016 年 8 月发现新用户可能无法使用
      *
+     * https://fama.alipay.com/qrcode/qrcodelist.htm?qrCodeType=P  二维码地址
+     * http://cli.im/deqr/ 解析二维码
+     *
      * @param activity Parent Activity
      * @param urlCode  手动解析二维码获得地址中的参数，例如 https://qr.alipay.com/aehvyvf4taua18zo6e 最后那段
      * @return 是否成功调用

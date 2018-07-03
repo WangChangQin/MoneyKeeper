@@ -38,6 +38,7 @@
     <string name="toast_get_month_summary_fail">獲取該月匯總數據失敗</string>
     <string name="toast_get_type_summary_fail">獲取類型匯總數據失敗</string>
     <string name="toast_not_install_market">您的手機沒有安裝Android應用市場</string>
+    <string name="toast_not_install_email">您的手機沒有安裝郵件應用</string>
     <string name="toast_not_install_alipay">謝謝，您沒有安裝支付寶客戶端</string>
     <string name="toast_is_not_writable_external">備份失敗，外部存儲不可用</string>
     <string name="toast_restore_fail">恢復備份失敗</string>
@@ -125,9 +126,10 @@
     <string name="text_setting_about_and_help">關於|幫助</string>
     <string name="text_about">關於</string>
     <string name="text_setting_score">評分</string>
-    <string name="text_setting_donate">捐贈作者</string>
+    <string name="text_setting_donate">捐贈</string>
     <string name="text_privacy_policy">隱私政策</string>
-    <string name="text_setting_lisence">開源許可證</string>
+    <string name="text_setting_license">開源許可證</string>
+    <string name="text_setting_contact_author">聯繫作者</string>
     <string name="text_setting_help">幫助</string>
     <string name="text_setting_good_score">給個好評唄</string>
     <string name="text_about_content">了解我們的設計理念</string>
@@ -153,7 +155,7 @@
     <string name="text_developer_designer">開發和部分設計</string>
     <string name="text_share_to">分享到</string>
     <string name="text_app_slogan">簡單、純粹的記賬應用</string>
-    <string name="text_share_content">我發現了一個簡單、純粹的記賬應用，點擊鏈接下載 https://www.coolapk.com/apk/me.bakumon.moneykeeper</string>
+    <string name="text_share_content" formatted="true">我發現了一個簡單、純粹的記賬應用，點擊鏈接下載 %1$s</string>
     <string name="text_successive_record">連續記賬</string>
     <string name="text_successive_record_tip">長按首頁添加按鈕，連續記賬</string>
     <string name="text_no_budget">未設置</string>
@@ -161,4 +163,9 @@
     <string name="text_fast_accounting">快速記賬</string>
     <string name="text_fast_tip">打開APP直接記賬</string>
     <string name="text_set_budget">設置預算</string>
+    <string name="text_feedback">反饋：</string>
+    <string name="text_phone_brand">手機品牌：</string>
+    <string name="text_phone_model">手機型號：</string>
+    <string name="text_system_version">系統版本：</string>
+    <string name="text_app_version">應用版本：</string>
 </resources>

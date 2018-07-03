@@ -20,7 +20,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
@@ -29,13 +28,9 @@ import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.BuildConfig
-import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
-import me.bakumon.moneykeeper.utill.AlipayZeroSdk
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
@@ -93,9 +88,6 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         list.add(SettingSectionEntity(getString(R.string.text_setting_about_and_help)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_score), getString(R.string.text_setting_good_score) + "\uD83D\uDE18")))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_donate), "")))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_lisence))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_help))))
 
         mAdapter.setNewData(list)
@@ -107,14 +99,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         mAdapter.setOnItemClickListener { _, _, position ->
             when (position) {
                 1 -> setBudget(position)
-                2 -> goTypeManage()
+                2 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
                 6 -> showBackupDialog()
                 7 -> showRestoreDialog()
-                10 -> goAbout()
-                11 -> market()
-                12 -> alipay()
-                13 -> goOpenSource()
-                14 -> AndroidUtil.openWeb(this, "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md")
+                10 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+                11 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
                 else -> {
                 }
             }
@@ -309,50 +298,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 })
     }
 
-    private fun goTypeManage() {
-        Floo.navigation(this, Router.Url.URL_TYPE_MANAGE)
-                .start()
-    }
-
-    private fun goAbout() {
-        Floo.navigation(this, Router.Url.URL_ABOUT)
-                .start()
-    }
-
-    private fun goOpenSource() {
-        Floo.navigation(this, Router.Url.URL_OPEN_SOURCE)
-                .start()
-    }
-
-    private fun market() {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("market://details?id=$packageName")
-            startActivity(intent)
-        } catch (e: Exception) {
-            ToastUtils.show(R.string.toast_not_install_market)
-            e.printStackTrace()
-        }
-
-    }
-
-    private fun alipay() {
-        // https://fama.alipay.com/qrcode/qrcodelist.htm?qrCodeType=P  二维码地址
-        // http://cli.im/deqr/ 解析二维码
-        // aex01251c8foqaprudcp503
-        if (AlipayZeroSdk.hasInstalledAlipayClient(this)) {
-            AlipayZeroSdk.startAlipayClient(this, "aex01251c8foqaprudcp503")
-        } else {
-            ToastUtils.show(R.string.toast_not_install_alipay)
-        }
-    }
-
     companion object {
         private val TAG = SettingActivity::class.java.simpleName
         @SuppressLint("SdCardPath")
         val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
         @SuppressLint("SdCardPath")
         val backupFilepath = backupDir + if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug.db" else "MoneyKeeperBackupUser.db"
-
     }
 }
