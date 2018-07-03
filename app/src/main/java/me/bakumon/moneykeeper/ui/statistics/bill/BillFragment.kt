@@ -218,7 +218,7 @@ class BillFragment : BaseFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordWithTypes ->
                     mAdapter.setNewData(recordWithTypes)
-                    if (recordWithTypes == null || recordWithTypes.isEmpty()) {
+                    if (recordWithTypes.isEmpty()) {
                         mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)
                     }
                 }

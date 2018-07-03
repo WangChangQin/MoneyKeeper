@@ -85,7 +85,7 @@ class ReportsFragment : BaseFragment() {
 
         initPieChart()
 
-        mBinding.layoutSumMoney?.rgType?.setOnCheckedChangeListener { group, checkedId ->
+        mBinding.layoutSumMoney?.rgType?.setOnCheckedChangeListener { _, checkedId ->
             mType = if (checkedId == R.id.rb_outlay) {
                 RecordType.TYPE_OUTLAY
             } else {
@@ -220,7 +220,7 @@ class ReportsFragment : BaseFragment() {
                 .subscribe({ typeSumMoneyBeans ->
                     setChartData(typeSumMoneyBeans)
                     mAdapter.setNewData(typeSumMoneyBeans)
-                    if (typeSumMoneyBeans == null || typeSumMoneyBeans.isEmpty()) {
+                    if (typeSumMoneyBeans.isEmpty()) {
                         mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)
                     }
                 }

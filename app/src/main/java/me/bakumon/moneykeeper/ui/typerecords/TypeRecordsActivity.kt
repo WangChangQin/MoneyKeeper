@@ -56,7 +56,7 @@ class TypeRecordsActivity : BaseActivity() {
             mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
         }
 
-        mBinding.titleBar?.ibtClose?.setOnClickListener { v -> finish() }
+        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
         mBinding.typeChoice?.rbOutlay?.setText(R.string.text_sort_time)
         mBinding.typeChoice?.rbIncome?.setText(R.string.text_sort_money)
 

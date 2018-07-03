@@ -80,7 +80,7 @@ class TypeRecordsFragment : BaseFragment() {
         if (mSortType == SORT_TIME) {
             mSortTimeAdapter = HomeAdapter(null)
             mBinding.rvRecords.adapter = mSortTimeAdapter
-            mSortTimeAdapter.setOnItemChildLongClickListener { adapter, view, position ->
+            mSortTimeAdapter.setOnItemChildLongClickListener { _, _, position ->
                 showOperateDialog(mSortTimeAdapter.data[position])
                 false
             }
@@ -146,12 +146,12 @@ class TypeRecordsFragment : BaseFragment() {
                 .subscribe({ recordWithTypes ->
                     if (mSortType == 0) {
                         mSortTimeAdapter.setNewData(recordWithTypes)
-                        if (recordWithTypes == null || recordWithTypes.isEmpty()) {
+                        if (recordWithTypes.isEmpty()) {
                             mSortTimeAdapter.emptyView = inflate(R.layout.layout_record_empty)
                         }
                     } else {
                         mSortMoneyAdapter.setNewData(recordWithTypes)
-                        if (recordWithTypes == null || recordWithTypes.isEmpty()) {
+                        if (recordWithTypes.isEmpty()) {
                             mSortMoneyAdapter.emptyView = inflate(R.layout.layout_record_empty)
                         }
                     }

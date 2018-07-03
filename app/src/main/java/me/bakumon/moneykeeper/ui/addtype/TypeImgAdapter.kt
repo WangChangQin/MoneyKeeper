@@ -16,8 +16,6 @@
 
 package me.bakumon.moneykeeper.ui.addtype
 
-import android.databinding.ViewDataBinding
-
 import me.bakumon.moneykeeper.BR
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
