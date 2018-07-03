@@ -36,7 +36,6 @@ import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.SoftInputUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.bakumon.moneykeeper.view.KeyboardView
 import java.util.*
 
 /**
@@ -103,15 +102,13 @@ class AddRecordActivity : BaseActivity() {
             mBinding.qmTvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
         }
 
-        mBinding.keyboard.setAffirmClickListener(object : KeyboardView.OnAffirmClickListener {
-            override fun onAffirmClick(text: String) {
-                if (mRecord == null) {
-                    insertRecord(text)
-                } else {
-                    modifyRecord(text)
-                }
+        mBinding.keyboard.mOnAffirmClickListener = {
+            if (mRecord == null) {
+                insertRecord(it)
+            } else {
+                modifyRecord(it)
             }
-        })
+        }
 
         mBinding.qmTvDate.setOnClickListener {
             val dpd = DatePickerDialog.newInstance(

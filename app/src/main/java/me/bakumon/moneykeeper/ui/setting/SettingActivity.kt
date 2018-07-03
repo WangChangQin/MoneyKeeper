@@ -22,7 +22,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
 import android.text.TextUtils
@@ -43,7 +42,6 @@ import me.drakeet.floo.Floo
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-import java.io.File
 import java.util.*
 
 /**
@@ -283,12 +281,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ backupBeans ->
                     val dialog = BackupFliesDialog(this, backupBeans)
-//                    dialog.setListener { file -> restoreDB(file.path) }
-                    dialog.setOnItemClickListener(object : BackupFliesDialog.OnItemClickListener {
-                        override fun onClick(file: File) {
-                            restoreDB(file.path)
-                        }
-                    })
+                    dialog.mOnItemClickListener = {
+                        restoreDB(it.path)
+                    }
                     dialog.show()
                 }
                 ) { throwable ->

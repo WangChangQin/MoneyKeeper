@@ -25,12 +25,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.databinding.LayoutKeyboardBinding
@@ -44,27 +41,14 @@ import me.bakumon.moneykeeper.utill.SoftInputUtils
 class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
 
     private lateinit var mBinding: LayoutKeyboardBinding
-    private var mOnAffirmClickListener: OnAffirmClickListener? = null
+    var mOnAffirmClickListener: ((String) -> Unit)? = null
 
     init {
         init(context)
     }
 
-    interface OnAffirmClickListener {
-        /**
-         * 确定按钮点击事件
-         *
-         * @param text 输入框的文字
-         */
-        fun onAffirmClick(text: String)
-    }
-
     fun setAffirmEnable(enable: Boolean) {
         mBinding.keyboardAffirm.isEnabled = enable
-    }
-
-    fun setAffirmClickListener(listener: OnAffirmClickListener) {
-        mOnAffirmClickListener = listener
     }
 
     fun setText(text: String) {
@@ -88,7 +72,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
         orientation = LinearLayout.VERTICAL
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_keyboard, this, true)
         mBinding.editInput.requestFocus()
-        mBinding.editInput.setOnTouchListener { v, event ->
+        mBinding.editInput.setOnTouchListener { _, _ ->
             SoftInputUtils.hideSoftInput(mBinding.editInput)
             mBinding.editInput.requestFocus()
             // 返回 true，拦截了默认的点击和长按操作，这是一个妥协的做法
@@ -104,18 +88,18 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 mBinding.keyboardNumPoint)
         setDeleteView(mBinding.keyboardDelete)
 
-        mBinding.keyboardAffirm.setOnClickListener { v ->
-            if (mOnAffirmClickListener != null) {
-                val text = mBinding.editInput.text.toString()
-                val isDigital = (!TextUtils.isEmpty(text)
-                        && !TextUtils.equals("0", text)
-                        && !TextUtils.equals("0.", text))
-                if (!isDigital) {
-                    val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
-                    mBinding.editInput.startAnimation(animation)
-                } else {
-                    mOnAffirmClickListener!!.onAffirmClick(text)
-                }
+        mBinding.keyboardAffirm.setOnClickListener {
+            val text = mBinding.editInput.text.toString()
+            val isDigital = (!TextUtils.isEmpty(text)
+                    && !TextUtils.equals("0", text)
+                    && !TextUtils.equals("0.", text)
+                    && !TextUtils.equals("0.0", text)
+                    && !TextUtils.equals("0.00", text))
+            if (!isDigital) {
+                val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
+                mBinding.editInput.startAnimation(animation)
+            } else {
+                mOnAffirmClickListener?.invoke(text)
             }
         }
     }
@@ -125,11 +109,11 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
      */
     private fun setInputTextViews(vararg textViews: TextView) {
         val target = mBinding.editInput
-        if (target == null || textViews.isEmpty()) {
+        if (textViews.isEmpty()) {
             return
         }
         for (i in textViews.indices) {
-            textViews[i].setOnClickListener { view ->
+            textViews[i].setOnClickListener {
                 val sb = StringBuilder(target.text.toString().trim { it <= ' ' })
                 val result = inputFilter(sb, textViews[i].text.toString())
                 setText(result)
@@ -185,7 +169,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
      * 设置删除键
      */
     private fun setDeleteView(deleteView: View) {
-        val target = mBinding.editInput ?: return
+        val target = mBinding.editInput
         deleteView.setOnClickListener {
             val sb = StringBuilder(target.text.toString().trim { it <= ' ' })
             if (sb.isNotEmpty()) {
@@ -193,7 +177,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 setText(sb.toString())
             }
         }
-        deleteView.setOnLongClickListener { v ->
+        deleteView.setOnLongClickListener {
             val sb = StringBuilder(target.text.toString().trim { it <= ' ' })
             if (sb.isNotEmpty()) {
                 setText("")
