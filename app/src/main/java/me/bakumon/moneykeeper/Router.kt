@@ -38,6 +38,7 @@ object Router {
         const val URL_SETTING = "setting"
         const val URL_OPEN_SOURCE = "open_source"
         const val URL_ABOUT = "about"
+        const val URL_REVIEW = "review"
     }
 
     /**

@@ -42,7 +42,7 @@ class App : Application() {
         }
         LeakCanary.install(this)
         // Normal app init code...
-        val mappings = HashMap<String, Target>(10)
+        val mappings = HashMap<String, Target>(11)
         mappings[Router.Url.URL_HOME] = Target("mk://bakumon.me/home")
         mappings[Router.Url.URL_ADD_RECORD] = Target("mk://bakumon.me/addRecord")
         mappings[Router.Url.URL_TYPE_MANAGE] = Target("mk://bakumon.me/typeManage")
@@ -53,6 +53,7 @@ class App : Application() {
         mappings[Router.Url.URL_SETTING] = Target("mk://bakumon.me/setting")
         mappings[Router.Url.URL_OPEN_SOURCE] = Target("mk://bakumon.me/openSource")
         mappings[Router.Url.URL_ABOUT] = Target("mk://bakumon.me/about")
+        mappings[Router.Url.URL_REVIEW] = Target("mk://bakumon.me/review")
 
         Floo.configuration()
                 .setDebugEnabled(BuildConfig.DEBUG)

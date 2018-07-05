@@ -20,11 +20,13 @@ import android.os.Bundle
 import android.view.View
 
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivityStatisticsBinding
 import me.bakumon.moneykeeper.ui.statistics.bill.BillFragment
 import me.bakumon.moneykeeper.ui.statistics.reports.ReportsFragment
 import me.bakumon.moneykeeper.utill.DateUtils
+import me.drakeet.floo.Floo
 
 /**
  * 统计
@@ -50,6 +52,8 @@ class StatisticsActivity : BaseActivity() {
     private fun initView() {
         val title = DateUtils.getCurrentYearMonth()
         mBinding.titleBar?.title = title
+        mBinding.titleBar?.tvRight?.text = getString(R.string.text_review)
+        mBinding.titleBar?.tvRight?.setOnClickListener { Floo.navigation(this, Router.Url.URL_REVIEW).start() }
         mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
         mBinding.titleBar?.llTitle?.setOnClickListener { chooseMonth() }
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }

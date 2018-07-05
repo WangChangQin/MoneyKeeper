@@ -16,21 +16,10 @@
 
 package me.bakumon.moneykeeper.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
-import android.arch.persistence.room.Update
-
-import java.util.Date
-
+import android.arch.persistence.room.*
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean
-import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
+import me.bakumon.moneykeeper.database.entity.*
+import java.util.*
 
 /**
  * 记账记录表操作类
@@ -83,4 +72,7 @@ interface RecordDao {
 
     @Query("SELECT t_type.img_name AS imgName,t_type.name AS typeName, Record.record_type_id AS typeId,sum(Record.money) AS typeSumMoney, count(Record.record_type_id) AS count FROM Record LEFT JOIN RecordType AS t_type ON Record.record_type_id=t_type.id where (t_type.type=:type and Record.time BETWEEN :from AND :to) GROUP by Record.record_type_id Order by sum(Record.money) DESC")
     fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>
+
+    @Query("SELECT substr(datetime(substr(Record.time, 1, 10), 'unixepoch', 'localtime'), 1, 7) as month, RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type, month ORDER BY Record.time DESC")
+    fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>>
 }

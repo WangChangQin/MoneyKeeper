@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.bakumon.moneykeeper.ui.review.ReviewActivity">
+
+    <data>
+
+        <import type="java.util.List" />
+
+        <import type="me.bakumon.moneykeeper.database.entity.SumMoneyBean" />
+
+        <variable
+            name="sumMoneyBeanList"
+            type="List&lt;SumMoneyBean>" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/layout_title_bar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            tools:background="@color/colorPrimary">
+
+            <TextView
+                android:id="@+id/tv_outlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_red"
+                android:textColor="@color/colorTextWhite2"
+                app:text_statistics_outlay="@{sumMoneyBeanList}"
+                tools:text="支出 ¥3580" />
+
+            <TextView
+                android:id="@+id/tv_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_green"
+                android:textColor="@color/colorTextWhite2"
+                app:text_statistics_income="@{sumMoneyBeanList}"
+                tools:text="收入 ¥9827" />
+
+            <TextView
+                android:id="@+id/tv_overage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/colorTextWhite3"
+                app:text_statistics_overage="@{sumMoneyBeanList}"
+                tools:text="结余 ¥3498.89" />
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="5dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_review"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

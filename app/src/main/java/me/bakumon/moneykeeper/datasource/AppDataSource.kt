@@ -169,4 +169,9 @@ interface AppDataSource {
      * 获取按类型汇总数据
      */
     fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>
+
+    /**
+     * 获取某年（或某段时间）内所有月份的收支总数
+     */
+    fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>>
 }

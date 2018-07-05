@@ -46,6 +46,8 @@
     <string name="toast_backup_list_fail">備份文件列表獲取失敗</string>
     <string name="toast_open_auto_backup">自動備份已關閉，設置界面可重新打開</string>
     <string name="toast_success_record">記賬成功</string>
+    <string name="toast_get_review_fail">獲取回顧數據失敗</string>
+    <string name="toast_get_review_sum_money_fail">獲取回顧匯總數據失敗</string>
 
     <string name="hint_enter_money">輸入金額</string>
     <string name="hint_enter_remark">輸入備註</string>
@@ -107,6 +109,7 @@
     <string name="text_month_outlay_symbol">支出&#160;$</string>
     <string name="text_month_income_symbol">收入&#160;$</string>
     <string name="text_month_overage">結餘&#160;$</string>
+    <string name="text_overage">結餘</string>
     <string name="text_unit_account">筆</string>
     <string name="text_day">日&#160;</string>
     <string name="text_choose_month">選擇月份</string>
@@ -168,4 +171,7 @@
     <string name="text_phone_model">手機型號：</string>
     <string name="text_system_version">系統版本：</string>
     <string name="text_app_version">應用版本：</string>
+    <string name="text_review">回顧</string>
+    <string name="text_year">年</string>
+    <string name="text_month">月</string>
 </resources>

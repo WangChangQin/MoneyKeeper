@@ -224,11 +224,11 @@ object DateUtils {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND))
         return calendar.time
     }
 
@@ -243,18 +243,47 @@ object DateUtils {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
-        val maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val maxHour = calendar.getActualMaximum(Calendar.HOUR_OF_DAY)
-        val maxMinute = calendar.getActualMaximum(Calendar.MINUTE)
-        val maxSecond = calendar.getActualMaximum(Calendar.SECOND)
-        val maxMillisecond = calendar.getActualMaximum(Calendar.MILLISECOND)
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND))
+        return calendar.time
+    }
 
-        calendar.set(Calendar.DAY_OF_MONTH, maxDay)
-        calendar.set(Calendar.HOUR_OF_DAY, maxHour)
-        calendar.set(Calendar.MINUTE, maxMinute)
-        calendar.set(Calendar.SECOND, maxSecond)
-        calendar.set(Calendar.MILLISECOND, maxMillisecond)
+    /**
+     * 获取某年开始时刻的 Date
+     *
+     * @param year  年份
+     * @return 当前年开始的 Date
+     */
+    fun getYearStart(year: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, calendar.getActualMinimum(Calendar.MONTH))
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND))
+        return calendar.time
+    }
 
+    /**
+     * 获取某年结束时刻的 Date
+     *
+     * @param year  年份
+     * @return 某年结束的 Date
+     */
+    fun getYearEnd(year: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH))
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND))
         return calendar.time
     }
 
