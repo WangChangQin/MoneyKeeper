@@ -25,6 +25,7 @@
 
 预览：
 ![img.png](https://ws3.sinaimg.cn/large/006tNc79ly1fsp159i5gxj31kw0sgwl3.jpg)
+![img.png](https://ws2.sinaimg.cn/large/006tNc79ly1ft1s1k77igj31kw11xwvy.jpg)
 
 ## 架构和技术
 
