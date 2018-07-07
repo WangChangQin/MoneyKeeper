@@ -20,16 +20,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.widget.TextView
-
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
-
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
-import java.math.BigDecimal
 
 /**
  * 折线图 MarkerView
@@ -41,11 +39,12 @@ class LineChartMarkerView(context: Context) : MarkerView(context, R.layout.bar_c
     private val tvContent: TextView = findViewById(R.id.tv_content)
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
-        val content = resources.getString(R.string.text_money_symbol) + BigDecimalUtil.fen2Yuan(BigDecimal(e!!.y.toString()))
+        val bean = e!!.data as MonthSumMoneyBean
+        val content = resources.getString(R.string.text_money_symbol) + BigDecimalUtil.fen2Yuan(bean.sumMoney)
         tvContent.text = content
         if (e.y > 0) {
             tvContent.visibility = View.VISIBLE
-            if (e.data == RecordType.TYPE_OUTLAY) {
+            if (bean.type == RecordType.TYPE_OUTLAY) {
                 tvContent.setBackgroundColor(resources.getColor(R.color.colorOutlay))
             } else {
                 tvContent.setBackgroundColor(resources.getColor(R.color.colorIncome))

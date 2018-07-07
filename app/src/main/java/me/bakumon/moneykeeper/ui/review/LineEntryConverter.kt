@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.review
 
+import android.os.Debug
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -24,6 +25,7 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.utill.DateUtils
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -38,9 +40,9 @@ object LineEntryConverter {
      * @param beans 类型汇总数据
      * @return List<PieEntry>
     </PieEntry> */
-    fun getBarEntryList(newBeans: List<MonthSumMoneyBean>): LineData {
+    fun getBarEntryList(sourceBeans: List<MonthSumMoneyBean>): LineData {
 
-        val beans = newBeans.asReversed()
+        val beans = sourceBeans.asReversed()
 
         val yVals1 = ArrayList<Entry>()
         initYVals(yVals1)
@@ -51,10 +53,10 @@ object LineEntryConverter {
                 val index = DateUtils.month2Index(beans[i].month)
                 if (beans[i].type == RecordType.TYPE_OUTLAY) {
                     yVals1[index].y = beans[i].sumMoney.toFloat()
-                    yVals1[index].data = RecordType.TYPE_OUTLAY
+                    yVals1[index].data = beans[i]
                 } else {
                     yVals2[index].y = beans[i].sumMoney.toFloat()
-                    yVals2[index].data = RecordType.TYPE_INCOME
+                    yVals2[index].data = beans[i]
                 }
             }
         }
@@ -70,6 +72,7 @@ object LineEntryConverter {
     private fun initYVals(yVals: ArrayList<Entry>) {
         for (i in 0..11) {
             val entry = Entry(i.toFloat(), 0f)
+            entry.data = MonthSumMoneyBean("", 0, BigDecimal(0))
             yVals.add(entry)
         }
     }

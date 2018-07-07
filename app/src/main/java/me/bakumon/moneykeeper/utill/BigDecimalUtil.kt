@@ -19,6 +19,7 @@ package me.bakumon.moneykeeper.utill
 import android.text.TextUtils
 
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
 /**
  * BigDecimal 工具类
@@ -31,20 +32,24 @@ object BigDecimalUtil {
      */
     fun fen2Yuan(fenBD: BigDecimal?): String {
         return if (fenBD != null) {
-            fenBD.divide(BigDecimal(100)).toPlainString()
+            val yuanBD = fenBD.divide(BigDecimal(100))
+            val df = format(yuanBD)
+            df.format(yuanBD)
         } else {
             "0"
         }
     }
 
-    /**
-     * 分转换为元
-     */
-    fun fen2YuanBD(fenBD: BigDecimal?): BigDecimal {
-        return if (fenBD != null) {
-            fenBD.divide(BigDecimal(100))
+    private fun format(yuanBD: BigDecimal): DecimalFormat {
+        val strList = yuanBD.toPlainString().split(".")
+        return if (strList.size == 2) {
+            if (strList[1].length == 1) {
+                DecimalFormat("#,###.0")
+            } else {
+                DecimalFormat("#,###.00")
+            }
         } else {
-            BigDecimal(0)
+            DecimalFormat("#,###")
         }
     }
 

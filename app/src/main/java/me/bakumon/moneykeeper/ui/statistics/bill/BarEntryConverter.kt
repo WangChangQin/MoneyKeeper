@@ -17,12 +17,8 @@
 package me.bakumon.moneykeeper.ui.statistics.bill
 
 import com.github.mikephil.charting.data.BarEntry
-
-import java.math.BigDecimal
-import java.util.ArrayList
-
 import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.utill.BigDecimalUtil
+import java.util.*
 
 /**
  * 柱状图数据转换器
@@ -44,9 +40,10 @@ object BarEntryConverter {
             for (i in 0 until count) {
                 for (j in daySumMoneyBeans.indices) {
                     if (i + 1 == daySumMoneyBeans[j].time.date) {
-                        val money = BigDecimalUtil.fen2YuanBD(daySumMoneyBeans[j].daySumMoney)
+                        barEntry = BarEntry((i + 1).toFloat(), daySumMoneyBeans[j].daySumMoney.toFloat())
                         // 这里的 y 由于是 float，所以数值很大的话，还是会出现科学计数法
-                        barEntry = BarEntry((i + 1).toFloat(), money.toFloat())
+                        // 为了避免科学计数法显示,marker从data中取值
+                        barEntry.data = daySumMoneyBeans[j].daySumMoney
                         entryList.add(barEntry)
                     }
                 }
