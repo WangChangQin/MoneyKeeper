@@ -113,6 +113,7 @@
     <string name="text_unit_account">筆</string>
     <string name="text_day">日&#160;</string>
     <string name="text_choose_month">選擇月份</string>
+    <string name="text_choose_year">選擇年份</string>
     <string name="text_sort_time">按時間</string>
     <string name="text_sort_money">按金額</string>
     <string name="text_title_open_source">開源許可證</string>

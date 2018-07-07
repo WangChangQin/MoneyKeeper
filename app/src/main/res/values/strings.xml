@@ -115,6 +115,7 @@
     <string name="text_unit_account"></string>
     <string name="text_day">&#160;</string>
     <string name="text_choose_month">Select month</string>
+    <string name="text_choose_year">Select year</string>
     <string name="text_sort_time">By time</string>
     <string name="text_sort_money">By amount</string>
     <string name="text_title_open_source">License</string>

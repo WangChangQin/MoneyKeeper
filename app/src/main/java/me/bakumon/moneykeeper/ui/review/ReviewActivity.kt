@@ -31,6 +31,7 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.databinding.ActivityReviewBinding
+import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
 
 /**
@@ -43,6 +44,8 @@ class ReviewActivity : BaseActivity() {
     private lateinit var mBinding: ActivityReviewBinding
     private lateinit var mViewModel: ReviewModel
     private lateinit var mAdapter: ReviewAdapter
+
+    private var mCurrentYear = DateUtils.getCurrentYear()
 
     override val layoutId: Int
         get() = R.layout.activity_review
@@ -58,7 +61,7 @@ class ReviewActivity : BaseActivity() {
     private fun initView() {
         mBinding.titleBar?.title = "2018"
         mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
-        mBinding.titleBar?.llTitle?.setOnClickListener { showChooseDateDialog() }
+        mBinding.titleBar?.llTitle?.setOnClickListener { chooseYear() }
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
 
         mBinding.rvReview.layoutManager = LinearLayoutManager(this)
@@ -67,12 +70,21 @@ class ReviewActivity : BaseActivity() {
 
         initLineChart()
 
-        updateData(2018)
+        updateData(mCurrentYear)
     }
 
-    private fun showChooseDateDialog() {
-        updateData(2017)
-        mBinding.titleBar?.title = "2017"
+    private fun chooseYear() {
+        mBinding.titleBar?.llTitle?.isEnabled = false
+        val chooseYearDialog = ChooseYearDialog(this, mCurrentYear)
+        chooseYearDialog.mOnDismissListener = {
+            mBinding.titleBar?.llTitle?.isEnabled = true
+        }
+        chooseYearDialog.mOnChooseListener = { year ->
+            mCurrentYear = year
+            mBinding.titleBar?.title = mCurrentYear.toString()
+            updateData(mCurrentYear)
+        }
+        chooseYearDialog.show()
     }
 
     private fun initLineChart() {
