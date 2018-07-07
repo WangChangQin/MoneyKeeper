@@ -125,6 +125,8 @@ andResGuard {
             "R.mipmap.type_wallet",
             "R.mipmap.type_income_red",
             "R.mipmap.type_outlay_red",
+            "R.mipmap.type_adventure",
+            "R.mipmap.type_movie",
     ]
     compressFilePattern = [
             "*.png",

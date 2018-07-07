@@ -91,6 +91,12 @@ object TypeImgListCreator {
 
             bean = TypeImgBean("type_outlay_red")
             list.add(bean)
+
+            bean = TypeImgBean("type_adventure")
+            list.add(bean)
+
+            bean = TypeImgBean("type_movie")
+            list.add(bean)
         } else {
             bean = TypeImgBean("type_salary")
             list.add(bean)
