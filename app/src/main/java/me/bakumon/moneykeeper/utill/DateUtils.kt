@@ -38,8 +38,6 @@ object DateUtils {
     private val MONTH_DAY_FORMAT: DateFormat = SimpleDateFormat("MM-dd")
     @SuppressLint("SimpleDateFormat")
     private val YEAR_MONTH_DAY_FORMAT: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-    @SuppressLint("SimpleDateFormat")
-    private val FORMAT_FOR_FILE_NAME: DateFormat = SimpleDateFormat("_yy_MM_dd_HH_mm_ss")
 
     /**
      * 获取今天 Date 对象
@@ -56,8 +54,14 @@ object DateUtils {
         return calendar.time
     }
 
-    fun getCurrentDateString(): String {
-        return date2String(Date(), FORMAT_FOR_FILE_NAME)
+    /**
+     * @month 2018-07
+     * @return 6
+     */
+    fun month2Index(month: String): Int {
+        val calendar = Calendar.getInstance()
+        calendar.time = string2Date(month, FORMAT)
+        return calendar.get(Calendar.MONTH)
     }
 
     /**

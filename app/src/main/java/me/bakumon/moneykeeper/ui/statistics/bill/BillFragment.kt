@@ -41,7 +41,6 @@ import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.home.HomeAdapter
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.bakumon.moneykeeper.view.BarChartMarkerView
 import me.drakeet.floo.Floo
 import java.util.*
 
@@ -180,7 +179,7 @@ class BillFragment : BaseFragment() {
             set1.setDrawIcons(false)
             set1.setDrawValues(false)
             set1.color = resources.getColor(R.color.colorAccent)
-            set1.valueTextColor = resources.getColor(R.color.colorTextWhite)
+            set1.highLightAlpha = 70
 
             val dataSets = ArrayList<IBarDataSet>()
             dataSets.add(set1)

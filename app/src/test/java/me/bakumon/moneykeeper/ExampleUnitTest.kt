@@ -16,7 +16,7 @@
 
 package me.bakumon.moneykeeper
 
-import org.junit.Assert.assertEquals
+import me.bakumon.moneykeeper.utill.DateUtils
 import org.junit.Test
 
 /**
@@ -28,6 +28,8 @@ class ExampleUnitTest {
     @Test
     @Throws(Exception::class)
     fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toLong())
+//        assertEquals(4, (2 + 2).toLong())
+        val index = DateUtils.month2Index("2018-07")
+        System.out.print(index)
     }
 }

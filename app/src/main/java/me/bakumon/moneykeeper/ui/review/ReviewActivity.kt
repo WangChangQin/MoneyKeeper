@@ -17,15 +17,19 @@
 package me.bakumon.moneykeeper.ui.review
 
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.databinding.ActivityReviewBinding
 import me.bakumon.moneykeeper.utill.ToastUtils
 
@@ -54,18 +58,71 @@ class ReviewActivity : BaseActivity() {
     private fun initView() {
         mBinding.titleBar?.title = "2018"
         mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
-        mBinding.titleBar?.llTitle?.setOnClickListener { ToastUtils.show("title") }
+        mBinding.titleBar?.llTitle?.setOnClickListener { showChooseDateDialog() }
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
 
         mBinding.rvReview.layoutManager = LinearLayoutManager(this)
         mAdapter = ReviewAdapter(null)
         mBinding.rvReview.adapter = mAdapter
 
-        updateData()
+        initLineChart()
+
+        updateData(2018)
     }
 
-    private fun updateData() {
-        mDisposable.add(mViewModel.getYearSumMoney(2018)
+    private fun showChooseDateDialog() {
+        updateData(2017)
+        mBinding.titleBar?.title = "2017"
+    }
+
+    private fun initLineChart() {
+        mBinding.lineChart.setNoDataText("")
+        mBinding.lineChart.setScaleEnabled(false)
+        mBinding.lineChart.description.isEnabled = false
+        mBinding.lineChart.legend.isEnabled = true
+        mBinding.lineChart.legend.textColor = resources.getColor(R.color.colorTextWhite1)
+
+        val marker = LineChartMarkerView(this)
+        marker.chartView = mBinding.lineChart
+        mBinding.lineChart.marker = marker
+
+        val xAxis = mBinding.lineChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.textColor = resources.getColor(R.color.colorTextGray)
+        xAxis.setLabelCount(12, true)
+        xAxis.setValueFormatter { value, _ ->
+            val intValue = value.toInt()
+            if (intValue >= 0) {
+                return@setValueFormatter (intValue + 1).toString() + getString(R.string.text_month)
+            } else {
+                return@setValueFormatter ""
+            }
+        }
+
+        val leftAxis = mBinding.lineChart.axisLeft
+        leftAxis.axisMinimum = 0f
+        leftAxis.setDrawAxisLine(true)
+        leftAxis.setDrawGridLines(false)
+        leftAxis.textSize = 0f
+        leftAxis.textColor = Color.TRANSPARENT
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+        val rightAxis = mBinding.lineChart.axisRight
+        rightAxis.axisMinimum = 0f
+        rightAxis.setDrawAxisLine(true)
+        rightAxis.setDrawGridLines(false)
+        rightAxis.textSize = 0f
+        rightAxis.textColor = Color.TRANSPARENT
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+
+    }
+
+    private fun updateData(year: Int) {
+        getYearSumMoney(year)
+        getMonthOfYearSumMoney(year)
+    }
+
+    private fun getYearSumMoney(year: Int) {
+        mDisposable.add(mViewModel.getYearSumMoney(year)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -75,21 +132,32 @@ class ReviewActivity : BaseActivity() {
                     ToastUtils.show(R.string.toast_get_review_sum_money_fail)
                     Log.e(TAG, "获取回顾数据失败", it)
                 })
+    }
 
-
-        mDisposable.add(mViewModel.getMonthOfYearSumMoney(2018)
+    private fun getMonthOfYearSumMoney(year: Int) {
+        mDisposable.add(mViewModel.getMonthOfYearSumMoney(year)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     mAdapter.setNewData(ReviewItemDataConverter.getBarEntryList(it))
                     if (it.isEmpty()) {
+                        mBinding.lineChart.clear()
                         mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)
+                    } else {
+                        setLineChartData(it)
                     }
                 }
                 ) {
                     ToastUtils.show(R.string.toast_get_review_fail)
                     Log.e(TAG, "获取回顾数据失败", it)
                 })
+    }
+
+    private fun setLineChartData(beans: List<MonthSumMoneyBean>) {
+        mBinding.lineChart.clear()
+        val lineData = LineEntryConverter.getBarEntryList(beans)
+        mBinding.lineChart.data = lineData
+        mBinding.lineChart.animateY(1000)
     }
 
     companion object {
