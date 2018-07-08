@@ -31,7 +31,7 @@
         android:gravity="center|bottom"
         android:paddingBottom="3dp"
         android:paddingTop="20dp"
-        android:text="@string/text_month_empty_tip"
+        android:text="@string/text_empty_tip"
         android:textColor="@color/colorTextWhite3"
         android:textSize="14sp">
 

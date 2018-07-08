@@ -25,6 +25,7 @@ import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
+import me.bakumon.moneykeeper.ConfigManager
 
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -40,7 +41,7 @@ class BarChartMarkerView(context: Context) : MarkerView(context, R.layout.bar_ch
     private val tvContent: TextView = findViewById(R.id.tv_content)
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
-        val content = e!!.x.toInt().toString() + context.getString(R.string.text_day) + resources.getString(R.string.text_money_symbol) + BigDecimalUtil.fen2Yuan(e.data as BigDecimal?)
+        val content = e!!.x.toInt().toString() + context.getString(R.string.text_day) + " " + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(e.data as BigDecimal?)
         tvContent.text = content
         if (e.y > 0) {
             tvContent.visibility = View.VISIBLE

@@ -51,11 +51,12 @@ class AboutActivity : BaseActivity() {
 
     private fun initView() {
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_title_about)
+        mBinding.titleBar?.title = getString(R.string.text_about)
         mBinding.titleBar?.ibtRight?.visibility = View.VISIBLE
         mBinding.titleBar?.ibtRight?.setOnClickListener { share() }
 
-        mBinding.tvVersion.text = BuildConfig.VERSION_NAME
+        val version = "v" + BuildConfig.VERSION_NAME
+        mBinding.tvVersion.text = version
     }
 
     private fun share() {

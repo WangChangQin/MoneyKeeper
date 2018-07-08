@@ -50,7 +50,7 @@ class SPUtils private constructor(spName: String) {
     }
 
     @JvmOverloads
-    fun getString(key: String, defaultValue: String = ""): String? {
+    fun getString(key: String, defaultValue: String = ""): String {
         return sp.getString(key, defaultValue)
     }
 

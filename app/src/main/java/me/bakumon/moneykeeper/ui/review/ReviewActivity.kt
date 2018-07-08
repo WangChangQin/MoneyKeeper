@@ -105,9 +105,9 @@ class ReviewActivity : BaseActivity() {
         xAxis.setValueFormatter { value, _ ->
             val intValue = value.toInt()
             if (intValue >= 0) {
-                return@setValueFormatter (intValue + 1).toString() + getString(R.string.text_month)
+                (intValue + 1).toString() + getString(R.string.text_month)
             } else {
-                return@setValueFormatter ""
+                ""
             }
         }
 

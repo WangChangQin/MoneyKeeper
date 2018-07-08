@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.RecordType
@@ -78,7 +79,25 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter("text_money_with_prefix")
     fun setMoneyTextWithPrefix(textView: TextView, bigDecimal: BigDecimal) {
-        val text = textView.resources.getString(R.string.text_money_symbol) + BigDecimalUtil.fen2Yuan(bigDecimal)
+        val text = ConfigManager.symbol + BigDecimalUtil.fen2Yuan(bigDecimal)
+        textView.text = text
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_plus_subtract")
+    fun setPlusOrSubtract(textView: TextView, type: Int) {
+        if (type == RecordType.TYPE_OUTLAY) {
+            textView.text = "-"
+        } else {
+            textView.text = "+"
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_outlay")
+    fun setTitleOutlay(textView: TextView, list: List<SumMoneyBean>?) {
+        val symbols = "(" + ConfigManager.symbol + ")"
+        val text = App.instance.getString(R.string.text_month_outlay) + symbols
         textView.text = text
     }
 
@@ -88,10 +107,13 @@ object BindAdapter {
         // app:text_income_or_budget="@{sumMoneyBeanList}" 这里传递 sumMoneyBeanList
         // 在 sumMoneyBeanList 变化的时候才会自动调用本方法
         // 显示剩余预算或本月收入
+        val symbols = "(" + ConfigManager.symbol + ")"
         if (ConfigManager.budget > 0) {
-            textView.setText(R.string.text_month_remaining_budget)
+            val text = App.instance.getString(R.string.text_month_remaining_budget) + symbols
+            textView.text = text
         } else {
-            textView.setText(R.string.text_month_income)
+            val text = App.instance.getString(R.string.text_month_income) + symbols
+            textView.text = text
         }
     }
 
@@ -136,7 +158,7 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter("text_statistics_outlay")
     fun setMonthStatisticsOutlay(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
-        val prefix = textView.context.getString(R.string.text_month_outlay_symbol)
+        val prefix = textView.context.getString(R.string.text_outlay) + " " + ConfigManager.symbol
         var outlay = prefix + "0"
         if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
@@ -151,7 +173,7 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter("text_statistics_income")
     fun setMonthStatisticsIncome(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
-        val prefix = textView.context.getString(R.string.text_month_income_symbol)
+        val prefix = textView.context.getString(R.string.text_income) + " " + ConfigManager.symbol
         var income = prefix + "0"
         if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
@@ -182,7 +204,7 @@ object BindAdapter {
         }
         if (isShowOverage) {
             textView.visibility = View.VISIBLE
-            val prefix = textView.context.getString(R.string.text_month_overage)
+            val prefix = textView.context.getString(R.string.text_overage) + " " + ConfigManager.symbol
             val overage = prefix + BigDecimalUtil.fen2Yuan(incomeBd.subtract(outlayBd))
             textView.text = overage
         } else {

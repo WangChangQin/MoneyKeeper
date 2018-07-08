@@ -70,7 +70,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="@string/text_app_slogan"
+                    android:text="@string/text_slogan"
                     android:textColor="@color/colorTextWhite3" />
 
                 <TextView
@@ -234,7 +234,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_score"
+                    android:text="@string/text_score"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
 
@@ -251,7 +251,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_donate"
+                    android:text="@string/text_donate"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
 
@@ -268,7 +268,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_contact_author"
+                    android:text="@string/text_contact_author"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
 
@@ -285,7 +285,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_license"
+                    android:text="@string/text_license"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
 
@@ -319,7 +319,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_help"
+                    android:text="@string/text_help"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
             </LinearLayout>

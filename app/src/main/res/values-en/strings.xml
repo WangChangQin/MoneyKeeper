@@ -1,0 +1,194 @@
+<!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">MoneyKeeper</string>
+
+    <string name="toast_add_record_fail">Billing failed, please try again</string>
+    <string name="toast_modify_record_fail">Failed to modify record</string>
+    <string name="toast_sort_fail">Failed to sort</string>
+    <string name="toast_least_one_type">Please keep at least one type</string>
+    <string name="toast_delete_fail">failed to delete</string>
+    <string name="toast_type_img_fail">Failed to get type picture</string>
+    <string name="toast_type_save_fail">Failed to save the type</string>
+    <string name="toast_type_is_exist" formatted="true">%1$s&#160;The type already exists</string>
+    <string name="toast_record_delete_fail">Failed to delete record</string>
+    <string name="toast_current_sum_money_fail">Failed to obtain the total amount of expenditure income this month</string>
+    <string name="toast_records_fail">Failed to get list data</string>
+    <string name="toast_init_types_fail">Failed to initialize type data</string>
+    <string name="toast_get_types_fail">Failed to get type data</string>
+    <string name="toast_get_statistics_fail">Failed to get statistics</string>
+    <string name="toast_get_month_summary_fail">Failed to get summary data for the month</string>
+    <string name="toast_get_type_summary_fail">Failed to get type summary data</string>
+    <string name="toast_not_install_market">Your phone does not have an Android app market installed</string>
+    <string name="toast_not_install_email">Your phone does not have a mail app installed</string>
+    <string name="toast_not_install_alipay">Thank you, you did not install Alipay application</string>
+    <string name="toast_is_not_writable_external">Backup failed, external storage is unavailable</string>
+    <string name="toast_restore_fail">Failed to restore the backup</string>
+    <string name="toast_restore_success">Restore backup success</string>
+    <string name="toast_backup_list_fail">Failed to get backup file list</string>
+    <string name="toast_open_auto_backup">Automatic backup is turned off. You can go to settings to reopen</string>
+    <string name="toast_backup_success">Backup was successful</string>
+    <string name="toast_backup_fail">Backup failed</string>
+    <string name="toast_success_record">Accounting success</string>
+    <string name="toast_get_review_fail">Failed to get review data</string>
+    <string name="toast_get_review_sum_money_fail">Failed to get review summary data</string>
+
+    <!-- 首页 -->
+    <string name="text_month_outlay">Pay</string>
+    <string name="text_month_income">Earn</string>
+    <string name="text_month_remaining_budget">Remaining budget</string>
+    <string name="text_home_footer_tip">Statistics page can view previous month records</string>
+    <string name="text_current_month_empty_tip">No bookkeeping started this month\n\nClick the button to start bookkeeping</string>
+    <string name="shortcuts_add_record">add</string>
+    <string name="shortcuts_statistics">statistics</string>
+    <string name="text_storage">Storage permissions</string>
+    <string name="text_storage_content">In order to back up your accounting data automatically, you need to open the storage permission.</string>
+    <string name="text_storage_permission_tip">Backup related operations require storage permissions to set open permissions</string>
+    <string name="text_close_auto_backup">Turn off automatic backup</string>
+    <string name="text_close_auto_backup_tip">After the automatic backup is turned off, you need to manually click 「Back up now」 to back up the data and you may lose some of the latest data.</string>
+    <string name="text_tip_backup_fail">Auto backup failed</string>
+
+    <!-- 记一笔 -->
+    <string name="text_add_record">Record</string>
+    <string name="text_add_record_successive">Record(continuous)</string>
+    <string name="text_modify_record">modify</string>
+    <string name="text_outlay">Pay</string>
+    <string name="text_income">Earn</string>
+    <string name="text_today">today</string>
+    <string name="text_yesterday">yesterday</string>
+    <string name="hint_enter_money">Enter the amount</string>
+    <string name="hint_enter_remark">Enter a note</string>
+    <string name="text_tip_type_delete">The type of record has been deleted and the first type has been selected by default</string>
+    <string name="text_know">i see</string>
+    <string name="type_eat">food</string>
+    <string name="type_clothes">clothes</string>
+    <string name="type_humanity">gift</string>
+    <string name="type_candy">snacks</string>
+    <string name="type_3c">3c</string>
+    <string name="type_pet">pet</string>
+    <string name="type_pill">pill</string>
+    <string name="type_calendar">necessary</string>
+    <string name="type_pluralism">pluralism</string>
+    <string name="type_salary">salary</string>
+
+    <!-- 分类管理 -->
+    <string name="text_type_manage">Management</string>
+    <string name="text_delete">delete</string>
+    <string name="text_delete_type_note">After you delete this category, you will not be able to select this category on the bookkeeping page. The original bills under this category will remain unchanged.</string>
+    <string name="text_affirm_delete">delete</string>
+    <string name="text_affirm">OK</string>
+    <string name="text_cancel">Cancel</string>
+
+    <!-- 排序 -->
+    <string name="text_sort">sort</string>
+    <string name="text_drag_sort">Long press item to sort</string>
+    <string name="text_done">Done</string>
+
+    <!-- 添加/修改类型 -->
+    <string name="hint_enter_type_name">Enter the type name</string>
+    <string name="text_add">Add</string>
+    <string name="text_modify">Modify</string>
+    <string name="text_outlay_type">type of pay</string>
+    <string name="text_income_type">type of earn</string>
+    <string name="text_save">save</string>
+
+    <!-- 统计 -->
+    <string name="text_order">Bill</string>
+    <string name="text_reports">Reports</string>
+    <string name="text_overage">Lave</string>
+    <string name="text_day" />
+    <string name="text_unit_account" />
+    <string name="text_choose_month">Select month</string>
+    <string name="text_sort_time">By time</string>
+    <string name="text_sort_money">By amount</string>
+    <string name="text_empty_tip">Every bill is a bit of life</string>
+
+    <!-- 回顾 -->
+    <string name="text_review">review</string>
+    <string name="text_choose_year">Select year</string>
+    <string name="text_year" />
+    <string name="text_month" />
+
+    <!-- 设置 -->
+    <string name="text_setting">setting</string>
+    <string name="text_money">Bookkeeping</string>
+    <string name="text_no_budget">no data</string>
+    <string name="text_monty_budget">Monthly budget</string>
+    <string name="text_set_budget">Set a budget</string>
+    <string name="hint_enter_budget">Enter a budget</string>
+    <string name="text_title_symbol">currency symbol</string>
+    <string name="text_set_symbol">Select currency symbol</string>
+    <string name="text_content_symbol">Only change the item number, do not convert the exchange rate</string>
+    <string name="text_setting_type_manage">type management</string>
+    <string name="text_fast_accounting">Quick accounting</string>
+    <string name="text_fast_tip">Open APP directly bookkeeping</string>
+    <string name="text_successive_record">Continuous accounting</string>
+    <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
+    <string name="text_backup">Backup</string>
+    <string name="text_go_backup">Back up now</string>
+    <string name="text_backup_save" formatted="true">Backup file will be saved to%1$s</string>
+    <string name="text_restore">Restore</string>
+    <string name="text_restore_content" formatted="true">Backup files will read from %1$s</string>
+    <string name="text_restore_tip">The backup file name with automatic typeface indicates that the file is automatically backed up, with the user indicating that the file was manually backed up by clicking the Backup Now button.</string>
+    <string name="text_list_restore">The following is the backup file, click restore:</string>
+    <string name="text_auto_backup">Automatic backup</string>
+    <string name="text_auto_backup_content">Data change automatic backup (recommended to open)</string>
+    <string name="text_about_and_help">About|Help</string>
+    <string name="text_about_content">Understand our design philosophy</string>
+    <string-array name="symbol">
+        <item>RMB(¥)</item>
+        <item>Hong Kong dollar(HK$)</item>
+        <item>MOP(MOP$)</item>
+        <item>New Taiwan dollar(NT$)</item>
+        <item>dollar($)</item>
+        <item>euro(€)</item>
+        <item>pound(£)</item>
+        <item>General purpose(¤)</item>
+    </string-array>
+    <string-array name="simple_symbol">
+        <item>¥</item>
+        <item>HK$</item>
+        <item>MOP$</item>
+        <item>NT$</item>
+        <item>$</item>
+        <item>€</item>
+        <item>£</item>
+        <item>¤</item>
+    </string-array>
+
+    <!-- 关于 -->
+    <string name="text_about">about</string>
+    <string name="text_slogan">Simple, pure accounting application</string>
+    <string name="text_share_to">Share to</string>
+    <string name="text_share_content" formatted="true">I found a simple, pure billing application, click on the link to download %1$s</string>
+    <string name="text_dev_designer">Developer &amp; Designer</string>
+    <string name="text_designer">Designer</string>
+    <string name="text_launcher_designer">Launcher icon design</string>
+    <string name="text_developer_designer">Developer &amp; Designer</string>
+    <string name="text_more">more</string>
+    <string name="text_score">score</string>
+    <string name="text_donate">Donate</string>
+    <string name="text_contact_author">Contact author</string>
+    <string name="text_feedback">Feedback:</string>
+    <string name="text_phone_brand">phone brand:</string>
+    <string name="text_phone_model">Phone model:</string>
+    <string name="text_system_version">System version:</string>
+    <string name="text_app_version">App version:</string>
+    <string name="text_license">Open source license</string>
+    <string name="text_privacy_policy">Privacy Policy</string>
+    <string name="text_help">help</string>
+</resources>

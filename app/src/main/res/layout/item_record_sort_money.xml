@@ -86,9 +86,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{recordWithType.mRecordTypes.get(0).type == 0 ? @string/text_symbol_outlay : @string/text_symbol_income}"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp"
+                    app:text_plus_subtract="@{recordWithType.mRecordTypes.get(0).type}"
                     tools:text="-" />
 
                 <TextView

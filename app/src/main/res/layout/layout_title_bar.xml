@@ -40,8 +40,7 @@
             android:id="@+id/ibt_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_back"
-            android:contentDescription="@string/content_des_close" />
+            android:background="@drawable/ic_back" />
 
         <me.bakumon.moneykeeper.view.qmui.QMUIAlphaLinearLayout
             android:id="@+id/ll_title"

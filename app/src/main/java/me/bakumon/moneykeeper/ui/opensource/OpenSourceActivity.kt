@@ -43,7 +43,7 @@ class OpenSourceActivity : BaseActivity() {
 
     private fun initView() {
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_title_open_source)
+        mBinding.titleBar?.title = getString(R.string.text_license)
 
         mBinding.rvOpenSource.layoutManager = LinearLayoutManager(this)
         val adapter = OpenSourceAdapter(OpenSourceListCreator.openSourceList)

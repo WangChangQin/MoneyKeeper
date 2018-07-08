@@ -134,7 +134,7 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
     private fun showTypeNotExistTip() {
         MaterialDialog.Builder(context)
                 .content(R.string.text_tip_type_delete)
-                .positiveText(R.string.text_button_know)
+                .positiveText(R.string.text_know)
                 .show()
     }
 

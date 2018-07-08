@@ -50,7 +50,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_setting"
-                    android:contentDescription="@string/content_des_setting"
                     android:onClick="settingClick" />
 
                 <LinearLayout
@@ -72,7 +71,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_statistics"
-                    android:contentDescription="@string/content_des_statistics"
                     android:onClick="statisticsClick" />
 
             </LinearLayout>
@@ -94,8 +92,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_month_outlay"
-                        android:textColor="@color/colorTextWhite1" />
+                        android:textColor="@color/colorTextWhite1"
+                        app:text_outlay="@{sumMoneyBeanList}"
+                        tools:text="@string/text_month_outlay" />
 
                     <TextView
                         android:id="@+id/tv_month_outlay"

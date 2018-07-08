@@ -64,9 +64,9 @@ class TypeManageActivity : BaseActivity() {
 
     private fun initView() {
         mCurrentType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
-        mBinding.titleBar?.tvRight?.text = getString(R.string.text_button_sort)
+        mBinding.titleBar?.tvRight?.text = getString(R.string.text_sort)
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_title_type_manage)
+        mBinding.titleBar?.title = getString(R.string.text_type_manage)
         mBinding.titleBar?.tvRight?.setOnClickListener {
             Floo.navigation(this, Router.Url.URL_TYPE_SORT)
                     .putExtra(Router.ExtraKey.KEY_TYPE, mCurrentType)
@@ -104,10 +104,10 @@ class TypeManageActivity : BaseActivity() {
 
     private fun showDeleteDialog(recordType: RecordType) {
         MaterialDialog.Builder(this)
-                .title(getString(R.string.text_dialog_delete) + recordType.name!!)
+                .title(getString(R.string.text_delete) + recordType.name!!)
                 .content(R.string.text_delete_type_note)
-                .positiveText(R.string.text_button_affirm_delete)
-                .negativeText(R.string.text_button_cancel)
+                .positiveText(R.string.text_affirm_delete)
+                .negativeText(R.string.text_cancel)
                 .onPositive({ _, _ -> deleteType(recordType) })
                 .show()
     }

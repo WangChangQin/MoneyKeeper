@@ -94,7 +94,7 @@ class ChooseYearDialog {
         mBuilder = AlertDialog.Builder(mContext)
                 .setTitle(R.string.text_choose_year)
                 .setView(contentView)
-                .setNegativeButton(R.string.text_button_cancel, null)
+                .setNegativeButton(R.string.text_cancel, null)
                 .setPositiveButton(R.string.text_affirm) { _, _ ->
                     mOnChooseListener?.invoke(mYear)
                 }

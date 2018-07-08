@@ -17,10 +17,6 @@
 <resources>
     <string name="app_name">那样记账</string>
 
-    <string name="content_des_setting">设置</string>
-    <string name="content_des_statistics">统计</string>
-    <string name="content_des_close">关闭</string>
-
     <string name="toast_add_record_fail">记账失败，请重试</string>
     <string name="toast_modify_record_fail">记录修改失败</string>
     <string name="toast_sort_fail">排序失败</string>
@@ -28,7 +24,7 @@
     <string name="toast_delete_fail">删除失败</string>
     <string name="toast_type_img_fail">类型图片获取失败</string>
     <string name="toast_type_save_fail">类型保存失败</string>
-    <string name="toast_type_is_exist">&#160;类型已经存在</string>
+    <string name="toast_type_is_exist" formatted="true">%1$s&#160;类型已经存在</string>
     <string name="toast_record_delete_fail">记录删除失败</string>
     <string name="toast_current_sum_money_fail">本月支出收入总数获取失败</string>
     <string name="toast_records_fail">获取记录列表失败</string>
@@ -45,134 +41,154 @@
     <string name="toast_restore_success">恢复备份成功</string>
     <string name="toast_backup_list_fail">备份文件列表获取失败</string>
     <string name="toast_open_auto_backup">自动备份已关闭，设置界面可重新打开</string>
+    <string name="toast_backup_success">备份成功</string>
+    <string name="toast_backup_fail">备份失败</string>
     <string name="toast_success_record">记账成功</string>
     <string name="toast_get_review_fail">获取回顾数据失败</string>
     <string name="toast_get_review_sum_money_fail">获取回顾汇总数据失败</string>
 
-    <string name="hint_enter_money">输入金额</string>
-    <string name="hint_enter_remark">输入备注</string>
-    <string name="hint_enter_type_name">请输入类型名称</string>
-    <string name="hint_enter_budget">请输入预算</string>
-
-    <string name="shortcuts_add_short">记一笔</string>
-    <string name="shortcuts_add_long">记一笔</string>
-    <string name="shortcuts_statistics_short">历史统计</string>
-    <string name="shortcuts_statistics_long">历史统计</string>
-
-    <string name="text_affirm">确定</string>
-    <string name="text_symbol_outlay">-</string>
-    <string name="text_symbol_income">+</string>
+    <!-- 首页 -->
+    <string name="text_month_outlay">本月支出</string>
+    <string name="text_month_income">本月收入</string>
+    <string name="text_month_remaining_budget">剩余预算</string>
     <string name="text_home_footer_tip">统计页面可以查看往月记录</string>
-    <string name="text_add_record">记一笔</string>
-    <string name="text_add_record_successive">记一笔（连续）</string>
-    <string name="text_modify_record">修改</string>
-    <string name="text_done">完成</string>
-    <string name="text_title_drag_sort">长按拖动排序</string>
-    <string name="text_title_type_manage">分类管理</string>
-    <string name="text_button_sort">排序</string>
-    <string name="text_outlay">支出</string>
-    <string name="text_income">收入</string>
-    <string name="text_setting">设置</string>
-    <string name="text_title_setting">设置</string>
-    <string name="text_month_outlay">本月支出(¥)</string>
-    <string name="text_month_income">本月收入(¥)</string>
-    <string name="text_month_remaining_budget">剩余预算(¥)</string>
-    <string name="text_today">今天</string>
-    <string name="text_yesterday">昨天</string>
-    <string name="text_type_eat">餐饮</string>
-    <string name="text_type_clothes">衣服</string>
-    <string name="text_type_humanity">礼物</string>
-    <string name="text_type_candy">零食</string>
-    <string name="text_type_3c">电子产品</string>
-    <string name="text_type_pet">宠物</string>
-    <string name="text_type_pill">医疗</string>
-    <string name="text_type_calendar">日用</string>
-    <string name="text_type_pluralism">兼职</string>
-    <string name="text_type_salary">薪资</string>
     <string name="text_current_month_empty_tip">本月未开始记账\n\n点击加号，开始记账</string>
-    <string name="text_month_empty_tip">每一笔账单，都是生活的点滴</string>
-    <string name="text_button_cancel">取消</string>
-    <string name="text_button_know">我知道了</string>
-    <string name="text_button_affirm_delete">确认删除</string>
-    <string name="text_dialog_delete">删除</string>
-    <string name="text_delete_type_note">删除该分类后，将无法在记账页选择该分类，该分类下原有账单仍保持不变</string>
-    <string name="text_save">保存</string>
-    <string name="text_add">添加</string>
-    <string name="text_modify">修改</string>
-    <string name="text_outlay_type">支出类型</string>
-    <string name="text_income_type">收入类型</string>
-    <string name="text_delete">删除</string>
-    <string name="text_tip_type_delete">该记录的类型已经被删除，已默认选择了第一个类型</string>
-    <string name="text_order">账单</string>
-    <string name="text_reports">报表</string>
-    <string name="text_money_symbol">¥</string>
-    <string name="text_month_outlay_symbol">支出&#160;¥</string>
-    <string name="text_month_income_symbol">收入&#160;¥</string>
-    <string name="text_month_overage">结余&#160;¥</string>
-    <string name="text_overage">结余</string>
-    <string name="text_unit_account">笔</string>
-    <string name="text_day">日&#160;</string>
-    <string name="text_choose_month">选择月份</string>
-    <string name="text_choose_year">选择年份</string>
-    <string name="text_sort_time">按时间</string>
-    <string name="text_sort_money">按金额</string>
-    <string name="text_title_open_source">开源许可证</string>
-    <string name="text_title_about">关于</string>
-    <string name="toast_backup_success">备份成功</string>
-    <string name="toast_backup_fail">备份失败</string>
-    <string name="text_backup">立即备份</string>
-    <string name="text_backup_save" formatted="true">备份文件将保存到%1$s</string>
-    <string name="text_setting_money">记账</string>
-    <string name="text_setting_type_manage">收支类型管理</string>
-    <string name="text_setting_backup">备份</string>
-    <string name="text_go_backup">立即备份</string>
-    <string name="text_setting_restore">恢复备份</string>
-    <string name="text_setting_about_and_help">关于|帮助</string>
-    <string name="text_about">关于</string>
-    <string name="text_setting_score">评分</string>
-    <string name="text_setting_donate">捐赠</string>
-    <string name="text_privacy_policy">隐私政策</string>
-    <string name="text_setting_license">开源许可证</string>
-    <string name="text_setting_contact_author">联系作者</string>
-    <string name="text_setting_help">帮助</string>
-    <string name="text_setting_good_score">给个好评呗</string>
-    <string name="text_about_content">了解我们的设计理念</string>
-    <string name="text_setting_auto_backup">自动备份</string>
-    <string name="text_setting_go_backup_content" formatted="true">备份文件将保存到%1$s</string>
-    <string name="text_setting_restore_content" formatted="true">备份文件将从%1$s读取</string>
-    <string name="text_setting_auto_backup_content">数据有改变自动备份（建议开启）</string>
-    <string name="text_restore">恢复备份</string>
-    <string name="text_list_restore">以下是备份文件，点击恢复：</string>
-    <string name="text_restore_tip">备份文件名带有Auto字样表示是自动备份的文件，带有User表示是点击立即备份按钮手动备份的文件。</string>
+    <string name="shortcuts_add_record">记一笔</string>
+    <string name="shortcuts_statistics">历史统计</string>
     <string name="text_storage">开启存储权限</string>
     <string name="text_storage_content">为了自动备份您的记账数据，需要开启存储权限。</string>
-    <string name="text_open_permissions">开启权限</string>
     <string name="text_storage_permission_tip">备份相关操作需要存储权限，去设置界面开启权限</string>
     <string name="text_close_auto_backup">关闭自动备份</string>
     <string name="text_close_auto_backup_tip">关闭自动备份后，需要手动点击「立即备份」来备份数据，可能会丢失部分最新的数据。</string>
     <string name="text_tip_backup_fail">自动备份失败</string>
-    <string name="text_share">分享</string>
-    <string name="text_more">更多</string>
+
+    <!-- 记一笔 -->
+    <string name="text_add_record">记一笔</string>
+    <string name="text_add_record_successive">记一笔（连续）</string>
+    <string name="text_modify_record">修改</string>
+    <string name="text_outlay">支出</string>
+    <string name="text_income">收入</string>
+    <string name="text_today">今天</string>
+    <string name="text_yesterday">昨天</string>
+    <string name="hint_enter_money">输入金额</string>
+    <string name="hint_enter_remark">输入备注</string>
+    <string name="text_tip_type_delete">该记录的类型已经被删除，已默认选择了第一个类型</string>
+    <string name="text_know">我知道了</string>
+    <string name="type_eat">餐饮</string>
+    <string name="type_clothes">衣服</string>
+    <string name="type_humanity">礼物</string>
+    <string name="type_candy">零食</string>
+    <string name="type_3c">电子产品</string>
+    <string name="type_pet">宠物</string>
+    <string name="type_pill">医疗</string>
+    <string name="type_calendar">日用</string>
+    <string name="type_pluralism">兼职</string>
+    <string name="type_salary">薪资</string>
+
+    <!-- 分类管理 -->
+    <string name="text_type_manage">分类管理</string>
+    <string name="text_delete">删除</string>
+    <string name="text_delete_type_note">删除该分类后，将无法在记账页选择该分类，该分类下原有账单仍保持不变</string>
+    <string name="text_affirm_delete">确认删除</string>
+    <string name="text_affirm">确定</string>
+    <string name="text_cancel">取消</string>
+
+    <!-- 排序 -->
+    <string name="text_sort">排序</string>
+    <string name="text_drag_sort">长按拖动排序</string>
+    <string name="text_done">完成</string>
+
+    <!-- 添加/修改类型 -->
+    <string name="hint_enter_type_name">请输入类型名称</string>
+    <string name="text_add">添加</string>
+    <string name="text_modify">修改</string>
+    <string name="text_outlay_type">支出类型</string>
+    <string name="text_income_type">收入类型</string>
+    <string name="text_save">保存</string>
+
+    <!-- 统计 -->
+    <string name="text_order">账单</string>
+    <string name="text_reports">报表</string>
+    <string name="text_overage">结余</string>
+    <string name="text_day">日</string>
+    <string name="text_unit_account">笔</string>
+    <string name="text_choose_month">选择月份</string>
+    <string name="text_sort_time">按时间</string>
+    <string name="text_sort_money">按金额</string>
+    <string name="text_empty_tip">每一笔账单，都是生活的点滴</string>
+
+    <!-- 回顾 -->
+    <string name="text_review">回顾</string>
+    <string name="text_choose_year">选择年份</string>
+    <string name="text_year">年</string>
+    <string name="text_month">月</string>
+
+    <!-- 设置 -->
+    <string name="text_setting">设置</string>
+    <string name="text_money">记账</string>
+    <string name="text_no_budget">未设置</string>
+    <string name="text_monty_budget">月预算</string>
+    <string name="text_set_budget">设置预算</string>
+    <string name="hint_enter_budget">请输入预算</string>
+    <string name="text_title_symbol">货币符号</string>
+    <string name="text_set_symbol">选择货币符号</string>
+    <string name="text_content_symbol">只改变货号，不转换汇率</string>
+    <string name="text_setting_type_manage">收支类型管理</string>
+    <string name="text_fast_accounting">快速记账</string>
+    <string name="text_fast_tip">打开APP直接记账</string>
+    <string name="text_successive_record">连续记账</string>
+    <string name="text_successive_record_tip">长按首页添加按钮，连续记账</string>
+    <string name="text_backup">备份</string>
+    <string name="text_go_backup">立即备份</string>
+    <string name="text_backup_save" formatted="true">备份文件将保存到%1$s</string>
+    <string name="text_restore">恢复备份</string>
+    <string name="text_restore_content" formatted="true">备份文件将从%1$s读取</string>
+    <string name="text_restore_tip">备份文件名带有Auto字样表示是自动备份的文件，带有User表示是点击立即备份按钮手动备份的文件。</string>
+    <string name="text_list_restore">以下是备份文件，点击恢复：</string>
+    <string name="text_auto_backup">自动备份</string>
+    <string name="text_auto_backup_content">数据有改变自动备份（建议开启）</string>
+    <string name="text_about_and_help">关于|帮助</string>
+    <string name="text_about_content">了解我们的设计理念</string>
+    <string-array name="symbol">
+        <item>人民币(¥)</item>
+        <item>港币(HK$)</item>
+        <item>澳门币(MOP$)</item>
+        <item>新台币(NT$)</item>
+        <item>美元($)</item>
+        <item>欧元(€)</item>
+        <item>英镑(£)</item>
+        <item>货币(¤)</item>
+    </string-array>
+    <string-array name="simple_symbol">
+        <item>¥</item>
+        <item>HK$</item>
+        <item>MOP$</item>
+        <item>NT$</item>
+        <item>$</item>
+        <item>€</item>
+        <item>£</item>
+        <item>¤</item>
+    </string-array>
+
+    <!-- 关于 -->
+    <string name="text_about">关于</string>
+    <string name="text_slogan">简单、纯粹的记账应用</string>
+    <string name="text_share_to">分享到</string>
+    <string name="text_share_content" formatted="true">我发现了一个简单、纯粹的记账应用，点击链接下载 %1$s</string>
     <string name="text_dev_designer">设计和开发</string>
     <string name="text_designer">总体设计</string>
     <string name="text_launcher_designer">启动图标设计</string>
     <string name="text_developer_designer">开发和部分设计</string>
-    <string name="text_share_to">分享到</string>
-    <string name="text_app_slogan">简单、纯粹的记账应用</string>
-    <string name="text_share_content" formatted="true">我发现了一个简单、纯粹的记账应用，点击链接下载 %1$s</string>
-    <string name="text_successive_record">连续记账</string>
-    <string name="text_successive_record_tip">长按首页添加按钮，连续记账</string>
-    <string name="text_no_budget">未设置</string>
-    <string name="text_monty_budget">月预算</string>
-    <string name="text_fast_accounting">快速记账</string>
-    <string name="text_fast_tip">打开APP直接记账</string>
-    <string name="text_set_budget">设置预算</string>
+    <string name="text_more">更多</string>
+    <string name="text_score">评分</string>
+    <string name="text_donate">捐赠</string>
+    <string name="text_contact_author">联系作者</string>
     <string name="text_feedback">反馈：</string>
     <string name="text_phone_brand">手机品牌：</string>
     <string name="text_phone_model">手机型号：</string>
     <string name="text_system_version">系统版本：</string>
     <string name="text_app_version">应用版本：</string>
-    <string name="text_review">回顾</string>
-    <string name="text_year">年</string>
-    <string name="text_month">月</string>
+    <string name="text_license">开源许可证</string>
+    <string name="text_privacy_policy">隐私政策</string>
+    <string name="text_help">帮助</string>
 </resources>

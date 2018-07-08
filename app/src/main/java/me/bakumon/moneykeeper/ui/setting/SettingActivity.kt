@@ -66,29 +66,30 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun initView() {
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_title_setting)
+        mBinding.titleBar?.title = getString(R.string.text_setting)
 
         mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
         mAdapter = SettingAdapter(null)
 
         val list = ArrayList<SettingSectionEntity>()
 
-        list.add(SettingSectionEntity(getString(R.string.text_setting_money)))
-        val budget = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else getString(R.string.text_money_symbol) + ConfigManager.budget
+        list.add(SettingSectionEntity(getString(R.string.text_money)))
+        val budget = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else ConfigManager.symbol + ConfigManager.budget
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), budget)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive)))
 
 
-        list.add(SettingSectionEntity(getString(R.string.text_setting_backup)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_setting_go_backup_content, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_restore), getString(R.string.text_setting_restore_content, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_auto_backup), getString(R.string.text_setting_auto_backup_content), ConfigManager.isAutoBackup)))
+        list.add(SettingSectionEntity(getString(R.string.text_backup)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup)))
 
-        list.add(SettingSectionEntity(getString(R.string.text_setting_about_and_help)))
+        list.add(SettingSectionEntity(getString(R.string.text_about_and_help)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_help))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_help))))
 
         mAdapter.setNewData(list)
         addListener()
@@ -99,11 +100,12 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         mAdapter.setOnItemClickListener { _, _, position ->
             when (position) {
                 1 -> setBudget(position)
-                2 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
-                6 -> showBackupDialog()
-                7 -> showRestoreDialog()
-                10 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                11 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
+                2 -> setSymbol()
+                3 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
+                7 -> showBackupDialog()
+                8 -> showRestoreDialog()
+                11 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+                12 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
                 else -> {
                 }
             }
@@ -111,9 +113,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         // Switch
         mAdapter.setOnItemChildClickListener { _, _, position ->
             when (position) {
-                3 -> switchFast()
-                4 -> switchSuccessive()
-                8 -> switchAutoBackup(position)
+                4 -> switchFast()
+                5 -> switchSuccessive()
+                9 -> switchAutoBackup(position)
                 else -> {
                 }
             }
@@ -127,7 +129,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .inputRange(0, 8)
                 .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_button_cancel)
+                .negativeText(R.string.text_cancel)
                 .input(getString(R.string.hint_enter_budget), oldBudget,
                         { _, input ->
                             val text = input.toString()
@@ -136,10 +138,30 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                             } else {
                                 ConfigManager.setBudget(0)
                             }
-                            mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else getString(R.string.text_money_symbol) + ConfigManager.budget
-                            mBinding.rvSetting.itemAnimator.changeDuration = 250
-                            mAdapter.notifyItemChanged(position)
+                            resetBudgetItem(position)
                         }).show()
+    }
+
+    private fun resetBudgetItem(position: Int) {
+        mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else ConfigManager.symbol + ConfigManager.budget
+        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
+    }
+
+    private fun setSymbol() {
+        MaterialDialog.Builder(this)
+                .title(R.string.text_set_symbol)
+                .items(R.array.symbol)
+                .itemsCallbackSingleChoice(ConfigManager.symbolIndex, { _, _, which, _ ->
+                    ConfigManager.setSymbolIndex(which)
+                    val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
+                    ConfigManager.setSymbol(simpleSymbol)
+                    // 更新预算符号
+                    resetBudgetItem(1)
+                    true
+                })
+                .positiveText(R.string.text_affirm)
+                .show()
     }
 
     private fun switchFast() {
@@ -160,8 +182,8 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                     .title(R.string.text_close_auto_backup)
                     .content(R.string.text_close_auto_backup_tip)
                     .positiveText(R.string.text_affirm)
-                    .negativeText(R.string.text_button_cancel)
-                    .onNegative({ _, _ -> mAdapter.notifyDataSetChanged() })
+                    .negativeText(R.string.text_cancel)
+                    .onNegative({ _, _ -> mAdapter.notifyItemChanged(position) })
                     .onPositive({ _, _ -> setAutoBackup(position, false) })
                     .show()
 
@@ -174,7 +196,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                     PermissionRequest.Builder(this, 11, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                             .setRationale(R.string.text_storage_content)
                             .setPositiveButtonText(R.string.text_affirm)
-                            .setNegativeButtonText(R.string.text_button_cancel)
+                            .setNegativeButtonText(R.string.text_cancel)
                             .build())
         }
     }
@@ -198,7 +220,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                     .setRationale(R.string.text_storage_permission_tip)
                     .setTitle(R.string.text_storage)
                     .setPositiveButton(R.string.text_affirm)
-                    .setNegativeButton(R.string.text_button_cancel)
+                    .setNegativeButton(R.string.text_cancel)
                     .build()
                     .show()
         }
@@ -228,16 +250,16 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 PermissionRequest.Builder(this, 12, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                         .setRationale(R.string.text_storage_content)
                         .setPositiveButtonText(R.string.text_affirm)
-                        .setNegativeButtonText(R.string.text_button_cancel)
+                        .setNegativeButtonText(R.string.text_cancel)
                         .build())
     }
 
     private fun backupDB() {
         MaterialDialog.Builder(this)
-                .title(R.string.text_backup)
+                .title(R.string.text_go_backup)
                 .content(R.string.text_backup_save, backupFilepath)
                 .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_button_cancel)
+                .negativeText(R.string.text_cancel)
                 .onPositive({ _, _ ->
                     mDisposable.add(mViewModel.backupDB()
                             .subscribeOn(Schedulers.io())
@@ -260,7 +282,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 PermissionRequest.Builder(this, 13, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                         .setRationale(R.string.text_storage_content)
                         .setPositiveButtonText(R.string.text_affirm)
-                        .setNegativeButtonText(R.string.text_button_cancel)
+                        .setNegativeButtonText(R.string.text_cancel)
                         .build())
     }
 

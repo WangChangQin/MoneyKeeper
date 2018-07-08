@@ -235,7 +235,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 PermissionRequest.Builder(this, REQUEST_CODE_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                         .setRationale(R.string.text_storage_content)
                         .setPositiveButtonText(R.string.text_affirm)
-                        .setNegativeButtonText(R.string.text_button_cancel)
+                        .setNegativeButtonText(R.string.text_cancel)
                         .build())
     }
 
@@ -268,7 +268,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                         .setRationale(R.string.text_storage_permission_tip)
                         .setTitle(R.string.text_storage)
                         .setPositiveButton(R.string.text_affirm)
-                        .setNegativeButton(R.string.text_button_cancel)
+                        .setNegativeButton(R.string.text_cancel)
                         .build()
                         .show()
             }

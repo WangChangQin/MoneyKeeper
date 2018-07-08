@@ -62,7 +62,7 @@ class TypeSortActivity : BaseActivity() {
         mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
 
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_title_drag_sort)
+        mBinding.titleBar?.title = getString(R.string.text_drag_sort)
         mBinding.titleBar?.tvRight?.text = getString(R.string.text_done)
         mBinding.titleBar?.tvRight?.setOnClickListener { sortRecordTypes() }
 
