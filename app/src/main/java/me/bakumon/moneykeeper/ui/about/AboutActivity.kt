@@ -29,6 +29,7 @@ import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivityAboutBinding
 import me.bakumon.moneykeeper.utill.AlipayZeroSdk
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.Pi
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 
@@ -57,6 +58,10 @@ class AboutActivity : BaseActivity() {
 
         val version = "v" + BuildConfig.VERSION_NAME
         mBinding.tvVersion.text = version
+    }
+
+    fun piYiXia(view: View) {
+        ToastUtils.show(Pi.randomPi())
     }
 
     private fun share() {

@@ -17,6 +17,7 @@
 package me.bakumon.moneykeeper
 
 import me.bakumon.moneykeeper.utill.DateUtils
+import me.bakumon.moneykeeper.utill.Pi
 import org.junit.Test
 
 /**
@@ -31,5 +32,14 @@ class ExampleUnitTest {
 //        assertEquals(4, (2 + 2).toLong())
         val index = DateUtils.month2Index("2018-07")
         System.out.print(index)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun random() {
+        for (i in 0..100) {
+            val pi = Pi.randomPi()
+            System.out.print(pi)
+        }
     }
 }

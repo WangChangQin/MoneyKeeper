@@ -59,7 +59,7 @@ class ReviewActivity : BaseActivity() {
     }
 
     private fun initView() {
-        mBinding.titleBar?.title = "2018"
+        mBinding.titleBar?.title = mCurrentYear.toString()
         mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
         mBinding.titleBar?.llTitle?.setOnClickListener { chooseYear() }
         mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
