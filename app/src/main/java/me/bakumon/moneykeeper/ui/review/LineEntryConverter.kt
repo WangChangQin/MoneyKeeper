@@ -16,7 +16,6 @@
 
 package me.bakumon.moneykeeper.ui.review
 
-import android.os.Debug
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -83,5 +82,6 @@ object LineEntryConverter {
         set.circleColors = arrayListOf(App.instance.resources.getColor(colorId))
         set.setDrawCircleHole(false)
         set.setDrawValues(false)
+        set.setDrawHighlightIndicators(false)
     }
 }
