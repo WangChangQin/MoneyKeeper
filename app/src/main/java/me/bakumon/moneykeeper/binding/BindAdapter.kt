@@ -96,7 +96,10 @@ object BindAdapter {
     @JvmStatic
     @BindingAdapter("text_outlay")
     fun setTitleOutlay(textView: TextView, list: List<SumMoneyBean>?) {
-        val symbols = "(" + ConfigManager.symbol + ")"
+        val symbols = if (TextUtils.isEmpty(ConfigManager.symbol))
+            ""
+        else
+            "(" + ConfigManager.symbol + ")"
         val text = App.instance.getString(R.string.text_month_outlay) + symbols
         textView.text = text
     }
@@ -107,7 +110,10 @@ object BindAdapter {
         // app:text_income_or_budget="@{sumMoneyBeanList}" 这里传递 sumMoneyBeanList
         // 在 sumMoneyBeanList 变化的时候才会自动调用本方法
         // 显示剩余预算或本月收入
-        val symbols = "(" + ConfigManager.symbol + ")"
+        val symbols = if (TextUtils.isEmpty(ConfigManager.symbol))
+            ""
+        else
+            "(" + ConfigManager.symbol + ")"
         if (ConfigManager.budget > 0) {
             val text = App.instance.getString(R.string.text_month_remaining_budget) + symbols
             textView.text = text

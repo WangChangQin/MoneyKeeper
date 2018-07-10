@@ -149,11 +149,20 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun setSymbol() {
+        var index = 0
+        val symbolList = resources.getStringArray(R.array.simple_symbol)
+        val savedSymbol = ConfigManager.symbol
+
+        symbolList.forEachIndexed { i, symbol ->
+            if (TextUtils.equals(symbol, savedSymbol)) {
+                index = i
+            }
+        }
+
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_symbol)
                 .items(R.array.symbol)
-                .itemsCallbackSingleChoice(ConfigManager.symbolIndex, { _, _, which, _ ->
-                    ConfigManager.setSymbolIndex(which)
+                .itemsCallbackSingleChoice(index, { _, _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算符号

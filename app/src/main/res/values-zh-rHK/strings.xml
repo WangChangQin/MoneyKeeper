@@ -158,6 +158,7 @@
         <item>歐元(€)</item>
         <item>英鎊(£)</item>
         <item>貨幣(¤)</item>
+        <item>不顯示</item>
     </string-array>
     <string-array name="simple_symbol">
         <item>¥</item>
@@ -168,6 +169,7 @@
         <item>€</item>
         <item>£</item>
         <item>¤</item>
+        <item/>
     </string-array>
 
     <!-- 关于 -->
