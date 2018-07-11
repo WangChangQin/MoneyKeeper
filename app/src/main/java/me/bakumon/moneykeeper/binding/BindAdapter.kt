@@ -18,6 +18,7 @@ package me.bakumon.moneykeeper.binding
 
 import android.databinding.BindingAdapter
 import android.text.TextUtils
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -25,10 +26,12 @@ import android.widget.TextView
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.SizeUtils
+import me.drakeet.floo.Floo
 import java.math.BigDecimal
 
 /**
@@ -105,22 +108,36 @@ object BindAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("text_income_or_budget")
-    fun setTitleIncomeOrBudget(textView: TextView, list: List<SumMoneyBean>?) {
-        // app:text_income_or_budget="@{sumMoneyBeanList}" 这里传递 sumMoneyBeanList
-        // 在 sumMoneyBeanList 变化的时候才会自动调用本方法
-        // 显示剩余预算或本月收入
+    @BindingAdapter("text_income")
+    fun setTitleIncome(textView: TextView, list: List<SumMoneyBean>?) {
         val symbols = if (TextUtils.isEmpty(ConfigManager.symbol))
             ""
         else
             "(" + ConfigManager.symbol + ")"
-        if (ConfigManager.budget > 0) {
-            val text = App.instance.getString(R.string.text_month_remaining_budget) + symbols
-            textView.text = text
-        } else {
-            val text = App.instance.getString(R.string.text_month_income) + symbols
-            textView.text = text
-        }
+        val text = App.instance.getString(R.string.text_month_income) + symbols
+        textView.text = text
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_budget")
+    fun setTitleBudget(textView: TextView, list: List<SumMoneyBean>?) {
+        val symbols = if (TextUtils.isEmpty(ConfigManager.symbol))
+            ""
+        else
+            "(" + ConfigManager.symbol + ")"
+        val text = App.instance.getString(R.string.text_month_remaining_budget) + symbols
+        textView.text = text
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_assets")
+    fun setTitleAssets(textView: TextView, list: List<SumMoneyBean>?) {
+        val symbols = if (TextUtils.isEmpty(ConfigManager.symbol))
+            ""
+        else
+            "(" + ConfigManager.symbol + ")"
+        val text = App.instance.getString(R.string.text_assets) + symbols
+        textView.text = text
     }
 
     @JvmStatic
@@ -138,26 +155,62 @@ object BindAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("text_month_income_or_budget")
-    fun setMonthIncomeOrBudget(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
+    @BindingAdapter("text_month_income")
+    fun setMonthIncome(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
+        var outlay = "0"
+        if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
+            for ((type, sumMoney) in sumMoneyBean) {
+                if (type == RecordType.TYPE_INCOME) {
+                    outlay = BigDecimalUtil.fen2Yuan(sumMoney)
+                }
+            }
+        }
+        textView.text = outlay
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_month_budget")
+    fun setMonthBudget(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
         var outlay = BigDecimal(0)
-        var inComeStr = "0"
         if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
                 if (type == RecordType.TYPE_OUTLAY) {
                     outlay = sumMoney
-                } else if (type == RecordType.TYPE_INCOME) {
-                    inComeStr = BigDecimalUtil.fen2Yuan(sumMoney)
                 }
             }
         }
-        // 显示剩余预算或本月收入
         val budget = ConfigManager.budget
         if (budget > 0) {
             val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
             textView.text = budgetStr
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
+            textView.isClickable = false
         } else {
-            textView.text = inComeStr
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            textView.text = textView.context.getString(R.string.text_set_budget)
+            textView.setOnClickListener({
+                Floo.navigation(textView.context, Router.Url.URL_SETTING)
+                        .start()
+            })
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("text_head_assets")
+    fun setHeadAssets(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
+        val assets = ConfigManager.assets
+        if (assets != -Int.MAX_VALUE) {
+            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets).multiply(BigDecimal(100)))
+            textView.text = budgetStr
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
+            textView.isClickable = false
+        } else {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            textView.text = textView.context.getString(R.string.text_setting_assets)
+            textView.setOnClickListener({
+                Floo.navigation(textView.context, Router.Url.URL_SETTING)
+                        .start()
+            })
         }
     }
 

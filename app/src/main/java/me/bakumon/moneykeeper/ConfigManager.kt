@@ -29,6 +29,7 @@ object ConfigManager {
     private const val KEY_SUCCESSIVE = "successive"
     private const val KEY_FAST = "fast"
     private const val KEY_BUDGET = "budget"
+    private const val KEY_ASSETS = "assets"
     private const val KEY_SYMBOL = "symbol"
 
     val isAutoBackup: Boolean
@@ -42,6 +43,9 @@ object ConfigManager {
 
     val budget: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_BUDGET, 0)
+
+    val assets: Int
+        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_ASSETS, -Int.MAX_VALUE)
 
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
@@ -72,6 +76,13 @@ object ConfigManager {
      */
     fun setBudget(budget: Int): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_BUDGET, budget)
+    }
+
+    /**
+     * 资产余额
+     */
+    fun setAssets(assets: Int): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS, assets)
     }
 
     /**

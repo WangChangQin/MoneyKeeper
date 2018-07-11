@@ -38,13 +38,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_gradient"
-            android:padding="15dp">
+            android:paddingBottom="10dp"
+            android:paddingTop="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
 
                 <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
                     android:layout_width="wrap_content"
@@ -75,78 +78,14 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <me.bakumon.moneykeeper.ui.home.HeadPageView
+                android:id="@+id/head_page_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="35dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="5dp"
+                app:sumMoneyBeanList="@{sumMoneyBeanList}"
+                tools:layout_height="150dp" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorTextWhite1"
-                        app:text_outlay="@{sumMoneyBeanList}"
-                        tools:text="@string/text_month_outlay" />
-
-                    <TextView
-                        android:id="@+id/tv_month_outlay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="34sp"
-                        app:text_month_outlay="@{sumMoneyBeanList}"
-                        tools:text="0" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="25dp"
-                    android:background="@android:color/white" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_month_income_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorTextWhite1"
-                        app:text_income_or_budget="@{sumMoneyBeanList}"
-                        tools:text="@string/text_month_income" />
-
-                    <TextView
-                        android:id="@+id/tv_month_income"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="34sp"
-                        app:text_month_income_or_budget="@{sumMoneyBeanList}"
-                        tools:text="0" />
-                </LinearLayout>
-            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView

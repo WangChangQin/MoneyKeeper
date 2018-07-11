@@ -51,6 +51,8 @@
     <string name="text_month_outlay">Pay</string>
     <string name="text_month_income">Earn</string>
     <string name="text_month_remaining_budget">Remaining budget</string>
+    <string name="text_assets">Remaining assets</string>
+    <string name="text_setting_assets">Adjust assets</string>
     <string name="text_home_footer_tip">Statistics page can view previous month records</string>
     <string name="text_current_month_empty_tip">No bookkeeping started this month\n\nClick the button to start bookkeeping</string>
     <string name="shortcuts_add_record">add</string>
