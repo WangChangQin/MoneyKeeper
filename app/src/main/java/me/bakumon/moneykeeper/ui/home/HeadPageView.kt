@@ -32,7 +32,7 @@ import me.bakumon.moneykeeper.databinding.LayoutHeadPageContent1Binding
 import me.bakumon.moneykeeper.databinding.LayoutHeadPageContentBinding
 
 /**
- * 翻页的 recyclerView + 指示器
+ * 首页 Head
  *
  * @author Bakumon https://bakumon.me
  */

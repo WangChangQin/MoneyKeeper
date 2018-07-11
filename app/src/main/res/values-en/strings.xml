@@ -51,7 +51,7 @@
     <string name="text_month_outlay">Pay</string>
     <string name="text_month_income">Earn</string>
     <string name="text_month_remaining_budget">Remaining budget</string>
-    <string name="text_assets">Remaining assets</string>
+    <string name="text_assets">Net assets</string>
     <string name="text_setting_assets">Adjust assets</string>
     <string name="text_home_footer_tip">Statistics page can view previous month records</string>
     <string name="text_current_month_empty_tip">No bookkeeping started this month\n\nClick the button to start bookkeeping</string>
@@ -128,10 +128,11 @@
     <!-- 设置 -->
     <string name="text_setting">setting</string>
     <string name="text_money">Bookkeeping</string>
-    <string name="text_no_budget">no data</string>
+    <string name="text_no_setting">no data</string>
     <string name="text_monty_budget">Monthly budget</string>
     <string name="text_set_budget">Set a budget</string>
     <string name="hint_enter_budget">Enter a budget</string>
+    <string name="hint_enter_assets">Enter assets</string>
     <string name="text_title_symbol">currency symbol</string>
     <string name="text_set_symbol">Select currency symbol</string>
     <string name="text_content_symbol">Only change the item number, do not convert the exchange rate</string>

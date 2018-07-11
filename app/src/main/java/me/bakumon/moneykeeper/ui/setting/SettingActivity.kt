@@ -74,8 +74,10 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val list = ArrayList<SettingSectionEntity>()
 
         list.add(SettingSectionEntity(getString(R.string.text_money)))
-        val budget = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else ConfigManager.symbol + ConfigManager.budget
+        val budget = if (ConfigManager.budget == 0) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.budget
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), budget)))
+        val assets = if (ConfigManager.assets == -Int.MAX_VALUE) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.assets
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_assets), assets)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast)))
@@ -100,12 +102,13 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         mAdapter.setOnItemClickListener { _, _, position ->
             when (position) {
                 1 -> setBudget(position)
-                2 -> setSymbol()
-                3 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
-                7 -> showBackupDialog()
-                8 -> showRestoreDialog()
-                11 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                12 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
+                2 -> setAssets(position)
+                3 -> setSymbol()
+                4 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
+                8 -> showBackupDialog()
+                9 -> showRestoreDialog()
+                12 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+                13 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
                 else -> {
                 }
             }
@@ -113,9 +116,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         // Switch
         mAdapter.setOnItemChildClickListener { _, _, position ->
             when (position) {
-                4 -> switchFast()
-                5 -> switchSuccessive()
-                9 -> switchAutoBackup(position)
+                5 -> switchFast()
+                6 -> switchSuccessive()
+                10 -> switchAutoBackup(position)
                 else -> {
                 }
             }
@@ -143,7 +146,33 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun resetBudgetItem(position: Int) {
-        mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_budget) else ConfigManager.symbol + ConfigManager.budget
+        mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.budget
+        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
+    }
+
+    private fun setAssets(position: Int) {
+        val oldAssets = if (ConfigManager.assets == -Int.MAX_VALUE) null else ConfigManager.assets.toString()
+        MaterialDialog.Builder(this)
+                .title(R.string.text_setting_assets)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .inputRange(0, 9)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_cancel)
+                .input(getString(R.string.hint_enter_assets), oldAssets,
+                        { _, input ->
+                            val text = input.toString()
+                            if (!TextUtils.isEmpty(text)) {
+                                ConfigManager.setAssets(Integer.parseInt(text))
+                            } else {
+                                ConfigManager.setAssets(-Int.MAX_VALUE)
+                            }
+                            resetAssetsItem(position)
+                        }).show()
+    }
+
+    private fun resetAssetsItem(position: Int) {
+        mAdapter.data[position].t.content = if (ConfigManager.assets == -Int.MAX_VALUE) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.assets
         mBinding.rvSetting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
@@ -165,8 +194,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .itemsCallbackSingleChoice(index, { _, _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
-                    // 更新预算符号
+                    // 更新预算和资产符号
                     resetBudgetItem(1)
+                    resetAssetsItem(2)
                     true
                 })
                 .positiveText(R.string.text_affirm)

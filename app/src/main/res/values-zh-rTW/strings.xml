@@ -51,7 +51,7 @@
     <string name="text_month_outlay">本月支出</string>
     <string name="text_month_income">本月收入</string>
     <string name="text_month_remaining_budget">剩餘預算</string>
-    <string name="text_assets">剩餘淨資產</string>
+    <string name="text_assets">淨資產</string>
     <string name="text_setting_assets">調整資產</string>
     <string name="text_home_footer_tip">統計頁面可以查看往月記錄</string>
     <string name="text_current_month_empty_tip">本月未開始記賬\n\n點擊加號，開始記賬</string>
@@ -128,10 +128,11 @@
     <!-- 设置 -->
     <string name="text_setting">設置</string>
     <string name="text_money">記賬</string>
-    <string name="text_no_budget">未設置</string>
+    <string name="text_no_setting">未設置</string>
     <string name="text_monty_budget">月預算</string>
     <string name="text_set_budget">設置預算</string>
     <string name="hint_enter_budget">請輸入預算</string>
+    <string name="hint_enter_assets">請輸入資產</string>
     <string name="text_title_symbol">貨幣符號</string>
     <string name="text_set_symbol">選擇貨幣符號</string>
     <string name="text_content_symbol">只改變貨號，不轉換匯率</string>
