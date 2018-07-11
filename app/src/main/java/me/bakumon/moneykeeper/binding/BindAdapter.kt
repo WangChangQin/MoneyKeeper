@@ -199,8 +199,8 @@ object BindAdapter {
     @BindingAdapter("text_head_assets")
     fun setHeadAssets(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
         val assets = ConfigManager.assets
-        if (assets != -Int.MAX_VALUE) {
-            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets).multiply(BigDecimal(100)))
+        if (!TextUtils.equals(assets, "NaN")) {
+            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
             textView.text = budgetStr
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
             textView.isClickable = false

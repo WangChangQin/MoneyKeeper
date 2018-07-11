@@ -42,4 +42,23 @@ class ExampleUnitTest {
             System.out.print(pi)
         }
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun inputFilter(){
+        val text = "1234590.09"
+        var result = ""
+        if (text.contains(".")) {
+            val splitList = text.split(".")
+            if (splitList[1].length > 2) {
+                result = splitList[0] + "." + splitList[1].substring(0, 2)
+            } else {
+                result = text
+            }
+        } else {
+            result = text
+        }
+
+        System.out.print(result)
+    }
 }

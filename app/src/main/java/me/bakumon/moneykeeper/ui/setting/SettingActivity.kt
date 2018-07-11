@@ -32,11 +32,13 @@ import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -74,10 +76,8 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val list = ArrayList<SettingSectionEntity>()
 
         list.add(SettingSectionEntity(getString(R.string.text_money)))
-        val budget = if (ConfigManager.budget == 0) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.budget
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), budget)))
-        val assets = if (ConfigManager.assets == -Int.MAX_VALUE) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.assets
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_assets), assets)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), getBudgetStr())))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_assets), getAssetsStr())))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast)))
@@ -125,8 +125,18 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+    private fun getBudgetStr(): String {
+        return if (ConfigManager.budget == 0)
+            getString(R.string.text_no_setting)
+        else
+            ConfigManager.symbol + BigDecimalUtil.formatNum(ConfigManager.budget.toString())
+    }
+
     private fun setBudget(position: Int) {
-        val oldBudget = if (ConfigManager.budget == 0) null else ConfigManager.budget.toString()
+        val oldBudget = if (ConfigManager.budget == 0)
+            null
+        else
+            ConfigManager.budget.toString().replace(",", "")
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_budget)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
@@ -146,33 +156,57 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun resetBudgetItem(position: Int) {
-        mAdapter.data[position].t.content = if (ConfigManager.budget == 0) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.budget
+        mAdapter.data[position].t.content = getBudgetStr()
         mBinding.rvSetting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
+    private fun getAssetsStr(): String {
+        return if (TextUtils.equals(ConfigManager.assets, "NaN"))
+            getString(R.string.text_no_setting)
+        else
+            ConfigManager.symbol + BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
+    }
+
     private fun setAssets(position: Int) {
-        val oldAssets = if (ConfigManager.assets == -Int.MAX_VALUE) null else ConfigManager.assets.toString()
+        val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
+            null
+        else
+            BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets)).replace(",", "")
         MaterialDialog.Builder(this)
                 .title(R.string.text_setting_assets)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .inputRange(0, 9)
+                .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
+                .inputRange(0, 10)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
                 .input(getString(R.string.hint_enter_assets), oldAssets,
                         { _, input ->
                             val text = input.toString()
                             if (!TextUtils.isEmpty(text)) {
-                                ConfigManager.setAssets(Integer.parseInt(text))
+                                val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
+                                ConfigManager.setAssets(saveStr)
                             } else {
-                                ConfigManager.setAssets(-Int.MAX_VALUE)
+                                ConfigManager.setAssets("NaN")
                             }
                             resetAssetsItem(position)
                         }).show()
     }
 
+    private fun inputFilter(text: String): String {
+        return if (text.contains(".")) {
+            val splitList = text.split(".")
+            if (splitList[1].length > 2) {
+                splitList[0] + "." + splitList[1].substring(0, 2)
+            } else {
+                text
+            }
+        } else {
+            text
+        }
+    }
+
     private fun resetAssetsItem(position: Int) {
-        mAdapter.data[position].t.content = if (ConfigManager.assets == -Int.MAX_VALUE) getString(R.string.text_no_setting) else ConfigManager.symbol + ConfigManager.assets
+        mAdapter.data[position].t.content = getAssetsStr()
         mBinding.rvSetting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }

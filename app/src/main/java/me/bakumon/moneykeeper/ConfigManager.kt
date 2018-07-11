@@ -44,8 +44,8 @@ object ConfigManager {
     val budget: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_BUDGET, 0)
 
-    val assets: Int
-        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_ASSETS, -Int.MAX_VALUE)
+    val assets: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_ASSETS, "NaN")
 
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
@@ -81,7 +81,7 @@ object ConfigManager {
     /**
      * 资产余额
      */
-    fun setAssets(assets: Int): Boolean {
+    fun setAssets(assets: String): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS, assets)
     }
 

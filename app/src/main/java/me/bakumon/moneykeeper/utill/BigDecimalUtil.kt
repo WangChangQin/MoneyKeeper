@@ -33,15 +33,15 @@ object BigDecimalUtil {
     fun fen2Yuan(fenBD: BigDecimal?): String {
         return if (fenBD != null) {
             val yuanBD = fenBD.divide(BigDecimal(100))
-            val df = format(yuanBD)
+            val df = format(yuanBD.toPlainString())
             df.format(yuanBD)
         } else {
             "0"
         }
     }
 
-    private fun format(yuanBD: BigDecimal): DecimalFormat {
-        val strList = yuanBD.toPlainString().split(".")
+    private fun format(yuanStr: String): DecimalFormat {
+        val strList = yuanStr.split(".")
         return if (strList.size == 2) {
             if (strList[1].length == 1) {
                 DecimalFormat("#,###.0")
@@ -51,6 +51,12 @@ object BigDecimalUtil {
         } else {
             DecimalFormat("#,###")
         }
+    }
+
+    fun formatNum(numStr: String): String {
+        val numDB = BigDecimal(numStr)
+        val df = format(numStr)
+        return df.format(numDB)
     }
 
     /**
