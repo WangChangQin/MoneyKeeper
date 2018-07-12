@@ -16,9 +16,11 @@
 
 package me.bakumon.moneykeeper
 
+import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.Pi
 import org.junit.Test
+import java.math.BigDecimal
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -59,6 +61,13 @@ class ExampleUnitTest {
             result = text
         }
 
+        System.out.print(result)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun decimalTest(){
+        val result = BigDecimalUtil.fen2Yuan(BigDecimal("566699"))
         System.out.print(result)
     }
 }

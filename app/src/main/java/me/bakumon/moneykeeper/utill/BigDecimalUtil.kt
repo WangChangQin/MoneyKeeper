@@ -51,9 +51,9 @@ object BigDecimalUtil {
         val strList = yuanStr.split(".")
         return if (strList.size == 2) {
             if (strList[1].length == 1) {
-                DecimalFormat("#,###.0")
+                DecimalFormat("#,##0.0")
             } else {
-                DecimalFormat("#,###.00")
+                DecimalFormat("#,##0.00")
             }
         } else {
             DecimalFormat("#,###")
