@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'AndResGuard'
 
 /*
@@ -24,8 +26,8 @@ android {
         applicationId "me.bakumon.moneykeeper"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 4
-        versionName "1.1.0"
+        versionCode 11
+        versionName "1.6.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // 指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -62,14 +64,11 @@ android {
             versionNameSuffix ".debug"
             applicationIdSuffix ".debug"
             resValue "string", "scheme", "mk-debug"
-            // 只会给 res/values/string.xml 增加，不会影响其他 values 文件夹
-            resValue "string", "app_name", "那样记账debug"
         }
         release {
             // 签名
             //signingConfig signingConfigs.release
             resValue "string", "scheme", "mk"
-            resValue "string", "app_name", "那样记账"
             // Zipalign优化
             zipAlignEnabled true
             // 移除无用的resource文件
@@ -114,6 +113,16 @@ andResGuard {
             "R.mipmap.type_sim",
             "R.mipmap.type_study",
             "R.mipmap.type_train",
+            "R.mipmap.type_plain",
+            "R.mipmap.type_bus",
+            "R.mipmap.type_home",
+            "R.mipmap.type_insure",
+            "R.mipmap.type_wifi",
+            "R.mipmap.type_wallet",
+            "R.mipmap.type_income_red",
+            "R.mipmap.type_outlay_red",
+            "R.mipmap.type_adventure",
+            "R.mipmap.type_movie",
     ]
     compressFilePattern = [
             "*.png",
@@ -146,6 +155,10 @@ dependencies {
     testImplementation deps.junit
     androidTestImplementation deps.test_runner
     androidTestImplementation deps.spresso_core
+    // kotlin
+    implementation deps.kotlin.stdlib
+    // Data Binding
+    kapt deps.databinding.compiler
     // 支持库
     implementation deps.support.app_compat
     implementation deps.support.design
@@ -153,14 +166,19 @@ dependencies {
     implementation deps.support.customtabs
     // ViewModel and LiveData
     implementation deps.lifecycle.extensions
-    annotationProcessor deps.lifecycle.compiler
+    kapt deps.lifecycle.compiler
     // Room
     implementation deps.room.runtime
     implementation deps.room.rxjava2
-    annotationProcessor deps.room.compiler
+    kapt deps.room.compiler
     // 第三方库
-    implementation deps.rxjava
+    implementation deps.rxjava2
     implementation deps.rxandroid
+    // retrofit2 会自动依赖 okhttp3 okio rxjava2 gson
+    // rxjava 版本以上面 deps.rxjava 为准
+//    implementation deps.retrofit2.retrofit
+//    implementation deps.retrofit2.adapter_rxjava2
+//    implementation deps.retrofit2.converter_gson
     // base adapter
     implementation deps.BRVAH
     // 路由
@@ -180,4 +198,6 @@ dependencies {
     implementation deps.prettytime
     // 圆形 ImageView
     implementation deps.circleimageview
+    // 对话框
+    implementation deps.material_dialogs
 }

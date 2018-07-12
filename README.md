@@ -1,5 +1,7 @@
 # 那样记账
 
+<img alt='那样记账' src='https://i.loli.net/2018/06/27/5b33a4e2e7cb0.png' height="70"/>
+
 >生活越复杂，记账越有用。
 
 ## 诞生记
@@ -12,10 +14,18 @@
 
 ## 下载使用
 
-第一个版本开发完成后，已经发布在了酷安上， 后续更新也会在酷安。https://www.coolapk.com/apk/188475
+已经发布在以下平台：
+
+| 平台 | 下载地址 |
+| ---- | ---- |
+| Google Play | <a href='https://play.google.com/store/apps/details?id=me.bakumon.moneykeeper&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://i.loli.net/2018/06/27/5b32eac49f930.png' height="60"/>
+</a> |
+| 酷安 | <a href='https://www.coolapk.com/apk/me.bakumon.moneykeeper'><img alt='去酷安下载' src='https://ws4.sinaimg.cn/large/006tNc79ly1fsphx16ybdj30go06st8q.jpg' height="60"/>
+</a> |
 
 预览：
-![img.png](https://github.com/Bakumon/MoneyKeeper/raw/master/imgs/img.png)
+![img.png](https://ws3.sinaimg.cn/large/006tNc79ly1fsp159i5gxj31kw0sgwl3.jpg)
+![img.png](https://ws2.sinaimg.cn/large/006tNc79ly1ft2ct8vnk7j31kw0sgtum.jpg)
 
 ## 架构和技术
 
@@ -37,10 +47,10 @@ Room 返回的数据使用 Flowable 包装，并且使用 ViewModel 在 Activity
 
 ## 相关链接：
 
-1. App下载地址: https://www.coolapk.com/apk/188475
-2. 设计稿: https://www.zcool.com.cn/work/ZMjExOTI4OTY=.html
-3. Architecture Components: https://developer.android.com/topic/libraries/architecture/
-4. Room: https://developer.android.com/topic/libraries/architecture/room
+1. [App下载地址](https://www.coolapk.com/apk/188475)
+2. [设计稿](https://www.zcool.com.cn/work/ZMjExOTI4OTY=.html)
+3. [Architecture Components](https://developer.android.com/topic/libraries/architecture/)
+4. [Room](https://developer.android.com/topic/libraries/architecture/room)
 
 ## License
 

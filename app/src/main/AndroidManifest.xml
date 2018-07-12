@@ -186,7 +186,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.setting.OpenSourceActivity"
+            android:name="me.bakumon.moneykeeper.ui.opensource.OpenSourceActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -205,7 +205,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.setting.AboutActivity"
+            android:name="me.bakumon.moneykeeper.ui.about.AboutActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -220,6 +220,25 @@
                 <data
                     android:host="bakumon.me"
                     android:path="/about"
+                    android:scheme="@string/scheme" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="me.bakumon.moneykeeper.ui.review.ReviewActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="bakumon.me"
+                    android:path="/review"
                     android:scheme="@string/scheme" />
             </intent-filter>
         </activity>

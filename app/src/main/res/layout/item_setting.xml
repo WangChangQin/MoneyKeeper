@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +56,7 @@
                 tools:text="打开应用直接记账" />
         </LinearLayout>
 
-        <android.support.v7.widget.SwitchCompat
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/switch_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

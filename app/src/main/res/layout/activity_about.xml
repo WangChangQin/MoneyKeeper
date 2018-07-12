@@ -16,7 +16,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="me.bakumon.moneykeeper.ui.setting.AboutActivity">
+    tools:context=".ui.about.AboutActivity">
 
 
     <LinearLayout
@@ -37,7 +37,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="15dp">
 
                 <ImageView
                     android:layout_width="65dp"
@@ -69,7 +70,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="@string/text_app_slogan"
+                    android:text="@string/text_slogan"
                     android:textColor="@color/colorTextWhite3" />
 
                 <TextView
@@ -174,6 +175,7 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
+                    android:onClick="piYiXia"
                     android:orientation="horizontal"
                     android:paddingBottom="5dp"
                     android:paddingEnd="20dp"
@@ -225,6 +227,74 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_score"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:onClick="market"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/text_score"
+                    android:textColor="@color/colorTextWhite"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_donate"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:onClick="alipay"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/text_donate"
+                    android:textColor="@color/colorTextWhite"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_email"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:onClick="contactAuthor"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/text_contact_author"
+                    android:textColor="@color/colorTextWhite"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_code"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:onClick="goOpenSource"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/text_license"
+                    android:textColor="@color/colorTextWhite"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_privacy"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -241,23 +311,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:drawablePadding="4dp"
-                    android:drawableStart="@drawable/ic_share"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:onClick="share"
-                    android:paddingBottom="12dp"
-                    android:paddingEnd="20dp"
-                    android:paddingStart="19dp"
-                    android:paddingTop="12dp"
-                    android:text="@string/text_share"
-                    android:textColor="@color/colorTextWhite"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_help"
                     android:focusable="true"
@@ -267,7 +320,7 @@
                     android:paddingEnd="20dp"
                     android:paddingStart="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/text_setting_help"
+                    android:text="@string/text_help"
                     android:textColor="@color/colorTextWhite"
                     android:textSize="16sp" />
             </LinearLayout>
