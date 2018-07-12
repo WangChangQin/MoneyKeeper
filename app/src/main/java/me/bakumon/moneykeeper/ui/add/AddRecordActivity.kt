@@ -148,7 +148,7 @@ class AddRecordActivity : BaseActivity() {
         else
             mBinding.typePageIncome.currentItem!!.id
 
-        mDisposable.add(mViewModel.insertRecord(record)
+        mDisposable.add(mViewModel.insertRecord(record, mCurrentType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ this.insertRecordDone() }
@@ -183,6 +183,11 @@ class AddRecordActivity : BaseActivity() {
     private fun modifyRecord(text: String) {
         // 防止重复提交
         mBinding.keyboard.setAffirmEnable(false)
+
+        val oldType = mRecord!!.mRecordTypes!![0].type
+        val oldMoney = mRecord!!.money!!
+        val newType = mCurrentType
+
         mRecord!!.money = BigDecimalUtil.yuan2FenBD(text)
         mRecord!!.remark = mBinding.edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
@@ -191,7 +196,7 @@ class AddRecordActivity : BaseActivity() {
         else
             mBinding.typePageIncome.currentItem!!.id
 
-        mDisposable.add(mViewModel.updateRecord(mRecord!!)
+        mDisposable.add(mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ this.finish() }

@@ -18,7 +18,9 @@ package me.bakumon.moneykeeper.ui.typerecords
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.BaseViewModel
+import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.utill.DateUtils
@@ -41,6 +43,12 @@ class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource
     }
 
     fun deleteRecord(record: RecordWithType): Completable {
+        val oldType = record.mRecordTypes!![0].type
+        if (oldType == RecordType.TYPE_OUTLAY) {
+            ConfigManager.addAssets(record.money!!)
+        } else {
+            ConfigManager.reduceAssets(record.money!!)
+        }
         return mDataSource.deleteRecord(record)
     }
 

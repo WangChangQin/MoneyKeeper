@@ -18,10 +18,12 @@ package me.bakumon.moneykeeper.ui.add
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import java.math.BigDecimal
 
 /**
  * 记一笔界面 ViewModel
@@ -33,11 +35,26 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
     val allRecordTypes: Flowable<List<RecordType>>
         get() = mDataSource.getAllRecordType()
 
-    fun insertRecord(record: Record): Completable {
+    fun insertRecord(record: Record, type: Int): Completable {
+        if (type == RecordType.TYPE_OUTLAY) {
+            ConfigManager.reduceAssets(record.money!!)
+        } else {
+            ConfigManager.addAssets(record.money!!)
+        }
         return mDataSource.insertRecord(record)
     }
 
-    fun updateRecord(record: Record): Completable {
+    fun updateRecord(record: Record, newType: Int, oldMoney: BigDecimal, oldType: Int): Completable {
+        if (oldType == RecordType.TYPE_OUTLAY) {
+            ConfigManager.addAssets(oldMoney)
+        } else {
+            ConfigManager.reduceAssets(oldMoney)
+        }
+        if (newType == RecordType.TYPE_OUTLAY) {
+            ConfigManager.reduceAssets(record.money!!)
+        } else {
+            ConfigManager.addAssets(record.money!!)
+        }
         return mDataSource.updateRecord(record)
     }
 }

@@ -71,7 +71,8 @@ object BigDecimalUtil {
      */
     fun yuan2FenBD(strYuan: String): BigDecimal {
         return if (!TextUtils.isEmpty(strYuan)) {
-            BigDecimal(strYuan).multiply(BigDecimal(100))
+            // 元最多两位小数，可直接去掉小数位
+            BigDecimal(strYuan).multiply(BigDecimal(100)).setScale(0)
         } else {
             BigDecimal(0)
         }

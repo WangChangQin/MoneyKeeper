@@ -16,7 +16,9 @@
 
 package me.bakumon.moneykeeper
 
+import android.text.TextUtils
 import me.bakumon.moneykeeper.utill.SPUtils
+import java.math.BigDecimal
 
 /**
  * 管理本地配置
@@ -83,6 +85,28 @@ object ConfigManager {
      */
     fun setAssets(assets: String): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS, assets)
+    }
+
+    /**
+     * 增加资产
+     */
+    fun addAssets(num: BigDecimal): Boolean {
+        val oldAssets = if (TextUtils.equals(assets, "NaN"))
+            BigDecimal(0)
+        else
+            BigDecimal(assets)
+        return setAssets(oldAssets.add(num).toPlainString())
+    }
+
+    /**
+     * 减少资产
+     */
+    fun reduceAssets(num: BigDecimal): Boolean {
+        val oldAssets = if (TextUtils.equals(assets, "NaN"))
+            BigDecimal(0)
+        else
+            BigDecimal(assets)
+        return setAssets(oldAssets.subtract(num).toPlainString())
     }
 
     /**
