@@ -172,7 +172,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
             null
         else
-            BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets)).replace(",", "")
+            BigDecimalUtil.fen2YuanNoSeparator(BigDecimal(ConfigManager.assets))
         MaterialDialog.Builder(this)
                 .title(R.string.text_setting_assets)
                 .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)

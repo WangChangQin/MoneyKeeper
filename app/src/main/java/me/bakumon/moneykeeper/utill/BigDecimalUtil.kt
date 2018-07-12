@@ -40,6 +40,13 @@ object BigDecimalUtil {
         }
     }
 
+    /**
+     * 分转换为元，去掉分隔符
+     */
+    fun fen2YuanNoSeparator(fenBD: BigDecimal?): String {
+        return fen2Yuan(fenBD).replace(",", "")
+    }
+
     private fun format(yuanStr: String): DecimalFormat {
         val strList = yuanStr.split(".")
         return if (strList.size == 2) {

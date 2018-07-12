@@ -96,7 +96,7 @@ class AddRecordActivity : BaseActivity() {
             mCurrentType = mRecord!!.mRecordTypes!![0].type
             mBinding.titleBar?.title = getString(R.string.text_modify_record)
             mBinding.edtRemark.setText(mRecord!!.remark)
-            mBinding.keyboard.setText(BigDecimalUtil.fen2Yuan(mRecord!!.money))
+            mBinding.keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mRecord!!.money))
             mCurrentChooseDate = mRecord!!.time
             mCurrentChooseCalendar.time = mCurrentChooseDate
             mBinding.qmTvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
