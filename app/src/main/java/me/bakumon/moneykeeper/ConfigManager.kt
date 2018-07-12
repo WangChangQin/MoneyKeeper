@@ -91,22 +91,20 @@ object ConfigManager {
      * 增加资产
      */
     fun addAssets(num: BigDecimal): Boolean {
-        val oldAssets = if (TextUtils.equals(assets, "NaN"))
-            BigDecimal(0)
-        else
-            BigDecimal(assets)
-        return setAssets(oldAssets.add(num).toPlainString())
+        if (TextUtils.equals(assets, "NaN")) {
+            return true
+        }
+        return setAssets(BigDecimal(assets).add(num).toPlainString())
     }
 
     /**
      * 减少资产
      */
     fun reduceAssets(num: BigDecimal): Boolean {
-        val oldAssets = if (TextUtils.equals(assets, "NaN"))
-            BigDecimal(0)
-        else
-            BigDecimal(assets)
-        return setAssets(oldAssets.subtract(num).toPlainString())
+        if (TextUtils.equals(assets, "NaN")) {
+            return true
+        }
+        return setAssets(BigDecimal(assets).subtract(num).toPlainString())
     }
 
     /**
