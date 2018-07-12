@@ -182,11 +182,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .input(getString(R.string.hint_enter_assets), oldAssets,
                         { _, input ->
                             val text = input.toString()
-                            if (!TextUtils.isEmpty(text)) {
+                            if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
+                                ConfigManager.setAssets("NaN")
+                            } else {
                                 val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
                                 ConfigManager.setAssets(saveStr)
-                            } else {
-                                ConfigManager.setAssets("NaN")
                             }
                             resetAssetsItem(position)
                         }).show()
