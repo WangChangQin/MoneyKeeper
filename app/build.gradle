@@ -15,12 +15,8 @@ apply plugin: 'AndResGuard'
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  *  limitations under the License.
- */
 
-// 加载 keystore.properties 文件
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+*/
 
 android {
     compileSdkVersion build_versions.compile_sdk
@@ -45,24 +41,24 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    signingConfigs {
-        debug {
-            storeFile file("key/debug_key")
-            storePassword "123456"
-            keyAlias "key"
-            keyPassword "123456"
-        }
-        release {
-            storeFile file(keystoreProperties['RELEASE_STORE_FILE'])
-            storePassword keystoreProperties['RELEASE_KEYSTORE_PASSWORD']
-            keyAlias keystoreProperties['RELEASE_KEY_ALIAS']
-            keyPassword keystoreProperties['RELEASE_KEY_PASSWORD']
-        }
-    }
+//    signingConfigs {
+//        debug {
+//            storeFile file("key/debug_key")
+//            storePassword "123456"
+//            keyAlias "key"
+//            keyPassword "123456"
+//        }
+//        release {
+//            storeFile file(keystoreProperties['RELEASE_STORE_FILE'])
+//            storePassword keystoreProperties['RELEASE_KEYSTORE_PASSWORD']
+//            keyAlias keystoreProperties['RELEASE_KEY_ALIAS']
+//            keyPassword keystoreProperties['RELEASE_KEY_PASSWORD']
+//        }
+//    }
     buildTypes {
         debug {
             // 签名
-            signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.debug
             versionNameSuffix ".debug"
             applicationIdSuffix ".debug"
             resValue "string", "scheme", "mk-debug"
@@ -71,7 +67,7 @@ android {
         }
         release {
             // 签名
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
             resValue "string", "scheme", "mk"
             resValue "string", "app_name", "那样记账"
             // Zipalign优化
