@@ -141,7 +141,7 @@
     <string name="text_fast_tip">打开APP直接记账</string>
     <string name="text_successive_record">连续记账</string>
     <string name="text_successive_record_tip">长按首页添加按钮，连续记账</string>
-    <string name="text_backup">备份</string>
+    <string name="text_backup">本地备份</string>
     <string name="text_go_backup">立即备份</string>
     <string name="text_backup_save" formatted="true">备份文件将保存到%1$s</string>
     <string name="text_restore">恢复备份</string>
@@ -150,6 +150,9 @@
     <string name="text_list_restore">以下是备份文件，点击恢复：</string>
     <string name="text_auto_backup">自动备份</string>
     <string name="text_auto_backup_content">数据有改变自动备份（建议开启）</string>
+    <string name="text_cloud_backup">云备份</string>
+    <string name="text_cloud_backup_title">云盘备份</string>
+    <string name="text_cloud_backup_content">坚果云</string>
     <string name="text_about_and_help">关于|帮助</string>
     <string name="text_about_content">了解我们的设计理念</string>
     <string-array name="symbol">
@@ -196,4 +199,13 @@
     <string name="text_license">开源许可证</string>
     <string name="text_privacy_policy">隐私政策</string>
     <string name="text_help">帮助</string>
+
+    <!-- 云备份 -->
+    <string name="text_nutstore">坚果云</string>
+    <string name="text_nutstore_account">坚果云授权账号</string>
+    <string name="text_nutstore_password">坚果云授权密码</string>
+    <string name="text_nutstore_backup_content">备份文件将保存在坚果云MoneyKeeperBackup.db</string>
+    <string name="text_nutstore_restore_content">从坚果云MoneyKeeperBackup.db恢复</string>
+    <string name="text_nutstore_help">坚果云授权教程</string>
+    <string name="text_tip_auth_fail">授权账号或密码不正确</string>
 </resources>

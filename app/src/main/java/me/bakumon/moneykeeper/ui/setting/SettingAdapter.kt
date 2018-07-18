@@ -44,6 +44,7 @@ class SettingAdapter(data: List<SettingSectionEntity>?) : BaseSectionQuickAdapte
                 .setGone(R.id.tv_title, !TextUtils.isEmpty(item.t.title))
                 .setText(R.id.tv_content, item.t.content)
                 .setGone(R.id.tv_content, !TextUtils.isEmpty(item.t.content))
+                .setGone(R.id.iv_icon, item.t.isShowIcon)
                 .setVisible(R.id.switch_item, item.t.isShowSwitch)
                 .setChecked(R.id.switch_item, item.t.isConfigOpen)
                 .addOnClickListener(R.id.switch_item)

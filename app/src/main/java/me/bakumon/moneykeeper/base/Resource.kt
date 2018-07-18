@@ -16,21 +16,25 @@
 
 package me.bakumon.moneykeeper.base
 
-import android.arch.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
+@Suppress("unused") // T is used in extending classes
+sealed class Resource<T> {
+    companion object {
+        fun <T> create(error: Throwable): ErrorResource<T> {
+            return ErrorResource(error.message ?: "unknown error")
+        }
 
-import me.bakumon.moneykeeper.datasource.AppDataSource
-
-/**
- * ViewModel基类
- * 包含 AppDataSource 数据源
- *
- * @author Bakumon https://bakumon.me
- */
-open class BaseViewModel(protected var mDataSource: AppDataSource) : ViewModel() {
-    protected val mDisposable = CompositeDisposable()
-    override fun onCleared() {
-        super.onCleared()
-        mDisposable.clear()
+        fun <T> create(bean: T?): Resource<T> {
+            return if (bean == null) {
+                EmptyResource()
+            } else {
+                SuccessResource(bean)
+            }
+        }
     }
 }
+
+class EmptyResource<T> : Resource<T>()
+
+data class SuccessResource<T>(val body: T) : Resource<T>()
+
+data class ErrorResource<T>(val errorMessage: String) : Resource<T>()

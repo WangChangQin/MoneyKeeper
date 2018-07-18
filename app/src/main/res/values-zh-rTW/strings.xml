@@ -141,7 +141,7 @@
     <string name="text_fast_tip">打開APP直接記賬</string>
     <string name="text_successive_record">連續記賬</string>
     <string name="text_successive_record_tip">長按首頁添加按鈕，連續記賬</string>
-    <string name="text_backup">備份</string>
+    <string name="text_backup">本地備份</string>
     <string name="text_go_backup">立即備份</string>
     <string name="text_backup_save" formatted="true">備份文件將保存到%1$s</string>
     <string name="text_restore">恢復備份</string>
@@ -150,6 +150,9 @@
     <string name="text_list_restore">以下是備份文件，點擊恢復：</string>
     <string name="text_auto_backup">自動備份</string>
     <string name="text_auto_backup_content">數據有改變自動備份（建議開啟）</string>
+    <string name="text_cloud_backup">雲備份</string>
+    <string name="text_cloud_backup_title">雲盤備份</string>
+    <string name="text_cloud_backup_content">坚果云</string>
     <string name="text_about_and_help">關於|幫助</string>
     <string name="text_about_content">了解我們的設計理念</string>
     <string-array name="symbol">
@@ -196,4 +199,13 @@
     <string name="text_license">開源許可證</string>
     <string name="text_privacy_policy">隱私政策</string>
     <string name="text_help">幫助</string>
+
+    <!-- 云备份 -->
+    <string name="text_nutstore">堅果雲</string>
+    <string name="text_nutstore_account">堅果雲授權賬號</string>
+    <string name="text_nutstore_password">堅果雲授權密碼</string>
+    <string name="text_nutstore_backup_content">備份文件將保存在堅果雲MoneyKeeperBackup.db</string>
+    <string name="text_nutstore_restore_content">從堅果雲MoneyKeeperBackup.db恢復</string>
+    <string name="text_nutstore_help">堅果雲授權教程</string>
+    <string name="text_tip_auth_fail">授權賬號或密碼不正確</string>
 </resources>

@@ -32,12 +32,14 @@ class SettingSectionEntity : SectionEntity<SettingSectionEntity.Item> {
 
         var title: String? = null
         var content: String?
+        var isShowIcon: Boolean = false
         var isShowSwitch: Boolean = false
         var isConfigOpen: Boolean = false
 
         constructor(content: String) {
             this.title = null
             this.content = content
+            this.isShowIcon = false
             this.isShowSwitch = false
             this.isConfigOpen = false
         }
@@ -45,6 +47,7 @@ class SettingSectionEntity : SectionEntity<SettingSectionEntity.Item> {
         constructor(title: String, content: String?) {
             this.title = title
             this.content = content
+            this.isShowIcon = false
             this.isShowSwitch = false
             this.isConfigOpen = false
         }
@@ -52,8 +55,17 @@ class SettingSectionEntity : SectionEntity<SettingSectionEntity.Item> {
         constructor(title: String, content: String, isConfigOpen: Boolean) {
             this.title = title
             this.content = content
+            this.isShowIcon = false
             this.isShowSwitch = true
             this.isConfigOpen = isConfigOpen
+        }
+
+        constructor(isShowIcon: Boolean, title: String, content: String?) {
+            this.title = title
+            this.content = content
+            this.isShowIcon = isShowIcon
+            this.isShowSwitch = false
+            this.isConfigOpen = false
         }
     }
 }

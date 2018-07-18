@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_red"
+                android:drawableStart="@drawable/bg_dot_red"
                 android:textColor="@color/colorTextWhite2"
                 app:text_statistics_outlay="@{sumMoneyBeanList}"
                 tools:text="支出 ¥3580" />
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_green"
+                android:drawableStart="@drawable/bg_dot_green"
                 android:textColor="@color/colorTextWhite2"
                 app:text_statistics_income="@{sumMoneyBeanList}"
                 tools:text="收入 ¥9827" />

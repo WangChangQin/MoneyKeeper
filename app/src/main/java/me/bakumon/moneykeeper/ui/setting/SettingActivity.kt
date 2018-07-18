@@ -89,6 +89,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup)))
 
+        list.add(SettingSectionEntity(getString(R.string.text_cloud_backup)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(true, getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content))))
+
         list.add(SettingSectionEntity(getString(R.string.text_about_and_help)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_help))))
@@ -107,8 +110,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 4 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
                 8 -> showBackupDialog()
                 9 -> showRestoreDialog()
-                12 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                13 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
+                12 -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
+                14 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+                15 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
                 else -> {
                 }
             }

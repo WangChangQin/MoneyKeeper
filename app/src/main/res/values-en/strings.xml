@@ -141,7 +141,7 @@
     <string name="text_fast_tip">Open APP directly bookkeeping</string>
     <string name="text_successive_record">Continuous accounting</string>
     <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
-    <string name="text_backup">Backup</string>
+    <string name="text_backup">Local backup</string>
     <string name="text_go_backup">Back up now</string>
     <string name="text_backup_save" formatted="true">Backup file will be saved to%1$s</string>
     <string name="text_restore">Restore</string>
@@ -150,6 +150,9 @@
     <string name="text_list_restore">The following is the backup file, click restore:</string>
     <string name="text_auto_backup">Automatic backup</string>
     <string name="text_auto_backup_content">Data change automatic backup (recommended to open)</string>
+    <string name="text_cloud_backup">Cloud backup</string>
+    <string name="text_cloud_backup_title">Cloud disk backup</string>
+    <string name="text_cloud_backup_content">Nutstore</string>
     <string name="text_about_and_help">About|Help</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
@@ -196,4 +199,13 @@
     <string name="text_license">Open source license</string>
     <string name="text_privacy_policy">Privacy Policy</string>
     <string name="text_help">help</string>
+
+    <!-- 云备份 -->
+    <string name="text_nutstore">Nutstore</string>
+    <string name="text_nutstore_account">Nutstore authorized account</string>
+    <string name="text_nutstore_password">Nutstore authorization password</string>
+    <string name="text_nutstore_backup_content">The backup file will be saved in the Nutstore MoneyKeeperBackup.db</string>
+    <string name="text_nutstore_restore_content">Recover from Nutstore MoneyKeeperBackup.db</string>
+    <string name="text_nutstore_help">Nutstore tutorial</string>
+    <string name="text_tip_auth_fail">Authorized account or password is incorrect</string>
 </resources>

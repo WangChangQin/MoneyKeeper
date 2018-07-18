@@ -1,3 +1,4 @@
+apply plugin: 'cipher.so'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -23,6 +24,11 @@ apply plugin: 'AndResGuard'
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+// 加载 encrypt.properties 文件
+def encryptPropertiesFile = rootProject.file("encrypt.properties")
+def encryptProperties = new Properties()
+encryptProperties.load(new FileInputStream(encryptPropertiesFile))
 
 android {
     compileSdkVersion build_versions.compile_sdk
@@ -90,6 +96,18 @@ android {
     }
 }
 
+cipher.so {
+    keys {
+        aesKey {
+            value = encryptProperties['KEY']
+        }
+        aesSalt {
+            value = encryptProperties['SALT']
+        }
+    }
+    encryptSeed = encryptProperties['CIPHER_SO_SEED']
+}
+
 andResGuard {
     // mappingFile = file("./resource_mapping.txt")
     mappingFile = null
@@ -149,7 +167,7 @@ andResGuard {
      * Optional: Specifies the name of the message digest algorithm to user when digesting the entries of JAR file
      * Only works in V1signing, default value is "SHA-1"
      **/
-     digestalg = "SHA-256"
+    digestalg = "SHA-256"
 }
 
 dependencies {
@@ -178,11 +196,10 @@ dependencies {
     // 第三方库
     implementation deps.rxjava2
     implementation deps.rxandroid
-    // retrofit2 会自动依赖 okhttp3 okio rxjava2 gson
-    // rxjava 版本以上面 deps.rxjava 为准
-//    implementation deps.retrofit2.retrofit
-//    implementation deps.retrofit2.adapter_rxjava2
-//    implementation deps.retrofit2.converter_gson
+    // retrofit2
+    implementation deps.retrofit2.retrofit
+    implementation deps.retrofit2.converter_simplexml
+    implementation deps.okhttp3.logging
     // base adapter
     implementation deps.BRVAH
     // 路由
@@ -204,4 +221,6 @@ dependencies {
     implementation deps.circleimageview
     // 对话框
     implementation deps.material_dialogs
+    // aes 加密解密
+    implementation deps.aes_crypto
 }

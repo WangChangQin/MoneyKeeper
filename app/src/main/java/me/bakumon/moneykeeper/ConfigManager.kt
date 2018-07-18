@@ -33,6 +33,8 @@ object ConfigManager {
     private const val KEY_BUDGET = "budget"
     private const val KEY_ASSETS = "assets"
     private const val KEY_SYMBOL = "symbol"
+    private const val KEY_JIANGUOYUN_ACCOUNT = "jianguoyun_account"
+    private const val KEY_JIANGUOYUN_ENCRYPT_PSW = "jianguoyun_encrypt_psw"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -51,6 +53,14 @@ object ConfigManager {
 
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
+
+    val jianguoyunAccount: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_JIANGUOYUN_ACCOUNT, "")
+
+    val jianguoyunEncryptPsw: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_JIANGUOYUN_ENCRYPT_PSW, "")
+
+    var auth = ""
 
     /**
      * 自动备份
@@ -112,6 +122,20 @@ object ConfigManager {
      */
     fun setSymbol(symbol: String): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_SYMBOL, symbol)
+    }
+
+    /**
+     * 坚果云账号
+     */
+    fun setJianguoyunAccount(account: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_JIANGUOYUN_ACCOUNT, account)
+    }
+
+    /**
+     * 坚果云加密后的密码
+     */
+    fun setJianguoyunEncryptPsw(encryptPsw: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_JIANGUOYUN_ENCRYPT_PSW, encryptPsw)
     }
 
 }

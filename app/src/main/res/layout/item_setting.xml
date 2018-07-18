@@ -32,6 +32,13 @@
         android:paddingTop="10dp"
         tools:background="@color/colorPrimary">
 
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_cloud" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
