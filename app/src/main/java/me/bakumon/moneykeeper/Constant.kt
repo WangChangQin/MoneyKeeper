@@ -10,4 +10,5 @@ object Constant {
     const val URL_APP_DOWNLOAD = "https://www.coolapk.com/apk/me.bakumon.moneykeeper"
     const val URL_PRIVACY = "https://github.com/Bakumon/MoneyKeeper/blob/master/PrivacyPolicy.md"
     const val URL_HELP = "https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md"
+    const val NUTSTORE_HELP_URL = "http://help.jianguoyun.com/?p=2064"
 }

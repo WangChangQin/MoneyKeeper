@@ -28,8 +28,8 @@ object Network {
         }
 
         val okHttpClient = OkHttpClient.Builder()
-                .readTimeout(5000, TimeUnit.MILLISECONDS)
-                .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                .readTimeout(10000, TimeUnit.MILLISECONDS)
+                .connectTimeout(10000, TimeUnit.MILLISECONDS)
                 .addInterceptor(loggingInterceptor)
                 .addNetworkInterceptor(AuthInterceptor())
                 .build()
@@ -42,11 +42,17 @@ object Network {
 
     fun davService(): DavService {
         if (davService == null) {
-            val retrofit = retrofitBuilder.baseUrl("http://dav.jianguoyun.com/dav/")
-                    .build()
-            davService = retrofit.create(DavService::class.java)
+            updateDavServiceBaseUrl()
         }
         return davService!!
+    }
+
+    fun updateDavServiceBaseUrl() {
+        val url = ConfigManager.webDavUrl
+        val baseUrl = if (url.endsWith("/")) url else "$url/"
+        val retrofit = retrofitBuilder.baseUrl(baseUrl)
+                .build()
+        davService = retrofit.create(DavService::class.java)
     }
 
     internal class AuthInterceptor : Interceptor {
@@ -57,14 +63,20 @@ object Network {
             var request = chain.request()
             val builder = request.newBuilder()
 
-            if (ConfigManager.auth.isEmpty()) {
-                val account = ConfigManager.jianguoyunAccount
-                val psw = EncryptUtil.decrypt(ConfigManager.jianguoyunEncryptPsw, key, salt)
-                ConfigManager.auth = "Basic " + Base64Util.encode("$account:$psw")
+            val account = ConfigManager.webDavAccount
+
+            // TODO 动态处理 Authorization
+            // https://blog.csdn.net/qq_30806949/article/details/52447771
+            val auth = if (ConfigManager.webDAVPsw.isEmpty()) {
+                val psw = EncryptUtil.decrypt(ConfigManager.webDavEncryptPsw, key, salt)
+                "Basic " + Base64Util.encode("$account:$psw")
+            } else {
+                val psw = ConfigManager.webDAVPsw
+                "Basic " + Base64Util.encode("$account:$psw")
             }
 
             request = builder
-                    .addHeader("Authorization", ConfigManager.auth)
+                    .addHeader("Authorization", auth)
                     .build()
 
             return chain.proceed(request)

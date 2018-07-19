@@ -20,13 +20,7 @@ import android.arch.lifecycle.LiveData
 
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.HTTP
-import retrofit2.http.Multipart
-import retrofit2.http.PUT
-import retrofit2.http.Part
-import retrofit2.http.Streaming
-import retrofit2.http.Url
+import retrofit2.http.*
 
 /**
  * WebDAV api
@@ -44,7 +38,12 @@ interface DavService {
     @GET
     fun download(@Url url: String): LiveData<ApiResponse<ResponseBody>>
 
-    @Multipart
+//    @Multipart
+//    @PUT
+//    fun upload(@Url url: String, @Part("backup") body: RequestBody): LiveData<ApiResponse<ResponseBody>>
+
+    // 使用 @Multipart 会导致文件异常
+    // https://blog.csdn.net/ZZB_Bin/article/details/62895852
     @PUT
-    fun upload(@Url url: String, @Part("backup") body: RequestBody): LiveData<ApiResponse<ResponseBody>>
+    fun upload(@Url url: String, @Body body: RequestBody): LiveData<ApiResponse<ResponseBody>>
 }

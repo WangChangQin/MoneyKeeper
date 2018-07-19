@@ -35,6 +35,11 @@ interface AppDataSource {
     fun initRecordTypes(): Completable
 
     /**
+     * 获取类型表记录数
+     */
+    fun getRecordTypeCount(): Long
+
+    /**
      * 添加记账类型
      *
      * @param type    类型

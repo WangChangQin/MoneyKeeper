@@ -31,13 +31,16 @@ import me.bakumon.moneykeeper.api.ApiResponse
 import me.bakumon.moneykeeper.api.DavFileList
 import me.bakumon.moneykeeper.api.Network
 import me.bakumon.moneykeeper.base.BaseViewModel
+import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.AppDatabase
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.EncryptUtil
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import java.io.File
 
 
 /**
@@ -60,7 +63,7 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         val salt = EncryptUtil.salt
 
         mDisposable.add(Flowable.create(FlowableOnSubscribe<String>({
-            val displayPsw = ConfigManager.jianguoyunEncryptPsw
+            val displayPsw = ConfigManager.webDavEncryptPsw
             val psw = if (displayPsw.isEmpty()) "" else EncryptUtil.decrypt(displayPsw, key, salt)
             it.onNext(psw)
         }), BackpressureStrategy.BUFFER)
@@ -82,9 +85,9 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
         mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean>({
             val result = if (input.isEmpty()) {
-                ConfigManager.setJianguoyunEncryptPsw("")
+                ConfigManager.setWebDavEncryptPsw("")
             } else {
-                ConfigManager.setJianguoyunEncryptPsw(EncryptUtil.encrypt(input, key, salt))
+                ConfigManager.setWebDavEncryptPsw(EncryptUtil.encrypt(input, key, salt))
             }
             it.onNext(result)
         }), BackpressureStrategy.BUFFER)
@@ -110,22 +113,70 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         return Network.davService().list(BACKUP_DIR)
     }
 
-    fun restore(): LiveData<ApiResponse<ResponseBody>> {
-        return Network.davService().download(BACKUP_FILE)
-    }
-
     fun backup(): LiveData<ApiResponse<ResponseBody>> {
         val storage = Storage(App.instance)
         val path = App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path
         val file = storage.getFile(path)
 
-        val body = RequestBody.create(MediaType.parse("*/*"), file)
+        val body = RequestBody.create(MediaType.parse("application/octet-stream"), file)
         return Network.davService().upload(BACKUP_FILE, body)
+    }
+
+    fun restore(): LiveData<ApiResponse<ResponseBody>> {
+        return Network.davService().download(BACKUP_FILE)
+    }
+
+    fun restoreToDB(body: ResponseBody): MutableLiveData<Resource<Boolean>> {
+        val resultLiveData = MutableLiveData<Resource<Boolean>>()
+        val storage = Storage(App.instance)
+        // 先把恢复前的 db 文件备份到内部 file 文件夹下
+        val beforeRestorePath = storage.internalFilesDirectory + File.separator + BACKUP_FILE_BEFORE_RESTORE
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean>({
+            val backupResult = BackupUtil.backupDB(beforeRestorePath)
+            if (!backupResult) {
+                it.onNext(false)
+            } else {
+                val restoreFile = storage.internalCacheDirectory + File.separator + BACKUP_FILE_TEMP
+                // 保存下载的 db 文件到内部 cache 文件夹
+                val result = storage.createFile(restoreFile, body.bytes())
+                if (!result) {
+                    it.onNext(false)
+                } else {
+                    // 恢复到数据库文件夹
+                    val restoreDB = BackupUtil.restoreDB(restoreFile)
+                    if (!restoreDB) {
+                        it.onNext(false)
+                    } else {
+                        // 检查 db 文件是否完好
+                        mDataSource.getRecordTypeCount()
+                        it.onNext(true)
+                    }
+                }
+            }
+        }), BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    resultLiveData.value = Resource.create(it)
+                })
+                { throwable ->
+                    // 说明 db 文件损坏
+                    val result = BackupUtil.restoreDB(beforeRestorePath)
+                    if (result) {
+                        resultLiveData.value = EmptyResource()
+                    } else {
+                        resultLiveData.value = Resource.create(throwable)
+                    }
+                }
+        )
+        return resultLiveData
     }
 
     companion object {
         val BACKUP_DIR = if (BuildConfig.DEBUG) "MoneyKeeper_Debug" else "MoneyKeeper"
         val BACKUP_FILE_NAME = if (BuildConfig.DEBUG) "MoneyKeeperCloudBackup_Debug.db" else "MoneyKeeperCloudBackup.db"
+        const val BACKUP_FILE_TEMP = "backup_temp.db"
+        const val BACKUP_FILE_BEFORE_RESTORE = "before_restore.db"
         val BACKUP_FILE = "$BACKUP_DIR/$BACKUP_FILE_NAME"
     }
 }

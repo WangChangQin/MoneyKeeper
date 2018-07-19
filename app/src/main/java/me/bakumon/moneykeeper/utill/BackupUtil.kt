@@ -57,7 +57,7 @@ object BackupUtil {
         return backupBeans
     }
 
-    private fun backupDB(fileName: String): Boolean {
+    private fun backupDBToSDCard(fileName: String): Boolean {
         val storage = Storage(App.instance)
         val isWritable = Storage.isExternalWritable()
         if (!isWritable) {
@@ -77,12 +77,12 @@ object BackupUtil {
 
     fun autoBackup(): Boolean {
         val fileName = AUTO_BACKUP_PREFIX + SUFFIX
-        return backupDB(fileName)
+        return backupDBToSDCard(fileName)
     }
 
     fun userBackup(): Boolean {
         val fileName = USER_BACKUP_PREFIX + SUFFIX
-        return backupDB(fileName)
+        return backupDBToSDCard(fileName)
     }
 
     fun restoreDB(restoreFile: String): Boolean {
@@ -91,5 +91,14 @@ object BackupUtil {
             return storage.copy(restoreFile, App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path)
         }
         return false
+    }
+
+    fun backupDB(backupPath: String): Boolean {
+        val storage = Storage(App.instance)
+        if (!storage.isFileExist(backupPath)) {
+            // 创建空文件，在模拟器上测试，如果没有这个文件，复制的时候会报 FileNotFound
+            storage.createFile(backupPath, "")
+        }
+        return storage.copy(App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path, backupPath)
     }
 }

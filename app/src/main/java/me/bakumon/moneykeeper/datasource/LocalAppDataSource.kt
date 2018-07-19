@@ -59,6 +59,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
+    override fun getRecordTypeCount(): Long {
+        return mAppDatabase.recordTypeDao().getRecordTypeCount()
+    }
+
     override fun addRecordType(type: Int, imgName: String, name: String): Completable {
         return Completable.fromAction {
             val recordType = mAppDatabase.recordTypeDao().getTypeByName(type, name)

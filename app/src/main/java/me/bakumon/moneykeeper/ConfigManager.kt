@@ -33,8 +33,9 @@ object ConfigManager {
     private const val KEY_BUDGET = "budget"
     private const val KEY_ASSETS = "assets"
     private const val KEY_SYMBOL = "symbol"
-    private const val KEY_JIANGUOYUN_ACCOUNT = "jianguoyun_account"
-    private const val KEY_JIANGUOYUN_ENCRYPT_PSW = "jianguoyun_encrypt_psw"
+    private const val KEY_WEBDAV_URL = "webDav_url"
+    private const val KEY_WEBDAV_ACCOUNT = "webDav_account"
+    private const val KEY_WEBDAV_ENCRYPT_PSW = "webDav_encrypt_psw"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -54,13 +55,16 @@ object ConfigManager {
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
 
-    val jianguoyunAccount: String
-        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_JIANGUOYUN_ACCOUNT, "")
+    val webDavUrl: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_WEBDAV_URL, "")
 
-    val jianguoyunEncryptPsw: String
-        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_JIANGUOYUN_ENCRYPT_PSW, "")
+    val webDavAccount: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_WEBDAV_ACCOUNT, "")
 
-    var auth = ""
+    val webDavEncryptPsw: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_WEBDAV_ENCRYPT_PSW, "")
+
+    var webDAVPsw = ""
 
     /**
      * 自动备份
@@ -125,17 +129,24 @@ object ConfigManager {
     }
 
     /**
-     * 坚果云账号
+     * WebDAV地址
      */
-    fun setJianguoyunAccount(account: String): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_JIANGUOYUN_ACCOUNT, account)
+    fun setWevDavUrl(url: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_WEBDAV_URL, url)
     }
 
     /**
-     * 坚果云加密后的密码
+     * WebDAV账号
      */
-    fun setJianguoyunEncryptPsw(encryptPsw: String): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_JIANGUOYUN_ENCRYPT_PSW, encryptPsw)
+    fun setWevDavAccount(account: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_WEBDAV_ACCOUNT, account)
+    }
+
+    /**
+     * WebDAV加密后的密码
+     */
+    fun setWebDavEncryptPsw(encryptPsw: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_WEBDAV_ENCRYPT_PSW, encryptPsw)
     }
 
 }

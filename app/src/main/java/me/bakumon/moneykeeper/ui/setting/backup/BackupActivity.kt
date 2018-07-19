@@ -24,21 +24,20 @@ import android.text.InputType
 import android.text.TextUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import me.bakumon.moneykeeper.ConfigManager
+import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.api.ApiEmptyResponse
-import me.bakumon.moneykeeper.api.ApiErrorResponse
-import me.bakumon.moneykeeper.api.ApiSuccessResponse
-import me.bakumon.moneykeeper.api.DavFileList
+import me.bakumon.moneykeeper.api.*
 import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
 import me.bakumon.moneykeeper.ui.setting.SettingAdapter
 import me.bakumon.moneykeeper.ui.setting.SettingSectionEntity
 import me.bakumon.moneykeeper.utill.AndroidUtil
-import me.bakumon.moneykeeper.utill.Base64Util
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.drakeet.floo.Floo
 import okhttp3.ResponseBody
 import java.util.*
 
@@ -74,12 +73,13 @@ class BackupActivity : BaseActivity() {
 
         val list = ArrayList<SettingSectionEntity>()
 
-        list.add(SettingSectionEntity(getString(R.string.text_nutstore)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_nutstore_account), ConfigManager.jianguoyunAccount)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_nutstore_password), getItemDisplayPsw())))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_nutstore_backup_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_nutstore_restore_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_nutstore_help), NUTSTORE_HELP_URL)))
+        list.add(SettingSectionEntity(getString(R.string.text_webdav)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_url), ConfigManager.webDavUrl)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_account), ConfigManager.webDavAccount)))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_password), getItemDisplayPsw())))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_help), Constant.NUTSTORE_HELP_URL)))
 
         mAdapter.setNewData(list)
         addListener()
@@ -91,67 +91,83 @@ class BackupActivity : BaseActivity() {
     private fun addListener() {
         mAdapter.setOnItemClickListener { _, _, position ->
             when (position) {
-                1 -> setAccount()
-                2 -> setPsw()
-                3 -> backup()
-                4 -> restore()
-                5 -> AndroidUtil.openWeb(this, NUTSTORE_HELP_URL)
+                1 -> setUrl(position)
+                2 -> setAccount(position)
+                3 -> setPsw(position)
+                4 -> showBackupDialog()
+                5 -> showRestoreDialog()
+                6 -> AndroidUtil.openWeb(this, Constant.NUTSTORE_HELP_URL)
                 else -> {
                 }
             }
         }
     }
 
-    private fun setAccount() {
+    private fun setUrl(position: Int) {
         MaterialDialog.Builder(this)
-                .title(R.string.text_nutstore_account)
+                .title(R.string.text_webdav_url)
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.jianguoyunAccount,
+                .input("", ConfigManager.webDavUrl,
                         { _, input ->
-                            ConfigManager.setJianguoyunAccount(input.toString().trim())
-                            mAdapter.data[1].t.content = ConfigManager.jianguoyunAccount
+                            ConfigManager.setWevDavUrl(input.toString().trim())
+                            mAdapter.data[position].t.content = ConfigManager.webDavUrl
                             mBinding.rvSetting.itemAnimator.changeDuration = 250
-                            mAdapter.notifyItemChanged(1)
+                            mAdapter.notifyItemChanged(position)
+                            Network.updateDavServiceBaseUrl()
+                            initDir()
+                        }).show()
+    }
+
+    private fun setAccount(position: Int) {
+        MaterialDialog.Builder(this)
+                .title(R.string.text_webdav_account)
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_cancel)
+                .input("", ConfigManager.webDavAccount,
+                        { _, input ->
+                            ConfigManager.setWevDavAccount(input.toString().trim())
+                            mAdapter.data[position].t.content = ConfigManager.webDavAccount
+                            mBinding.rvSetting.itemAnimator.changeDuration = 250
+                            mAdapter.notifyItemChanged(position)
                             initDir()
                         }).show()
     }
 
     private fun getItemDisplayPsw(): String {
-        return if (ConfigManager.jianguoyunEncryptPsw.isEmpty()) "" else "******"
+        return if (ConfigManager.webDavEncryptPsw.isEmpty()) "" else "******"
     }
 
     private var isSaving = false
 
-    private fun setPsw() {
+    private fun setPsw(position: Int) {
         if (isSaving) {
             return
         }
         MaterialDialog.Builder(this)
-                .title(R.string.text_nutstore_password)
+                .title(R.string.text_webdav_password)
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
                 .input("", psw,
                         { _, input ->
-                            savePsw(input.toString())
+                            savePsw(position, input.toString())
                         }).show()
     }
 
-    private var inputPsw = ""
-
-    private fun savePsw(input: String) {
+    private fun savePsw(position: Int, input: String) {
         isSaving = true
-        inputPsw = input
+        psw = input
         mViewModel.savePsw(input).observe(this, Observer {
             isSaving = false
             when (it) {
                 is SuccessResource<Boolean> -> {
                     if (it.body) {
-                        mAdapter.data[2].t.content = getItemDisplayPsw()
+                        mAdapter.data[position].t.content = getItemDisplayPsw()
                         mBinding.rvSetting.itemAnimator.changeDuration = 0
-                        mAdapter.notifyItemChanged(2)
+                        mAdapter.notifyItemChanged(position)
                         initDir()
                     }
                 }
@@ -169,14 +185,13 @@ class BackupActivity : BaseActivity() {
         })
     }
 
-    private fun updateAuth() {
-        val account = ConfigManager.jianguoyunAccount
-        ConfigManager.auth = "Basic " + Base64Util.encode("$account:$inputPsw")
+    private fun updatePsw() {
+        ConfigManager.webDAVPsw = psw
     }
 
     private fun initDir() {
-        updateAuth()
-        if (ConfigManager.jianguoyunAccount.isEmpty() || ConfigManager.jianguoyunEncryptPsw.isEmpty()) {
+        updatePsw()
+        if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDavEncryptPsw.isEmpty()) {
             return
         }
         mViewModel.createDir().observe(this, Observer {
@@ -184,6 +199,16 @@ class BackupActivity : BaseActivity() {
                 is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
             }
         })
+    }
+
+    private fun showBackupDialog() {
+        MaterialDialog.Builder(this)
+                .title(R.string.text_go_backup)
+                .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_cancel)
+                .onPositive({ _, _ -> backup() })
+                .show()
     }
 
     private fun backup() {
@@ -225,20 +250,52 @@ class BackupActivity : BaseActivity() {
         })
     }
 
+    private fun showRestoreDialog() {
+        MaterialDialog.Builder(this)
+                .title(R.string.text_restore)
+                .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
+                .positiveText(R.string.text_affirm)
+                .negativeText(R.string.text_cancel)
+                .onPositive({ _, _ -> restore() })
+                .show()
+    }
+
     private fun restore() {
         mViewModel.restore().observe(this, Observer {
             when (it) {
                 is ApiSuccessResponse<ResponseBody> -> {
-                    // TODO 恢复网备份
-                    ToastUtils.show("Response:" + it.body)
+                    restoreToDB(it.body)
                 }
                 is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
             }
         })
     }
 
-    companion object {
-        const val NUTSTORE_HELP_URL = "http://help.jianguoyun.com/?p=2064"
+    private fun restoreToDB(body: ResponseBody) {
+        mViewModel.restoreToDB(body).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    if (it.body) {
+                        ToastUtils.show(R.string.toast_restore_success)
+                        backHome()
+                    } else {
+                        ToastUtils.show(R.string.toast_restore_fail)
+                    }
+                }
+                is EmptyResource -> {
+                    ToastUtils.show(R.string.toast_restore_fail_rollback)
+                    backHome()
+                }
+                is ErrorResource<Boolean> -> ToastUtils.show(getString(R.string.toast_restore_fail) + "\n" + it.errorMessage)
+            }
+        })
+    }
+
+    private fun backHome() {
+        Floo.stack(this)
+                .popCount(2)
+                .result("refresh")
+                .start()
     }
 
 }
