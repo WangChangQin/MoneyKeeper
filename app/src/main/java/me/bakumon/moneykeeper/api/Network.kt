@@ -1,22 +1,23 @@
 package me.bakumon.moneykeeper.api
 
+import android.util.Log
 import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.utill.Base64Util
 import me.bakumon.moneykeeper.utill.EncryptUtil
-import okhttp3.Interceptor
+import okhttp3.Challenge
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 object Network {
 
     private var davService: DavService? = null
     private var retrofitBuilder: Retrofit.Builder
+    private val key = EncryptUtil.key
+    private val salt = EncryptUtil.salt
 
     init {
         // 日志拦截器
@@ -31,7 +32,34 @@ object Network {
                 .readTimeout(10000, TimeUnit.MILLISECONDS)
                 .connectTimeout(10000, TimeUnit.MILLISECONDS)
                 .addInterceptor(loggingInterceptor)
-                .addNetworkInterceptor(AuthInterceptor())
+                .authenticator({ _, response ->
+
+                    val challenges = response.challenges()
+
+                    Log.e("mafei", challenges.toString())
+
+                    val credential = if (challenges.size < 1) {
+                        ""
+                    } else {
+                        if (challenges[0].scheme() == "Basic") {
+                            // Basic 基本认证
+                            basicAuth()
+                        } else if (challenges[0].scheme() == "Digest") {
+                            // Digest 摘要认证
+                            digestAuth(challenges[0])
+                        } else {
+                            ""
+                        }
+                    }
+
+                    if (credential.isEmpty() || credential == response.request().header("Authorization")) {
+                        null
+                    } else {
+                        response.request().newBuilder()
+                                .header("Authorization", credential)
+                                .build()
+                    }
+                })
                 .build()
 
         retrofitBuilder = Retrofit.Builder()
@@ -55,31 +83,22 @@ object Network {
         davService = retrofit.create(DavService::class.java)
     }
 
-    internal class AuthInterceptor : Interceptor {
-        private val key = EncryptUtil.key
-        private val salt = EncryptUtil.salt
-        @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain): Response {
-            var request = chain.request()
-            val builder = request.newBuilder()
-
-            val account = ConfigManager.webDavAccount
-
-            // TODO 动态处理 Authorization
-            // https://blog.csdn.net/qq_30806949/article/details/52447771
-            val auth = if (ConfigManager.webDAVPsw.isEmpty()) {
-                val psw = EncryptUtil.decrypt(ConfigManager.webDavEncryptPsw, key, salt)
-                "Basic " + Base64Util.encode("$account:$psw")
-            } else {
-                val psw = ConfigManager.webDAVPsw
-                "Basic " + Base64Util.encode("$account:$psw")
-            }
-
-            request = builder
-                    .addHeader("Authorization", auth)
-                    .build()
-
-            return chain.proceed(request)
+    private fun getPws(): String {
+        return if (ConfigManager.webDAVPsw.isEmpty()) {
+            EncryptUtil.decrypt(ConfigManager.webDavEncryptPsw, key, salt)
+        } else {
+            ConfigManager.webDAVPsw
         }
+    }
+
+    private fun basicAuth(): String {
+        val account = ConfigManager.webDavAccount
+        val psw = getPws()
+        return Credentials.basic(account, psw)
+    }
+
+    private fun digestAuth(challenge: Challenge): String {
+        // TODO Digest 摘要认证
+        return ""
     }
 }
