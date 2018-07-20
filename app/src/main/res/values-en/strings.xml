@@ -38,7 +38,6 @@
     <string name="toast_not_install_alipay">Thank you, you did not install Alipay application</string>
     <string name="toast_is_not_writable_external">Backup failed, external storage is unavailable</string>
     <string name="toast_restore_fail">Failed to restore the backup</string>
-    <string name="toast_restore_fail_rollback">Recovery failed, rolled back to before recovery</string>
     <string name="toast_restore_success">Restore backup success</string>
     <string name="toast_backup_list_fail">Failed to get backup file list</string>
     <string name="toast_open_auto_backup">Automatic backup is turned off. You can go to settings to reopen</string>
@@ -208,4 +207,6 @@
     <string name="text_webdav_password">WebDAV authorization password</string>
     <string name="text_webdav_help">Nutstore tutorial</string>
     <string name="text_tip_auth_fail">Authorized account or password is incorrect</string>
+    <string name="text_error">Error</string>
+    <string name="text_restore_fail_rollback">The recovery failed, has been rolled back to the pre-recovery state, click the OK button to restart the application.</string>
 </resources>

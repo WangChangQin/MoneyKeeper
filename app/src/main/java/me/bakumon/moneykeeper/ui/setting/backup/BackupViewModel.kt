@@ -175,8 +175,8 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
     companion object {
         val BACKUP_DIR = if (BuildConfig.DEBUG) "MoneyKeeper_Debug" else "MoneyKeeper"
         val BACKUP_FILE_NAME = if (BuildConfig.DEBUG) "MoneyKeeperCloudBackup_Debug.db" else "MoneyKeeperCloudBackup.db"
-        const val BACKUP_FILE_TEMP = "backup_temp.db"
-        const val BACKUP_FILE_BEFORE_RESTORE = "before_restore.db"
+        const val BACKUP_FILE_TEMP = "backup_temp_cloud.db"
+        const val BACKUP_FILE_BEFORE_RESTORE = "before_restore_cloud.db"
         val BACKUP_FILE = "$BACKUP_DIR/$BACKUP_FILE_NAME"
     }
 }

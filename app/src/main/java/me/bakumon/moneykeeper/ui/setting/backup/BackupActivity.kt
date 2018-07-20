@@ -18,11 +18,13 @@ package me.bakumon.moneykeeper.ui.setting.backup
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
 import android.text.TextUtils
 import com.afollestad.materialdialogs.MaterialDialog
+import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.Injection
@@ -33,6 +35,7 @@ import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
+import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.ui.setting.SettingAdapter
 import me.bakumon.moneykeeper.ui.setting.SettingSectionEntity
 import me.bakumon.moneykeeper.utill.AndroidUtil
@@ -283,8 +286,7 @@ class BackupActivity : BaseActivity() {
                     }
                 }
                 is EmptyResource -> {
-                    ToastUtils.show(R.string.toast_restore_fail_rollback)
-                    backHome()
+                    restartApp()
                 }
                 is ErrorResource<Boolean> -> ToastUtils.show(getString(R.string.toast_restore_fail) + "\n" + it.errorMessage)
             }
@@ -296,6 +298,18 @@ class BackupActivity : BaseActivity() {
                 .popCount(2)
                 .result("refresh")
                 .start()
+    }
+
+    private fun restartApp() {
+        MaterialDialog.Builder(this)
+                .cancelable(false)
+                .title("\uD83D\uDC7A" + getString(R.string.text_error))
+                .content(R.string.text_restore_fail_rollback)
+                .positiveText(R.string.text_affirm)
+                .onPositive({ _, _ ->
+                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
+                })
+                .show()
     }
 
 }

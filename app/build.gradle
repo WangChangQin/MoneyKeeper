@@ -223,4 +223,6 @@ dependencies {
     implementation deps.material_dialogs
     // aes 加密解密
     implementation deps.aes_crypto
+    // 重启进程
+    implementation deps.process_phoenix
 }

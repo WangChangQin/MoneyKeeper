@@ -42,7 +42,7 @@
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="AppLinkUrlError">
             <intent-filter>

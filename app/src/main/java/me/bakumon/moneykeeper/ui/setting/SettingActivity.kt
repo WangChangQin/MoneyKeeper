@@ -26,11 +26,16 @@ import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
+import com.jakewharton.processphoenix.ProcessPhoenix
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.base.EmptyResource
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
+import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
@@ -56,7 +61,8 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
-        mViewModel = ViewModelProviders.of(this).get(SettingViewModel::class.java)
+        val viewModelFactory = Injection.provideViewModelFactory()
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(SettingViewModel::class.java)
 
         initView()
     }
@@ -381,20 +387,41 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun restoreDB(restoreFile: String) {
-        mDisposable.add(mViewModel.restoreDB(restoreFile)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    ToastUtils.show(R.string.toast_restore_success)
-                    Floo.stack(this)
-                            .target(Router.IndexKey.INDEX_KEY_HOME)
-                            .result("refresh")
-                            .start()
+        mViewModel.restoreToDB(restoreFile).observe(this, android.arch.lifecycle.Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    if (it.body) {
+                        ToastUtils.show(R.string.toast_restore_success)
+                        backHome()
+                    } else {
+                        ToastUtils.show(R.string.toast_restore_fail)
+                    }
                 }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_restore_fail)
-                    Log.e(TAG, "恢复备份失败", throwable)
+                is EmptyResource -> {
+                    restartApp()
+                }
+                is ErrorResource<Boolean> -> ToastUtils.show(getString(R.string.toast_restore_fail) + "\n" + it.errorMessage)
+            }
+        })
+    }
+
+    private fun backHome() {
+        Floo.stack(this)
+                .target(Router.IndexKey.INDEX_KEY_HOME)
+                .result("refresh")
+                .start()
+    }
+
+    private fun restartApp() {
+        MaterialDialog.Builder(this)
+                .cancelable(false)
+                .title("\uD83D\uDC7A" + getString(R.string.text_error))
+                .content(R.string.text_restore_fail_rollback)
+                .positiveText(R.string.text_affirm)
+                .onPositive({ _, _ ->
+                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
                 })
+                .show()
     }
 
     companion object {
