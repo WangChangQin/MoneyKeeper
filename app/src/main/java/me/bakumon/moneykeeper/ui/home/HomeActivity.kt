@@ -17,6 +17,7 @@
 package me.bakumon.moneykeeper.ui.home
 
 import android.Manifest
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -31,6 +32,8 @@ import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.databinding.ActivityHomeBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
@@ -71,6 +74,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         if (ConfigManager.isFast) {
             Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
         }
+
+        getOldPsw()
     }
 
     private fun initView() {
@@ -111,6 +116,17 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         } else {
             mBinding.btnAddRecord.setOnLongClickListener(null)
         }
+    }
+
+    private fun getOldPsw() {
+        mViewModel.getPsw().observe(this, Observer {
+            when (it) {
+                is SuccessResource<String> -> {
+                    ConfigManager.webDAVPsw = it.body
+                }
+                is ErrorResource<String> -> ToastUtils.show(it.errorMessage)
+            }
+        })
     }
 
     private fun showOperateDialog(record: RecordWithType) {

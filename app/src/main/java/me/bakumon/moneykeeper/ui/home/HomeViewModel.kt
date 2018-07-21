@@ -16,14 +16,21 @@
 
 package me.bakumon.moneykeeper.ui.home
 
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.FlowableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.BaseViewModel
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.utill.EncryptUtil
 
 /**
  * 主页 ViewModel
@@ -31,6 +38,34 @@ import me.bakumon.moneykeeper.datasource.AppDataSource
  * @author Bakumon https://bakumon.me
  */
 class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
+
+    private lateinit var pswLiveData: MutableLiveData<Resource<String>>
+
+    fun getPsw(): MutableLiveData<Resource<String>> {
+        pswLiveData = MutableLiveData()
+        getClearPsw()
+        return pswLiveData
+    }
+
+    private fun getClearPsw() {
+        val key = EncryptUtil.key
+        val salt = EncryptUtil.salt
+
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<String>({
+            val displayPsw = ConfigManager.webDavEncryptPsw
+            val psw = if (displayPsw.isEmpty()) "" else EncryptUtil.decrypt(displayPsw, key, salt)
+            it.onNext(psw)
+        }), BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    pswLiveData.value = Resource.create(it)
+                })
+                { throwable ->
+                    pswLiveData.value = Resource.create(throwable)
+                }
+        )
+    }
 
     val currentMonthRecordWithTypes: Flowable<List<RecordWithType>>
         get() = mDataSource.getCurrentMonthRecordWithTypes()

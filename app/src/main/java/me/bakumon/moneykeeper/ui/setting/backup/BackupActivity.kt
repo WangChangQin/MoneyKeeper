@@ -54,8 +54,6 @@ class BackupActivity : BaseActivity() {
     private lateinit var mViewModel: BackupViewModel
     private lateinit var mAdapter: SettingAdapter
 
-    private var psw = ""
-
     override val layoutId: Int
         get() = R.layout.activity_setting
 
@@ -87,8 +85,10 @@ class BackupActivity : BaseActivity() {
         mAdapter.setNewData(list)
         addListener()
         mBinding.rvSetting.adapter = mAdapter
+    }
 
-        getOldPsw()
+    private fun getItemDisplayPsw(): String {
+        return if (ConfigManager.webDAVPsw.isEmpty()) "" else "******"
     }
 
     private fun addListener() {
@@ -118,7 +118,6 @@ class BackupActivity : BaseActivity() {
                             mAdapter.data[position].t.content = ConfigManager.webDavUrl
                             mBinding.rvSetting.itemAnimator.changeDuration = 250
                             mAdapter.notifyItemChanged(position)
-                            Network.updateDavServiceBaseUrl()
                             initDir()
                         }).show()
     }
@@ -139,10 +138,6 @@ class BackupActivity : BaseActivity() {
                         }).show()
     }
 
-    private fun getItemDisplayPsw(): String {
-        return if (ConfigManager.webDavEncryptPsw.isEmpty()) "" else "******"
-    }
-
     private var isSaving = false
 
     private fun setPsw(position: Int) {
@@ -154,7 +149,7 @@ class BackupActivity : BaseActivity() {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input("", psw,
+                .input("", ConfigManager.webDAVPsw,
                         { _, input ->
                             savePsw(position, input.toString())
                         }).show()
@@ -162,39 +157,23 @@ class BackupActivity : BaseActivity() {
 
     private fun savePsw(position: Int, input: String) {
         isSaving = true
-        psw = input
+        ConfigManager.webDAVPsw = input
+        mAdapter.data[position].t.content = getItemDisplayPsw()
+        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        mAdapter.notifyItemChanged(position)
+        initDir()
         mViewModel.savePsw(input).observe(this, Observer {
             isSaving = false
             when (it) {
-                is SuccessResource<Boolean> -> {
-                    if (it.body) {
-                        mAdapter.data[position].t.content = getItemDisplayPsw()
-                        mBinding.rvSetting.itemAnimator.changeDuration = 0
-                        mAdapter.notifyItemChanged(position)
-                        initDir()
-                    }
-                }
                 is ErrorResource<Boolean> -> ToastUtils.show(it.errorMessage)
             }
         })
     }
 
-    private fun getOldPsw() {
-        mViewModel.getPsw().observe(this, Observer {
-            when (it) {
-                is SuccessResource<String> -> psw = it.body
-                is ErrorResource<String> -> ToastUtils.show(it.errorMessage)
-            }
-        })
-    }
-
-    private fun updatePsw() {
-        ConfigManager.webDAVPsw = psw
-    }
-
     private fun initDir() {
-        updatePsw()
-        if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDavEncryptPsw.isEmpty()) {
+        // 更新网络配置
+        Network.updateDavServiceConfig()
+        if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
             return
         }
         mViewModel.createDir().observe(this, Observer {
@@ -269,7 +248,13 @@ class BackupActivity : BaseActivity() {
                 is ApiSuccessResponse<ResponseBody> -> {
                     restoreToDB(it.body)
                 }
-                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
+                is ApiErrorResponse<ResponseBody> -> {
+                    if (it.code == 404) {
+                        ToastUtils.show(R.string.text_backup_file_not_exist)
+                    } else {
+                        ToastUtils.show(it.errorMessage)
+                    }
+                }
             }
         })
     }
@@ -310,6 +295,14 @@ class BackupActivity : BaseActivity() {
                     ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
                 })
                 .show()
+    }
+
+    override fun onDestroy() {
+        if (isSaving) {
+            ToastUtils.show(R.string.text_saving_psw)
+        } else {
+            super.onDestroy()
+        }
     }
 
 }

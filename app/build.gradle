@@ -225,4 +225,6 @@ dependencies {
     implementation deps.aes_crypto
     // 重启进程
     implementation deps.process_phoenix
+    // okhttp 支持 digest 认证
+    implementation deps.okhttp_digest
 }

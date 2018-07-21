@@ -209,4 +209,6 @@
     <string name="text_tip_auth_fail">授权账号或密码不正确</string>
     <string name="text_error">出错了</string>
     <string name="text_restore_fail_rollback">恢复失败，已回滚至恢复前状态，点击确定按钮重启应用。</string>
+    <string name="text_backup_file_not_exist">备份文件不存在</string>
+    <string name="text_saving_psw">正在加密保存密码&#8230;</string>
 </resources>

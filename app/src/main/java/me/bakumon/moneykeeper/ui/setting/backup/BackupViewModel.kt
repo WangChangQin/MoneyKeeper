@@ -50,34 +50,6 @@ import java.io.File
  */
 class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    private lateinit var pswLiveData: MutableLiveData<Resource<String>>
-
-    fun getPsw(): MutableLiveData<Resource<String>> {
-        pswLiveData = MutableLiveData()
-        getClearPsw()
-        return pswLiveData
-    }
-
-    private fun getClearPsw() {
-        val key = EncryptUtil.key
-        val salt = EncryptUtil.salt
-
-        mDisposable.add(Flowable.create(FlowableOnSubscribe<String>({
-            val displayPsw = ConfigManager.webDavEncryptPsw
-            val psw = if (displayPsw.isEmpty()) "" else EncryptUtil.decrypt(displayPsw, key, salt)
-            it.onNext(psw)
-        }), BackpressureStrategy.BUFFER)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    pswLiveData.value = Resource.create(it)
-                })
-                { throwable ->
-                    pswLiveData.value = Resource.create(throwable)
-                }
-        )
-    }
-
     fun savePsw(input: String): MutableLiveData<Resource<Boolean>> {
         val resultLiveData = MutableLiveData<Resource<Boolean>>()
         val key = EncryptUtil.key
@@ -95,7 +67,6 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     resultLiveData.value = Resource.create(it)
-                    getClearPsw()
                 })
                 { throwable ->
                     resultLiveData.value = Resource.create(throwable)

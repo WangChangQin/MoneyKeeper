@@ -209,4 +209,6 @@
     <string name="text_tip_auth_fail">授權賬號或密碼不正確</string>
     <string name="text_error">出錯了</string>
     <string name="text_restore_fail_rollback">恢復失敗，已回滾至恢復前狀態，點擊確定按鈕重啟應用。</string>
+    <string name="text_backup_file_not_exist">備份文件不存在</string>
+    <string name="text_saving_psw">正在加密保存密碼&#8230;</string>
 </resources>
