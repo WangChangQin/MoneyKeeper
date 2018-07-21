@@ -22,7 +22,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
-import android.text.TextUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.ConfigManager
@@ -194,9 +193,19 @@ class BackupActivity : BaseActivity() {
         if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
             return
         }
-        mViewModel.createDir().observe(this, Observer {
+        mViewModel.getList().observe(this, Observer {
             when (it) {
-                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
+                is ApiErrorResponse<DavFileList> -> {
+                    if (it.code == 404) {
+                        mViewModel.createDir().observe(this, Observer {
+                            when (it) {
+                                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
+                            }
+                        })
+                    } else {
+                        ToastUtils.show(it.errorMessage)
+                    }
+                }
             }
         })
     }
@@ -216,12 +225,23 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun backup() {
-        // 创建目录
-        mViewModel.createDir().observe(this, Observer {
+        mViewModel.getList().observe(this, Observer {
             when (it) {
-                is ApiSuccessResponse<ResponseBody> -> backupUpload()
-                is ApiEmptyResponse<ResponseBody> -> backupUpload()
-                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
+                is ApiEmptyResponse<DavFileList> -> backupUpload()
+                is ApiSuccessResponse<DavFileList> -> backupUpload()
+                is ApiErrorResponse<DavFileList> -> {
+                    if (it.code == 404) {
+                        mViewModel.createDir().observe(this, Observer {
+                            when (it) {
+                                is ApiSuccessResponse<ResponseBody> -> backupUpload()
+                                is ApiEmptyResponse<ResponseBody> -> backupUpload()
+                                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
+                            }
+                        })
+                    } else {
+                        ToastUtils.show(it.errorMessage)
+                    }
+                }
             }
         })
     }
@@ -243,9 +263,11 @@ class BackupActivity : BaseActivity() {
             when (it) {
                 is ApiSuccessResponse<DavFileList> -> {
                     for (bean in it.body.list) {
-                        if (TextUtils.equals(bean.displayName, BackupViewModel.BACKUP_FILE_NAME)) {
+                        if (bean.href.contains(BackupViewModel.BACKUP_FILE_NAME)) {
                             ToastUtils.show(R.string.toast_backup_success)
                             break
+                        } else {
+                            ToastUtils.show(R.string.toast_backup_fail)
                         }
                     }
                 }
