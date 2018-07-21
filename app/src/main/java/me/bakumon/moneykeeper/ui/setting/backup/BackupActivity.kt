@@ -116,16 +116,26 @@ class BackupActivity : BaseActivity() {
                 .input("", ConfigManager.webDavUrl,
                         { _, input ->
                             val url = input.toString().trim()
-                            if (HttpUrl.parse(url) == null) {
-                                ToastUtils.show(R.string.text_url_illegal)
-                            } else {
-                                ConfigManager.setWevDavUrl(url)
-                                mAdapter.data[position].t.content = ConfigManager.webDavUrl
-                                mBinding.rvSetting.itemAnimator.changeDuration = 250
-                                mAdapter.notifyItemChanged(position)
-                                initDir()
+                            when {
+                                url.isEmpty() -> {
+                                    updateUrlItem(url, position)
+                                }
+                                HttpUrl.parse(url) == null -> ToastUtils.show(R.string.text_url_illegal)
+                                else -> {
+                                    updateUrlItem(url, position)
+                                    // 更新网络配置
+                                    Network.updateDavServiceConfig()
+                                    initDir()
+                                }
                             }
                         }).show()
+    }
+
+    private fun updateUrlItem(url: String, position: Int) {
+        ConfigManager.setWevDavUrl(url)
+        mAdapter.data[position].t.content = ConfigManager.webDavUrl
+        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun setAccount(position: Int) {
@@ -140,6 +150,8 @@ class BackupActivity : BaseActivity() {
                             mAdapter.data[position].t.content = ConfigManager.webDavAccount
                             mBinding.rvSetting.itemAnimator.changeDuration = 250
                             mAdapter.notifyItemChanged(position)
+                            // 更新网络配置
+                            Network.updateDavServiceConfig()
                             initDir()
                         }).show()
     }
@@ -167,6 +179,8 @@ class BackupActivity : BaseActivity() {
         mAdapter.data[position].t.content = getItemDisplayPsw()
         mBinding.rvSetting.itemAnimator.changeDuration = 0
         mAdapter.notifyItemChanged(position)
+        // 更新网络配置
+        Network.updateDavServiceConfig()
         initDir()
         mViewModel.savePsw(input).observe(this, Observer {
             isSaving = false
@@ -177,8 +191,6 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun initDir() {
-        // 更新网络配置
-        Network.updateDavServiceConfig()
         if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
             return
         }
@@ -190,6 +202,10 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun showBackupDialog() {
+        if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
+            ToastUtils.show(R.string.text_config_webdav)
+            return
+        }
         MaterialDialog.Builder(this)
                 .title(R.string.text_go_backup)
                 .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
@@ -239,6 +255,10 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun showRestoreDialog() {
+        if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
+            ToastUtils.show(R.string.text_config_webdav)
+            return
+        }
         MaterialDialog.Builder(this)
                 .title(R.string.text_restore)
                 .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
