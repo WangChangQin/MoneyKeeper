@@ -41,6 +41,7 @@ import me.bakumon.moneykeeper.ui.setting.SettingSectionEntity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
+import okhttp3.HttpUrl
 import okhttp3.ResponseBody
 import java.util.*
 
@@ -114,11 +115,16 @@ class BackupActivity : BaseActivity() {
                 .negativeText(R.string.text_cancel)
                 .input("", ConfigManager.webDavUrl,
                         { _, input ->
-                            ConfigManager.setWevDavUrl(input.toString().trim())
-                            mAdapter.data[position].t.content = ConfigManager.webDavUrl
-                            mBinding.rvSetting.itemAnimator.changeDuration = 250
-                            mAdapter.notifyItemChanged(position)
-                            initDir()
+                            val url = input.toString().trim()
+                            if (HttpUrl.parse(url) == null) {
+                                ToastUtils.show(R.string.text_url_illegal)
+                            } else {
+                                ConfigManager.setWevDavUrl(url)
+                                mAdapter.data[position].t.content = ConfigManager.webDavUrl
+                                mBinding.rvSetting.itemAnimator.changeDuration = 250
+                                mAdapter.notifyItemChanged(position)
+                                initDir()
+                            }
                         }).show()
     }
 
