@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.api
 
+import android.util.Log
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import retrofit2.Response
@@ -49,6 +50,7 @@ sealed class ApiResponse<T> {
                 if (response.code() == 401) {
                     msg += App.instance.resources.getString(R.string.text_tip_auth_fail)
                 }
+                Log.e("ApiResponse", msg)
                 ApiErrorResponse(response.code(), msg)
             }
         }

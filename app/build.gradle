@@ -198,7 +198,7 @@ dependencies {
     implementation deps.rxandroid
     // retrofit2
     implementation deps.retrofit2.retrofit
-    implementation deps.retrofit2.converter_simplexml
+    // okhttp 日志拦截器
     implementation deps.okhttp3.logging
     // base adapter
     implementation deps.BRVAH

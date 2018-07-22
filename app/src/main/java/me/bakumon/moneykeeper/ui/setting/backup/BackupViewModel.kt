@@ -28,7 +28,6 @@ import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.api.ApiResponse
-import me.bakumon.moneykeeper.api.DavFileList
 import me.bakumon.moneykeeper.api.Network
 import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.base.EmptyResource
@@ -79,8 +78,7 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         return Network.davService().createDir(BACKUP_DIR)
     }
 
-
-    fun getList(): LiveData<ApiResponse<DavFileList>> {
+    fun getList(): LiveData<ApiResponse<ResponseBody>> {
         return Network.davService().list(BACKUP_DIR)
     }
 

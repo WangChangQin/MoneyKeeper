@@ -98,8 +98,6 @@ deps.rxandroid = "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
 def retrofit2 = [:]
 retrofit2.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit2"
 retrofit2.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit2"
-retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit2"
-retrofit2.converter_simplexml = "com.squareup.retrofit2:converter-simplexml:$versions.retrofit2"
 deps.retrofit2 = retrofit2
 
 def okhttp3 = [:]

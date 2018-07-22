@@ -32,7 +32,7 @@ interface DavService {
     fun createDir(@Url url: String): LiveData<ApiResponse<ResponseBody>>
 
     @HTTP(method = "PROPFIND")
-    fun list(@Url url: String): LiveData<ApiResponse<DavFileList>>
+    fun list(@Url url: String): LiveData<ApiResponse<ResponseBody>>
 
     @Streaming
     @GET

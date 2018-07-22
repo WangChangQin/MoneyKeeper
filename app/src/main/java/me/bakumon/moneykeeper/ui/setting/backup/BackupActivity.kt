@@ -28,7 +28,10 @@ import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.api.*
+import me.bakumon.moneykeeper.api.ApiEmptyResponse
+import me.bakumon.moneykeeper.api.ApiErrorResponse
+import me.bakumon.moneykeeper.api.ApiSuccessResponse
+import me.bakumon.moneykeeper.api.Network
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
@@ -195,7 +198,7 @@ class BackupActivity : BaseActivity() {
         }
         mViewModel.getList().observe(this, Observer {
             when (it) {
-                is ApiErrorResponse<DavFileList> -> {
+                is ApiErrorResponse<ResponseBody> -> {
                     if (it.code == 404) {
                         mViewModel.createDir().observe(this, Observer {
                             when (it) {
@@ -227,9 +230,9 @@ class BackupActivity : BaseActivity() {
     private fun backup() {
         mViewModel.getList().observe(this, Observer {
             when (it) {
-                is ApiEmptyResponse<DavFileList> -> backupUpload()
-                is ApiSuccessResponse<DavFileList> -> backupUpload()
-                is ApiErrorResponse<DavFileList> -> {
+                is ApiEmptyResponse<ResponseBody> -> backupUpload()
+                is ApiSuccessResponse<ResponseBody> -> backupUpload()
+                is ApiErrorResponse<ResponseBody> -> {
                     if (it.code == 404) {
                         mViewModel.createDir().observe(this, Observer {
                             when (it) {
@@ -250,28 +253,9 @@ class BackupActivity : BaseActivity() {
         // 上传文件
         mViewModel.backup().observe(this, Observer {
             when (it) {
-                is ApiSuccessResponse<ResponseBody> -> checkUpload()
-                is ApiEmptyResponse<ResponseBody> -> checkUpload()
+                is ApiSuccessResponse<ResponseBody> -> ToastUtils.show(R.string.toast_backup_success)
+                is ApiEmptyResponse<ResponseBody> -> ToastUtils.show(R.string.toast_backup_success)
                 is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
-            }
-        })
-    }
-
-    private fun checkUpload() {
-        // 检测上传是否真的成功
-        mViewModel.getList().observe(this, Observer {
-            when (it) {
-                is ApiSuccessResponse<DavFileList> -> {
-                    for (bean in it.body.list) {
-                        if (bean.href.contains(BackupViewModel.BACKUP_FILE_NAME)) {
-                            ToastUtils.show(R.string.toast_backup_success)
-                            break
-                        } else {
-                            ToastUtils.show(R.string.toast_backup_fail)
-                        }
-                    }
-                }
-                is ApiErrorResponse<DavFileList> -> ToastUtils.show(it.errorMessage)
             }
         })
     }
