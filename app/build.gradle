@@ -1,5 +1,6 @@
 apply plugin: 'cipher.so'
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'AndResGuard'
@@ -36,8 +37,8 @@ android {
         applicationId "me.bakumon.moneykeeper"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 11
-        versionName "1.6.1"
+        versionCode 12
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // 指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -117,6 +118,8 @@ andResGuard {
     keepRoot = false
 
     whiteList = [
+            // fabric
+            "me.bakumon.moneykeeper.R.string.com.crashlytics.*",
             // your icon
             "R.mipmap.type_item_default",
             "R.mipmap.type_item_setting",
@@ -227,4 +230,5 @@ dependencies {
     implementation deps.process_phoenix
     // okhttp 支持 digest 认证
     implementation deps.okhttp_digest
+    implementation deps.fabric_crashlytics, { transitive = true }
 }
