@@ -51,6 +51,9 @@
 # 保留Annotation不混淆
 -keepattributes *Annotation*,InnerClasses
 
+# 保留自定义异常类
+-keep public class * extends java.lang.Exception
+
 # 避免混淆泛型
 -keepattributes Signature
 
@@ -219,3 +222,7 @@
 
 # OkIO
 -dontwarn okio.**
+
+# fabric crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
