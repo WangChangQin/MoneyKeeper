@@ -27,6 +27,12 @@ object OpenSourceListCreator {
             list.add(OpenSourceBean("RxAndroid - ReactiveX",
                     "https://github.com/ReactiveX/rxAndroid",
                     "Apache Software License 2.0"))
+            list.add(OpenSourceBean("retrofit - square",
+                    "https://github.com/square/retrofit",
+                    "Apache Software License 2.0"))
+            list.add(OpenSourceBean("okhttp - square",
+                    "https://github.com/square/okhttp",
+                    "Apache Software License 2.0"))
             list.add(OpenSourceBean("leakcanary - square",
                     "https://github.com/square/leakcanary",
                     "Apache Software License 2.0"))
@@ -41,7 +47,7 @@ object OpenSourceListCreator {
                     "Apache Software License 2.0"))
             list.add(OpenSourceBean("StatusLayoutManager - Bakumon",
                     "https://github.com/Bakumon/StatusLayoutManager",
-                    "MIT License"))
+                    "The MIT License"))
             list.add(OpenSourceBean("easypermissions - googlesamples",
                     "https://github.com/googlesamples/easypermissions",
                     "Apache Software License 2.0"))
@@ -65,6 +71,21 @@ object OpenSourceListCreator {
                     "Apache Software License 2.0"))
             list.add(OpenSourceBean("CircleImageView - hdodenhof",
                     "https://github.com/hdodenhof/CircleImageView",
+                    "Apache Software License 2.0"))
+            list.add(OpenSourceBean("material-dialogs - afollestad",
+                    "https://github.com/afollestad/material-dialogs",
+                    "The MIT License"))
+            list.add(OpenSourceBean("java-aes-crypto - tozny",
+                    "https://github.com/tozny/java-aes-crypto",
+                    "The MIT License"))
+            list.add(OpenSourceBean("ProcessPhoenix - JakeWharton",
+                    "https://github.com/JakeWharton/ProcessPhoenix",
+                    "Apache Software License 2.0"))
+            list.add(OpenSourceBean("okhttp-digest - rburgst",
+                    "https://github.com/rburgst/okhttp-digest",
+                    "Apache Software License 2.0"))
+            list.add(OpenSourceBean("Cipher.so - MEiDIK",
+                    "https://github.com/MEiDIK/Cipher.so",
                     "Apache Software License 2.0"))
             return list
         }
