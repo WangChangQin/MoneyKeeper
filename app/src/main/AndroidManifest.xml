@@ -34,15 +34,16 @@
             android:name="io.fabric.ApiKey"
             android:value="78cc0e1b5afde4c17c153efa4cf5bcb10265d7e1" />
 
-        <activity
-            android:name=".ui.LauncherActivity"
-            android:theme="@style/AppTheme.Translucent">
+        <activity-alias
+            android:name=".LauncherActivity"
+            android:targetActivity=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false"

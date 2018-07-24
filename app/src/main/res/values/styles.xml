@@ -24,14 +24,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondary">@color/colorTextWhite3</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="AppTheme.Translucent">
-        <!-- 避免启动白屏，打开的一瞬间 activity 透明 -->
-        <!-- 一下两个设置缺一不可 -->
-        <!-- Note:activity 不能用这个属性，android:screenOrientation="portrait" ，否则8。0以上设置会奔溃-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/colorPrimaryFA</item>
     </style>
 
     <!-- 键盘 -->

@@ -25,6 +25,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
+import io.fabric.sdk.android.Fabric
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
@@ -74,7 +77,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         if (ConfigManager.isFast) {
             Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
         }
-
+        Fabric.with(this, Crashlytics(), Answers())
         getOldPsw()
     }
 
