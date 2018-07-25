@@ -110,6 +110,14 @@ class BillFragment : BaseFragment() {
         xAxis.setDrawGridLines(false)
         xAxis.textColor = resources.getColor(R.color.colorTextGray)
         xAxis.labelCount = 5
+        xAxis.setValueFormatter { value, _ ->
+            val intValue = value.toInt()
+            if (intValue >= 0) {
+                intValue.toString() + getString(R.string.text_day)
+            } else {
+                ""
+            }
+        }
 
         val mv = BarChartMarkerView(context!!)
         mv.chartView = mBinding.barChart

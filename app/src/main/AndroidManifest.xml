@@ -193,7 +193,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.opensource.OpenSourceActivity"
+            android:name=".ui.opensource.OpenSourceActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -212,7 +212,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.about.AboutActivity"
+            android:name=".ui.about.AboutActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -231,7 +231,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.review.ReviewActivity"
+            android:name=".ui.review.ReviewActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -250,7 +250,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.setting.backup.BackupActivity"
+            android:name=".ui.setting.backup.BackupActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
