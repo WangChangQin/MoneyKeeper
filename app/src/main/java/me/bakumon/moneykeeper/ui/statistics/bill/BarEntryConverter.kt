@@ -18,6 +18,7 @@ package me.bakumon.moneykeeper.ui.statistics.bill
 
 import com.github.mikephil.charting.data.BarEntry
 import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -36,11 +37,14 @@ object BarEntryConverter {
     fun getBarEntryList(count: Int, daySumMoneyBeans: List<DaySumMoneyBean>?): List<BarEntry> {
         val entryList = ArrayList<BarEntry>()
         if (daySumMoneyBeans != null && daySumMoneyBeans.isNotEmpty()) {
+            val max = getMax(daySumMoneyBeans)
             var barEntry: BarEntry
             for (i in 0 until count) {
                 for (j in daySumMoneyBeans.indices) {
                     if (i + 1 == daySumMoneyBeans[j].time.date) {
-                        barEntry = BarEntry((i + 1).toFloat(), daySumMoneyBeans[j].daySumMoney.toFloat())
+                        // 加上最大值的十分之一来调整每个柱形的高度，避免数据差距太大，小数据显示太低
+                        val y = max.divide(BigDecimal(10), 0, BigDecimal.ROUND_HALF_DOWN).add(daySumMoneyBeans[j].daySumMoney)
+                        barEntry = BarEntry((i + 1).toFloat(), y.toFloat())
                         // 这里的 y 由于是 float，所以数值很大的话，还是会出现科学计数法
                         // 为了避免科学计数法显示,marker从data中取值
                         barEntry.data = daySumMoneyBeans[j].daySumMoney
@@ -52,5 +56,16 @@ object BarEntryConverter {
             }
         }
         return entryList
+    }
+
+    private fun getMax(daySumMoneyBeans: List<DaySumMoneyBean>?): BigDecimal {
+        // 找出最大值
+        var max = BigDecimal(0)
+        daySumMoneyBeans?.forEach {
+            if (it.daySumMoney > max) {
+                max = it.daySumMoney
+            }
+        }
+        return max
     }
 }
