@@ -61,9 +61,12 @@ object LineEntryConverter {
         }
         val set1 = LineDataSet(yVals1, App.instance.getString(R.string.text_outlay))
         setupDateSet(set1, true)
+        // 横向贝塞尔平滑
+        set1.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
         val set2 = LineDataSet(yVals2, App.instance.getString(R.string.text_income))
         setupDateSet(set2, false)
+        set2.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
         return LineData(set1, set2)
     }
