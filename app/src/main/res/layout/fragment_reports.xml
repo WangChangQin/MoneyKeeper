@@ -27,7 +27,7 @@
             android:id="@+id/layout_sum_money"
             layout="@layout/layout_sum_money" />
 
-        <com.github.mikephil.charting.charts.PieChart
+        <me.bakumon.moneykeeper.view.mpchartpatch.piechart.MyPieChart
             android:id="@+id/pie_chart"
             android:layout_width="match_parent"
             android:layout_height="180dp"

@@ -109,7 +109,8 @@ class ReportsFragment : BaseFragment() {
         mBinding.pieChart.description.isEnabled = false
         mBinding.pieChart.setNoDataText("")
         mBinding.pieChart.setUsePercentValues(true)
-        mBinding.pieChart.isDrawHoleEnabled = false
+        mBinding.pieChart.isDrawHoleEnabled = true
+        mBinding.pieChart.setHoleColor(Color.TRANSPARENT)
         mBinding.pieChart.isRotationEnabled = false
         mBinding.pieChart.rotationAngle = 20f
 
@@ -159,7 +160,7 @@ class ReportsFragment : BaseFragment() {
 
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter())
-            data.setValueTextSize(10f)
+            data.setValueTextSize(9f)
             data.setValueTextColor(Color.WHITE)
 
             mBinding.pieChart.data = data
