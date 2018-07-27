@@ -42,6 +42,7 @@ object BarEntryConverter {
             for (i in 0 until count) {
                 for (j in daySumMoneyBeans.indices) {
                     if (i + 1 == daySumMoneyBeans[j].time.date) {
+                        // 高度补偿
                         // 加上最大值的十分之一来调整每个柱形的高度，避免数据差距太大，小数据显示太低
                         val y = max.divide(BigDecimal(10), 0, BigDecimal.ROUND_HALF_DOWN).add(daySumMoneyBeans[j].daySumMoney)
                         barEntry = BarEntry((i + 1).toFloat(), y.toFloat())

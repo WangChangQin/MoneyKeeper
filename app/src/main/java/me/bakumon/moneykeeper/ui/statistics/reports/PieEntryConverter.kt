@@ -18,6 +18,7 @@ package me.bakumon.moneykeeper.ui.statistics.reports
 
 import com.github.mikephil.charting.data.PieEntry
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -39,5 +40,16 @@ object PieEntryConverter {
             entryList.add(PieEntry(typeMoney.toInt().toFloat(), typeSumMoneyBeans[i].typeName, typeSumMoneyBeans[i]))
         }
         return entryList
+    }
+
+    fun getMax(typeSumMoneyBeans: List<TypeSumMoneyBean>?): BigDecimal {
+        // 找出最大值
+        var max = BigDecimal(0)
+        typeSumMoneyBeans?.forEach {
+            if (it.typeSumMoney > max) {
+                max = it.typeSumMoney
+            }
+        }
+        return max
     }
 }

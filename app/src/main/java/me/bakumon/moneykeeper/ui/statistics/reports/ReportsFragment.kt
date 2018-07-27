@@ -23,15 +23,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import com.android.databinding.library.baseAdapters.BR
-
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.Injection
@@ -114,6 +111,7 @@ class ReportsFragment : BaseFragment() {
         mBinding.pieChart.setUsePercentValues(true)
         mBinding.pieChart.isDrawHoleEnabled = false
         mBinding.pieChart.isRotationEnabled = false
+        mBinding.pieChart.rotationAngle = 20f
 
         mBinding.pieChart.legend.isEnabled = false
         mBinding.pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -154,18 +152,10 @@ class ReportsFragment : BaseFragment() {
             dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             dataSet.yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             dataSet.valueTextSize = 10f
-            dataSet.isValueLineVariableLength = true
+            dataSet.isValueLineVariableLength = false
             dataSet.valueLineColor = resources.getColor(R.color.colorTextWhite)
 
-            val color: List<Int>
-            if (entries.size % 7 == 0) {
-                color = ColorTemplate.createColors(resources,
-                        intArrayOf(R.color.colorPieChart1, R.color.colorPieChart2, R.color.colorPieChart3, R.color.colorPieChart4, R.color.colorPieChart5, R.color.colorPieChart6, R.color.colorPieChart7))
-            } else {
-                color = ColorTemplate.createColors(resources,
-                        intArrayOf(R.color.colorPieChart1, R.color.colorPieChart2, R.color.colorPieChart3, R.color.colorPieChart4, R.color.colorPieChart5, R.color.colorPieChart6))
-            }
-            dataSet.colors = color
+            dataSet.colors = PieColorsCreator.colors(this.context, entries.size)
 
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter())
@@ -219,6 +209,8 @@ class ReportsFragment : BaseFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ typeSumMoneyBeans ->
                     setChartData(typeSumMoneyBeans)
+                    mAdapter.colors = PieColorsCreator.colors(context!!, typeSumMoneyBeans.size)
+                    mAdapter.maxValue = PieEntryConverter.getMax(typeSumMoneyBeans)
                     mAdapter.setNewData(typeSumMoneyBeans)
                     if (typeSumMoneyBeans.isEmpty()) {
                         mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)

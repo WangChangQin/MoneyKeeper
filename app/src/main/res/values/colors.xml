@@ -32,10 +32,10 @@
     <color name="colorIncome">#02AE7C</color>
 
     <color name="colorPieChart1">#96c6fd</color>
-    <color name="colorPieChart2">#6f54e6</color>
-    <color name="colorPieChart3">#e6a239</color>
+    <color name="colorPieChart2">#e6a239</color>
+    <color name="colorPieChart3">#44cef6</color>
     <color name="colorPieChart4">#86d06d</color>
-    <color name="colorPieChart5">#59B6DC</color>
-    <color name="colorPieChart6">#F9C909</color>
+    <color name="colorPieChart5">#F9C909</color>
+    <color name="colorPieChart6">#59B6DC</color>
     <color name="colorPieChart7">#e1677a</color>
 </resources>
