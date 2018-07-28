@@ -148,11 +148,10 @@ class ReportsFragment : BaseFragment() {
             dataSet = PieDataSet(entries, "")
             dataSet.sliceSpace = 0f
             dataSet.selectionShift = 1.2f
-            dataSet.valueLinePart1Length = 0.3f
-            dataSet.valueLinePart2Length = 1f
+            dataSet.valueLinePart1Length = 0.2f
+            dataSet.valueLinePart2Length = 0.4f
             dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             dataSet.yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
-            dataSet.valueTextSize = 10f
             dataSet.isValueLineVariableLength = false
             dataSet.valueLineColor = resources.getColor(R.color.colorTextWhite)
 
@@ -168,7 +167,7 @@ class ReportsFragment : BaseFragment() {
         // undo all highlights
         mBinding.pieChart.highlightValues(null)
         mBinding.pieChart.invalidate()
-        mBinding.pieChart.animateY(1000)
+        mBinding.pieChart.animateXY(1000, 1000)
     }
 
     /**
