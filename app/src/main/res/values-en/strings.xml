@@ -213,4 +213,11 @@
     <string name="text_saving_psw">Encrypting password saved&#8230;</string>
     <string name="text_url_illegal">WebDAV address is illegal</string>
     <string name="text_config_webdav">Please configure WebDAV first.</string>
+    <string name="text_auto_backup_mode_title">Automatic backup mode</string>
+    <string name="text_auto_backup_mode">Select backup mode</string>
+    <string name="text_auto_backup_fail">Automatic cloud backup failed!</string>
+    <string-array name="text_cloud_auto_backup_mode">
+        <item>Do not automatically backup</item>
+        <item>when opening app</item>
+    </string-array>
 </resources>

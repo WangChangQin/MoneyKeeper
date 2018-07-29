@@ -17,7 +17,6 @@
 package me.bakumon.moneykeeper.ui.setting.backup
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -26,9 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
-import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.api.ApiEmptyResponse
 import me.bakumon.moneykeeper.api.ApiErrorResponse
 import me.bakumon.moneykeeper.api.ApiSuccessResponse
 import me.bakumon.moneykeeper.api.Network
@@ -62,10 +59,10 @@ class BackupActivity : BaseActivity() {
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(BackupViewModel::class.java)
+        mViewModel = getViewModel()
 
         initView()
+        initDir()
     }
 
     private fun initView() {
@@ -83,6 +80,7 @@ class BackupActivity : BaseActivity() {
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_password), getItemDisplayPsw())))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_auto_backup_mode_title), ConfigManager.cloudEnable, getBackupModeStr())))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_webdav_help), Constant.NUTSTORE_HELP_URL)))
 
         mAdapter.setNewData(list)
@@ -102,7 +100,10 @@ class BackupActivity : BaseActivity() {
                 3 -> setPsw(position)
                 4 -> showBackupDialog()
                 5 -> showRestoreDialog()
-                6 -> AndroidUtil.openWeb(this, Constant.NUTSTORE_HELP_URL)
+                6 -> if (ConfigManager.cloudEnable) {
+                    chooseAutoBackupMode(position)
+                }
+                7 -> AndroidUtil.openWeb(this, Constant.NUTSTORE_HELP_URL)
                 else -> {
                 }
             }
@@ -192,22 +193,42 @@ class BackupActivity : BaseActivity() {
         })
     }
 
+    private fun updateBackupEnable(enable: Boolean) {
+        ConfigManager.setCloudEnable(enable)
+        updateCloudBackupItem(6)
+    }
+
     private fun initDir() {
         if (ConfigManager.webDavUrl.isEmpty() || ConfigManager.webDavAccount.isEmpty() || ConfigManager.webDAVPsw.isEmpty()) {
+            updateBackupEnable(false)
             return
         }
         mViewModel.getList().observe(this, Observer {
             when (it) {
                 is ApiErrorResponse<ResponseBody> -> {
                     if (it.code == 404) {
-                        mViewModel.createDir().observe(this, Observer {
-                            when (it) {
-                                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
-                            }
-                        })
+                        createDir()
                     } else {
+                        updateBackupEnable(false)
                         ToastUtils.show(it.errorMessage)
                     }
+                }
+                else -> {
+                    updateBackupEnable(true)
+                }
+            }
+        })
+    }
+
+    private fun createDir() {
+        mViewModel.createDir().observe(this, Observer {
+            when (it) {
+                is ApiErrorResponse<ResponseBody> -> {
+                    updateBackupEnable(false)
+                    ToastUtils.show(it.errorMessage)
+                }
+                else -> {
+                    updateBackupEnable(true)
                 }
             }
         })
@@ -223,41 +244,12 @@ class BackupActivity : BaseActivity() {
                 .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ -> backup() })
+                .onPositive({ _, _ -> cloudBackup(mViewModel) })
                 .show()
     }
 
-    private fun backup() {
-        mViewModel.getList().observe(this, Observer {
-            when (it) {
-                is ApiEmptyResponse<ResponseBody> -> backupUpload()
-                is ApiSuccessResponse<ResponseBody> -> backupUpload()
-                is ApiErrorResponse<ResponseBody> -> {
-                    if (it.code == 404) {
-                        mViewModel.createDir().observe(this, Observer {
-                            when (it) {
-                                is ApiSuccessResponse<ResponseBody> -> backupUpload()
-                                is ApiEmptyResponse<ResponseBody> -> backupUpload()
-                                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
-                            }
-                        })
-                    } else {
-                        ToastUtils.show(it.errorMessage)
-                    }
-                }
-            }
-        })
-    }
-
-    private fun backupUpload() {
-        // 上传文件
-        mViewModel.backup().observe(this, Observer {
-            when (it) {
-                is ApiSuccessResponse<ResponseBody> -> ToastUtils.show(R.string.toast_backup_success)
-                is ApiEmptyResponse<ResponseBody> -> ToastUtils.show(R.string.toast_backup_success)
-                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
-            }
-        })
+    override fun onCloudBackupSuccess() {
+        ToastUtils.show(R.string.toast_backup_success)
     }
 
     private fun showRestoreDialog() {
@@ -327,6 +319,46 @@ class BackupActivity : BaseActivity() {
                     ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
                 })
                 .show()
+    }
+
+    private fun chooseAutoBackupMode(position: Int) {
+        val index = when (ConfigManager.cloudBackupMode) {
+            ConfigManager.MODE_NO -> 0
+            ConfigManager.MODE_LAUNCHER_APP -> 1
+            else -> 0
+        }
+
+        MaterialDialog.Builder(this)
+                .title(R.string.text_auto_backup_mode)
+                .items(R.array.text_cloud_auto_backup_mode)
+                .itemsCallbackSingleChoice(index, { _, _, which, _ ->
+                    when (which) {
+                        0 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_NO)
+                        1 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_LAUNCHER_APP)
+                    }
+                    updateCloudBackupItem(position)
+                    true
+                })
+                .positiveText(R.string.text_affirm)
+                .show()
+    }
+
+    /**
+     * 更新备份模式 item 内容
+     */
+    private fun updateCloudBackupItem(position: Int) {
+        mAdapter.data[position].t.content = getBackupModeStr()
+        mAdapter.data[position].t.isEnable = ConfigManager.cloudEnable
+        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        mAdapter.notifyItemChanged(position)
+    }
+
+    private fun getBackupModeStr(): String {
+        return when (ConfigManager.cloudBackupMode) {
+            ConfigManager.MODE_NO -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[0]
+            ConfigManager.MODE_LAUNCHER_APP -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[1]
+            else -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[3]
+        }
     }
 
     override fun onDestroy() {

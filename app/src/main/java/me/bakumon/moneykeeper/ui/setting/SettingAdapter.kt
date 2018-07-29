@@ -42,6 +42,7 @@ class SettingAdapter(data: List<SettingSectionEntity>?) : BaseSectionQuickAdapte
     override fun convert(helper: BaseViewHolder, item: SettingSectionEntity) {
         helper.setText(R.id.tv_title, item.t.title)
                 .setGone(R.id.tv_title, !TextUtils.isEmpty(item.t.title))
+                .setTextColor(R.id.tv_title, mContext.resources.getColor(if (item.t.isEnable) R.color.colorTextWhite else R.color.colorTextWhite3))
                 .setText(R.id.tv_content, item.t.content)
                 .setGone(R.id.tv_content, !TextUtils.isEmpty(item.t.content))
                 .setGone(R.id.iv_icon, item.t.isShowIcon)

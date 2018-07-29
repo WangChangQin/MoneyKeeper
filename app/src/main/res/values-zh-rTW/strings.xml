@@ -213,4 +213,11 @@
     <string name="text_saving_psw">正在加密保存密碼&#8230;</string>
     <string name="text_url_illegal">WebDAV地址不合法</string>
     <string name="text_config_webdav">請先配置WebDAV</string>
+    <string name="text_auto_backup_mode_title">自動備份模式</string>
+    <string name="text_auto_backup_mode">選擇自動備份模式</string>
+    <string name="text_auto_backup_fail">自動雲備份失敗！</string>
+    <string-array name="text_cloud_auto_backup_mode">
+        <item>不自動備份</item>
+        <item>打開應用時備份</item>
+    </string-array>
 </resources>

@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.ui.home
 
 import android.Manifest
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -31,9 +30,9 @@ import io.fabric.sdk.android.Fabric
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.api.ApiErrorResponse
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
@@ -44,6 +43,7 @@ import me.bakumon.moneykeeper.utill.ShortcutUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.floo.StackCallback
+import okhttp3.ResponseBody
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -66,8 +66,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     override fun onInit(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
+        mViewModel = getViewModel()
 
         initView()
         initData()
@@ -126,10 +125,18 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
             when (it) {
                 is SuccessResource<String> -> {
                     ConfigManager.webDAVPsw = it.body
+                    // 自动云备份
+                    if (ConfigManager.cloudEnable && ConfigManager.cloudBackupMode == ConfigManager.MODE_LAUNCHER_APP) {
+                        cloudBackup(mViewModel)
+                    }
                 }
                 is ErrorResource<String> -> ToastUtils.show(it.errorMessage)
             }
         })
+    }
+
+    override fun onCloudBackupFail(errorResponse: ApiErrorResponse<ResponseBody>) {
+        ToastUtils.show(getString(R.string.text_auto_backup_fail) + errorResponse.errorMessage)
     }
 
     private fun showOperateDialog(record: RecordWithType) {

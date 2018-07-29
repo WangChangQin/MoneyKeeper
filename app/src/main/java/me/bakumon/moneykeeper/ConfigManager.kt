@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper
 
+import android.support.annotation.IntDef
 import android.text.TextUtils
 import me.bakumon.moneykeeper.utill.SPUtils
 import java.math.BigDecimal
@@ -26,6 +27,14 @@ import java.math.BigDecimal
  * @author Bakumon https://bakumon.me
  */
 object ConfigManager {
+
+    @IntDef(MODE_NO, MODE_LAUNCHER_APP)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class CloudBackupMode
+
+    const val MODE_NO = 0L
+    const val MODE_LAUNCHER_APP = 1L
+
     private const val SP_NAME = "config"
     private const val KEY_AUTO_BACKUP = "auto_backup"
     private const val KEY_SUCCESSIVE = "successive"
@@ -36,6 +45,8 @@ object ConfigManager {
     private const val KEY_WEBDAV_URL = "webDav_url"
     private const val KEY_WEBDAV_ACCOUNT = "webDav_account"
     private const val KEY_WEBDAV_ENCRYPT_PSW = "webDav_encrypt_psw"
+    private const val KEY_CLOUD_BACKUP_MODE = "cloud_backup_mode"
+    private const val KEY_CLOUD_ENABLE = "cloud_enable"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -65,6 +76,13 @@ object ConfigManager {
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_WEBDAV_ENCRYPT_PSW, "")
 
     var webDAVPsw = ""
+
+    @CloudBackupMode
+    val cloudBackupMode: Long
+        get() = SPUtils.getInstance(SP_NAME)!!.getLong(KEY_CLOUD_BACKUP_MODE, MODE_NO)
+
+    val cloudEnable: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_CLOUD_ENABLE, false)
 
     /**
      * 自动备份
@@ -147,6 +165,20 @@ object ConfigManager {
      */
     fun setWebDavEncryptPsw(encryptPsw: String): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_WEBDAV_ENCRYPT_PSW, encryptPsw)
+    }
+
+    /**
+     * 云备份模式
+     */
+    fun setCloudBackupMode(@CloudBackupMode cloudBackupMode: Long): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_CLOUD_BACKUP_MODE, cloudBackupMode)
+    }
+
+    /**
+     * 网盘是否可用
+     */
+    fun setCloudEnable(cloudEnable: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_CLOUD_ENABLE, cloudEnable)
     }
 
 }

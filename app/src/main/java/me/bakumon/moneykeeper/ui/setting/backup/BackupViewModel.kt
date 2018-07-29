@@ -32,12 +32,9 @@ import me.bakumon.moneykeeper.api.Network
 import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.Resource
-import me.bakumon.moneykeeper.database.AppDatabase
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.EncryptUtil
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import java.io.File
 
@@ -72,23 +69,6 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 }
         )
         return resultLiveData
-    }
-
-    fun createDir(): LiveData<ApiResponse<ResponseBody>> {
-        return Network.davService().createDir(BACKUP_DIR)
-    }
-
-    fun getList(): LiveData<ApiResponse<ResponseBody>> {
-        return Network.davService().list(BACKUP_DIR)
-    }
-
-    fun backup(): LiveData<ApiResponse<ResponseBody>> {
-        val storage = Storage(App.instance)
-        val path = App.instance.getDatabasePath(AppDatabase.DB_NAME)?.path
-        val file = storage.getFile(path)
-
-        val body = RequestBody.create(MediaType.parse("application/octet-stream"), file)
-        return Network.davService().upload(BACKUP_FILE, body)
     }
 
     fun restore(): LiveData<ApiResponse<ResponseBody>> {

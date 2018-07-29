@@ -35,6 +35,7 @@ class SettingSectionEntity : SectionEntity<SettingSectionEntity.Item> {
         var isShowIcon: Boolean = false
         var isShowSwitch: Boolean = false
         var isConfigOpen: Boolean = false
+        var isEnable: Boolean = true
 
         constructor(content: String) {
             this.title = null
@@ -47,6 +48,15 @@ class SettingSectionEntity : SectionEntity<SettingSectionEntity.Item> {
         constructor(title: String, content: String?) {
             this.title = title
             this.content = content
+            this.isShowIcon = false
+            this.isShowSwitch = false
+            this.isConfigOpen = false
+        }
+
+        constructor(title: String, isEnable: Boolean, content: String?) {
+            this.title = title
+            this.content = content
+            this.isEnable = isEnable
             this.isShowIcon = false
             this.isShowSwitch = false
             this.isConfigOpen = false
