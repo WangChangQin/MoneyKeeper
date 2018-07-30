@@ -181,17 +181,16 @@
     <!-- 关于 -->
     <string name="text_about">關於</string>
     <string name="text_slogan">簡單，純粹的記賬應用</string>
-    <string name="text_about_Introduction">介紹與幫助</string>
-    <string name="text_about_detail" formatted="true">　　为个人提供一款轻量的记账产品。个人开发的应用，开始是自用，后来觉得也许有人也和我一样，喜欢简单、纯粹的记账方式，所以就发布了出来。让大家以轻松的方式来记账，而不是面面俱到，个人记账不必要专业化。\n\n　　没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况，做一些明了的统计，通过清楚的了解钱花在了哪，来建立起良好的消费习惯。\n\n　　开源地址：%1$s \n\n　　查看更多帮助：%2$s</string>
-    <string name="text_share_content" formatted="true">我發現了一個簡單，純粹的記賬應用，點擊鏈接下載 %1$s</string>
+    <string name="text_about_Introduction">介紹</string>
+    <string name="text_about_detail" formatted="true">　　一款輕量級的記賬工具。\n\n　　這是我第一個用心的作品，起源於從小到大的一個「不可思議」（錢到底花在了哪兒），工作以後尤為明顯。於是「那樣記賬」誕生了，目的是讓大家以最簡單、直接的方式來記賬，讓這個「不可思議」不再不可思議，慢慢建立起良好的消費習慣。\n\n　　沒有任何多餘的權限，沒有廣告，沒有用戶系統，不保存用戶任何信息，只是單純的記錄收支情況。\n\n　　「那樣記賬」名稱取自一個人名字「娜」的諧音。\n\n　　更多幫助：%1$s</string>
     <string name="text_dev_designer">設計和開發</string>
     <string name="text_designer">總體設計</string>
     <string name="text_launcher_designer">啟動圖標設計</string>
     <string name="text_developer_designer">開發和部分設計</string>
-    <string name="text_more">更多</string>
+    <string name="text_links">更多</string>
     <string name="text_score">評分</string>
     <string name="text_donate">捐贈作者</string>
-    <string name="text_contact_author" formatted="true">聯繫作者： %1$s</string>
+    <string name="text_contact_author" formatted="true">聯繫作者： %1$s \n\n更多幫助：%2$s \n\n本應用已開源，歡迎貢獻代碼。\n開源地址：%3$s\n\n*本應用遵循《Android綠色應用公約》\n %4$s</string>
     <string name="text_license">開源許可證</string>
     <string name="text_privacy_policy">隱私政策</string>
 

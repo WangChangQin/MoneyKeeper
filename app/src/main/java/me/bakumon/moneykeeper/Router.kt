@@ -36,7 +36,6 @@ object Router {
         const val URL_STATISTICS = "statistics"
         const val URL_TYPE_RECORDS = "type_records"
         const val URL_SETTING = "setting"
-        const val URL_OPEN_SOURCE = "open_source"
         const val URL_ABOUT = "about"
         const val URL_REVIEW = "review"
         const val URL_BACKUP = "backup"

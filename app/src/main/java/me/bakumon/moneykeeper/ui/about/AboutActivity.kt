@@ -18,9 +18,10 @@ package me.bakumon.moneykeeper.ui.about
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v7.app.AppCompatDelegate
 import android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.URLSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -50,8 +51,7 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
         onContributorClickedListener = this
         toolbar.setNavigationOnClickListener { finish() }
 
-        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-        delegate.applyDayNight()
+        delegate.setLocalNightMode(MODE_NIGHT_YES)
     }
 
     @SuppressLint("SetTextI18n")
@@ -63,19 +63,24 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
 
     override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_about_Introduction)))
-        val text = getString(R.string.text_about_detail, Constant.APP_OPEN_SOURCE_URL, Constant.URL_HELP)
-        val spanBuilder = SpannableStringBuilder(text)
+        val summaryText = getString(R.string.text_about_detail, Constant.URL_HELP)
+        val summarySpan = SpannableStringBuilder(summaryText)
                 // 捐赠按钮
                 .append(SpanUtil.getDonateSpannable(this))
-        items.add(Card(spanBuilder))
+        items.add(Card(summarySpan))
 
         items.add(Category(getString(R.string.text_dev_designer)))
         items.add(Contributor(R.mipmap.avatar_markcrs, "Markcrs", getString(R.string.text_designer)))
         items.add(Contributor(R.mipmap.avatar_liangyue, "梁月", getString(R.string.text_launcher_designer)))
         items.add(Contributor(R.mipmap.avatar_bakumon, "Bakumon", getString(R.string.text_developer_designer), Constant.AUTHOR_URL))
 
-        items.add(Category(getString(R.string.text_more)))
-        items.add(Card(getString(R.string.text_contact_author, Constant.AUTHOR_EMAIL)))
+        items.add(Category(getString(R.string.text_links)))
+        val linksText = getString(R.string.text_contact_author,
+                Constant.AUTHOR_EMAIL,
+                Constant.URL_HELP,
+                Constant.APP_OPEN_SOURCE_URL,
+                Constant.URL_GREEN_ANDROID)
+        items.add(Card(linksText))
 
         // Android 应用友链
         RecommendedLoaderDelegate.attach(this, items.size, MoshiJsonConverter())

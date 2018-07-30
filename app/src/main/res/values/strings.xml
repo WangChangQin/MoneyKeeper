@@ -181,17 +181,16 @@
     <!-- 关于 -->
     <string name="text_about">关于</string>
     <string name="text_slogan">简单、纯粹的记账应用</string>
-    <string name="text_about_Introduction">介绍与帮助</string>
-    <string name="text_about_detail" formatted="true">　　为个人提供一款轻量的记账产品。个人开发的应用，开始是自用，后来觉得也许有人也和我一样，喜欢简单、纯粹的记账方式，所以就发布了出来。让大家以轻松的方式来记账，而不是面面俱到，个人记账不必要专业化。\n\n　　没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况，做一些明了的统计，通过清楚的了解钱花在了哪，来建立起良好的消费习惯。\n\n　　开源地址：%1$s \n\n　　查看更多帮助：%2$s</string>
-    <string name="text_share_content" formatted="true">我发现了一个简单、纯粹的记账应用，点击链接下载 %1$s</string>
+    <string name="text_about_Introduction">简介</string>
+    <string name="text_about_detail" formatted="true">　　一款轻量级的记账工具。\n\n　　这是我第一个用心的作品，起源于从小到大的一个「不可思议」（钱到底花在了哪儿），工作以后尤为明显。于是「那样记账」诞生了，目的是让大家以最简单、直接的方式来记账，让这个「不可思议」不再不可思议，慢慢建立起良好的消费习惯。\n\n　　没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况。\n\n　　「那样记账」名称取自一个人名字「娜」的谐音。\n\n　　更多帮助：%1$s</string>
     <string name="text_dev_designer">设计和开发</string>
     <string name="text_designer">总体设计</string>
     <string name="text_launcher_designer">启动图标设计</string>
     <string name="text_developer_designer">开发和部分设计</string>
-    <string name="text_more">更多</string>
+    <string name="text_links">链接</string>
     <string name="text_score">评分</string>
     <string name="text_donate">捐赠作者</string>
-    <string name="text_contact_author" formatted="true">联系作者： %1$s</string>
+    <string name="text_contact_author" formatted="true">联系作者： %1$s \n\n更多帮助：%2$s \n\n本应用已开源，欢迎贡献代码。\n开源地址：%3$s\n\n*本应用遵循《Android绿色应用公约》\n %4$s</string>
     <string name="text_license">开源许可证</string>
     <string name="text_privacy_policy">隐私政策</string>
 
