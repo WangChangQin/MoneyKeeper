@@ -24,7 +24,26 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorSecondary">@color/colorTextWhite3</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
-        <item name="android:windowBackground">@color/colorPrimaryFA</item>
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
+
+        <!-- dialog 不使用暗色主题-->
+        <item name="md_dark_theme">false</item>
+    </style>
+
+    <!-- 覆盖 AboutPage.CardContent 增加行间距 和 email -->
+    <style name="AboutPage.CardContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:autoLink">web|email</item>
+        <item name="android:textColorLink">@color/about_page_link_text_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:textColor">@color/about_page_card_text_color</item>
+    </style>
+
+    <style name="About" parent="AppTheme">
+        <item name="aboutPageNavigationIcon">@drawable/ic_close</item>
     </style>
 
     <!-- 键盘 -->

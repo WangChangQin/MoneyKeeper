@@ -16,12 +16,13 @@
 
 package me.bakumon.moneykeeper.utill
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
-
+import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
 
 /**
@@ -31,17 +32,28 @@ import me.bakumon.moneykeeper.R
  */
 object AndroidUtil {
     /**
-     * 使用系统发送分享数据
-     *
-     * @param context 上下文
-     * @param text    要分享的文本
+     * 去应用市场 app 查看（评分）应用
      */
-    fun share(context: Context, text: String) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, text)
-        sendIntent.type = "text/plain"
-        context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.text_share_to)))
+    fun goMarket(context: Context) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("market://details?id=" + context.packageName)
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            ToastUtils.show(R.string.toast_not_install_market)
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 去支付宝捐赠
+     */
+    fun alipay(activity: Activity) {
+        if (AlipayZeroSdk.hasInstalledAlipayClient(activity)) {
+            AlipayZeroSdk.startAlipayClient(activity, Constant.ALIPAY_CODE)
+        } else {
+            ToastUtils.show(R.string.toast_not_install_alipay)
+        }
     }
 
     /**

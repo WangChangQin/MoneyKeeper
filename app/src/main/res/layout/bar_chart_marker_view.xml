@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorItem"
+        android:background="@color/colorItemBackground"
         android:ellipsize="end"
         android:paddingBottom="2dp"
         android:paddingLeft="5dp"

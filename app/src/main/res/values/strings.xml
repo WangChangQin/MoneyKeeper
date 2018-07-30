@@ -153,7 +153,7 @@
     <string name="text_cloud_backup">云备份</string>
     <string name="text_cloud_backup_title">云盘备份</string>
     <string name="text_cloud_backup_content">WebDAV</string>
-    <string name="text_about_and_help">关于|帮助</string>
+    <string name="text_about_and_more">关于 | 更多</string>
     <string name="text_about_content">了解我们的设计理念</string>
     <string-array name="symbol">
         <item>人民币(¥)</item>
@@ -181,7 +181,8 @@
     <!-- 关于 -->
     <string name="text_about">关于</string>
     <string name="text_slogan">简单、纯粹的记账应用</string>
-    <string name="text_share_to">分享到</string>
+    <string name="text_about_Introduction">介绍与帮助</string>
+    <string name="text_about_detail" formatted="true">　　为个人提供一款轻量的记账产品。个人开发的应用，开始是自用，后来觉得也许有人也和我一样，喜欢简单、纯粹的记账方式，所以就发布了出来。让大家以轻松的方式来记账，而不是面面俱到，个人记账不必要专业化。\n\n　　没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况，做一些明了的统计，通过清楚的了解钱花在了哪，来建立起良好的消费习惯。\n\n　　开源地址：%1$s \n\n　　查看更多帮助：%2$s</string>
     <string name="text_share_content" formatted="true">我发现了一个简单、纯粹的记账应用，点击链接下载 %1$s</string>
     <string name="text_dev_designer">设计和开发</string>
     <string name="text_designer">总体设计</string>
@@ -189,16 +190,10 @@
     <string name="text_developer_designer">开发和部分设计</string>
     <string name="text_more">更多</string>
     <string name="text_score">评分</string>
-    <string name="text_donate">捐赠</string>
-    <string name="text_contact_author">联系作者</string>
-    <string name="text_feedback">反馈：</string>
-    <string name="text_phone_brand">手机品牌：</string>
-    <string name="text_phone_model">手机型号：</string>
-    <string name="text_system_version">系统版本：</string>
-    <string name="text_app_version">应用版本：</string>
+    <string name="text_donate">捐赠作者</string>
+    <string name="text_contact_author" formatted="true">联系作者： %1$s</string>
     <string name="text_license">开源许可证</string>
     <string name="text_privacy_policy">隐私政策</string>
-    <string name="text_help">帮助</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV云盘</string>

@@ -98,9 +98,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         list.add(SettingSectionEntity(getString(R.string.text_cloud_backup)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(true, getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content))))
 
-        list.add(SettingSectionEntity(getString(R.string.text_about_and_help)))
+        list.add(SettingSectionEntity(getString(R.string.text_about_and_more)))
         list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_help))))
+        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_privacy_policy))))
 
         mAdapter.setNewData(list)
         addListener()
@@ -118,7 +118,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 9 -> showRestoreDialog()
                 12 -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
                 14 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                15 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
+                15 -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
                 else -> {
                 }
             }

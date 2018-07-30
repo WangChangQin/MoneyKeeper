@@ -82,14 +82,5 @@
             android:textColor="@color/colorTextWhite"
             tools:ignore="RelativeOverlap"
             tools:text="action" />
-
-        <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
-            android:id="@+id/ibt_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_share"
-            android:visibility="gone" />
-
     </RelativeLayout>
 </layout>

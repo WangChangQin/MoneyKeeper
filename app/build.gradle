@@ -234,4 +234,14 @@ dependencies {
     // okhttp 支持 digest 认证
     implementation deps.okhttp_digest
     implementation deps.fabric_crashlytics, { transitive = true }
+    // about 页面
+    implementation deps.about
+    // Android Links 扩展
+    implementation deps.about_extension
+    // 列表多布局
+    implementation deps.multitype
+    // 图片加载
+    implementation deps.picasso
+    // json 解析
+    implementation deps.moshi
 }

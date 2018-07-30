@@ -153,7 +153,7 @@
     <string name="text_cloud_backup">Cloud backup</string>
     <string name="text_cloud_backup_title">Cloud disk backup</string>
     <string name="text_cloud_backup_content">WebDAV</string>
-    <string name="text_about_and_help">About|Help</string>
+    <string name="text_about_and_more">About | More</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
         <item>RMB(¥)</item>
@@ -181,7 +181,8 @@
     <!-- 关于 -->
     <string name="text_about">about</string>
     <string name="text_slogan">Simple, pure accounting application</string>
-    <string name="text_share_to">Share to</string>
+    <string name="text_about_Introduction">Introduction and help</string>
+    <string name="text_about_detail" formatted="true">　　为个人提供一款轻量的记账产品。个人开发的应用，开始是自用，后来觉得也许有人也和我一样，喜欢简单、纯粹的记账方式，所以就发布了出来。让大家以轻松的方式来记账，而不是面面俱到，个人记账不必要专业化。\n\n　　没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况，做一些明了的统计，通过清楚的了解钱花在了哪，来建立起良好的消费习惯。\n\n　　开源地址：%1$s \n\n　　查看更多帮助：%2$s</string>
     <string name="text_share_content" formatted="true">I found a simple, pure billing application, click on the link to download %1$s</string>
     <string name="text_dev_designer">Developer &amp; Designer</string>
     <string name="text_designer">Designer</string>
@@ -190,15 +191,9 @@
     <string name="text_more">more</string>
     <string name="text_score">score</string>
     <string name="text_donate">Donate</string>
-    <string name="text_contact_author">Contact author</string>
-    <string name="text_feedback">Feedback:</string>
-    <string name="text_phone_brand">phone brand:</string>
-    <string name="text_phone_model">Phone model:</string>
-    <string name="text_system_version">System version:</string>
-    <string name="text_app_version">App version:</string>
+    <string name="text_contact_author" formatted="true">Contact author： %1$s</string>
     <string name="text_license">Open source license</string>
     <string name="text_privacy_policy">Privacy Policy</string>
-    <string name="text_help">help</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV</string>
