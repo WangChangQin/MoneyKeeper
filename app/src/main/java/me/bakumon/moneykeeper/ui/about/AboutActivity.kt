@@ -18,10 +18,8 @@ package me.bakumon.moneykeeper.ui.about
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES
+import android.support.v7.app.AppCompatDelegate
 import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.URLSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -51,7 +49,8 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
         onContributorClickedListener = this
         toolbar.setNavigationOnClickListener { finish() }
 
-        delegate.setLocalNightMode(MODE_NIGHT_YES)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        delegate.applyDayNight()
     }
 
     @SuppressLint("SetTextI18n")
