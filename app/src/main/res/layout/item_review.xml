@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{reviewItemBean.month + @string/text_month}"
-                android:textColor="@color/colorTextWhite2"
+                android:textColor="@color/colorText2"
                 android:textSize="16sp"
                 tools:text="7月" />
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="@{reviewItemBean.year + @string/text_year}"
-                android:textColor="@color/colorTextWhite3"
+                android:textColor="@color/colorText3"
                 android:textSize="14sp"
                 tools:text="2018年" />
 
@@ -71,7 +71,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="13dp"
             android:layout_marginTop="13dp"
-            android:background="@color/colorTextWhite" />
+            android:background="@color/colorText" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_outlay"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
             <TextView
@@ -109,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_income"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
             <TextView
@@ -134,14 +134,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_overage"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/colorTextGray"
+                android:textColor="@color/colorTextHint"
                 android:textSize="14sp"
                 app:text_money_with_prefix="@{reviewItemBean.overage}"
                 tools:text="¥28989" />

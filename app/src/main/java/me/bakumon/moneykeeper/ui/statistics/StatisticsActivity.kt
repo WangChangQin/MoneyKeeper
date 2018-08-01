@@ -17,8 +17,8 @@
 package me.bakumon.moneykeeper.ui.statistics
 
 import android.os.Bundle
-import android.view.View
-
+import android.view.Menu
+import android.view.MenuItem
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.BaseActivity
@@ -50,17 +50,31 @@ class StatisticsActivity : BaseActivity() {
     }
 
     private fun initView() {
-        val title = DateUtils.getCurrentYearMonth()
-        mBinding.titleBar?.title = title
-        mBinding.titleBar?.tvRight?.text = getString(R.string.text_review)
-        mBinding.titleBar?.tvRight?.setOnClickListener { Floo.navigation(this, Router.Url.URL_REVIEW).start() }
-        mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
-        mBinding.titleBar?.llTitle?.setOnClickListener { chooseMonth() }
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
+        mBinding.toolbarLayout?.title = DateUtils.getCurrentYearMonth()
+        mBinding.toolbarLayout?.tvTitle?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+        mBinding.toolbarLayout?.tvTitle?.compoundDrawablePadding = 10
+        mBinding.toolbarLayout?.tvTitle?.setOnClickListener { chooseMonth() }
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         mBinding.typeChoice?.rbOutlay?.setText(R.string.text_order)
         mBinding.typeChoice?.rbIncome?.setText(R.string.text_reports)
 
         setUpFragment()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_statistics, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_review -> Floo.navigation(this, Router.Url.URL_REVIEW).start()
+            android.R.id.home -> finish()
+        }
+        return true
     }
 
     private fun setUpFragment() {
@@ -83,15 +97,15 @@ class StatisticsActivity : BaseActivity() {
     }
 
     private fun chooseMonth() {
-        mBinding.titleBar?.llTitle?.isEnabled = false
+        mBinding.toolbarLayout?.tvTitle?.isEnabled = false
         val chooseMonthDialog = ChooseMonthDialog(this, mCurrentYear, mCurrentMonth)
         chooseMonthDialog.mOnDismissListener = {
-            mBinding.titleBar?.llTitle?.isEnabled = true
+            mBinding.toolbarLayout?.tvTitle?.isEnabled = true
         }
         chooseMonthDialog.mOnChooseListener = { year, month ->
             mCurrentYear = year
             mCurrentMonth = month
-            mBinding.titleBar?.title = DateUtils.getYearMonthFormatString(year, month)
+            mBinding.toolbarLayout?.title = DateUtils.getYearMonthFormatString(year, month)
             mBillFragment.setYearMonth(year, month)
             mReportsFragment.setYearMonth(year, month)
         }

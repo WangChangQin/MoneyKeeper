@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{recordWithType.mRecordTypes.get(0).name}"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp"
                 tools:text="餐饮" />
 
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/colorTextGray"
+                android:textColor="@color/colorTextHint"
                 android:textSize="14sp"
                 app:text_check_null="@{recordWithType.remark}"
                 tools:text="请客吃早点" />
@@ -86,7 +86,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorTextWhite"
+                    android:textColor="@color/colorText"
                     android:textSize="16sp"
                     app:text_plus_subtract="@{recordWithType.mRecordTypes.get(0).type}"
                     tools:text="-" />
@@ -94,7 +94,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorTextWhite"
+                    android:textColor="@color/colorText"
                     android:textSize="16sp"
                     app:text_money="@{recordWithType.money}"
                     tools:text="43" />
@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{DateUtils.INSTANCE.date2MonthDay(recordWithType.time)}"
-                android:textColor="@color/colorTextGray"
+                android:textColor="@color/colorTextHint"
                 tools:text="4月11日" />
         </LinearLayout>
     </LinearLayout>

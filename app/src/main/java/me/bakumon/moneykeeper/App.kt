@@ -17,7 +17,6 @@
 package me.bakumon.moneykeeper
 
 import android.app.Application
-import android.support.v7.app.AppCompatDelegate
 import com.squareup.leakcanary.LeakCanary
 import me.drakeet.floo.Floo
 import me.drakeet.floo.Target
@@ -32,7 +31,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         instance = this
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.

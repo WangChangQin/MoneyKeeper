@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,8 +29,8 @@
             android:inputType="number"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/colorTextWhite"
-            android:textColorHint="@color/colorTextGray"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorTextHint"
             android:textSize="36sp" />
 
         <LinearLayout
@@ -158,7 +157,8 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_input_delete" />
+                        android:src="@drawable/ic_input_delete"
+                        android:tint="@color/colorIcon" />
                 </LinearLayout>
 
                 <TextView

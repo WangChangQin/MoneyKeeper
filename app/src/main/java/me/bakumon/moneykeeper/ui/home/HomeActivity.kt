@@ -22,6 +22,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
@@ -81,6 +83,9 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     }
 
     private fun initView() {
+        mBinding.toolbarHead.title = ""
+        setSupportActionBar(mBinding.toolbarHead)
+
         mBinding.rvHome.layoutManager = LinearLayoutManager(this)
         mAdapter = HomeAdapter(null)
         mBinding.rvHome.adapter = mAdapter
@@ -91,14 +96,17 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         }
     }
 
-    fun settingClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_SETTING)
-                .start()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
-    fun statisticsClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_STATISTICS)
-                .start()
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_statistics -> Floo.navigation(this, Router.Url.URL_STATISTICS).start()
+            android.R.id.home -> Floo.navigation(this, Router.Url.URL_SETTING).start()
+        }
+        return true
     }
 
     fun addRecordClick(view: View) {
@@ -107,7 +115,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     override fun onResume() {
         super.onResume()
-        getCurrentMontySumMonty()
+        getCurrentMoneySumMonty()
         if (ConfigManager.isSuccessive) {
             mBinding.btnAddRecord.setOnLongClickListener {
                 Floo.navigation(this, Router.Url.URL_ADD_RECORD)
@@ -195,7 +203,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 })
     }
 
-    private fun getCurrentMontySumMonty() {
+    private fun getCurrentMoneySumMonty() {
         mDisposable.add(mViewModel.currentMonthSumMoney
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

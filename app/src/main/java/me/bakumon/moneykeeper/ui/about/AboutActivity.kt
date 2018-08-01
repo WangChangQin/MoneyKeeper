@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.ui.about
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v7.app.AppCompatDelegate
 import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +28,7 @@ import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.StatusBarUtil
 import me.drakeet.multitype.Items
 import me.drakeet.support.about.*
 import me.drakeet.support.about.extension.RecommendedLoaderDelegate
@@ -44,13 +44,20 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setImmersiveStatus()
         setImageLoader(PicassoImageLoader())
         onRecommendedClickedListener = this
         onContributorClickedListener = this
         toolbar.setNavigationOnClickListener { finish() }
+    }
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        delegate.applyDayNight()
+    /**
+     * 设置沉浸式状态栏
+     */
+    private fun setImmersiveStatus() {
+        val view = toolbar
+        StatusBarUtil.immersive(this)
+        StatusBarUtil.setPaddingSmart(this, view)
     }
 
     @SuppressLint("SetTextI18n")
@@ -97,7 +104,7 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.about_menu, menu)
+        menuInflater.inflate(R.menu.menu_about, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

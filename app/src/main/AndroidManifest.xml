@@ -68,6 +68,7 @@
             android:name=".ui.add.AddRecordActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
@@ -141,6 +142,7 @@
             android:name=".ui.statistics.StatisticsActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -160,6 +162,7 @@
             android:name=".ui.typerecords.TypeRecordsActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.statistics.StatisticsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -179,6 +182,7 @@
             android:name=".ui.setting.SettingActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -237,6 +241,7 @@
             android:name=".ui.setting.backup.BackupActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.setting.SettingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">

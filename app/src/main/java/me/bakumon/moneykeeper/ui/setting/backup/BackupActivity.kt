@@ -66,8 +66,10 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun initView() {
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_cloud_backup)
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        mBinding.toolbarLayout?.title = getString(R.string.text_cloud_backup)
 
         mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
         mAdapter = SettingAdapter(null)

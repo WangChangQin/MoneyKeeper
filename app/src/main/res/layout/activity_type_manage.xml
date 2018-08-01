@@ -24,17 +24,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- TODO 这里的背景需要优化 -->
-        <!-- 目前为了配合 about-page 的夜间模式 -->
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWindowBackground"
+            android:background="@android:color/transparent"
             app:elevation="0dp">
 
             <include
-                android:id="@+id/title_bar"
-                layout="@layout/layout_title_bar" />
+                android:id="@+id/toolbar_layout"
+                layout="@layout/layout_toolbar" />
 
             <include
                 android:id="@+id/type_choice"

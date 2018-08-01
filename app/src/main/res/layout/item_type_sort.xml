@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@{recordType.name}"
-            android:textColor="@color/colorTextWhite"
+            android:textColor="@color/colorText"
             tools:text="餐饮" />
     </LinearLayout>
 </layout>

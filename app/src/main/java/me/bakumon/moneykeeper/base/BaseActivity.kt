@@ -189,6 +189,7 @@ abstract class BaseActivity : AppCompatActivity() {
         return layoutInflater.inflate(resource, null, false)
     }
 
+    @Suppress("DEPRECATION")
     override fun getResources(): Resources {
         // 固定字体大小，不随系统字体大小改变
         val res = super.getResources()

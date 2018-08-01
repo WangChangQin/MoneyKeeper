@@ -38,43 +38,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_gradient"
-            android:paddingBottom="10dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="10dp">
 
-            <LinearLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_head"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp">
-
-                <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_setting"
-                    android:onClick="settingClick" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal" />
-
-                <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_statistics"
-                    android:onClick="statisticsClick" />
-
-            </LinearLayout>
+                android:layout_height="?attr/actionBarSize"
+                app:navigationContentDescription="@string/text_setting"
+                app:navigationIcon="@drawable/ic_setting" />
 
             <me.bakumon.moneykeeper.ui.home.HeadPageView
                 android:id="@+id/head_page_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 app:sumMoneyBeanList="@{sumMoneyBeanList}"
                 tools:layout_height="150dp" />
 

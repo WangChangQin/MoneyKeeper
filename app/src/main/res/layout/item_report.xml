@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{typeSumMoney.typeName}"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp"
                 tools:text="餐饮" />
 
@@ -95,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorText"
                 android:textSize="16sp"
                 app:text_money_with_prefix="@{typeSumMoney.typeSumMoney}"
                 tools:text="¥12312" />
@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text='@{typeSumMoney.count+@string/text_unit_account}'
-                android:textColor="@color/colorTextGray"
+                android:textColor="@color/colorTextHint"
                 android:textSize="16sp"
                 tools:text="43笔" />
         </LinearLayout>

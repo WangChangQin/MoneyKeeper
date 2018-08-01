@@ -49,7 +49,7 @@ object SpanUtil {
         val start = 0
         val end = text.length
         val span = SpannableString(text)
-        span.setSpan(ForegroundColorSpan(App.instance.resources.getColor(R.color.colorTextWhite)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        span.setSpan(ForegroundColorSpan(App.instance.resources.getColor(R.color.colorText)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         span.setSpan(RadiusBackgroundSpan(App.instance.resources.getColor(R.color.colorDonate), 10, 20), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         span.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         span.setSpan(object : ClickableSpan() {

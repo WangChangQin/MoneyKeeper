@@ -17,7 +17,6 @@
 package me.bakumon.moneykeeper.ui.typerecords
 
 import android.os.Bundle
-
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.BaseActivity
@@ -48,15 +47,16 @@ class TypeRecordsActivity : BaseActivity() {
     }
 
     private fun initView() {
-        if (intent != null) {
-            mBinding.titleBar?.title = intent.getStringExtra(Router.ExtraKey.KEY_TYPE_NAME)
-            mRecordType = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE, 0)
-            mRecordTypeId = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE_ID, 0)
-            mYear = intent.getIntExtra(Router.ExtraKey.KEY_YEAR, 0)
-            mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
-        }
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
+        mBinding.toolbarLayout?.title = intent.getStringExtra(Router.ExtraKey.KEY_TYPE_NAME)
+        mRecordType = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE, 0)
+        mRecordTypeId = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE_ID, 0)
+        mYear = intent.getIntExtra(Router.ExtraKey.KEY_YEAR, 0)
+        mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
+
         mBinding.typeChoice?.rbOutlay?.setText(R.string.text_sort_time)
         mBinding.typeChoice?.rbIncome?.setText(R.string.text_sort_money)
 

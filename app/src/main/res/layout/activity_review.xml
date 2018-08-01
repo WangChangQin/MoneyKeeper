@@ -36,8 +36,8 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/title_bar"
-            layout="@layout/layout_title_bar" />
+            android:id="@+id/toolbar_layout"
+            layout="@layout/layout_toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,8 +45,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            tools:background="@color/colorPrimary">
+            android:paddingStart="15dp">
 
             <TextView
                 android:id="@+id/tv_outlay"
@@ -54,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/bg_dot_red"
-                android:textColor="@color/colorTextWhite2"
+                android:textColor="@color/colorText2"
                 app:text_statistics_outlay="@{sumMoneyBeanList}"
                 tools:text="支出 ¥3580" />
 
@@ -65,7 +64,7 @@
                 android:layout_marginStart="15dp"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/bg_dot_green"
-                android:textColor="@color/colorTextWhite2"
+                android:textColor="@color/colorText2"
                 app:text_statistics_income="@{sumMoneyBeanList}"
                 tools:text="收入 ¥9827" />
 
@@ -74,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:textColor="@color/colorTextWhite3"
+                android:textColor="@color/colorText3"
                 app:text_statistics_overage="@{sumMoneyBeanList}"
                 tools:text="结余 ¥3498.89" />
         </LinearLayout>

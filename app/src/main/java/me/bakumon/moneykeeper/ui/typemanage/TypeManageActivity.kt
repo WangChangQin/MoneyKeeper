@@ -20,6 +20,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,14 +66,11 @@ class TypeManageActivity : BaseActivity() {
 
     private fun initView() {
         mCurrentType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
-        mBinding.titleBar?.tvRight?.text = getString(R.string.text_sort)
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_type_manage)
-        mBinding.titleBar?.tvRight?.setOnClickListener {
-            Floo.navigation(this, Router.Url.URL_TYPE_SORT)
-                    .putExtra(Router.ExtraKey.KEY_TYPE, mCurrentType)
-                    .start()
-        }
+
+        mBinding.toolbarLayout?.title = getString(R.string.text_type_manage)
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         mBinding.rvType.layoutManager = LinearLayoutManager(this)
         mAdapter = TypeManageAdapter(null)
@@ -96,10 +95,24 @@ class TypeManageActivity : BaseActivity() {
         mBinding.typeChoice?.rgType?.setOnCheckedChangeListener { _, checkedId ->
             mCurrentType = if (checkedId == R.id.rb_outlay) RecordType.TYPE_OUTLAY else RecordType.TYPE_INCOME
             mAdapter.setNewData(mRecordTypes, mCurrentType)
-            val visibility = if (mAdapter.data.size > 1) View.VISIBLE else View.INVISIBLE
-            mBinding.titleBar?.tvRight?.visibility = visibility
         }
 
+    }
+
+    // TODO 少于一个时，隐藏排序 action
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_type_manage, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_sort -> Floo.navigation(this, Router.Url.URL_TYPE_SORT)
+                    .putExtra(Router.ExtraKey.KEY_TYPE, mCurrentType)
+                    .start()
+            android.R.id.home -> finish()
+        }
+        return true
     }
 
     private fun showDeleteDialog(recordType: RecordType) {

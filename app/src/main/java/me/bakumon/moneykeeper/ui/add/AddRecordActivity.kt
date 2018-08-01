@@ -77,11 +77,12 @@ class AddRecordActivity : BaseActivity() {
     }
 
     private fun initView() {
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         mRecord = intent.getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
         mIsSuccessive = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false)
-
-        mBinding.titleBar?.ibtClose?.setBackgroundResource(R.drawable.ic_close)
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
 
         mBinding.edtRemark.setOnEditorActionListener { _, _, _ ->
             SoftInputUtils.hideSoftInput(mBinding.typePageOutlay)
@@ -91,10 +92,10 @@ class AddRecordActivity : BaseActivity() {
 
         if (mRecord == null) {
             mCurrentType = RecordType.TYPE_OUTLAY
-            mBinding.titleBar?.title = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
+            mBinding.toolbarLayout?.title = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
         } else {
             mCurrentType = mRecord!!.mRecordTypes!![0].type
-            mBinding.titleBar?.title = getString(R.string.text_modify_record)
+            mBinding.toolbarLayout?.title = getString(R.string.text_modify_record)
             mBinding.edtRemark.setText(mRecord!!.remark)
             mBinding.keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mRecord!!.money))
             mCurrentChooseDate = mRecord!!.time

@@ -17,17 +17,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/colorTextWhite3</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <!-- 影响 checkbox 等的次颜色 -->
+        <item name="android:textColorSecondary">@color/colorText3</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
-
-        <!-- dialog 不使用暗色主题-->
-        <item name="md_dark_theme">false</item>
     </style>
 
     <!-- 覆盖 AboutPage.CardContent 增加行间距 和 email -->
@@ -43,7 +41,30 @@
     </style>
 
     <style name="About" parent="AppTheme">
-        <item name="aboutPageNavigationIcon">@drawable/ic_close</item>
+        <item name="aboutPageHeaderBackground">@color/colorAccent</item>
+    </style>
+
+    <style name="AppCompatToolBar" parent="Theme.AppCompat.Light">
+        <item name="android:textColorSecondary">@color/colorText</item>
+        <item name="titleTextColor">@color/colorText</item>
+        <item name="actionMenuTextColor">@color/colorText</item>
+    </style>
+
+    <style name="ToolBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+    </style>
+
+    <style name="ToolBar.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <!-- 键盘 -->
@@ -54,7 +75,7 @@
     <!-- 键盘 -->
     <style name="text_view_input" parent="bg_press">
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textColor">@color/colorText</item>
     </style>
 
     <!-- 键盘数字 -->
@@ -68,6 +89,7 @@
     <!-- 键盘确定 -->
     <style name="text_view_input_affirm" parent="text_view_input">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/colorAccentButtonTextNormal</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textSize">20sp</item>

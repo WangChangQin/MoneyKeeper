@@ -50,7 +50,7 @@ class LineChartMarkerView(context: Context) : MarkerView(context, R.layout.bar_c
             } else {
                 tvContent.setBackgroundColor(resources.getColor(R.color.colorIncome))
             }
-            tvContent.setTextColor(resources.getColor(R.color.colorTextWhite1))
+            tvContent.setTextColor(resources.getColor(R.color.colorText1))
         } else {
             tvContent.visibility = View.GONE
         }

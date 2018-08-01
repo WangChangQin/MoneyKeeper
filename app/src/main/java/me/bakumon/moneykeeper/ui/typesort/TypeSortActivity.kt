@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -61,10 +63,10 @@ class TypeSortActivity : BaseActivity() {
     private fun initView() {
         mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
 
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_drag_sort)
-        mBinding.titleBar?.tvRight?.text = getString(R.string.text_done)
-        mBinding.titleBar?.tvRight?.setOnClickListener { sortRecordTypes() }
+        mBinding.toolbarLayout?.title = getString(R.string.text_drag_sort)
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         mBinding.rvType.layoutManager = GridLayoutManager(this, COLUMN)
         mAdapter = TypeSortAdapter(null)
@@ -78,8 +80,20 @@ class TypeSortActivity : BaseActivity() {
         mAdapter.enableDragItem(itemTouchHelper)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_sort, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_done -> sortRecordTypes()
+            android.R.id.home -> finish()
+        }
+        return true
+    }
+
     private fun sortRecordTypes() {
-        mBinding.titleBar?.tvRight?.isEnabled = false
         mDisposable.add(mViewModel.sortRecordTypes(mAdapter.data).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ this.finish() }) { throwable ->
@@ -88,7 +102,6 @@ class TypeSortActivity : BaseActivity() {
                         Log.e(TAG, "备份失败（类型排序失败的时候）", throwable)
                         finish()
                     } else {
-                        mBinding.titleBar?.tvRight?.isEnabled = true
                         ToastUtils.show(R.string.toast_sort_fail)
                         Log.e(TAG, "类型排序失败", throwable)
                     }

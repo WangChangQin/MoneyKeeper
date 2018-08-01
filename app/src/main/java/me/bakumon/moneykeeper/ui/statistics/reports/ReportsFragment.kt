@@ -153,7 +153,7 @@ class ReportsFragment : BaseFragment() {
             dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             dataSet.yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             dataSet.isValueLineVariableLength = false
-            dataSet.valueLineColor = resources.getColor(R.color.colorTextWhite)
+            dataSet.valueLineColor = resources.getColor(R.color.colorText)
 
             dataSet.colors = PieColorsCreator.colors(this.context, entries.size)
 

@@ -73,8 +73,10 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun initView() {
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_setting)
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        mBinding.toolbarLayout?.title = getString(R.string.text_setting)
 
         mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
         mAdapter = SettingAdapter(null)

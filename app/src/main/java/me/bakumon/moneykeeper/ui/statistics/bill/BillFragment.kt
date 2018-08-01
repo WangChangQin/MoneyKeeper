@@ -108,7 +108,7 @@ class BillFragment : BaseFragment() {
         val xAxis = mBinding.barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
-        xAxis.textColor = resources.getColor(R.color.colorTextGray)
+        xAxis.textColor = resources.getColor(R.color.colorTextHint)
         xAxis.labelCount = 5
         xAxis.setValueFormatter { value, _ ->
             val intValue = value.toInt()

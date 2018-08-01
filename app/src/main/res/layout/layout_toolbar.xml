@@ -15,22 +15,25 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="me.bakumon.moneykeeper.ui.setting.SettingActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <data>
 
-        <include
-            android:id="@+id/toolbar_layout"
-            layout="@layout/layout_toolbar" />
+        <variable
+            name="title"
+            type="String" />
+    </data>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_setting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolBar"
+        app:theme="@style/AppCompatToolBar">
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/ToolBar.Title"
+            android:text="@{title}"
+            tools:text="TITLE" />
+    </android.support.v7.widget.Toolbar>
 </layout>

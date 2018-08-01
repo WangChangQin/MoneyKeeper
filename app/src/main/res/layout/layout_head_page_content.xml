@@ -35,7 +35,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="20dp"
-        android:paddingTop="30dp"
+        android:paddingTop="25dp"
         tools:background="@drawable/bg_gradient">
 
         <LinearLayout
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextWhite1"
+                android:textColor="@color/colorHeadTextSecond"
                 app:text_outlay="@{sumMoneyBeanList}"
                 tools:text="@string/text_month_outlay" />
 
@@ -59,7 +59,7 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorHeadTextNormal"
                 android:textSize="34sp"
                 app:text_month_outlay="@{sumMoneyBeanList}"
                 tools:text="0" />
@@ -86,18 +86,19 @@
                 android:id="@+id/tv_month_income_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextWhite1"
+                android:textColor="@color/colorHeadTextSecond"
                 app:text_budget="@{sumMoneyBeanList}"
                 tools:text="@string/text_month_remaining_budget" />
 
-            <me.bakumon.moneykeeper.view.qmui.QMUIAlphaTextView
+            <!-- TODO 点击效果，背景和文字 -->
+            <TextView
                 android:id="@+id/tv_month_income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/colorTextWhite"
+                android:textColor="@color/colorHeadTextNormal"
                 android:textSize="34sp"
                 app:text_month_budget="@{sumMoneyBeanList}"
                 tools:text="0" />

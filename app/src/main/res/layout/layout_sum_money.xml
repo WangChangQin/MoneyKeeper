@@ -43,7 +43,7 @@
             android:id="@+id/rb_outlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorTextWhite2"
+            android:textColor="@color/colorText2"
             app:text_statistics_outlay="@{sumMoneyBeanList}"
             tools:text="支出 ¥3580" />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:textColor="@color/colorTextWhite2"
+            android:textColor="@color/colorText2"
             app:text_statistics_income="@{sumMoneyBeanList}"
             tools:text="收入 ¥9827" />
 
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="@color/colorTextWhite3"
+            android:textColor="@color/colorText3"
             app:text_statistics_overage="@{sumMoneyBeanList}"
             tools:text="结余 ¥3498.89" />
     </RadioGroup>

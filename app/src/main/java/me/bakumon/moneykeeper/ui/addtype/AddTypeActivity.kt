@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.animation.AnimationUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -70,15 +72,28 @@ class AddTypeActivity : BaseActivity() {
         mBinding.edtTypeName.setText(mRecordType?.name)
         mBinding.edtTypeName.setSelection(mBinding.edtTypeName.text.length)
 
-        mBinding.titleBar?.title = prefix + type
-        mBinding.titleBar?.tvRight?.setText(R.string.text_save)
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.tvRight?.setOnClickListener { saveType() }
+        mBinding.toolbarLayout?.title = prefix + type
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         mBinding.rvType.layoutManager = GridLayoutManager(this, COLUMN)
         mAdapter = TypeImgAdapter(null)
         mBinding.rvType.adapter = mAdapter
         mAdapter.setOnItemClickListener { _, _, position -> checkItem(position) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_add_type, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_save -> saveType()
+            android.R.id.home -> finish()
+        }
+        return true
     }
 
     private fun checkItem(position: Int) {
@@ -113,13 +128,21 @@ class AddTypeActivity : BaseActivity() {
                 })
     }
 
+    /**
+     * 防止重复点击
+     */
+    private var isSaveEnable = true
+
     private fun saveType() {
-        mBinding.titleBar?.tvRight?.isEnabled = false
+        if (!isSaveEnable) {
+            return
+        }
+        isSaveEnable = false
         val text = mBinding.edtTypeName.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(text)) {
             val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
             mBinding.edtTypeName.startAnimation(animation)
-            mBinding.titleBar?.tvRight?.isEnabled = true
+            isSaveEnable = true
             return
         }
         val bean = mAdapter.currentItem
@@ -132,7 +155,7 @@ class AddTypeActivity : BaseActivity() {
                         Log.e(TAG, "备份失败（类型保存失败的时候）", throwable)
                         finish()
                     } else {
-                        mBinding.titleBar?.tvRight?.isEnabled = true
+                        isSaveEnable = true
                         val failTip = if (TextUtils.isEmpty(throwable.message)) getString(R.string.toast_type_save_fail) else throwable.message
                         ToastUtils.show(failTip)
                         Log.e(TAG, "类型保存失败", throwable)

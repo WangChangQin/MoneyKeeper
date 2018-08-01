@@ -21,7 +21,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.View
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,10 +58,13 @@ class ReviewActivity : BaseActivity() {
     }
 
     private fun initView() {
-        mBinding.titleBar?.title = mCurrentYear.toString()
-        mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
-        mBinding.titleBar?.llTitle?.setOnClickListener { chooseYear() }
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
+        mBinding.toolbarLayout?.title = mCurrentYear.toString()
+        mBinding.toolbarLayout?.tvTitle?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+        mBinding.toolbarLayout?.tvTitle?.compoundDrawablePadding = 10
+        mBinding.toolbarLayout?.tvTitle?.setOnClickListener { chooseYear() }
+        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         mBinding.rvReview.layoutManager = LinearLayoutManager(this)
         mAdapter = ReviewAdapter(null)
@@ -74,14 +76,14 @@ class ReviewActivity : BaseActivity() {
     }
 
     private fun chooseYear() {
-        mBinding.titleBar?.llTitle?.isEnabled = false
+        mBinding.toolbarLayout?.tvTitle?.isEnabled = false
         val chooseYearDialog = ChooseYearDialog(this, mCurrentYear)
         chooseYearDialog.mOnDismissListener = {
-            mBinding.titleBar?.llTitle?.isEnabled = true
+            mBinding.toolbarLayout?.tvTitle?.isEnabled = true
         }
         chooseYearDialog.mOnChooseListener = { year ->
             mCurrentYear = year
-            mBinding.titleBar?.title = mCurrentYear.toString()
+            mBinding.toolbarLayout?.title = mCurrentYear.toString()
             updateData(mCurrentYear)
         }
         chooseYearDialog.show()
@@ -92,7 +94,7 @@ class ReviewActivity : BaseActivity() {
         mBinding.lineChart.setScaleEnabled(false)
         mBinding.lineChart.description.isEnabled = false
         mBinding.lineChart.legend.isEnabled = true
-        mBinding.lineChart.legend.textColor = resources.getColor(R.color.colorTextWhite1)
+        mBinding.lineChart.legend.textColor = resources.getColor(R.color.colorText1)
 
         val marker = LineChartMarkerView(this)
         marker.chartView = mBinding.lineChart
@@ -100,7 +102,7 @@ class ReviewActivity : BaseActivity() {
 
         val xAxis = mBinding.lineChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = resources.getColor(R.color.colorTextGray)
+        xAxis.textColor = resources.getColor(R.color.colorTextHint)
         xAxis.setLabelCount(12, true)
         xAxis.setValueFormatter { value, _ ->
             val intValue = value.toInt()
