@@ -57,7 +57,7 @@ class BackupActivity : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.activity_setting
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onInitView(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
         mViewModel = getViewModel()
 

@@ -2,6 +2,7 @@ apply plugin: 'cipher.so'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'AndResGuard'
 
@@ -223,8 +224,6 @@ dependencies {
     implementation deps.storage
     // 时间格式化
     implementation deps.prettytime
-    // 圆形 ImageView
-    implementation deps.circleimageview
     // 对话框
     implementation deps.material_dialogs
     // aes 加密解密
@@ -240,6 +239,7 @@ dependencies {
     implementation deps.about_extension
     // 列表多布局
     implementation deps.multitype
+    implementation deps.multitype_kotlin
     // 图片加载
     implementation deps.picasso
     // json 解析

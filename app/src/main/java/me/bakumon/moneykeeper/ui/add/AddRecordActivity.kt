@@ -63,7 +63,7 @@ class AddRecordActivity : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.activity_add_record
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onInitView(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
         val viewModelFactory = Injection.provideViewModelFactory()
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddRecordViewModel::class.java)

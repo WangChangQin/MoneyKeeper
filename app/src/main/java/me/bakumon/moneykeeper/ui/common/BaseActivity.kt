@@ -14,14 +14,12 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.base
+package me.bakumon.moneykeeper.ui.common
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
@@ -38,14 +36,14 @@ import okhttp3.ResponseBody
 
 /**
  * 1.沉浸式状态栏
- * 2.ViewDataBinding 封装
+ * 2.mDisposable
+ * 3.
  *
  * @author Bakumon
  * @date 18-1-17
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    private lateinit var dataBinding: ViewDataBinding
     protected val mDisposable = CompositeDisposable()
 
     /**
@@ -63,20 +61,70 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataBinding = DataBindingUtil.setContentView(this, layoutId)
+        setContentView(layoutId)
         onInitView(savedInstanceState)
     }
 
     /**
-     * 获取 ViewDataBinding
+     * 初始化 view
+     * 比 onInit 早执行
      *
-     * @param <T> BaseActivity#getLayoutId() 布局创建的 ViewDataBinding
-     * 如 R.layout.activity_demo 会创建出 ActivityDemoBinding.java
-     * @return T
-    </T> */
-    @Suppress("UNCHECKED_CAST")
-    protected fun <T : ViewDataBinding> getDataBinding(): T {
-        return dataBinding as T
+     * @param savedInstanceState 保存的 Bundle
+     */
+    protected abstract fun onInitView(savedInstanceState: Bundle?)
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        onInit(savedInstanceState)
+    }
+
+    /**
+     * 初始化
+     */
+    protected abstract fun onInit(savedInstanceState: Bundle?)
+
+    /**
+     * inflate view root：null，attachToRoot：false
+     *
+     * @param resource 布局 id
+     * @return view
+     */
+    protected fun inflate(@LayoutRes resource: Int): View {
+        return layoutInflater.inflate(resource, null, false)
+    }
+
+    /**
+     * 设置沉浸式状态栏
+     */
+    private fun setImmersiveStatus() {
+        val views = setImmersiveView()
+        if (views.isEmpty()) {
+            return
+        }
+        StatusBarUtil.immersive(this)
+        for (view in views) {
+            StatusBarUtil.setPaddingSmart(this, view)
+        }
+    }
+
+    /**
+     * 子类可以重写该方法设置沉浸式状态栏
+     *
+     * @return view[]大小为0,则不启用沉浸式
+     */
+    open fun setImmersiveView(): Array<View> {
+        // 默认使用第一个子 View
+        val contentView: ViewGroup = this.findViewById(android.R.id.content)
+        val rootView = contentView.getChildAt(0) as ViewGroup
+        return arrayOf(rootView.getChildAt(0))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isSetupImmersive) {
+            setImmersiveStatus()
+            isSetupImmersive = true
+        }
     }
 
     /**
@@ -137,65 +185,6 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     open fun onCloudBackupFail(errorResponse: ApiErrorResponse<ResponseBody>) {
         ToastUtils.show(errorResponse.errorMessage)
-    }
-
-    /**
-     * 设置沉浸式状态栏
-     */
-    private fun setImmersiveStatus() {
-        val views = setImmersiveView()
-        if (views.isEmpty()) {
-            return
-        }
-        StatusBarUtil.immersive(this)
-        for (view in views) {
-            StatusBarUtil.setPaddingSmart(this, view)
-        }
-    }
-
-    /**
-     * 子类可以重写该方法设置沉浸式状态栏
-     *
-     * @return view[]大小为0,则不启用沉浸式
-     */
-    protected fun setImmersiveView(): Array<View> {
-        // 默认使用第一个子 View
-        val rootView = dataBinding.root as ViewGroup
-        return arrayOf(rootView.getChildAt(0))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!isSetupImmersive) {
-            setImmersiveStatus()
-            isSetupImmersive = true
-        }
-    }
-
-    /**
-     * 开始的方法
-     *
-     * @param savedInstanceState 保存的 Bundle
-     */
-    protected abstract fun onInitView(savedInstanceState: Bundle?)
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        onInit(savedInstanceState)
-    }
-
-    open fun onInit(savedInstanceState: Bundle?) {
-
-    }
-
-    /**
-     * inflate view root：null，attachToRoot：false
-     *
-     * @param resource 布局 id
-     * @return view
-     */
-    protected fun inflate(@LayoutRes resource: Int): View {
-        return layoutInflater.inflate(resource, null, false)
     }
 
     @Suppress("DEPRECATION")

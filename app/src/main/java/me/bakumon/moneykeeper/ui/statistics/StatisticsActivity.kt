@@ -43,7 +43,7 @@ class StatisticsActivity : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.activity_statistics
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onInitView(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
 
         initView()

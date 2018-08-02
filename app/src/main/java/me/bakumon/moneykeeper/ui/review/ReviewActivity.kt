@@ -49,7 +49,7 @@ class ReviewActivity : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.activity_review
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onInitView(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
         val viewModelFactory = Injection.provideViewModelFactory()
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReviewModel::class.java)

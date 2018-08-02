@@ -59,7 +59,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     override val layoutId: Int
         get() = R.layout.activity_setting
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onInitView(savedInstanceState: Bundle?) {
         mBinding = getDataBinding()
         val viewModelFactory = Injection.provideViewModelFactory()
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(SettingViewModel::class.java)

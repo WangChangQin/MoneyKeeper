@@ -20,36 +20,38 @@ import android.Manifest
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import io.fabric.sdk.android.Fabric
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_home.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.api.ApiErrorResponse
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.databinding.ActivityHomeBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
+import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.Empty
+import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.ShortcutUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.floo.StackCallback
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import okhttp3.ResponseBody
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-
 
 /**
  * HomeActivity
@@ -58,42 +60,46 @@ import pub.devrel.easypermissions.PermissionRequest
  * @date 2018/4/9
  */
 class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
-    private lateinit var mBinding: ActivityHomeBinding
     private lateinit var mViewModel: HomeViewModel
-    private lateinit var mAdapter: HomeAdapter
+    private lateinit var adapter: MultiTypeAdapter
     private var isUserFirst: Boolean = false
 
     override val layoutId: Int
         get() = R.layout.activity_home
 
+    override fun onInitView(savedInstanceState: Bundle?) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ADD_RECORD).start() }
+    }
+
     override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        mViewModel = getViewModel()
-
-        initView()
-        initData()
-        checkPermissionForBackup()
-
         // 快速记账
         if (ConfigManager.isFast) {
             Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
         }
+
         Fabric.with(this, Crashlytics(), Answers())
+
+        // 设置 MultiTypeAdapter
+        adapter = MultiTypeAdapter()
+        adapter.register(RecordWithType::class, RecordViewBinder({ deleteRecord(it) }))
+        adapter.register(String::class, FooterViewBinder())
+        adapter.register(Empty::class, EmptyViewBinder())
+        rvRecords.adapter = adapter
+
+        checkPermissionForBackup()
+
+        mViewModel = getViewModel()
+
+        initData()
+
         getOldPsw()
     }
 
-    private fun initView() {
-        mBinding.toolbarHead.title = ""
-        setSupportActionBar(mBinding.toolbarHead)
-
-        mBinding.rvHome.layoutManager = LinearLayoutManager(this)
-        mAdapter = HomeAdapter(null)
-        mBinding.rvHome.adapter = mAdapter
-
-        mAdapter.setOnItemChildLongClickListener { _, _, position ->
-            showOperateDialog(mAdapter.data[position])
-            false
-        }
+    private fun initData() {
+        initRecordTypes()
+        getCurrentMonthRecords()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -109,22 +115,18 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         return true
     }
 
-    fun addRecordClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
-    }
-
     override fun onResume() {
         super.onResume()
         getCurrentMoneySumMonty()
         if (ConfigManager.isSuccessive) {
-            mBinding.btnAddRecord.setOnLongClickListener {
+            btnAdd.setOnLongClickListener {
                 Floo.navigation(this, Router.Url.URL_ADD_RECORD)
                         .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
                         .start()
                 false
             }
         } else {
-            mBinding.btnAddRecord.setOnLongClickListener(null)
+            btnAdd.setOnLongClickListener(null)
         }
     }
 
@@ -147,25 +149,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         ToastUtils.show(getString(R.string.text_auto_backup_fail) + errorResponse.errorMessage)
     }
 
-    private fun showOperateDialog(record: RecordWithType) {
-        MaterialDialog.Builder(this)
-                .items(getString(R.string.text_modify), getString(R.string.text_delete))
-                .itemsCallback({ _, _, which, _ ->
-                    if (which == 0) {
-                        modifyRecord(record)
-                    } else {
-                        deleteRecord(record)
-                    }
-                })
-                .show()
-    }
-
-    private fun modifyRecord(record: RecordWithType) {
-        Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                .putExtra(Router.ExtraKey.KEY_RECORD_BEAN, record)
-                .start()
-    }
-
     private fun deleteRecord(record: RecordWithType) {
         mDisposable.add(mViewModel.deleteRecord(record)
                 .subscribeOn(Schedulers.io())
@@ -180,11 +163,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                         Log.e(TAG, "删除记账记录失败", throwable)
                     }
                 })
-    }
-
-    private fun initData() {
-        initRecordTypes()
-        getCurrentMonthRecords()
     }
 
     private fun initRecordTypes() {
@@ -207,7 +185,9 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         mDisposable.add(mViewModel.currentMonthSumMoney
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ mBinding.sumMoneyBeanList = it }
+                .subscribe({
+                    headPageView.setSumMoneyBeanList(it)
+                }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_current_sum_money_fail)
                     Log.e(TAG, "本月支出收入总数获取失败", throwable)
@@ -220,9 +200,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordWithTypes ->
                     setListData(recordWithTypes)
-                    if (recordWithTypes == null || recordWithTypes.isEmpty()) {
-                        setEmptyView()
-                    }
                 }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_records_fail)
@@ -230,18 +207,18 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 })
     }
 
-    private fun setListData(recordWithTypes: List<RecordWithType>?) {
-        mAdapter.setNewData(recordWithTypes)
-        val isShowFooter = recordWithTypes != null && recordWithTypes.size > MAX_ITEM_TIP
-        if (isShowFooter) {
-            mAdapter.setFooterView(inflate(R.layout.layout_footer_tip))
+    private fun setListData(recordWithTypes: List<RecordWithType>) {
+        val items = Items()
+        if (recordWithTypes.isEmpty()) {
+            items.add(Empty(getString(R.string.text_current_month_empty_tip), Gravity.CENTER))
         } else {
-            mAdapter.removeAllFooterView()
+            items.addAll(recordWithTypes)
+            if (recordWithTypes.size > MAX_ITEM_TIP) {
+                items.add(getString(R.string.text_home_footer_tip))
+            }
         }
-    }
-
-    private fun setEmptyView() {
-        mAdapter.emptyView = inflate(R.layout.layout_home_empty)
+        adapter.items = items
+        adapter.notifyDataSetChanged()
     }
 
     override fun indexKeyForStackTarget(): String? {
