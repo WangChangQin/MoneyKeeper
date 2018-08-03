@@ -61,7 +61,7 @@ import pub.devrel.easypermissions.PermissionRequest
  */
 class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
     private lateinit var mViewModel: HomeViewModel
-    private lateinit var adapter: MultiTypeAdapter
+    private lateinit var mAdapter: MultiTypeAdapter
     private var isUserFirst: Boolean = false
 
     override val layoutId: Int
@@ -82,11 +82,11 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         Fabric.with(this, Crashlytics(), Answers())
 
         // 设置 MultiTypeAdapter
-        adapter = MultiTypeAdapter()
-        adapter.register(RecordWithType::class, RecordViewBinder({ deleteRecord(it) }))
-        adapter.register(String::class, FooterViewBinder())
-        adapter.register(Empty::class, EmptyViewBinder())
-        rvRecords.adapter = adapter
+        mAdapter = MultiTypeAdapter()
+        mAdapter.register(RecordWithType::class, RecordViewBinder({ deleteRecord(it) }))
+        mAdapter.register(String::class, FooterViewBinder())
+        mAdapter.register(Empty::class, EmptyViewBinder())
+        rvRecords.adapter = mAdapter
 
         checkPermissionForBackup()
 
@@ -217,8 +217,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 items.add(getString(R.string.text_home_footer_tip))
             }
         }
-        adapter.items = items
-        adapter.notifyDataSetChanged()
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun indexKeyForStackTarget(): String? {

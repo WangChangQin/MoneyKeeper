@@ -14,90 +14,87 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="me.bakumon.moneykeeper.ui.add.AddRecordActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="123"
         android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbarLayout"
+            layout="@layout/layout_tool_bar" />
+
+        <include
+            android:id="@+id/typeChoose"
+            layout="@layout/layout_type_choose" />
+
+        <me.bakumon.moneykeeper.ui.add.TypePageView
+            android:id="@+id/typePageOutlay"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="visible"
+            tools:ignore="NestedWeights" />
+
+        <me.bakumon.moneykeeper.ui.add.TypePageView
+            android:id="@+id/typePageIncome"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="123"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center">
 
-            <include
-                android:id="@+id/toolbarLayout"
-                layout="@layout/layout_tool_bar" />
-
-            <include
-                android:id="@+id/typeChoose"
-                layout="@layout/layout_type_choose" />
-
-            <me.bakumon.moneykeeper.view.TypePageView
-                android:id="@+id/typePageOutlay"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:visibility="visible"
-                tools:ignore="NestedWeights" />
-
-            <me.bakumon.moneykeeper.view.TypePageView
-                android:id="@+id/typePageIncome"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center">
+                android:background="@drawable/bg_date"
+                android:maxLength="20"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:text="@string/text_today"
+                android:textColor="@color/colorText2" />
 
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_date"
-                    android:maxLength="20"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:text="@string/text_today"
-                    android:textColor="@color/colorText2" />
-
-                <EditText
-                    android:id="@+id/edtRemark"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/bg_date"
-                    android:hint="@string/hint_enter_remark"
-                    android:imeOptions="actionDone"
-                    android:maxLength="9"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:singleLine="true"
-                    android:textColor="@color/colorText2"
-                    android:textColorHint="@color/colorTextHint"
-                    android:textSize="14sp" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/edtRemark"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_date"
+                android:hint="@string/hint_enter_remark"
+                android:imeOptions="actionDone"
+                android:maxLength="9"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:textColor="@color/colorText2"
+                android:textColorHint="@color/colorTextHint"
+                android:textSize="14sp" />
         </LinearLayout>
-
-        <me.bakumon.moneykeeper.view.KeyboardView
-            android:id="@+id/keyboard"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="100"
-            android:background="@color/colorItemBackground" />
-
     </LinearLayout>
-</layout>
+
+    <me.bakumon.moneykeeper.view.KeyboardView
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:background="@color/colorItemBackground" />
+
+</LinearLayout>

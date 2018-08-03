@@ -209,17 +209,13 @@ class AddRecordActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordTypes ->
-                    typePageOutlay.setNewData(recordTypes, RecordType.TYPE_OUTLAY)
-                    typePageIncome.setNewData(recordTypes, RecordType.TYPE_INCOME)
-
                     if (mCurrentType == RecordType.TYPE_OUTLAY) {
                         (typeChoose as RadioGroup).check(R.id.rbOutlay)
-                        typePageOutlay.initCheckItem(mRecord)
                     } else {
                         (typeChoose as RadioGroup).check(R.id.rbIncome)
-                        typePageIncome.initCheckItem(mRecord)
                     }
-
+                    typePageOutlay.setItems(recordTypes, RecordType.TYPE_OUTLAY, mRecord)
+                    typePageIncome.setItems(recordTypes, RecordType.TYPE_INCOME, mRecord)
                 }) { throwable ->
                     ToastUtils.show(R.string.toast_get_types_fail)
                     Log.e(TAG, "获取类型数据失败", throwable)
