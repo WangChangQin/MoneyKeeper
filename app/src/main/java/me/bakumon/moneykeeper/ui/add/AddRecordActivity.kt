@@ -26,6 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_record.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
+import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.Record
@@ -65,6 +66,9 @@ class AddRecordActivity : BaseActivity() {
         setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        typeChoose.rbLeft.setText(R.string.text_outlay)
+        typeChoose.rbRight.setText(R.string.text_income)
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
@@ -111,7 +115,7 @@ class AddRecordActivity : BaseActivity() {
         }
 
         (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rbOutlay) {
+            if (checkedId == R.id.rbLeft) {
                 mCurrentType = RecordType.TYPE_OUTLAY
                 typePageOutlay.visibility = View.VISIBLE
                 typePageIncome.visibility = View.GONE
@@ -210,9 +214,9 @@ class AddRecordActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordTypes ->
                     if (mCurrentType == RecordType.TYPE_OUTLAY) {
-                        (typeChoose as RadioGroup).check(R.id.rbOutlay)
+                        (typeChoose as RadioGroup).check(R.id.rbLeft)
                     } else {
-                        (typeChoose as RadioGroup).check(R.id.rbIncome)
+                        (typeChoose as RadioGroup).check(R.id.rbRight)
                     }
                     typePageOutlay.setItems(recordTypes, RecordType.TYPE_OUTLAY, mRecord)
                     typePageIncome.setItems(recordTypes, RecordType.TYPE_INCOME, mRecord)

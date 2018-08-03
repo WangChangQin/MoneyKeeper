@@ -21,7 +21,7 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.databinding.ActivityStatisticsBinding
-import me.bakumon.moneykeeper.ui.statistics.ViewPagerAdapter
+import me.bakumon.moneykeeper.ui.common.ViewPagerAdapter
 
 /**
  * 某一类型的记账记录

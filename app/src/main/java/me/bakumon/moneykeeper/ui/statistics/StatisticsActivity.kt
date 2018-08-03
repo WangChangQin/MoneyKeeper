@@ -17,12 +17,17 @@
 package me.bakumon.moneykeeper.ui.statistics
 
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RadioGroup
+import kotlinx.android.synthetic.main.activity_two_tab.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
+import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
-import me.bakumon.moneykeeper.databinding.ActivityStatisticsBinding
+import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.ViewPagerAdapter
 import me.bakumon.moneykeeper.ui.statistics.bill.BillFragment
 import me.bakumon.moneykeeper.ui.statistics.reports.ReportsFragment
 import me.bakumon.moneykeeper.utill.DateUtils
@@ -34,34 +39,44 @@ import me.drakeet.floo.Floo
  * @author Bakumon https://bakumon
  */
 class StatisticsActivity : BaseActivity() {
-    private lateinit var mBinding: ActivityStatisticsBinding
     private lateinit var mBillFragment: BillFragment
     private lateinit var mReportsFragment: ReportsFragment
     private var mCurrentYear = DateUtils.getCurrentYear()
     private var mCurrentMonth = DateUtils.getCurrentMonth()
 
     override val layoutId: Int
-        get() = R.layout.activity_statistics
+        get() = R.layout.activity_two_tab
 
     override fun onInitView(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-
-        initView()
-    }
-
-    private fun initView() {
-        mBinding.toolbarLayout?.title = DateUtils.getCurrentYearMonth()
-        mBinding.toolbarLayout?.tvTitle?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
-        mBinding.toolbarLayout?.tvTitle?.compoundDrawablePadding = 10
-        mBinding.toolbarLayout?.tvTitle?.setOnClickListener { chooseMonth() }
-        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        toolbarLayout.tvTitle.text = DateUtils.getCurrentYearMonth()
+        toolbarLayout.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+        toolbarLayout.tvTitle.compoundDrawablePadding = 10
+        toolbarLayout.tvTitle.setOnClickListener { chooseMonth() }
+        setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        mBinding.typeChoice?.rbOutlay?.setText(R.string.text_order)
-        mBinding.typeChoice?.rbIncome?.setText(R.string.text_reports)
+        typeChoose.rbLeft.setText(R.string.text_order)
+        typeChoose.rbRight.setText(R.string.text_reports)
+    }
 
-        setUpFragment()
+    override fun onInit(savedInstanceState: Bundle?) {
+        val infoPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        mBillFragment = BillFragment()
+        mReportsFragment = ReportsFragment()
+        infoPagerAdapter.addFragment(mBillFragment)
+        infoPagerAdapter.addFragment(mReportsFragment)
+        viewPager.adapter = infoPagerAdapter
+        viewPager.offscreenPageLimit = 2
+
+        (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbLeft) {
+                viewPager.setCurrentItem(0, false)
+            } else {
+                viewPager.setCurrentItem(1, false)
+            }
+        }
+        (typeChoose as RadioGroup).check(R.id.rbLeft)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -77,35 +92,16 @@ class StatisticsActivity : BaseActivity() {
         return true
     }
 
-    private fun setUpFragment() {
-        val infoPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-        mBillFragment = BillFragment()
-        mReportsFragment = ReportsFragment()
-        infoPagerAdapter.addFragment(mBillFragment)
-        infoPagerAdapter.addFragment(mReportsFragment)
-        mBinding.viewPager.adapter = infoPagerAdapter
-        mBinding.viewPager.offscreenPageLimit = 2
-
-        mBinding.typeChoice?.rgType?.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rb_outlay) {
-                mBinding.viewPager.setCurrentItem(0, false)
-            } else {
-                mBinding.viewPager.setCurrentItem(1, false)
-            }
-        }
-        mBinding.typeChoice?.rgType?.check(R.id.rb_outlay)
-    }
-
     private fun chooseMonth() {
-        mBinding.toolbarLayout?.tvTitle?.isEnabled = false
+        toolbarLayout.tvTitle.isEnabled = false
         val chooseMonthDialog = ChooseMonthDialog(this, mCurrentYear, mCurrentMonth)
         chooseMonthDialog.mOnDismissListener = {
-            mBinding.toolbarLayout?.tvTitle?.isEnabled = true
+            toolbarLayout.tvTitle.isEnabled = true
         }
         chooseMonthDialog.mOnChooseListener = { year, month ->
             mCurrentYear = year
             mCurrentMonth = month
-            mBinding.toolbarLayout?.title = DateUtils.getYearMonthFormatString(year, month)
+            toolbarLayout.tvTitle.text = DateUtils.getYearMonthFormatString(year, month)
             mBillFragment.setYearMonth(year, month)
             mReportsFragment.setYearMonth(year, month)
         }

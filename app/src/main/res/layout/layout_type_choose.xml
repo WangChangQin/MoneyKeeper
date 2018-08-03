@@ -23,10 +23,10 @@
     android:paddingEnd="15dp"
     android:paddingStart="15dp"
     android:paddingTop="5dp"
-    tools:checkedButton="@id/rb_outlay">
+    tools:checkedButton="@id/rbLeft">
 
     <RadioButton
-        android:id="@+id/rbOutlay"
+        android:id="@+id/rbLeft"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -34,11 +34,11 @@
         android:button="@null"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/text_outlay"
-        android:textColor="@color/selector_tab_text_color" />
+        android:textColor="@color/selector_tab_text_color"
+        tools:text="@string/text_outlay" />
 
     <RadioButton
-        android:id="@+id/rbIncome"
+        android:id="@+id/rbRight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -46,6 +46,6 @@
         android:button="@null"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/text_income"
-        android:textColor="@color/selector_tab_text_color" />
+        android:textColor="@color/selector_tab_text_color"
+        tools:text="@string/text_income" />
 </RadioGroup>
