@@ -30,15 +30,15 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/toolbar_layout"
-                layout="@layout/layout_toolbar" />
+                android:id="@+id/toolbarLayout"
+                layout="@layout/layout_tool_bar" />
 
             <include
-                android:id="@+id/type_choice"
-                layout="@layout/layout_type_choice" />
+                android:id="@+id/typeChoose"
+                layout="@layout/layout_type_choose" />
 
             <me.bakumon.moneykeeper.view.TypePageView
-                android:id="@+id/type_page_outlay"
+                android:id="@+id/typePageOutlay"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -46,7 +46,7 @@
                 tools:ignore="NestedWeights" />
 
             <me.bakumon.moneykeeper.view.TypePageView
-                android:id="@+id/type_page_income"
+                android:id="@+id/typePageIncome"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -59,9 +59,8 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center">
 
-                <!-- TODO 点击效果，背景和文字 -->
                 <TextView
-                    android:id="@+id/qm_tv_date"
+                    android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_date"
@@ -74,7 +73,7 @@
                     android:textColor="@color/colorText2" />
 
                 <EditText
-                    android:id="@+id/edt_remark"
+                    android:id="@+id/edtRemark"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"

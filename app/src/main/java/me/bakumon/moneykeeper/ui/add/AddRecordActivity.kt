@@ -16,22 +16,23 @@
 
 package me.bakumon.moneykeeper.ui.add
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.widget.RadioGroup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.Injection
+import kotlinx.android.synthetic.main.activity_add_record.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.databinding.ActivityAddRecordBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
+import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.SoftInputUtils
@@ -39,15 +40,12 @@ import me.bakumon.moneykeeper.utill.ToastUtils
 import java.util.*
 
 /**
- * HomeActivity
+ * 记一笔
  *
  * @author bakumon https://bakumon.me
  * @date 2018/4/9
  */
 class AddRecordActivity : BaseActivity() {
-
-    private lateinit var mBinding: ActivityAddRecordBinding
-
     private lateinit var mViewModel: AddRecordViewModel
 
     private var mCurrentChooseDate: Date? = DateUtils.getTodayDate()
@@ -64,46 +62,35 @@ class AddRecordActivity : BaseActivity() {
         get() = R.layout.activity_add_record
 
     override fun onInitView(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddRecordViewModel::class.java)
-
-        initView()
-        initData()
-    }
-
-    private fun initData() {
-        getAllRecordTypes()
-    }
-
-    private fun initView() {
-        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
 
+    override fun onInit(savedInstanceState: Bundle?) {
         mRecord = intent.getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
         mIsSuccessive = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false)
 
-        mBinding.edtRemark.setOnEditorActionListener { _, _, _ ->
-            SoftInputUtils.hideSoftInput(mBinding.typePageOutlay)
-            mBinding.keyboard.setEditTextFocus()
+        edtRemark.setOnEditorActionListener { _, _, _ ->
+            SoftInputUtils.hideSoftInput(typePageOutlay)
+            keyboard.setEditTextFocus()
             false
         }
 
         if (mRecord == null) {
             mCurrentType = RecordType.TYPE_OUTLAY
-            mBinding.toolbarLayout?.title = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
+            toolbarLayout.tvTitle.text = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
         } else {
             mCurrentType = mRecord!!.mRecordTypes!![0].type
-            mBinding.toolbarLayout?.title = getString(R.string.text_modify_record)
-            mBinding.edtRemark.setText(mRecord!!.remark)
-            mBinding.keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mRecord!!.money))
+            toolbarLayout.tvTitle.text = getString(R.string.text_modify_record)
+            edtRemark.setText(mRecord!!.remark)
+            keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mRecord!!.money))
             mCurrentChooseDate = mRecord!!.time
             mCurrentChooseCalendar.time = mCurrentChooseDate
-            mBinding.qmTvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
+            tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
         }
 
-        mBinding.keyboard.mOnAffirmClickListener = {
+        keyboard.mOnAffirmClickListener = {
             if (mRecord == null) {
                 insertRecord(it)
             } else {
@@ -111,43 +98,46 @@ class AddRecordActivity : BaseActivity() {
             }
         }
 
-        mBinding.qmTvDate.setOnClickListener {
+        tvDate.setOnClickListener {
             val dpd = DatePickerDialog.newInstance(
                     { _, year, monthOfYear, dayOfMonth ->
                         mCurrentChooseDate = DateUtils.getDate(year, monthOfYear + 1, dayOfMonth)
                         mCurrentChooseCalendar.time = mCurrentChooseDate
-                        mBinding.qmTvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
+                        tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
                     }, mCurrentChooseCalendar)
             dpd.maxDate = Calendar.getInstance()
+            @Suppress("DEPRECATION")
             dpd.show(fragmentManager, TAG_PICKER_DIALOG)
         }
-        mBinding.typeChoice?.rgType?.setOnCheckedChangeListener { _, checkedId ->
 
-            if (checkedId == R.id.rb_outlay) {
+        (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbOutlay) {
                 mCurrentType = RecordType.TYPE_OUTLAY
-                mBinding.typePageOutlay.visibility = View.VISIBLE
-                mBinding.typePageIncome.visibility = View.GONE
+                typePageOutlay.visibility = View.VISIBLE
+                typePageIncome.visibility = View.GONE
             } else {
                 mCurrentType = RecordType.TYPE_INCOME
-                mBinding.typePageOutlay.visibility = View.GONE
-                mBinding.typePageIncome.visibility = View.VISIBLE
+                typePageOutlay.visibility = View.GONE
+                typePageIncome.visibility = View.VISIBLE
             }
-
         }
+
+        mViewModel = getViewModel()
+        getAllRecordTypes()
     }
 
     private fun insertRecord(text: String) {
         // 防止重复提交
-        mBinding.keyboard.setAffirmEnable(false)
+        keyboard.setAffirmEnable(false)
         val record = Record()
         record.money = BigDecimalUtil.yuan2FenBD(text)
-        record.remark = mBinding.edtRemark.text.toString().trim { it <= ' ' }
+        record.remark = edtRemark.text.toString().trim { it <= ' ' }
         record.time = mCurrentChooseDate
         record.createTime = Date()
         record.recordTypeId = if (mCurrentType == RecordType.TYPE_OUTLAY)
-            mBinding.typePageOutlay.currentItem!!.id
+            typePageOutlay.currentItem!!.id
         else
-            mBinding.typePageIncome.currentItem!!.id
+            typePageIncome.currentItem!!.id
 
         mDisposable.add(mViewModel.insertRecord(record, mCurrentType)
                 .subscribeOn(Schedulers.io())
@@ -160,7 +150,7 @@ class AddRecordActivity : BaseActivity() {
                         insertRecordDone()
                     } else {
                         Log.e(TAG, "新增记录失败", throwable)
-                        mBinding.keyboard.setAffirmEnable(true)
+                        keyboard.setAffirmEnable(true)
                         ToastUtils.show(R.string.toast_add_record_fail)
                     }
                 })
@@ -172,9 +162,9 @@ class AddRecordActivity : BaseActivity() {
     private fun insertRecordDone() {
         if (mIsSuccessive) {
             // 继续记账，清空输入
-            mBinding.keyboard.setText("")
-            mBinding.edtRemark.setText("")
-            mBinding.keyboard.setAffirmEnable(true)
+            keyboard.setText("")
+            edtRemark.setText("")
+            keyboard.setAffirmEnable(true)
             ToastUtils.show(R.string.toast_success_record)
         } else {
             finish()
@@ -183,19 +173,19 @@ class AddRecordActivity : BaseActivity() {
 
     private fun modifyRecord(text: String) {
         // 防止重复提交
-        mBinding.keyboard.setAffirmEnable(false)
+        keyboard.setAffirmEnable(false)
 
         val oldType = mRecord!!.mRecordTypes!![0].type
         val oldMoney = mRecord!!.money!!
         val newType = mCurrentType
 
         mRecord!!.money = BigDecimalUtil.yuan2FenBD(text)
-        mRecord!!.remark = mBinding.edtRemark.text.toString().trim { it <= ' ' }
+        mRecord!!.remark = edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
         mRecord!!.recordTypeId = if (mCurrentType == RecordType.TYPE_OUTLAY)
-            mBinding.typePageOutlay.currentItem!!.id
+            typePageOutlay.currentItem!!.id
         else
-            mBinding.typePageIncome.currentItem!!.id
+            typePageIncome.currentItem!!.id
 
         mDisposable.add(mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType)
                 .subscribeOn(Schedulers.io())
@@ -208,7 +198,7 @@ class AddRecordActivity : BaseActivity() {
                         finish()
                     } else {
                         Log.e(TAG, "记录修改失败", throwable)
-                        mBinding.keyboard.setAffirmEnable(true)
+                        keyboard.setAffirmEnable(true)
                         ToastUtils.show(R.string.toast_modify_record_fail)
                     }
                 })
@@ -219,15 +209,15 @@ class AddRecordActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordTypes ->
-                    mBinding.typePageOutlay.setNewData(recordTypes, RecordType.TYPE_OUTLAY)
-                    mBinding.typePageIncome.setNewData(recordTypes, RecordType.TYPE_INCOME)
+                    typePageOutlay.setNewData(recordTypes, RecordType.TYPE_OUTLAY)
+                    typePageIncome.setNewData(recordTypes, RecordType.TYPE_INCOME)
 
                     if (mCurrentType == RecordType.TYPE_OUTLAY) {
-                        mBinding.typeChoice?.rgType?.check(R.id.rb_outlay)
-                        mBinding.typePageOutlay.initCheckItem(mRecord)
+                        (typeChoose as RadioGroup).check(R.id.rbOutlay)
+                        typePageOutlay.initCheckItem(mRecord)
                     } else {
-                        mBinding.typeChoice?.rgType?.check(R.id.rb_income)
-                        mBinding.typePageIncome.initCheckItem(mRecord)
+                        (typeChoose as RadioGroup).check(R.id.rbIncome)
+                        typePageIncome.initCheckItem(mRecord)
                     }
 
                 }) { throwable ->
