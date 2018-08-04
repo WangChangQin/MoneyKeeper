@@ -20,10 +20,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.widget.RadioGroup
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_two_tab.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.R
@@ -36,6 +36,9 @@ import java.util.*
  */
 abstract class TwoTabActivity : BaseActivity() {
 
+    private lateinit var typeChoose: RadioGroup
+    private lateinit var viewPager: ViewPager
+
     override val layoutId: Int
         get() = R.layout.activity_two_tab
 
@@ -44,13 +47,13 @@ abstract class TwoTabActivity : BaseActivity() {
     protected abstract fun getTwoTabText(): ArrayList<String>
 
     override fun onInitView(savedInstanceState: Bundle?) {
-
-        onSetupTitle(toolbarLayout.tvTitle)
-
-        setSupportActionBar(toolbarLayout as Toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbarLayout)
+        onSetupTitle(toolbar.tvTitle)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        typeChoose = findViewById(R.id.typeChoose)
         typeChoose.rbLeft.text = getTwoTabText()[0]
         typeChoose.rbRight.text = getTwoTabText()[1]
     }
@@ -59,17 +62,35 @@ abstract class TwoTabActivity : BaseActivity() {
 
     override fun onInit(savedInstanceState: Bundle?) {
         val adapter = FragmentViewPagerAdapter(supportFragmentManager, getTwoFragments())
+        viewPager = findViewById(R.id.viewPager)
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
 
-        (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
+        typeChoose.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rbLeft) {
                 viewPager.setCurrentItem(0, false)
             } else {
                 viewPager.setCurrentItem(1, false)
             }
         }
-        (typeChoose as RadioGroup).check(R.id.rbLeft)
+        typeChoose.check(R.id.rbLeft)
+        onParentInitDone()
+    }
+
+    open fun onParentInitDone() {
+
+    }
+
+    fun setCurrentItem(index: Int) {
+        if (index == 0) {
+            typeChoose.check(R.id.rbLeft)
+        } else {
+            typeChoose.check(R.id.rbRight)
+        }
+    }
+
+    protected fun getTabCurrentIndex(): Int {
+        return viewPager.currentItem
     }
 
     inner class FragmentViewPagerAdapter(fm: FragmentManager, private val fragments: ArrayList<Fragment>) : FragmentPagerAdapter(fm) {

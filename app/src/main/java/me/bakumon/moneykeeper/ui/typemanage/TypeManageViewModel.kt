@@ -18,9 +18,9 @@ package me.bakumon.moneykeeper.ui.typemanage
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
  * 记一笔界面 ViewModel
@@ -29,8 +29,9 @@ import me.bakumon.moneykeeper.datasource.AppDataSource
  */
 class TypeManageViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val allRecordTypes: Flowable<List<RecordType>>
-        get() = mDataSource.getAllRecordType()
+    fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
+        return mDataSource.getRecordTypes(type)
+    }
 
     fun deleteRecordType(recordType: RecordType): Completable {
         return mDataSource.deleteRecordType(recordType)

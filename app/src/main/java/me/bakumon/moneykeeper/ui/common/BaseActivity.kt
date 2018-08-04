@@ -37,7 +37,6 @@ import okhttp3.ResponseBody
 /**
  * 1.沉浸式状态栏
  * 2.mDisposable
- * 3.
  *
  * @author Bakumon
  * @date 18-1-17
@@ -82,16 +81,6 @@ abstract class BaseActivity : AppCompatActivity() {
      * 初始化
      */
     protected abstract fun onInit(savedInstanceState: Bundle?)
-
-    /**
-     * inflate view root：null，attachToRoot：false
-     *
-     * @param resource 布局 id
-     * @return view
-     */
-    protected fun inflate(@LayoutRes resource: Int): View {
-        return layoutInflater.inflate(resource, null, false)
-    }
 
     /**
      * 设置沉浸式状态栏
