@@ -18,9 +18,9 @@ package me.bakumon.moneykeeper.ui.addtype
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
  * 添加记账类型 ViewModel
