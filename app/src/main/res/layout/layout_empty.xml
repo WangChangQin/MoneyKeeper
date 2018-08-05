@@ -33,5 +33,5 @@
         android:paddingTop="20dp"
         android:textColor="@color/colorText3"
         android:textSize="16sp"
-        tools:text="@string/text_current_month_empty_tip" />
+        tools:text="@string/text_empty_tip" />
 </LinearLayout>

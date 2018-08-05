@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.review
+package me.bakumon.moneykeeper.ui.review.linechart
 
 import android.annotation.SuppressLint
 import android.content.Context

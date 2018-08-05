@@ -17,10 +17,10 @@
 package me.bakumon.moneykeeper.ui.review
 
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import me.bakumon.moneykeeper.utill.DateUtils
 
 /**

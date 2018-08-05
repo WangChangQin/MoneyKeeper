@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.review
+package me.bakumon.moneykeeper.ui.review.linechart
 
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData

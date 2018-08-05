@@ -15,7 +15,7 @@ import me.drakeet.multitype.ItemViewBinder
 class EmptyViewBinder : ItemViewBinder<Empty, EmptyViewBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        val root = inflater.inflate(R.layout.layout_home_empty, parent, false)
+        val root = inflater.inflate(R.layout.layout_empty, parent, false)
         return ViewHolder(root)
     }
 
