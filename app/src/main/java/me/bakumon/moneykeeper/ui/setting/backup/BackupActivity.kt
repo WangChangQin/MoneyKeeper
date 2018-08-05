@@ -20,20 +20,22 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.text.InputType
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
+import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.api.ApiErrorResponse
 import me.bakumon.moneykeeper.api.ApiSuccessResponse
 import me.bakumon.moneykeeper.api.Network
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
-import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
+import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.ui.setting.SettingAdapter
 import me.bakumon.moneykeeper.ui.setting.SettingSectionEntity
@@ -50,7 +52,6 @@ import java.util.*
  * @author Bakumon https://bakumon.me
  */
 class BackupActivity : BaseActivity() {
-    private lateinit var mBinding: ActivitySettingBinding
     private lateinit var mViewModel: BackupViewModel
     private lateinit var mAdapter: SettingAdapter
 
@@ -58,7 +59,7 @@ class BackupActivity : BaseActivity() {
         get() = R.layout.activity_setting
 
     override fun onInitView(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
+//        mBinding = getDataBinding()
         mViewModel = getViewModel()
 
         initView()
@@ -66,12 +67,12 @@ class BackupActivity : BaseActivity() {
     }
 
     private fun initView() {
-        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        toolbarLayout.tvTitle.text = getString(R.string.text_cloud_backup)
+        setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        mBinding.toolbarLayout?.title = getString(R.string.text_cloud_backup)
 
-        mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
+        rv_setting.layoutManager = LinearLayoutManager(this)
         mAdapter = SettingAdapter(null)
 
         val list = ArrayList<SettingSectionEntity>()
@@ -87,7 +88,11 @@ class BackupActivity : BaseActivity() {
 
         mAdapter.setNewData(list)
         addListener()
-        mBinding.rvSetting.adapter = mAdapter
+        rv_setting.adapter = mAdapter
+    }
+
+    override fun onInit(savedInstanceState: Bundle?) {
+
     }
 
     private fun getItemDisplayPsw(): String {
@@ -139,7 +144,7 @@ class BackupActivity : BaseActivity() {
     private fun updateUrlItem(url: String, position: Int) {
         ConfigManager.setWevDavUrl(url)
         mAdapter.data[position].t.content = ConfigManager.webDavUrl
-        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        rv_setting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
@@ -153,7 +158,7 @@ class BackupActivity : BaseActivity() {
                         { _, input ->
                             ConfigManager.setWevDavAccount(input.toString().trim())
                             mAdapter.data[position].t.content = ConfigManager.webDavAccount
-                            mBinding.rvSetting.itemAnimator.changeDuration = 250
+                            rv_setting.itemAnimator.changeDuration = 250
                             mAdapter.notifyItemChanged(position)
                             // 更新网络配置
                             Network.updateDavServiceConfig()
@@ -182,7 +187,7 @@ class BackupActivity : BaseActivity() {
         isSaving = true
         ConfigManager.webDAVPsw = input
         mAdapter.data[position].t.content = getItemDisplayPsw()
-        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        rv_setting.itemAnimator.changeDuration = 0
         mAdapter.notifyItemChanged(position)
         // 更新网络配置
         Network.updateDavServiceConfig()
@@ -351,7 +356,7 @@ class BackupActivity : BaseActivity() {
     private fun updateCloudBackupItem(position: Int) {
         mAdapter.data[position].t.content = getBackupModeStr()
         mAdapter.data[position].t.isEnable = ConfigManager.cloudEnable
-        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        rv_setting.itemAnimator.changeDuration = 0
         mAdapter.notifyItemChanged(position)
     }
 

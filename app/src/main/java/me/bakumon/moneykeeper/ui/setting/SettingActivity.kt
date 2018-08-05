@@ -18,10 +18,10 @@ package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
@@ -29,12 +29,13 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.*
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
-import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
+import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -52,7 +53,6 @@ import java.util.*
  * @author Bakumon https://bakumon.me
  */
 class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
-    private lateinit var mBinding: ActivitySettingBinding
     private lateinit var mViewModel: SettingViewModel
     private lateinit var mAdapter: SettingAdapter
 
@@ -60,9 +60,8 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         get() = R.layout.activity_setting
 
     override fun onInitView(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(SettingViewModel::class.java)
+
+        mViewModel = getViewModel()
 
         initView()
     }
@@ -73,12 +72,13 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun initView() {
-        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+
+        toolbarLayout.tvTitle.text = getString(R.string.text_setting)
+        setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        mBinding.toolbarLayout?.title = getString(R.string.text_setting)
 
-        mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
+        rv_setting.layoutManager = LinearLayoutManager(this)
         mAdapter = SettingAdapter(null)
 
         val list = ArrayList<SettingSectionEntity>()
@@ -106,7 +106,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
         mAdapter.setNewData(list)
         addListener()
-        mBinding.rvSetting.adapter = mAdapter
+        rv_setting.adapter = mAdapter
+    }
+
+    override fun onInit(savedInstanceState: Bundle?) {
+
     }
 
     private fun addListener() {
@@ -169,7 +173,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun resetBudgetItem(position: Int) {
         mAdapter.data[position].t.content = getBudgetStr()
-        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        rv_setting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
@@ -219,7 +223,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun resetAssetsItem(position: Int) {
         mAdapter.data[position].t.content = getAssetsStr()
-        mBinding.rvSetting.itemAnimator.changeDuration = 250
+        rv_setting.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
@@ -322,7 +326,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         ConfigManager.setIsAutoBackup(isBackup)
         mAdapter.data[position].t.isConfigOpen = isBackup
         // 取消 item 动画
-        mBinding.rvSetting.itemAnimator.changeDuration = 0
+        rv_setting.itemAnimator.changeDuration = 0
         mAdapter.notifyItemChanged(position)
     }
 

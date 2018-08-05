@@ -29,15 +29,14 @@ import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.api.ApiResponse
 import me.bakumon.moneykeeper.api.Network
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.EncryptUtil
 import okhttp3.ResponseBody
 import java.io.File
-
 
 /**
  * 云备份 ViewModel

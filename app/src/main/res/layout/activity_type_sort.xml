@@ -14,23 +14,25 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="me.bakumon.moneykeeper.ui.typesort.TypeSortActivity">
 
-    <LinearLayout
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/layout_tool_bar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvType"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar_layout"
-            layout="@layout/layout_toolbar" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_type"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-</layout>
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        app:spanCount="4"
+        tools:listitem="@layout/item_type_sort" />
+</LinearLayout>

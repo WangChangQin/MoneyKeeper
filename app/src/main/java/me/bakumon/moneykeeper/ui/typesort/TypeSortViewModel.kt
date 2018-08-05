@@ -18,9 +18,9 @@ package me.bakumon.moneykeeper.ui.typesort
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
  * 类型排序 ViewModel

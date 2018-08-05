@@ -19,15 +19,10 @@ package me.bakumon.moneykeeper.binding
 import android.databinding.BindingAdapter
 import android.text.TextUtils
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
-import me.bakumon.moneykeeper.utill.SizeUtils
 import java.math.BigDecimal
 
 /**
@@ -36,28 +31,6 @@ import java.math.BigDecimal
  * @author Bakumon https://bakumon.me
  */
 object BindAdapter {
-
-    @JvmStatic
-    @BindingAdapter("android:visibility")
-    fun showHide(view: View, show: Boolean) {
-        view.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    @JvmStatic
-    @BindingAdapter("custom_margin_bottom")
-    fun setMarginBottom(view: View, bottomMargin: Int) {
-        val layoutParams = view.layoutParams
-        val marginParams: ViewGroup.MarginLayoutParams
-        marginParams = layoutParams as? ViewGroup.MarginLayoutParams ?: ViewGroup.MarginLayoutParams(layoutParams)
-        marginParams.bottomMargin = SizeUtils.dp2px(bottomMargin.toFloat())
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_check_null")
-    fun setText(textView: TextView, text: String) {
-        textView.text = text
-        textView.visibility = if (TextUtils.isEmpty(text)) View.GONE else View.VISIBLE
-    }
 
     @JvmStatic
     @BindingAdapter("src_img_name")
@@ -69,83 +42,4 @@ object BindAdapter {
         imageView.setImageResource(resId)
     }
 
-    @JvmStatic
-    @BindingAdapter("text_money")
-    fun setMoneyText(textView: TextView, bigDecimal: BigDecimal) {
-        textView.text = BigDecimalUtil.fen2Yuan(bigDecimal)
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_money_with_prefix")
-    fun setMoneyTextWithPrefix(textView: TextView, bigDecimal: BigDecimal) {
-        val text = ConfigManager.symbol + BigDecimalUtil.fen2Yuan(bigDecimal)
-        textView.text = text
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_plus_subtract")
-    fun setPlusOrSubtract(textView: TextView, type: Int) {
-        if (type == RecordType.TYPE_OUTLAY) {
-            textView.text = "-"
-        } else {
-            textView.text = "+"
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_statistics_outlay")
-    fun setMonthStatisticsOutlay(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
-        val prefix = textView.context.getString(R.string.text_outlay) + " " + ConfigManager.symbol
-        var outlay = prefix + "0"
-        if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
-            for ((type, sumMoney) in sumMoneyBean) {
-                if (type == RecordType.TYPE_OUTLAY) {
-                    outlay = prefix + BigDecimalUtil.fen2Yuan(sumMoney)
-                }
-            }
-        }
-        textView.text = outlay
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_statistics_income")
-    fun setMonthStatisticsIncome(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
-        val prefix = textView.context.getString(R.string.text_income) + " " + ConfigManager.symbol
-        var income = prefix + "0"
-        if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
-            for ((type, sumMoney) in sumMoneyBean) {
-                if (type == RecordType.TYPE_INCOME) {
-                    income = prefix + BigDecimalUtil.fen2Yuan(sumMoney)
-                }
-            }
-        }
-        textView.text = income
-    }
-
-    @JvmStatic
-    @BindingAdapter("text_statistics_overage")
-    fun setMonthStatisticsOverage(textView: TextView, sumMoneyBean: List<SumMoneyBean>?) {
-        var outlayBd = BigDecimal(0)
-        var incomeBd = BigDecimal(0)
-        // 是否显示结余
-        var isShowOverage = false
-        if (sumMoneyBean != null && sumMoneyBean.isNotEmpty()) {
-            for ((type, sumMoney) in sumMoneyBean) {
-                if (type == RecordType.TYPE_OUTLAY) {
-                    outlayBd = sumMoney
-                } else if (type == RecordType.TYPE_INCOME) {
-                    isShowOverage = sumMoney > BigDecimal(0)
-                    incomeBd = sumMoney
-                }
-            }
-        }
-        if (isShowOverage) {
-            textView.visibility = View.VISIBLE
-            val prefix = textView.context.getString(R.string.text_overage) + " " + ConfigManager.symbol
-            val overage = prefix + BigDecimalUtil.fen2Yuan(incomeBd.subtract(outlayBd))
-            textView.text = overage
-        } else {
-            textView.visibility = View.GONE
-        }
-    }
 }

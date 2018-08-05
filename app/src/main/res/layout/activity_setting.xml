@@ -14,23 +14,20 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="me.bakumon.moneykeeper.ui.setting.SettingActivity">
 
-    <LinearLayout
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/layout_tool_bar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_setting"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-        <include
-            android:id="@+id/toolbar_layout"
-            layout="@layout/layout_toolbar" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_setting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

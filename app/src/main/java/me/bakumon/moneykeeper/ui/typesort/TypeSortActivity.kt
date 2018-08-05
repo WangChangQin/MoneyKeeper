@@ -16,9 +16,8 @@
 
 package me.bakumon.moneykeeper.ui.typesort
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
@@ -26,24 +25,22 @@ import android.view.MenuItem
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.Injection
+import kotlinx.android.synthetic.main.activity_type_sort.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.databinding.ActivityTypeSortBinding
 import me.bakumon.moneykeeper.datasource.BackupFailException
+import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
 
 /**
  * 类型排序
  *
  * @author bakumon https://bakumon.me
- * @date 2018/5/10
  */
 class TypeSortActivity : BaseActivity() {
 
-    private lateinit var mBinding: ActivityTypeSortBinding
     private lateinit var mViewModel: TypeSortViewModel
     private lateinit var mAdapter: TypeSortAdapter
     private var mType: Int = 0
@@ -52,32 +49,27 @@ class TypeSortActivity : BaseActivity() {
         get() = R.layout.activity_type_sort
 
     override fun onInitView(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(TypeSortViewModel::class.java)
-
-        initView()
-        initData()
-    }
-
-    private fun initView() {
-        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
-
-        mBinding.toolbarLayout?.title = getString(R.string.text_drag_sort)
-        setSupportActionBar(mBinding.toolbarLayout?.toolbar)
+        toolbarLayout.tvTitle.text = getString(R.string.text_drag_sort)
+        setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
 
-        mBinding.rvType.layoutManager = GridLayoutManager(this, COLUMN)
+    override fun onInit(savedInstanceState: Bundle?) {
+        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
+
         mAdapter = TypeSortAdapter(null)
-        mBinding.rvType.adapter = mAdapter
+        rvType.adapter = mAdapter
 
         val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(mAdapter)
         val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
-        itemTouchHelper.attachToRecyclerView(mBinding.rvType)
+        itemTouchHelper.attachToRecyclerView(rvType)
 
         // open drag
         mAdapter.enableDragItem(itemTouchHelper)
+
+        mViewModel = getViewModel()
+        initData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -119,9 +111,6 @@ class TypeSortActivity : BaseActivity() {
     }
 
     companion object {
-
         private val TAG = TypeSortActivity::class.java.simpleName
-
-        private const val COLUMN = 4
     }
 }

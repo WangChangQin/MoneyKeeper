@@ -17,12 +17,12 @@
 package me.bakumon.moneykeeper.ui.typesort
 
 import android.support.v7.widget.RecyclerView
+import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import me.bakumon.moneykeeper.BR
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.base.BaseDraggableAdapter
 import me.bakumon.moneykeeper.database.entity.RecordType
+import me.bakumon.moneykeeper.utill.ResourcesUtil
 
 /**
  * 类型排序列表适配器
@@ -31,21 +31,19 @@ import me.bakumon.moneykeeper.database.entity.RecordType
  * @date 2018/5/10
  */
 
-class TypeSortAdapter(data: List<RecordType>?) : BaseDraggableAdapter<RecordType>(R.layout.item_type_sort, data), OnItemDragListener {
+class TypeSortAdapter(data: List<RecordType>?) : BaseItemDraggableAdapter<RecordType, BaseViewHolder>(R.layout.item_type_sort, data), OnItemDragListener {
 
     init {
         setOnItemDragListener(this)
     }
 
-    override fun convert(helper: BaseDraggableAdapter.DataBindingViewHolder, item: RecordType) {
-        val binding = helper.binding
-        binding.setVariable(BR.recordType, item)
-        binding.executePendingBindings()
+    override fun convert(helper: BaseViewHolder, item: RecordType) {
+        helper.setImageResource(R.id.iv_type, ResourcesUtil.getTypeImgId(mContext, item.imgName))
+                .setText(R.id.tv_type_name, item.name)
     }
 
     override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-        (viewHolder as BaseViewHolder)
-                .itemView.alpha = 0.8f
+        (viewHolder as BaseViewHolder).itemView.alpha = 0.8f
     }
 
     override fun onItemDragMoving(source: RecyclerView.ViewHolder, from: Int, target: RecyclerView.ViewHolder, to: Int) {
@@ -53,7 +51,6 @@ class TypeSortAdapter(data: List<RecordType>?) : BaseDraggableAdapter<RecordType
     }
 
     override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-        (viewHolder as BaseViewHolder)
-                .itemView.alpha = 1f
+        (viewHolder as BaseViewHolder).itemView.alpha = 1f
     }
 }

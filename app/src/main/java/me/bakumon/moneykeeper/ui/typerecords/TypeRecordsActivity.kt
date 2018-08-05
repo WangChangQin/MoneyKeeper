@@ -46,8 +46,8 @@ class TypeRecordsActivity : TwoTabActivity() {
         val mYear = intent.getIntExtra(Router.ExtraKey.KEY_YEAR, 0)
         val mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
 
-        val timeSortFragment = TypeRecordsFragment.newInstance(TypeRecordsFragment.SORT_TIME, mRecordType, mRecordTypeId, mYear, mMonth)
-        val moneySortFragment = TypeRecordsFragment.newInstance(TypeRecordsFragment.SORT_MONEY, mRecordType, mRecordTypeId, mYear, mMonth)
+        val timeSortFragment = TypeRecordsByTimeFragment.newInstance(mRecordType, mRecordTypeId, mYear, mMonth)
+        val moneySortFragment = TypeRecordsByMoneyFragment.newInstance(mRecordType, mRecordTypeId, mYear, mMonth)
 
         return arrayListOf(timeSortFragment, moneySortFragment)
     }

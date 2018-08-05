@@ -54,10 +54,17 @@ class TypeListFragment : BaseFragment() {
         val viewModel = TypeListViewBinder({ onClickItem(it) }, { onLongClickItem(it) })
         mAdapter.register(RecordType::class, viewModel)
         recyclerView.adapter = mAdapter
+        recyclerView.setPadding(0, 0, 0, 180)
+
+        mViewModel = getViewModel()
+        initData()
     }
 
     override fun lazyInitData() {
-        mViewModel = getViewModel()
+
+    }
+
+    private fun initData() {
         mDisposable.add(mViewModel.getRecordTypes(mType!!).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ setItems(it) }

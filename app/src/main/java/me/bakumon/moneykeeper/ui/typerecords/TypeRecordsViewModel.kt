@@ -19,10 +19,10 @@ package me.bakumon.moneykeeper.ui.typerecords
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.base.BaseViewModel
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import me.bakumon.moneykeeper.utill.DateUtils
 
 /**
@@ -35,7 +35,7 @@ class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource
     fun getRecordWithTypes(sortType: Int, type: Int, typeId: Int, year: Int, month: Int): Flowable<List<RecordWithType>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
-        return if (sortType == TypeRecordsFragment.SORT_TIME) {
+        return if (sortType == 0) {
             mDataSource.getRecordWithTypes(dateFrom, dateTo, type, typeId)
         } else {
             mDataSource.getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId)
