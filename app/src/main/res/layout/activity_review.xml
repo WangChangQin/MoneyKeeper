@@ -26,7 +26,7 @@
         android:id="@+id/toolbarLayout"
         layout="@layout/layout_tool_bar" />
 
-    <me.bakumon.moneykeeper.ui.review.SumMoneyView
+    <me.bakumon.moneykeeper.ui.statistics.SumMoneyChooseView
         android:id="@+id/sumMoneyView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

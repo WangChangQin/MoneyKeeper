@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.statistics.bill
+package me.bakumon.moneykeeper.ui.statistics.bill.barchart
 
 import com.github.mikephil.charting.data.BarEntry
 import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean

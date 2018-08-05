@@ -59,6 +59,8 @@ class ReviewActivity : BaseActivity() {
         setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        sumMoneyView.setCheckNotEnable()
     }
 
     override fun onInit(savedInstanceState: Bundle?) {

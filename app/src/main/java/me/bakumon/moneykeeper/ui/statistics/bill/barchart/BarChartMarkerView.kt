@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.statistics.bill
+package me.bakumon.moneykeeper.ui.statistics.bill.barchart
 
 import android.annotation.SuppressLint
 import android.content.Context

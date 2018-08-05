@@ -10,13 +10,7 @@ import com.github.mikephil.charting.charts.BarChart
  *
  * @author Bakumon https://bakumon.me
  */
-class RoundBarChart : BarChart {
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
-
+open class RoundBarChart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : BarChart(context, attrs, defStyle) {
     override fun init() {
         super.init()
         mRenderer = RoundBarChartRenderer(this, mAnimator, mViewPortHandler)

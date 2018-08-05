@@ -17,30 +17,26 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_outlay"
+    <RadioButton
+        android:id="@+id/rbOutlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/bg_dot_red"
         android:textColor="@color/colorText2"
         tools:text="支出 ¥3580" />
 
-    <TextView
-        android:id="@+id/tv_income"
+    <RadioButton
+        android:id="@+id/rbIncome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/bg_dot_green"
+        android:layout_marginStart="7dp"
         android:textColor="@color/colorText2"
         tools:text="收入 ¥9827" />
 
     <TextView
-        android:id="@+id/tv_overage"
+        android:id="@+id/tvOverage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="8dp"
         android:textColor="@color/colorText3"
         tools:text="结余 ¥3498.89" />
 </merge>

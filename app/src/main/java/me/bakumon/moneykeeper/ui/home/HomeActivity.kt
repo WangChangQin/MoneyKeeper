@@ -199,7 +199,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ recordWithTypes ->
-                    setListData(recordWithTypes)
+                    setItems(recordWithTypes)
                 }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_records_fail)
@@ -207,7 +207,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                 })
     }
 
-    private fun setListData(recordWithTypes: List<RecordWithType>) {
+    private fun setItems(recordWithTypes: List<RecordWithType>) {
         val items = Items()
         if (recordWithTypes.isEmpty()) {
             items.add(Empty(getString(R.string.text_current_month_empty_tip), Gravity.CENTER))
