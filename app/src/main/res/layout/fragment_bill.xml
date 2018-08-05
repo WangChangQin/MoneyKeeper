@@ -42,5 +42,5 @@
         android:clipToPadding="false"
         android:paddingBottom="20dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_home" />
+        tools:listitem="@layout/item_record" />
 </LinearLayout>

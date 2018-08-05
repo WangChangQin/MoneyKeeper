@@ -1,4 +1,4 @@
-package me.bakumon.moneykeeper.ui.statistics.reports
+package me.bakumon.moneykeeper.ui.statistics.reports.piechart
 
 import android.content.Context
 import com.github.mikephil.charting.utils.ColorTemplate

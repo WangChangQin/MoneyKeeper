@@ -16,31 +16,27 @@
 
 package me.bakumon.moneykeeper.ui.statistics.reports
 
-import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.View
-import com.android.databinding.library.baseAdapters.BR
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import android.view.Gravity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.Injection
+import kotlinx.android.synthetic.main.fragment_reports.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseFragment
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
-import me.bakumon.moneykeeper.databinding.FragmentReportsBinding
+import me.bakumon.moneykeeper.ui.common.BaseFragment
+import me.bakumon.moneykeeper.ui.common.Empty
+import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
+import me.bakumon.moneykeeper.ui.statistics.reports.piechart.PieColorsCreator
+import me.bakumon.moneykeeper.ui.statistics.reports.piechart.PieEntryConverter
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 
 /**
  * 统计-报表
@@ -48,49 +44,53 @@ import me.drakeet.floo.Floo
  * @author Bakumon https://bakumon.me
  */
 class ReportsFragment : BaseFragment() {
-    private lateinit var mBinding: FragmentReportsBinding
     private lateinit var mViewModel: ReportsViewModel
-    private lateinit var mAdapter: ReportAdapter
+    private lateinit var adapter: MultiTypeAdapter
 
-    private var mYear: Int = 0
-    private var mMonth: Int = 0
-    private var mType: Int = 0
+    private var mYear: Int = DateUtils.getCurrentYear()
+    private var mMonth: Int = DateUtils.getCurrentMonth()
+    private var mType: Int = RecordType.TYPE_OUTLAY
 
     override val layoutId: Int
         get() = R.layout.fragment_reports
 
     override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportsViewModel::class.java)
 
-        mYear = DateUtils.getCurrentYear()
-        mMonth = DateUtils.getCurrentMonth()
-        mType = RecordType.TYPE_OUTLAY
+        mViewModel = getViewModel()
 
-        initView()
+        adapter = MultiTypeAdapter()
+
+        adapter.register(Empty::class, EmptyViewBinder())
+        rvReports.adapter = adapter
+
+        pieChart.setOnValueClickListener { typeName, typeId -> navTypeRecords(typeName, typeId) }
+
+        sumMoneyChooseView.setOnCheckedChangeListener({
+            mType = it
+            updateData()
+        })
     }
 
-    private fun initView() {
-        mBinding.rvRecordReports.layoutManager = LinearLayoutManager(context)
-        mAdapter = ReportAdapter(null)
-        mBinding.rvRecordReports.adapter = mAdapter
-        mAdapter.setOnItemClickListener { _, _, position ->
-            val (_, typeName, _, typeId) = mAdapter.data[position]
-            navTypeRecords(typeName, typeId)
-        }
+    override fun lazyInitData() {
+        sumMoneyChooseView.checkItem(mType)
+    }
 
-        initPieChart()
+    private fun updateData() {
+        getTypeSumMoney()
+        getMonthSumMoney()
+    }
 
-        mBinding.layoutSumMoney?.rgType?.setOnCheckedChangeListener { _, checkedId ->
-            mType = if (checkedId == R.id.rb_outlay) {
-                RecordType.TYPE_OUTLAY
-            } else {
-                RecordType.TYPE_INCOME
-            }
-            getTypeSumMoney()
-            getMonthSumMoney()
+    /**
+     * 设置月份
+     */
+    fun setYearMonth(year: Int, month: Int) {
+        if (year == mYear && month == mMonth) {
+            return
         }
+        mYear = year
+        mMonth = month
+        // 更新数据
+        updateData()
     }
 
     private fun navTypeRecords(typeName: String, typeId: Int) {
@@ -105,97 +105,12 @@ class ReportsFragment : BaseFragment() {
         }
     }
 
-    private fun initPieChart() {
-        mBinding.pieChart.description.isEnabled = false
-        mBinding.pieChart.setNoDataText("")
-        mBinding.pieChart.setUsePercentValues(true)
-        mBinding.pieChart.isDrawHoleEnabled = true
-        mBinding.pieChart.setHoleColor(Color.TRANSPARENT)
-        mBinding.pieChart.isRotationEnabled = false
-        mBinding.pieChart.rotationAngle = 20f
-
-        mBinding.pieChart.legend.isEnabled = false
-        mBinding.pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry, h: Highlight) {
-                val typeName = (e.data as TypeSumMoneyBean).typeName
-                val typeId = (e.data as TypeSumMoneyBean).typeId
-                navTypeRecords(typeName, typeId)
-            }
-
-            override fun onNothingSelected() {
-
-            }
-        })
-    }
-
-    private fun setChartData(typeSumMoneyBeans: List<TypeSumMoneyBean>?) {
-        if (typeSumMoneyBeans == null || typeSumMoneyBeans.isEmpty()) {
-            mBinding.pieChart.visibility = View.INVISIBLE
-            return
-        } else {
-            mBinding.pieChart.visibility = View.VISIBLE
-        }
-
-        val entries = PieEntryConverter.getBarEntryList(typeSumMoneyBeans)
-        val dataSet: PieDataSet
-
-        if (mBinding.pieChart.data != null && mBinding.pieChart.data.dataSetCount > 0) {
-            dataSet = mBinding.pieChart.data.getDataSetByIndex(0) as PieDataSet
-            dataSet.values = entries
-            mBinding.pieChart.data.notifyDataChanged()
-            mBinding.pieChart.notifyDataSetChanged()
-        } else {
-            dataSet = PieDataSet(entries, "")
-            dataSet.sliceSpace = 0f
-            dataSet.selectionShift = 1.2f
-            dataSet.valueLinePart1Length = 0.2f
-            dataSet.valueLinePart2Length = 0.4f
-            dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
-            dataSet.yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
-            dataSet.isValueLineVariableLength = false
-            dataSet.valueLineColor = resources.getColor(R.color.colorText)
-
-            dataSet.colors = PieColorsCreator.colors(this.context, entries.size)
-
-            val data = PieData(dataSet)
-            data.setValueFormatter(PercentFormatter())
-            data.setValueTextSize(9f)
-            data.setValueTextColor(Color.WHITE)
-
-            mBinding.pieChart.data = data
-        }
-        // undo all highlights
-        mBinding.pieChart.highlightValues(null)
-        mBinding.pieChart.invalidate()
-        mBinding.pieChart.animateXY(1000, 1000)
-    }
-
-    /**
-     * 设置月份
-     */
-    fun setYearMonth(year: Int, month: Int) {
-        if (year == mYear && month == mMonth) {
-            return
-        }
-        mYear = year
-        mMonth = month
-        // 更新数据
-        getTypeSumMoney()
-        getMonthSumMoney()
-    }
-
-    override fun lazyInitData() {
-        mBinding.layoutSumMoney?.rgType?.check(R.id.rb_outlay)
-    }
-
     private fun getMonthSumMoney() {
         mDisposable.add(mViewModel.getMonthSumMoney(mYear, mMonth)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    // 这种方式被误报红
-                    // mBinding.layoutSumMoney?.sumMoneyBeanList = it
-                    mBinding.layoutSumMoney?.setVariable(BR.sumMoneyBeanList, it)
+                    sumMoneyChooseView.setSumMoneyBean(it)
                 }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_get_month_summary_fail)
@@ -208,18 +123,28 @@ class ReportsFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ typeSumMoneyBeans ->
-                    setChartData(typeSumMoneyBeans)
-                    mAdapter.colors = PieColorsCreator.colors(context!!, typeSumMoneyBeans.size)
-                    mAdapter.maxValue = PieEntryConverter.getMax(typeSumMoneyBeans)
-                    mAdapter.setNewData(typeSumMoneyBeans)
-                    if (typeSumMoneyBeans.isEmpty()) {
-                        mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)
-                    }
+                    pieChart.setChartData(typeSumMoneyBeans)
+                    setItems(typeSumMoneyBeans)
                 }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_get_type_summary_fail)
                     Log.e(TAG, "获取类型汇总数据失败", throwable)
                 })
+    }
+
+    private fun setItems(beans: List<TypeSumMoneyBean>) {
+        val viewBinder = ReportsViewBinder({ navTypeRecords(it.typeName, it.typeId) })
+        viewBinder.colors = PieColorsCreator.colors(context!!, beans.size)
+        viewBinder.maxValue = PieEntryConverter.getMax(beans)
+        adapter.register(TypeSumMoneyBean::class, viewBinder)
+        val items = Items()
+        if (beans.isEmpty()) {
+            items.add(Empty(getString(R.string.text_empty_tip), Gravity.CENTER_HORIZONTAL))
+        } else {
+            items.addAll(beans)
+        }
+        adapter.items = items
+        adapter.notifyDataSetChanged()
     }
 
     companion object {

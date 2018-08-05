@@ -14,29 +14,33 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="me.bakumon.moneykeeper.ui.statistics.reports.ReportsFragment">
 
-    <LinearLayout
+    <me.bakumon.moneykeeper.ui.statistics.SumMoneyChooseView
+        android:id="@+id/sumMoneyChooseView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp" />
+
+    <me.bakumon.moneykeeper.ui.statistics.reports.piechart.MinePieChart
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_margin="20dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvReports"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/layout_sum_money"
-            layout="@layout/layout_sum_money" />
-
-        <me.bakumon.moneykeeper.view.mpchartpatch.piechart.MyPieChart
-            android:id="@+id/pie_chart"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_margin="20dp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_record_reports"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-</layout>
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_report" />
+</LinearLayout>

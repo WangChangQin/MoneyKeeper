@@ -35,9 +35,11 @@ import java.util.List;
 
 
 /**
+ * 大于 2% 显示
+ *
  * @author mafei
  */
-public class MyPieChartRenderer extends DataRenderer {
+public class NoSmallPieChartRenderer extends DataRenderer {
     protected PieChart mChart;
 
     /**
@@ -71,8 +73,8 @@ public class MyPieChartRenderer extends DataRenderer {
 
     protected Canvas mBitmapCanvas;
 
-    public MyPieChartRenderer(PieChart chart, ChartAnimator animator,
-                              ViewPortHandler viewPortHandler) {
+    public NoSmallPieChartRenderer(PieChart chart, ChartAnimator animator,
+                                   ViewPortHandler viewPortHandler) {
         super(animator, viewPortHandler);
         mChart = chart;
 

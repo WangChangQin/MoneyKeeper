@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.statistics.reports
+package me.bakumon.moneykeeper.ui.statistics.reports.piechart
 
 import com.github.mikephil.charting.data.PieEntry
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean

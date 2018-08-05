@@ -53,7 +53,7 @@ class BillFragment : BaseFragment() {
 
     override fun onInit(savedInstanceState: Bundle?) {
         mViewModel = getViewModel()
-        // 设置 MultiTypeAdapter
+
         adapter = MultiTypeAdapter()
         adapter.register(RecordWithType::class, RecordViewBinder({ deleteRecord(it) }))
         adapter.register(Empty::class, EmptyViewBinder())
@@ -119,12 +119,12 @@ class BillFragment : BaseFragment() {
                 })
     }
 
-    private fun setItems(recordWithTypes: List<RecordWithType>) {
+    private fun setItems(beans: List<RecordWithType>) {
         val items = Items()
-        if (recordWithTypes.isEmpty()) {
+        if (beans.isEmpty()) {
             items.add(Empty(getString(R.string.text_empty_tip), Gravity.CENTER_HORIZONTAL))
         } else {
-            items.addAll(recordWithTypes)
+            items.addAll(beans)
         }
         adapter.items = items
         adapter.notifyDataSetChanged()
