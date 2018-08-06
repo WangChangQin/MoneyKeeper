@@ -16,7 +16,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_type_item_root"
+    android:id="@+id/llTypeSortItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -25,13 +25,13 @@
     tools:background="@color/colorPrimary">
 
     <ImageView
-        android:id="@+id/iv_type"
+        android:id="@+id/ivTypeImg"
         android:layout_width="50dp"
         android:layout_height="50dp"
         tools:src="@mipmap/type_eat" />
 
     <TextView
-        android:id="@+id/tv_type_name"
+        android:id="@+id/tvTypeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

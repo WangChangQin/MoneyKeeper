@@ -22,7 +22,6 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_type_sort.*
@@ -33,6 +32,9 @@ import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 
 /**
  * 类型排序
@@ -42,8 +44,8 @@ import me.bakumon.moneykeeper.utill.ToastUtils
 class TypeSortActivity : BaseActivity() {
 
     private lateinit var mViewModel: TypeSortViewModel
-    private lateinit var mAdapter: TypeSortAdapter
-    private var mType: Int = 0
+    private lateinit var mAdapter: MultiTypeAdapter
+    private var mType: Int = RecordType.TYPE_OUTLAY
 
     override val layoutId: Int
         get() = R.layout.activity_type_sort
@@ -58,15 +60,14 @@ class TypeSortActivity : BaseActivity() {
     override fun onInit(savedInstanceState: Bundle?) {
         mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
 
-        mAdapter = TypeSortAdapter(null)
+        mAdapter = MultiTypeAdapter()
+        mAdapter.register(RecordType::class, TypeSortViewBinder())
         rvType.adapter = mAdapter
 
-        val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(mAdapter)
-        val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
-        itemTouchHelper.attachToRecyclerView(rvType)
 
-        // open drag
-        mAdapter.enableDragItem(itemTouchHelper)
+        val callback = SortDragCallback(mAdapter)
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(rvType)
 
         mViewModel = getViewModel()
         initData()
@@ -86,7 +87,7 @@ class TypeSortActivity : BaseActivity() {
     }
 
     private fun sortRecordTypes() {
-        mDisposable.add(mViewModel.sortRecordTypes(mAdapter.data).subscribeOn(Schedulers.io())
+        mDisposable.add(mViewModel.sortRecordTypes(mAdapter.items as List<RecordType>).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ this.finish() }) { throwable ->
                     if (throwable is BackupFailException) {
@@ -103,11 +104,20 @@ class TypeSortActivity : BaseActivity() {
     private fun initData() {
         mDisposable.add(mViewModel.getRecordTypes(mType).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordTypes -> mAdapter.setNewData(recordTypes) }
+                .subscribe({ recordTypes ->
+                    setItems(recordTypes)
+                }
                 ) { throwable ->
                     ToastUtils.show(R.string.toast_get_types_fail)
                     Log.e(TAG, "获取类型数据失败", throwable)
                 })
+    }
+
+    private fun setItems(data: List<RecordType>) {
+        val items = Items()
+        items.addAll(data)
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 
     companion object {
