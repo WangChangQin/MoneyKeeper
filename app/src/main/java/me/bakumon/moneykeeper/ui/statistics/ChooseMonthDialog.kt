@@ -22,12 +22,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import android.view.ViewGroup
+import android.widget.TextView
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.view.PickerLayoutManager
 import java.util.*
+
 
 /**
  * 选择月份
@@ -81,9 +82,9 @@ class ChooseMonthDialog {
         val lmMonth = PickerLayoutManager(mContext, mRvMonth, LinearLayoutManager.VERTICAL, false, 3, 0.4f, true)
         mRvMonth.layoutManager = lmMonth
 
-        mYearAdapter = PickerAdapter(null)
+        mYearAdapter = PickerAdapter()
         rvYear.adapter = mYearAdapter
-        mMonthAdapter = PickerAdapter(null)
+        mMonthAdapter = PickerAdapter()
         mRvMonth.adapter = mMonthAdapter
 
         setYearAdapter()
@@ -158,9 +159,28 @@ class ChooseMonthDialog {
         mBuilder.create().show()
     }
 
-    internal inner class PickerAdapter(data: List<Int>?) : BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_picker, data) {
-        override fun convert(helper: BaseViewHolder, item: Int) {
-            helper.setText(R.id.tv_text, item.toString() + "")
+    internal inner class PickerAdapter : RecyclerView.Adapter<PickerAdapter.ViewHolder>() {
+        val data = arrayListOf<Int>()
+        fun setNewData(data: List<Int>) {
+            this.data.addAll(data)
+            notifyDataSetChanged()
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(mContext).inflate(R.layout.item_picker, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return data.size
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.textView.text = data[position].toString()
+        }
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val textView: TextView = itemView.findViewById(R.id.tv_text)
         }
     }
 
