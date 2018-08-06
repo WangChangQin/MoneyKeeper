@@ -18,12 +18,16 @@ package me.bakumon.moneykeeper.ui.setting
 
 import android.content.Context
 import android.support.design.widget.BottomSheetDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import me.bakumon.moneykeeper.BR
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
+import me.drakeet.multitype.ItemViewBinder
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import java.io.File
 
 /**
@@ -31,9 +35,8 @@ import java.io.File
  *
  * @author Bakumon https://bakumon.me
  */
-class BackupFliesDialog(private val mContext: Context, private val mBackupBeans: List<BackupBean>) {
+class BackupFliesDialog(private val mContext: Context, private val mBackupBeans: List<BackupBean>, private val onItemCLickListener: ((File) -> Unit)) {
     private lateinit var mDialog: BottomSheetDialog
-    var mOnItemClickListener: ((File) -> Unit)? = null
 
     init {
         setupDialog()
@@ -43,14 +46,13 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         val layoutInflater = LayoutInflater.from(mContext)
         val contentView = layoutInflater.inflate(R.layout.dialog_backup_files, null, false)
         val rvFiles = contentView.findViewById<RecyclerView>(R.id.rv_files)
-        rvFiles.layoutManager = LinearLayoutManager(mContext)
-        val adapter = FilesAdapter(null)
+
+        val adapter = MultiTypeAdapter()
+        adapter.register(BackupBean::class, FilesViewBinder())
         rvFiles.adapter = adapter
-        adapter.setOnItemClickListener { _, _, position ->
-            mDialog.dismiss()
-            mOnItemClickListener?.invoke(adapter.data[position].file)
-        }
-        adapter.setNewData(mBackupBeans)
+
+        adapter.items = mBackupBeans
+        adapter.notifyDataSetChanged()
 
         mDialog = BottomSheetDialog(mContext)
         mDialog.setContentView(contentView)
@@ -60,12 +62,28 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         mDialog.show()
     }
 
-    internal inner class FilesAdapter(data: List<BackupBean>?) : BaseDataBindingAdapter<BackupBean>(R.layout.item_backup_files, data) {
+    internal inner class FilesViewBinder : ItemViewBinder<BackupBean, FilesViewBinder.ViewHolder>() {
 
-        override fun convert(helper: BaseDataBindingAdapter.DataBindingViewHolder, item: BackupBean) {
-            val binding = helper.binding
-            binding.setVariable(BR.backupBean, item)
-            binding.executePendingBindings()
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
+            val root = inflater.inflate(R.layout.item_backup_file, parent, false)
+            return ViewHolder(root)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, item: BackupBean) {
+            holder.tvFileName.text = item.name
+            holder.tvFileTime.text = item.time
+            holder.tvFileSize.text = item.size
+            holder.llItemFile.setOnClickListener {
+                onItemCLickListener.invoke(item.file)
+                mDialog.dismiss()
+            }
+        }
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val tvFileName: TextView = itemView.findViewById(R.id.tvFileName)
+            val tvFileTime: TextView = itemView.findViewById(R.id.tvFileTime)
+            val tvFileSize: TextView = itemView.findViewById(R.id.tvFileSize)
+            val llItemFile: LinearLayout = itemView.findViewById(R.id.llItemFile)
         }
     }
 

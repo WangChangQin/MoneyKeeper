@@ -380,10 +380,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ backupBeans ->
-                    val dialog = BackupFliesDialog(this, backupBeans)
-                    dialog.mOnItemClickListener = {
-                        restoreDB(it.path)
-                    }
+                    val dialog = BackupFliesDialog(this, backupBeans, { restoreDB(it.path) })
                     dialog.show()
                 }
                 ) { throwable ->

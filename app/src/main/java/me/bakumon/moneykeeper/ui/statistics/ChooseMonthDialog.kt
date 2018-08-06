@@ -22,8 +22,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.base.BaseDataBindingAdapter
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.view.PickerLayoutManager
 import java.util.*
@@ -157,10 +158,9 @@ class ChooseMonthDialog {
         mBuilder.create().show()
     }
 
-    internal inner class PickerAdapter(data: List<Int>?) : BaseDataBindingAdapter<Int>(R.layout.item_picker, data) {
-
-        override fun convert(helper: BaseDataBindingAdapter.DataBindingViewHolder, item: Int?) {
-            helper.setText(R.id.tv_text, item!!.toString() + "")
+    internal inner class PickerAdapter(data: List<Int>?) : BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_picker, data) {
+        override fun convert(helper: BaseViewHolder, item: Int) {
+            helper.setText(R.id.tv_text, item.toString() + "")
         }
     }
 

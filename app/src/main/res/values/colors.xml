@@ -40,6 +40,8 @@
     <color name="colorText3">#b3b0b0</color>
     <color name="colorTextHint">#73798c</color>
 
+    <color name="colorDialogText">#333333</color>
+
     <!-- 捐赠按钮 -->
     <color name="colorDonate">#1565C0</color>
 

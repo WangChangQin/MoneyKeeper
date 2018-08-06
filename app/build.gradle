@@ -51,9 +51,6 @@ android {
             abiFilters 'armeabi-v7a'
         }
     }
-    dataBinding {
-        enabled = true
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -186,8 +183,6 @@ dependencies {
     androidTestImplementation deps.spresso_core
     // kotlin
     implementation deps.kotlin.stdlib
-    // Data Binding
-    kapt deps.databinding.compiler
     // 支持库
     implementation deps.support.app_compat
     implementation deps.support.design
