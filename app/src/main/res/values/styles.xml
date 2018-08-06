@@ -40,6 +40,13 @@
         <item name="android:textColor">@color/about_page_card_text_color</item>
     </style>
 
+    <!-- 覆盖 AboutPage.Header.Icon 增加上外边距 -->
+    <style name="AboutPage.Header.Icon">
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+    </style>
+
     <style name="About" parent="AppTheme">
         <item name="aboutPageHeaderBackground">@color/colorAccent</item>
     </style>

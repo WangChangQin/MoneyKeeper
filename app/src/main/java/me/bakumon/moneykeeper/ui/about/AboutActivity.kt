@@ -28,7 +28,9 @@ import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.Pi
 import me.bakumon.moneykeeper.utill.StatusBarUtil
+import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.support.about.*
 import me.drakeet.support.about.extension.RecommendedLoaderDelegate
@@ -96,6 +98,10 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
     }
 
     override fun onContributorClicked(itemView: View, contributor: Contributor): Boolean {
+        if (contributor.name == "Markcrs" || contributor.name == "梁月") {
+            ToastUtils.show(Pi.randomPi())
+            return true
+        }
         return false
     }
 
