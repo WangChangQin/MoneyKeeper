@@ -20,7 +20,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.InputType
 import android.text.TextUtils
@@ -41,11 +40,13 @@ import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * 设置
@@ -54,16 +55,17 @@ import java.util.*
  */
 class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var mViewModel: SettingViewModel
-    private lateinit var mAdapter: SettingAdapter
+    private lateinit var adapter: MultiTypeAdapter
 
     override val layoutId: Int
         get() = R.layout.activity_setting
 
     override fun onInitView(savedInstanceState: Bundle?) {
 
-        mViewModel = getViewModel()
-
-        initView()
+        toolbarLayout.tvTitle.text = getString(R.string.text_setting)
+        setSupportActionBar(toolbarLayout as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -71,73 +73,68 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-    private fun initView() {
-
-        toolbarLayout.tvTitle.text = getString(R.string.text_setting)
-        setSupportActionBar(toolbarLayout as Toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        rv_setting.layoutManager = LinearLayoutManager(this)
-        mAdapter = SettingAdapter(null)
-
-        val list = ArrayList<SettingSectionEntity>()
-
-        list.add(SettingSectionEntity(getString(R.string.text_money)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), getBudgetStr())))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_assets), getAssetsStr())))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive)))
-
-
-        list.add(SettingSectionEntity(getString(R.string.text_backup)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup)))
-
-        list.add(SettingSectionEntity(getString(R.string.text_cloud_backup)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(true, getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content))))
-
-        list.add(SettingSectionEntity(getString(R.string.text_about_and_more)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_privacy_policy))))
-
-        mAdapter.setNewData(list)
-        addListener()
-        rv_setting.adapter = mAdapter
-    }
-
     override fun onInit(savedInstanceState: Bundle?) {
+        adapter = MultiTypeAdapter()
+        adapter.register(Category::class, CategoryViewBinder())
+        adapter.register(NormalItem::class, NormalItemViewBinder({ onNormalItemClick(it) }))
+        adapter.register(CheckItem::class, CheckItemViewBinder({ item, isCheck -> onCheckItemCheckChange(item, isCheck) }))
+        adapter.register(ImgItem::class, ImgItemViewBinder({ onImgItemClick(it) }))
+        rv_setting.adapter = adapter
 
+
+        val items = Items()
+
+        items.add(Category(getString(R.string.text_money)))
+        items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
+        items.add(NormalItem(getString(R.string.text_setting_assets), getAssetsStr()))
+        items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
+        items.add(NormalItem(getString(R.string.text_setting_type_manage), "添加、修改和排序"))
+        items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
+        items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
+
+        items.add(Category(getString(R.string.text_backup)))
+        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir)))
+        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir)))
+        items.add(CheckItem(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup))
+
+        items.add(Category(getString(R.string.text_cloud_backup)))
+        items.add(ImgItem(getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content), R.drawable.ic_cloud))
+
+        items.add(Category(getString(R.string.text_about_and_more)))
+        items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
+        items.add(NormalItem("", getString(R.string.text_privacy_policy)))
+
+
+        adapter.items = items
+        adapter.notifyDataSetChanged()
+
+        mViewModel = getViewModel()
     }
 
-    private fun addListener() {
-        mAdapter.setOnItemClickListener { _, _, position ->
-            when (position) {
-                1 -> setBudget(position)
-                2 -> setAssets(position)
-                3 -> setSymbol()
-                4 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
-                8 -> showBackupDialog()
-                9 -> showRestoreDialog()
-                12 -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
-                14 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                15 -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
-                else -> {
-                }
-            }
+    private fun onNormalItemClick(item: NormalItem) {
+        when (item.title) {
+            getString(R.string.text_monty_budget) -> setBudget()
+            getString(R.string.text_setting_assets) -> setAssets()
+            getString(R.string.text_title_symbol) -> setSymbol()
+            getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
+            getString(R.string.text_go_backup) -> showBackupDialog()
+            getString(R.string.text_restore) -> showRestoreDialog()
+            getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+            "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }
-        // Switch
-        mAdapter.setOnItemChildClickListener { _, _, position ->
-            when (position) {
-                5 -> switchFast()
-                6 -> switchSuccessive()
-                10 -> switchAutoBackup(position)
-                else -> {
-                }
-            }
+    }
+
+    private fun onCheckItemCheckChange(item: CheckItem, isCheck: Boolean) {
+        when (item.title) {
+            getString(R.string.text_fast_accounting) -> ConfigManager.setIsFast(isCheck)
+            getString(R.string.text_successive_record) -> ConfigManager.setIsSuccessive(isCheck)
+            getString(R.string.text_auto_backup) -> switchAutoBackup(isCheck)
+        }
+    }
+
+    private fun onImgItemClick(item: ImgItem) {
+        when (item.title) {
+            getString(R.string.text_cloud_backup_title) -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
         }
     }
 
@@ -148,7 +145,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             ConfigManager.symbol + BigDecimalUtil.formatNum(ConfigManager.budget.toString())
     }
 
-    private fun setBudget(position: Int) {
+    private fun setBudget() {
         val oldBudget = if (ConfigManager.budget == 0)
             null
         else
@@ -159,22 +156,21 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 .inputRange(0, 8)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_budget), oldBudget,
-                        { _, input ->
-                            val text = input.toString()
-                            if (!TextUtils.isEmpty(text)) {
-                                ConfigManager.setBudget(Integer.parseInt(text))
-                            } else {
-                                ConfigManager.setBudget(0)
-                            }
-                            resetBudgetItem(position)
-                        }).show()
+                .input(getString(R.string.hint_enter_budget), oldBudget, { _, input ->
+                    if (!input.isEmpty()) {
+                        ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                    } else {
+                        ConfigManager.setBudget(0)
+                    }
+                    updateBudgetItem()
+                }).show()
     }
 
-    private fun resetBudgetItem(position: Int) {
-        mAdapter.data[position].t.content = getBudgetStr()
+    private fun updateBudgetItem() {
+        val position = 1
+        (adapter.items[position] as NormalItem).content = getBudgetStr()
         rv_setting.itemAnimator.changeDuration = 250
-        mAdapter.notifyItemChanged(position)
+        adapter.notifyItemChanged(position)
     }
 
     private fun getAssetsStr(): String {
@@ -184,7 +180,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             ConfigManager.symbol + BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
     }
 
-    private fun setAssets(position: Int) {
+    private fun setAssets() {
         val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
             null
         else
@@ -204,7 +200,7 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                                 val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
                                 ConfigManager.setAssets(saveStr)
                             }
-                            resetAssetsItem(position)
+                            updateAssetsItem()
                         }).show()
     }
 
@@ -221,10 +217,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun resetAssetsItem(position: Int) {
-        mAdapter.data[position].t.content = getAssetsStr()
+    private fun updateAssetsItem() {
+        val position = 2
+        (adapter.items[position] as NormalItem).content = getAssetsStr()
         rv_setting.itemAnimator.changeDuration = 250
-        mAdapter.notifyItemChanged(position)
+        adapter.notifyItemChanged(position)
     }
 
     private fun setSymbol() {
@@ -245,40 +242,20 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
-                    resetBudgetItem(1)
-                    resetAssetsItem(2)
+                    updateBudgetItem()
+                    updateAssetsItem()
                     true
                 })
                 .positiveText(R.string.text_affirm)
                 .show()
     }
 
-    private fun switchFast() {
-        val oldIsConfigOpen = ConfigManager.isFast
-        ConfigManager.setIsFast(!oldIsConfigOpen)
-    }
-
-    private fun switchSuccessive() {
-        val oldIsConfigOpen = ConfigManager.isSuccessive
-        ConfigManager.setIsSuccessive(!oldIsConfigOpen)
-    }
-
-    private fun switchAutoBackup(position: Int) {
-        val oldIsConfigOpen = mAdapter.data[position].t.isConfigOpen
-        if (oldIsConfigOpen) {
-            MaterialDialog.Builder(this)
-                    .cancelable(false)
-                    .title(R.string.text_close_auto_backup)
-                    .content(R.string.text_close_auto_backup_tip)
-                    .positiveText(R.string.text_affirm)
-                    .negativeText(R.string.text_cancel)
-                    .onNegative({ _, _ -> mAdapter.notifyItemChanged(position) })
-                    .onPositive({ _, _ -> setAutoBackup(position, false) })
-                    .show()
-
+    private fun switchAutoBackup(isCheck: Boolean) {
+        if (!isCheck) {
+            ConfigManager.setIsAutoBackup(false)
         } else {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                setAutoBackup(position, true)
+                ConfigManager.setIsAutoBackup(true)
                 return
             }
             EasyPermissions.requestPermissions(
@@ -294,7 +271,6 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         when (requestCode) {
             11 -> {
                 ConfigManager.setIsAutoBackup(true)
-                initView()
             }
             12 -> backupDB()
             13 -> restore()
@@ -303,7 +279,18 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+    private fun updateAutoBackupItem(isCheck: Boolean) {
+        val position = 10
+        (adapter.items[position] as CheckItem).isCheck = isCheck
+        rv_setting.itemAnimator.changeDuration = 250
+        adapter.notifyItemChanged(position)
+    }
+
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (requestCode == 11) {
+            // 更新自动备份 item
+            updateAutoBackupItem(false)
+        }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this)
                     .setRationale(R.string.text_storage_permission_tip)
@@ -315,19 +302,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            initView()
+            onInit(null)
         }
-    }
-
-    private fun setAutoBackup(position: Int, isBackup: Boolean) {
-        ConfigManager.setIsAutoBackup(isBackup)
-        mAdapter.data[position].t.isConfigOpen = isBackup
-        // 取消 item 动画
-        rv_setting.itemAnimator.changeDuration = 0
-        mAdapter.notifyItemChanged(position)
     }
 
     private fun showBackupDialog() {

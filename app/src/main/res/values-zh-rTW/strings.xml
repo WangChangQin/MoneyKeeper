@@ -60,8 +60,6 @@
     <string name="text_storage">開啟存儲權限</string>
     <string name="text_storage_content">為了自動備份您的記賬數據，需要開啟存儲權限。</string>
     <string name="text_storage_permission_tip">備份相關操作需要存儲權限，去設置界面開啟權限</string>
-    <string name="text_close_auto_backup">關閉自動備份</string>
-    <string name="text_close_auto_backup_tip">關閉自動備份後，需要手動點擊「立即備份」來備份數據，可能會丟失部分最新的數據。</string>
     <string name="text_tip_backup_fail">自動備份失敗</string>
 
     <!-- 记一笔 -->

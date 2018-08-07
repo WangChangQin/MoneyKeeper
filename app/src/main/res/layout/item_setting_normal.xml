@@ -16,21 +16,33 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_head"
+    android:id="@+id/llItemSettingNormal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingBottom="5dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
     android:paddingEnd="20dp"
     android:paddingStart="20dp"
-    android:paddingTop="30dp"
+    android:paddingTop="10dp"
     tools:background="@color/colorPrimary">
 
     <TextView
-        android:id="@+id/tv_head"
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        tools:text="月预算" />
+
+    <TextView
+        android:id="@+id/tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorText3"
-        android:textSize="15sp"
-        tools:text="记账" />
+        android:textSize="14sp"
+        tools:text="¥8,800" />
 </LinearLayout>
+
