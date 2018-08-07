@@ -19,7 +19,9 @@ class MinePieChart @JvmOverloads constructor(context: Context, attrs: AttributeS
     private var onValueClickListener: ((String, Int) -> Unit)? = null
 
     init {
-        this.description.isEnabled = false
+        this.description.isEnabled = true
+        this.description.textColor = context.resources.getColor(R.color.colorText3)
+        this.description.text = context.getString(R.string.text_small_tip)
         this.setNoDataText("")
         this.setUsePercentValues(true)
         this.isDrawHoleEnabled = true

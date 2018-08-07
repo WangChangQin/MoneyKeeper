@@ -116,6 +116,7 @@
     <string name="text_sort_time">按時間</string>
     <string name="text_sort_money">按金額</string>
     <string name="text_empty_tip">每一筆賬單，都是生活的點滴</string>
+    <string name="text_small_tip">注：小於1.9%不顯示</string>
 
     <!-- 回顾 -->
     <string name="text_review">回顧</string>

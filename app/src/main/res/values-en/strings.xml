@@ -116,6 +116,7 @@
     <string name="text_sort_time">By time</string>
     <string name="text_sort_money">By amount</string>
     <string name="text_empty_tip">Every bill is a bit of life</string>
+    <string name="text_small_tip">Note: no less than 1.9%</string>
 
     <!-- 回顾 -->
     <string name="text_review">review</string>
