@@ -202,8 +202,6 @@ dependencies {
     implementation deps.retrofit2.retrofit
     // okhttp 日志拦截器
     implementation deps.okhttp3.logging
-    // base adapter
-    implementation deps.BRVAH
     // 路由
     implementation deps.floo
     // 日期时间选择器

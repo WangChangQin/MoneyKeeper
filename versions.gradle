@@ -41,8 +41,6 @@ versions.rxandroid = "2.0.1"
 // retrofit2
 versions.retrofit2 = "2.4.0"
 versions.okhttp3 = "3.10.0"
-// BaseRecyclerViewAdapterHelper
-versions.BRVAH = "2.9.34"
 versions.floo = "1.1.0"
 versions.datetimepicker = "3.6.0"
 versions.MPChart = "v3.0.3"
@@ -105,7 +103,6 @@ def okhttp3 = [:]
 okhttp3.logging = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3"
 deps.okhttp3 = okhttp3
 
-deps.BRVAH = "com.github.CymChad:BaseRecyclerViewAdapterHelper:$versions.BRVAH"
 deps.floo = "me.drakeet.floo:floo:$versions.floo"
 deps.datetimepicker = "com.wdullaer:materialdatetimepicker:$versions.datetimepicker"
 deps.MPChart = "com.github.PhilJay:MPAndroidChart:$versions.MPChart"

@@ -41,8 +41,6 @@ object OpenSourceListCreator {
 
         items.add(License("MPAndroidChart", "PhilJay", License.APACHE_2, "https://github.com/PhilJay/MPAndroidChart"))
 
-        items.add(License("BRVAH", "CymChad", License.APACHE_2, "https://github.com/CymChad/BaseRecyclerViewAdapterHelper"))
-
         items.add(License("prettytime", "ocpsoft", License.APACHE_2, "https://github.com/ocpsoft/prettytime"))
 
         items.add(License("java-aes-crypto", "tozny", License.MIT, "https://github.com/tozny/java-aes-crypto"))
