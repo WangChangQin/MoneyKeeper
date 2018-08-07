@@ -54,7 +54,9 @@
             android:id="@+id/tvRemark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
+            android:singleLine="true"
             android:textColor="@color/colorTextHint"
             android:textSize="14sp"
             tools:text="请客吃早点" />
