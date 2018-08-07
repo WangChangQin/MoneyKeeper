@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_two_tab.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.ui.common.TwoTabActivity
+import me.bakumon.moneykeeper.ui.common.AbsTwoTabActivity
 import java.util.*
 
 /**
@@ -30,7 +30,7 @@ import java.util.*
  *
  * @author Bakumon https://bakumon
  */
-class TypeRecordsActivity : TwoTabActivity() {
+class TypeRecordsActivity : AbsTwoTabActivity() {
 
     override fun onSetupTitle(tvTitle: TextView) {
         toolbarLayout.tvTitle.text = intent.getStringExtra(Router.ExtraKey.KEY_TYPE_NAME)

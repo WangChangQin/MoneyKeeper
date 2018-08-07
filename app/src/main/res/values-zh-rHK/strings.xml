@@ -135,6 +135,7 @@
     <string name="text_set_symbol">選擇貨幣符號</string>
     <string name="text_content_symbol">只改變貨號，不轉換匯率</string>
     <string name="text_setting_type_manage">收支類型管理</string>
+    <string name="text_setting_type_manage_content">添加、修改和排序</string>
     <string name="text_fast_accounting">快速記帳</string>
     <string name="text_fast_tip">打開APP直接記賬</string>
     <string name="text_successive_record">連續記賬</string>

@@ -135,6 +135,7 @@
     <string name="text_set_symbol">Select currency symbol</string>
     <string name="text_content_symbol">Only change the item number, do not convert the exchange rate</string>
     <string name="text_setting_type_manage">type management</string>
+    <string name="text_setting_type_manage_content">Add, modify, and sort</string>
     <string name="text_fast_accounting">Quick accounting</string>
     <string name="text_fast_tip">Open APP directly bookkeeping</string>
     <string name="text_successive_record">Continuous accounting</string>

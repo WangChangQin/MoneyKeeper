@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_two_tab.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.ui.common.TwoTabActivity
+import me.bakumon.moneykeeper.ui.common.AbsTwoTabActivity
 import me.bakumon.moneykeeper.ui.statistics.bill.BillFragment
 import me.bakumon.moneykeeper.ui.statistics.reports.ReportsFragment
 import me.bakumon.moneykeeper.utill.DateUtils
@@ -36,7 +36,7 @@ import java.util.*
  *
  * @author Bakumon https://bakumon
  */
-class StatisticsActivity : TwoTabActivity() {
+class StatisticsActivity : AbsTwoTabActivity() {
 
     private lateinit var mBillFragment: BillFragment
     private lateinit var mReportsFragment: ReportsFragment

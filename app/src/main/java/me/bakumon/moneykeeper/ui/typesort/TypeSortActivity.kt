@@ -17,20 +17,20 @@
 package me.bakumon.moneykeeper.ui.typesort
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_type_sort.*
-import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.BackupFailException
-import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -41,34 +41,33 @@ import me.drakeet.multitype.register
  *
  * @author bakumon https://bakumon.me
  */
-class TypeSortActivity : BaseActivity() {
+class TypeSortActivity : AbsListActivity() {
 
     private lateinit var mViewModel: TypeSortViewModel
-    private lateinit var mAdapter: MultiTypeAdapter
     private var mType: Int = RecordType.TYPE_OUTLAY
 
-    override val layoutId: Int
-        get() = R.layout.activity_type_sort
-
-    override fun onInitView(savedInstanceState: Bundle?) {
-        toolbarLayout.tvTitle.text = getString(R.string.text_drag_sort)
-        setSupportActionBar(toolbarLayout as Toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    override fun onSetupTitle(tvTitle: TextView) {
+        tvTitle.text = getString(R.string.text_drag_sort)
     }
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
+        adapter.register(RecordType::class, TypeSortViewBinder())
+    }
 
-        mAdapter = MultiTypeAdapter()
-        mAdapter.register(RecordType::class, TypeSortViewBinder())
-        rvType.adapter = mAdapter
+    override fun onItemsCreated(items: Items) {
+
+    }
+
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
+
+        recyclerView.layoutManager = GridLayoutManager(this, 4)
 
 
         val callback = SortDragCallback(mAdapter)
         val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(rvType)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
+        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
         mViewModel = getViewModel()
         initData()
     }

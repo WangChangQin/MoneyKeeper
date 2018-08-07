@@ -20,21 +20,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
-import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -53,42 +52,27 @@ import java.math.BigDecimal
  *
  * @author Bakumon https://bakumon.me
  */
-class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
+class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
+
     private lateinit var mViewModel: SettingViewModel
-    private lateinit var adapter: MultiTypeAdapter
 
-    override val layoutId: Int
-        get() = R.layout.activity_setting
-
-    override fun onInitView(savedInstanceState: Bundle?) {
-
-        toolbarLayout.tvTitle.text = getString(R.string.text_setting)
-        setSupportActionBar(toolbarLayout as Toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    override fun onSetupTitle(tvTitle: TextView) {
+        tvTitle.text = getString(R.string.text_setting)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onInit(savedInstanceState: Bundle?) {
-        adapter = MultiTypeAdapter()
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
         adapter.register(NormalItem::class, NormalItemViewBinder({ onNormalItemClick(it) }))
         adapter.register(CheckItem::class, CheckItemViewBinder({ item, isCheck -> onCheckItemCheckChange(item, isCheck) }))
         adapter.register(ImgItem::class, ImgItemViewBinder({ onImgItemClick(it) }))
-        rv_setting.adapter = adapter
+    }
 
-
-        val items = Items()
-
+    override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_money)))
         items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
         items.add(NormalItem(getString(R.string.text_setting_assets), getAssetsStr()))
         items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
-        items.add(NormalItem(getString(R.string.text_setting_type_manage), "添加、修改和排序"))
+        items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
         items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
         items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
 
@@ -103,12 +87,15 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
         items.add(NormalItem("", getString(R.string.text_privacy_policy)))
+    }
 
-
-        adapter.items = items
-        adapter.notifyDataSetChanged()
-
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
         mViewModel = getViewModel()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     private fun onNormalItemClick(item: NormalItem) {
@@ -168,9 +155,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun updateBudgetItem() {
         val position = 1
-        (adapter.items[position] as NormalItem).content = getBudgetStr()
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = getBudgetStr()
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun getAssetsStr(): String {
@@ -219,9 +206,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun updateAssetsItem() {
         val position = 2
-        (adapter.items[position] as NormalItem).content = getAssetsStr()
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = getAssetsStr()
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun setSymbol() {
@@ -281,9 +268,9 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private fun updateAutoBackupItem(isCheck: Boolean) {
         val position = 10
-        (adapter.items[position] as CheckItem).isCheck = isCheck
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as CheckItem).isCheck = isCheck
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {

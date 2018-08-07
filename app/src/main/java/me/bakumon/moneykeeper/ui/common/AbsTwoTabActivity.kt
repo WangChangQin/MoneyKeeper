@@ -34,7 +34,7 @@ import java.util.*
  *
  * @author Bakumon https://bakumon
  */
-abstract class TwoTabActivity : BaseActivity() {
+abstract class AbsTwoTabActivity : BaseActivity() {
 
     private lateinit var typeChoose: RadioGroup
     private lateinit var viewPager: ViewPager

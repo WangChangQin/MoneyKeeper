@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_type_manager.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.ui.common.TwoTabActivity
+import me.bakumon.moneykeeper.ui.common.AbsTwoTabActivity
 import me.drakeet.floo.Floo
 import java.util.*
 
@@ -33,7 +33,7 @@ import java.util.*
  *
  * @author Bakumon https://bakumon
  */
-class TypeManageActivity : TwoTabActivity() {
+class TypeManageActivity : AbsTwoTabActivity() {
 
     override val layoutId: Int
         get() = R.layout.activity_type_manager

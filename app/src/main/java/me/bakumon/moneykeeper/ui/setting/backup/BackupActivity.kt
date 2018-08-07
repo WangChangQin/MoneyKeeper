@@ -19,12 +19,11 @@ package me.bakumon.moneykeeper.ui.setting.backup
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.RecyclerView
 import android.text.InputType
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
-import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
@@ -34,7 +33,7 @@ import me.bakumon.moneykeeper.api.Network
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
-import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.ui.setting.Category
 import me.bakumon.moneykeeper.ui.setting.CategoryViewBinder
@@ -54,28 +53,19 @@ import okhttp3.ResponseBody
  *
  * @author Bakumon https://bakumon.me
  */
-class BackupActivity : BaseActivity() {
+class BackupActivity : AbsListActivity() {
     private lateinit var mViewModel: BackupViewModel
-    private lateinit var adapter: MultiTypeAdapter
 
-    override val layoutId: Int
-        get() = R.layout.activity_setting
-
-    override fun onInitView(savedInstanceState: Bundle?) {
-        toolbarLayout.tvTitle.text = getString(R.string.text_cloud_backup)
-        setSupportActionBar(toolbarLayout as Toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    override fun onSetupTitle(tvTitle: TextView) {
+        tvTitle.text = getString(R.string.text_cloud_backup)
     }
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        adapter = MultiTypeAdapter()
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
         adapter.register(NormalItem::class, NormalItemViewBinder({ onNormalItemClick(it) }))
-        rv_setting.adapter = adapter
+    }
 
-
-        val items = Items()
+    override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_webdav)))
         items.add(NormalItem(getString(R.string.text_webdav_url), ConfigManager.webDavUrl))
         items.add(NormalItem(getString(R.string.text_webdav_account), ConfigManager.webDavAccount))
@@ -84,10 +74,9 @@ class BackupActivity : BaseActivity() {
         items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_backup_save, getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
         items.add(NormalItem(getString(R.string.text_auto_backup_mode_title), getBackupModeStr(), ConfigManager.cloudEnable))
         items.add(NormalItem(getString(R.string.text_webdav_help), Constant.NUTSTORE_HELP_URL))
+    }
 
-        adapter.items = items
-        adapter.notifyDataSetChanged()
-
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
         mViewModel = getViewModel()
         initDir()
     }
@@ -137,9 +126,9 @@ class BackupActivity : BaseActivity() {
     private fun updateUrlItem(url: String) {
         ConfigManager.setWevDavUrl(url)
         val position = 1
-        (adapter.items[position] as NormalItem).content = url
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = url
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun setAccount() {
@@ -160,9 +149,9 @@ class BackupActivity : BaseActivity() {
     private fun updateAccountItem(account: String) {
         ConfigManager.setWevDavAccount(account)
         val position = 2
-        (adapter.items[position] as NormalItem).content = account
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = account
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private var isSaving = false
@@ -202,9 +191,9 @@ class BackupActivity : BaseActivity() {
     private fun updatePswItem(input: String) {
         ConfigManager.webDAVPsw = input
         val position = 3
-        (adapter.items[position] as NormalItem).content = getItemDisplayPsw()
-        rv_setting.itemAnimator.changeDuration = 250
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = getItemDisplayPsw()
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun updateBackupEnable(enable: Boolean) {
@@ -362,10 +351,10 @@ class BackupActivity : BaseActivity() {
      */
     private fun updateCloudBackupItem() {
         val position = 6
-        (adapter.items[position] as NormalItem).content = getBackupModeStr()
-        (adapter.items[position] as NormalItem).clickEnable = ConfigManager.cloudEnable
-        rv_setting.itemAnimator.changeDuration = 0
-        adapter.notifyItemChanged(position)
+        (mAdapter.items[position] as NormalItem).content = getBackupModeStr()
+        (mAdapter.items[position] as NormalItem).clickEnable = ConfigManager.cloudEnable
+        mRecyclerView.itemAnimator.changeDuration = 0
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun getBackupModeStr(): String {
