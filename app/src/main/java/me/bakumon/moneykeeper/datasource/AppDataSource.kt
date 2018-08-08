@@ -83,7 +83,7 @@ interface AppDataSource {
      *
      * @see RecordType.TYPE_INCOME
      */
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>>
 
     /**
      * 记账类型排序
@@ -181,7 +181,7 @@ interface AppDataSource {
     /**
      * 获取按类型汇总数据
      */
-    fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>
+    fun getTypeSumMoney(from: Date, to: Date, type: Int): LiveData<List<TypeSumMoneyBean>>
 
     /**
      * 获取某年（或某段时间）内所有月份的收支总数

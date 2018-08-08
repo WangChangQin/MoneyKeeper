@@ -16,7 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.statistics.reports
 
-import io.reactivex.Flowable
+import android.arch.lifecycle.LiveData
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
@@ -30,13 +30,13 @@ import me.bakumon.moneykeeper.utill.DateUtils
  */
 class ReportsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    fun getMonthSumMoney(year: Int, month: Int): Flowable<List<SumMoneyBean>> {
+    fun getMonthSumMoney(year: Int, month: Int): LiveData<List<SumMoneyBean>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
-        return mDataSource.getMonthSumMoney(dateFrom, dateTo)
+        return mDataSource.getMonthSumMoneyLiveData(dateFrom, dateTo)
     }
 
-    fun getTypeSumMoney(year: Int, month: Int, type: Int): Flowable<List<TypeSumMoneyBean>> {
+    fun getTypeSumMoney(year: Int, month: Int, type: Int): LiveData<List<TypeSumMoneyBean>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
         return mDataSource.getTypeSumMoney(dateFrom, dateTo, type)

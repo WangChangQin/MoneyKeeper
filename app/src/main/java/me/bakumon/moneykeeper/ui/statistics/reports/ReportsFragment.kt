@@ -16,11 +16,9 @@
 
 package me.bakumon.moneykeeper.ui.statistics.reports
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_reports.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
@@ -32,7 +30,6 @@ import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.ui.statistics.reports.piechart.PieColorsCreator
 import me.bakumon.moneykeeper.ui.statistics.reports.piechart.PieEntryConverter
 import me.bakumon.moneykeeper.utill.DateUtils
-import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -65,10 +62,10 @@ class ReportsFragment : BaseFragment() {
 
         pieChart.setOnValueClickListener { typeName, typeId -> navTypeRecords(typeName, typeId) }
 
-        sumMoneyChooseView.setOnCheckedChangeListener({
+        sumMoneyChooseView.setOnCheckedChangeListener {
             mType = it
             updateData()
-        })
+        }
     }
 
     override fun lazyInitData() {
@@ -106,34 +103,22 @@ class ReportsFragment : BaseFragment() {
     }
 
     private fun getMonthSumMoney() {
-        mDisposable.add(mViewModel.getMonthSumMoney(mYear, mMonth)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    sumMoneyChooseView.setSumMoneyBean(it)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_month_summary_fail)
-                    Log.e(TAG, "获取该月汇总数据失败", throwable)
-                })
+        mViewModel.getMonthSumMoney(mYear, mMonth).observe(this, Observer {
+            sumMoneyChooseView.setSumMoneyBean(it)
+        })
     }
 
     private fun getTypeSumMoney() {
-        mDisposable.add(mViewModel.getTypeSumMoney(mYear, mMonth, mType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ typeSumMoneyBeans ->
-                    pieChart.setChartData(typeSumMoneyBeans)
-                    setItems(typeSumMoneyBeans)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_type_summary_fail)
-                    Log.e(TAG, "获取类型汇总数据失败", throwable)
-                })
+        mViewModel.getTypeSumMoney(mYear, mMonth, mType).observe(this, Observer {
+            if (it != null) {
+                pieChart.setChartData(it)
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(beans: List<TypeSumMoneyBean>) {
-        val viewBinder = ReportsViewBinder({ navTypeRecords(it.typeName, it.typeId) })
+        val viewBinder = ReportsViewBinder { navTypeRecords(it.typeName, it.typeId) }
         viewBinder.colors = PieColorsCreator.colors(context!!, beans.size)
         viewBinder.maxValue = PieEntryConverter.getMax(beans)
         adapter.register(TypeSumMoneyBean::class, viewBinder)
@@ -145,10 +130,5 @@ class ReportsFragment : BaseFragment() {
         }
         adapter.items = items
         adapter.notifyDataSetChanged()
-    }
-
-    companion object {
-
-        private val TAG = ReportsFragment::class.java.simpleName
     }
 }

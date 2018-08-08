@@ -130,8 +130,4 @@ class BillFragment : BaseFragment() {
             sumMoneyChooseView.setSumMoneyBean(it)
         })
     }
-
-    companion object {
-        private val TAG = BillFragment::class.java.simpleName
-    }
 }

@@ -148,7 +148,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.recordTypeDao().getAllRecordTypes()
     }
 
-    override fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
+    override fun getRecordTypes(type: Int): LiveData<List<RecordType>> {
         return mAppDatabase.recordTypeDao().getRecordTypes(type)
     }
 
@@ -238,7 +238,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.recordDao().getDaySumMoney(dateFrom, dateTo, type)
     }
 
-    override fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>> {
+    override fun getTypeSumMoney(from: Date, to: Date, type: Int): LiveData<List<TypeSumMoneyBean>> {
         return mAppDatabase.recordDao().getTypeSumMoney(from, to, type)
     }
 

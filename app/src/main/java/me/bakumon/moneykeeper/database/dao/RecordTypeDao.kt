@@ -36,7 +36,7 @@ interface RecordTypeDao {
     fun getRecordTypeCount(): Long
 
     @Query("SELECT * FROM RecordType WHERE state = 0 AND type = :type ORDER BY ranking")
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>>
 
     @Query("SELECT * FROM RecordType WHERE type = :type AND name = :name")
     fun getTypeByName(type: Int, name: String): RecordType?

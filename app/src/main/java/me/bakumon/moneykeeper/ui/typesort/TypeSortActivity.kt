@@ -16,20 +16,19 @@
 
 package me.bakumon.moneykeeper.ui.typesort
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
@@ -86,30 +85,22 @@ class TypeSortActivity : AbsListActivity() {
     }
 
     private fun sortRecordTypes() {
-        mDisposable.add(mViewModel.sortRecordTypes(mAdapter.items as List<RecordType>).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.finish() }) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（类型排序失败的时候）", throwable)
-                        finish()
-                    } else {
-                        ToastUtils.show(R.string.toast_sort_fail)
-                        Log.e(TAG, "类型排序失败", throwable)
-                    }
-                })
+        mViewModel.sortRecordTypes(mAdapter.items as List<RecordType>).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> finish()
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_sort_fail)
+                }
+            }
+        })
     }
 
     private fun initData() {
-        mDisposable.add(mViewModel.getRecordTypes(mType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordTypes ->
-                    setItems(recordTypes)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_types_fail)
-                    Log.e(TAG, "获取类型数据失败", throwable)
-                })
+        mViewModel.getRecordTypes(mType).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(data: List<RecordType>) {

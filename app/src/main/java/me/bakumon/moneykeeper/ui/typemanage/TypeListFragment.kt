@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.typemanage
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -24,6 +25,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.AbsListFragment
@@ -64,13 +67,18 @@ class TypeListFragment : AbsListFragment() {
     }
 
     private fun initData() {
-        mDisposable.add(mViewModel.getRecordTypes(mType!!).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ setItems(it) }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_types_fail)
-                    Log.e(TAG, "获取类型数据失败", throwable)
-                })
+//        mDisposable.add(mViewModel.getRecordTypes(mType!!).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ setItems(it) }
+//                ) { throwable ->
+//                    ToastUtils.show(R.string.toast_get_types_fail)
+//                    Log.e(TAG, "获取类型数据失败", throwable)
+//                })
+        mViewModel.getRecordTypes(mType!!).observe(this, Observer {
+            if (it != null){
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(recordTypes: List<RecordType>) {
@@ -112,18 +120,15 @@ class TypeListFragment : AbsListFragment() {
     }
 
     private fun deleteType(recordType: RecordType) {
-        mDisposable.add(mViewModel.deleteRecordType(recordType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（类型删除失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_delete_fail)
-                        Log.e(TAG, "类型删除失败", throwable)
-                    }
-                })
+        mViewModel.deleteRecordType(recordType).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_delete_fail)
+                }
+            }
+        })
     }
 
     companion object {
