@@ -16,8 +16,11 @@
 
 package me.bakumon.moneykeeper.ui.addtype
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
@@ -29,8 +32,10 @@ import me.bakumon.moneykeeper.ui.common.BaseViewModel
  */
 class AddTypeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>> {
-        return mDataSource.getAllTypeImgBeans(type)
+    fun getAllTypeImgBeans(type: Int): LiveData<List<TypeImgBean>> {
+        val liveData = MutableLiveData<List<TypeImgBean>>()
+        liveData.value = mDataSource.getAllTypeImgBeans(type)
+        return liveData
     }
 
     /**
@@ -41,8 +46,8 @@ class AddTypeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
      * @param imgName    图片
      * @param name       类型名称
      */
-    fun saveRecordType(recordType: RecordType?, type: Int, imgName: String, name: String): Completable {
-        return if (recordType == null) {
+    fun saveRecordType(recordType: RecordType?, type: Int, imgName: String, name: String): LiveData<Resource<Boolean>> {
+        val completable = if (recordType == null) {
             // 添加
             mDataSource.addRecordType(type, imgName, name)
         } else {
@@ -51,5 +56,16 @@ class AddTypeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
             updateType.state = recordType.state
             mDataSource.updateRecordType(recordType, updateType)
         }
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(completable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 }

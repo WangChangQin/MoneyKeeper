@@ -17,22 +17,21 @@
 package me.bakumon.moneykeeper.ui.addtype
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.AnimationUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_type.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
@@ -107,15 +106,11 @@ class AddTypeActivity : BaseActivity() {
     }
 
     private fun getAllTypeImg() {
-        mDisposable.add(mViewModel.getAllTypeImgBeans(mType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ typeImgBeans ->
-                    setItems(typeImgBeans)
-                }) { throwable ->
-                    ToastUtils.show(R.string.toast_type_img_fail)
-                    Log.e(TAG, "类型图片获取失败", throwable)
-                })
+        mViewModel.getAllTypeImgBeans(mType).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(typeImgBeans: List<TypeImgBean>) {
@@ -153,24 +148,13 @@ class AddTypeActivity : BaseActivity() {
         if (mCurrentItem == null) {
             return
         }
-        mDisposable.add(mViewModel.saveRecordType(mRecordType, mType, mCurrentItem!!.imgName, text)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.finish() }) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（类型保存失败的时候）", throwable)
-                        finish()
-                    } else {
-                        isSaveEnable = true
-                        val failTip = if (TextUtils.isEmpty(throwable.message)) getString(R.string.toast_type_save_fail) else throwable.message
-                        ToastUtils.show(failTip)
-                        Log.e(TAG, "类型保存失败", throwable)
-                    }
-                })
-    }
-
-    companion object {
-        private val TAG = AddTypeActivity::class.java.simpleName
+        mViewModel.saveRecordType(mRecordType, mType, mCurrentItem!!.imgName, text).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> finish()
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_type_save_fail)
+                }
+            }
+        })
     }
 }

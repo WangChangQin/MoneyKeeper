@@ -19,7 +19,6 @@ package me.bakumon.moneykeeper.datasource
 import android.arch.lifecycle.LiveData
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import java.util.*
@@ -102,7 +101,7 @@ interface AppDataSource {
      *
      * @see RecordType.TYPE_INCOME
      */
-    fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>>
+    fun getAllTypeImgBeans(type: Int): List<TypeImgBean>
 
     /**
      * 新增一条记账记录

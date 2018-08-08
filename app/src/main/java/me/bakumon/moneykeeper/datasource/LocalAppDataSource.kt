@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.datasource
 
 import android.arch.lifecycle.LiveData
 import android.text.TextUtils
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import me.bakumon.moneykeeper.App
@@ -170,12 +169,8 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>> {
-        return Flowable.create({ e ->
-            val beans = TypeImgListCreator.createTypeImgBeanData(type)
-            e.onNext(beans)
-            e.onComplete()
-        }, BackpressureStrategy.BUFFER)
+    override fun getAllTypeImgBeans(type: Int): List<TypeImgBean> {
+        return TypeImgListCreator.createTypeImgBeanData(type)
     }
 
     override fun insertRecord(record: Record): Completable {
