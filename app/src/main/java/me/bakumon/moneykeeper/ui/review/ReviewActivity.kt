@@ -16,12 +16,10 @@
 
 package me.bakumon.moneykeeper.ui.review
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Gravity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_review.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
@@ -30,7 +28,6 @@ import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.DateUtils
-import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -43,7 +40,7 @@ import me.drakeet.multitype.register
  */
 class ReviewActivity : BaseActivity() {
 
-    private lateinit var mViewModel: ReviewModel
+    private lateinit var mViewModel: ReviewViewModel
     private lateinit var mAdapter: MultiTypeAdapter
 
     private var mCurrentYear = DateUtils.getCurrentYear()
@@ -93,30 +90,19 @@ class ReviewActivity : BaseActivity() {
     }
 
     private fun getYearSumMoney(year: Int) {
-        mDisposable.add(mViewModel.getYearSumMoney(year)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    sumMoneyView.setSumMoneyBean(it)
-                }
-                ) {
-                    ToastUtils.show(R.string.toast_get_review_sum_money_fail)
-                    Log.e(TAG, "获取回顾数据失败", it)
-                })
+        mViewModel.getYearSumMoney(year).observe(this, Observer {
+            sumMoneyView.setSumMoneyBean(it)
+
+        })
     }
 
     private fun getMonthOfYearSumMoney(year: Int) {
-        mDisposable.add(mViewModel.getMonthOfYearSumMoney(year)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    lineChart.setLineChartData(it)
-                    setItems(it)
-                }
-                ) {
-                    ToastUtils.show(R.string.toast_get_review_fail)
-                    Log.e(TAG, "获取回顾数据失败", it)
-                })
+        mViewModel.getMonthOfYearSumMoney(year).observe(this, Observer {
+            if (it != null) {
+                lineChart.setLineChartData(it)
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(beans: List<MonthSumMoneyBean>) {
@@ -128,9 +114,5 @@ class ReviewActivity : BaseActivity() {
         }
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
-    }
-
-    companion object {
-        private val TAG = ReviewActivity::class.java.simpleName
     }
 }

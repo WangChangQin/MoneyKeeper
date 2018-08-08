@@ -16,7 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.review
 
-import io.reactivex.Flowable
+import android.arch.lifecycle.LiveData
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
@@ -28,15 +28,15 @@ import me.bakumon.moneykeeper.utill.DateUtils
  *
  * @author Bakumon https://bakumon.me
  */
-class ReviewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
+class ReviewViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    fun getYearSumMoney(year: Int): Flowable<List<SumMoneyBean>> {
+    fun getYearSumMoney(year: Int): LiveData<List<SumMoneyBean>> {
         val dateFrom = DateUtils.getYearStart(year)
         val dateTo = DateUtils.getYearEnd(year)
-        return mDataSource.getMonthSumMoney(dateFrom, dateTo)
+        return mDataSource.getMonthSumMoneyLiveData(dateFrom, dateTo)
     }
 
-    fun getMonthOfYearSumMoney(year: Int): Flowable<List<MonthSumMoneyBean>> {
+    fun getMonthOfYearSumMoney(year: Int): LiveData<List<MonthSumMoneyBean>> {
         val dateFrom = DateUtils.getYearStart(year)
         val dateTo = DateUtils.getYearEnd(year)
         return mDataSource.getMonthOfYearSumMoney(dateFrom, dateTo)

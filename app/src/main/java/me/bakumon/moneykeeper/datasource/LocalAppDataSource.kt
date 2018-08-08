@@ -228,6 +228,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
     }
 
+    override fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>> {
+        return mAppDatabase.recordDao().getSumMoneyLiveData(dateFrom, dateTo)
+    }
+
     override fun getDaySumMoney(year: Int, month: Int, type: Int): Flowable<List<DaySumMoneyBean>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
@@ -238,7 +242,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.recordDao().getTypeSumMoney(from, to, type)
     }
 
-    override fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>> {
+    override fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>> {
         return mAppDatabase.recordDao().getMonthOfYearSumMoney(from, to)
     }
 }

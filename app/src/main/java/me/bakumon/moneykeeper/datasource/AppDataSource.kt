@@ -167,6 +167,8 @@ interface AppDataSource {
      */
     fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>>
 
+    fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>>
+
     /**
      * 获取某天的合计
      *
@@ -184,5 +186,5 @@ interface AppDataSource {
     /**
      * 获取某年（或某段时间）内所有月份的收支总数
      */
-    fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>>
+    fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
 }

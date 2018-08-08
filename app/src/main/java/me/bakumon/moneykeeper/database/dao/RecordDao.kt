@@ -78,5 +78,5 @@ interface RecordDao {
     fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>
 
     @Query("SELECT substr(datetime(substr(Record.time, 1, 10), 'unixepoch', 'localtime'), 1, 7) as month, RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type, month ORDER BY Record.time DESC")
-    fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>>
+    fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
 }

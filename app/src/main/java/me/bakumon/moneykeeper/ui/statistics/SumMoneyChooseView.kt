@@ -81,7 +81,10 @@ class SumMoneyChooseView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     @SuppressLint("SetTextI18n")
-    fun setSumMoneyBean(sumMoneyBean: List<SumMoneyBean>) {
+    fun setSumMoneyBean(sumMoneyBean: List<SumMoneyBean>?) {
+        if (sumMoneyBean == null) {
+            return
+        }
         var outlay = BigDecimal(0)
         var income = BigDecimal(0)
         if (sumMoneyBean.isNotEmpty()) {
