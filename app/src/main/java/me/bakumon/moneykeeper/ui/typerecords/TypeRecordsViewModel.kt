@@ -16,9 +16,12 @@
 
 package me.bakumon.moneykeeper.ui.typerecords
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.datasource.AppDataSource
@@ -32,7 +35,7 @@ import me.bakumon.moneykeeper.utill.DateUtils
  */
 class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    fun getRecordWithTypes(sortType: Int, type: Int, typeId: Int, year: Int, month: Int): Flowable<List<RecordWithType>> {
+    fun getRecordWithTypes(sortType: Int, type: Int, typeId: Int, year: Int, month: Int): LiveData<List<RecordWithType>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
         return if (sortType == 0) {
@@ -42,14 +45,23 @@ class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource
         }
     }
 
-    fun deleteRecord(record: RecordWithType): Completable {
+    fun deleteRecord(record: RecordWithType): LiveData<Resource<Boolean>> {
         val oldType = record.mRecordTypes!![0].type
         if (oldType == RecordType.TYPE_OUTLAY) {
             ConfigManager.addAssets(record.money!!)
         } else {
             ConfigManager.reduceAssets(record.money!!)
         }
-        return mDataSource.deleteRecord(record)
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.deleteRecord(record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
-
 }

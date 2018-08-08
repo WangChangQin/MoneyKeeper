@@ -40,11 +40,11 @@ interface RecordDao {
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND Record.record_type_id=:typeId AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
-    fun getRangeRecordWithTypes(from: Date, to: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun getRangeRecordWithTypes(from: Date, to: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND Record.record_type_id=:typeId AND time BETWEEN :from AND :to) ORDER BY money DESC, create_time DESC")
-    fun getRecordWithTypesSortMoney(from: Date, to: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypesSortMoney(from: Date, to: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     @Insert
     fun insertRecord(record: Record)

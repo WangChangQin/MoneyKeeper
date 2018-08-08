@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.datasource
 
 import android.arch.lifecycle.LiveData
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import java.util.*
@@ -143,19 +142,14 @@ interface AppDataSource {
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取某一类型某段时间的记账记录数据，money 排序
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
-
-    /**
-     * 获取本月支出和收入总数
-     */
-    fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>>
+    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取本月支出和收入总数
@@ -165,8 +159,6 @@ interface AppDataSource {
     /**
      * 获取某月支出和收入总数
      */
-    fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>>
-
     fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>>
 
     /**

@@ -19,7 +19,6 @@ package me.bakumon.moneykeeper.datasource
 import android.arch.lifecycle.LiveData
 import android.text.TextUtils
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
@@ -204,28 +203,18 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type)
     }
 
-    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>> {
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type, typeId)
     }
 
-    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>> {
         return mAppDatabase.recordDao().getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId)
-    }
-
-    override fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>> {
-        val dateFrom = DateUtils.getCurrentMonthStart()
-        val dateTo = DateUtils.getCurrentMonthEnd()
-        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
     }
 
     override fun getCurrentMonthSumMoneyLiveData(): LiveData<List<SumMoneyBean>> {
         val dateFrom = DateUtils.getCurrentMonthStart()
         val dateTo = DateUtils.getCurrentMonthEnd()
         return mAppDatabase.recordDao().getSumMoneyLiveData(dateFrom, dateTo)
-    }
-
-    override fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>> {
-        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
     }
 
     override fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>> {

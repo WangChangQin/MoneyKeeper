@@ -16,20 +16,18 @@
 
 package me.bakumon.moneykeeper.ui.typerecords
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_list.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseFragment
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
-import me.bakumon.moneykeeper.ui.home.RecordViewBinder
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -73,19 +71,13 @@ class TypeRecordsByMoneyFragment : BaseFragment() {
     }
 
     private fun deleteRecord(record: RecordWithType) {
-        mDisposable.add(mViewModel.deleteRecord(record)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_record_delete_fail)
-                        Log.e(TAG, "删除记账记录失败", throwable)
-                    }
-                })
+        mViewModel.deleteRecord(record).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_record_delete_fail)
+            }
+        })
     }
 
     override fun lazyInitData() {
@@ -93,16 +85,11 @@ class TypeRecordsByMoneyFragment : BaseFragment() {
     }
 
     private fun getData() {
-        mDisposable.add(mViewModel.getRecordWithTypes(1, mRecordType, mRecordTypeId, mYear, mMonth)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    setItems(it)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_records_fail)
-                    Log.e(TAG, "获取记录列表失败", throwable)
-                })
+        mViewModel.getRecordWithTypes(1, mRecordType, mRecordTypeId, mYear, mMonth).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(recordWithTypes: List<RecordWithType>) {
