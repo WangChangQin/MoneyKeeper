@@ -17,16 +17,16 @@
 package me.bakumon.moneykeeper.ui.typemanage
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_list.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.BackupFailException
-import me.bakumon.moneykeeper.ui.common.BaseFragment
+import me.bakumon.moneykeeper.ui.common.AbsListFragment
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
@@ -34,28 +34,27 @@ import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
 
 /**
- * 类型列表
+ * 类型列表-支出或收入
  *
  * @author Bakumon https://bakumon.me
  */
-class TypeListFragment : BaseFragment() {
+class TypeListFragment : AbsListFragment() {
 
     private var mType: Int? = RecordType.TYPE_OUTLAY
     private lateinit var mViewModel: TypeManageViewModel
-    private lateinit var mAdapter: MultiTypeAdapter
 
-    override val layoutId: Int
-        get() = R.layout.layout_list
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
+        val viewBinder = TypeListViewBinder({ onClickItem(it) }, { onLongClickItem(it) })
+        adapter.register(RecordType::class, viewBinder)
+    }
 
-    override fun onInit(savedInstanceState: Bundle?) {
+    override fun onItemsCreated(items: Items) {
+
+    }
+
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
+        recyclerView.setPadding(0, 0, 0, 200)
         mType = arguments?.getInt(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
-
-        mAdapter = MultiTypeAdapter()
-        val viewModel = TypeListViewBinder({ onClickItem(it) }, { onLongClickItem(it) })
-        mAdapter.register(RecordType::class, viewModel)
-        recyclerView.adapter = mAdapter
-        recyclerView.setPadding(0, 0, 0, 180)
-
         mViewModel = getViewModel()
         initData()
     }
@@ -108,7 +107,7 @@ class TypeListFragment : BaseFragment() {
                 .content(R.string.text_delete_type_note)
                 .positiveText(R.string.text_affirm_delete)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ -> deleteType(recordType) })
+                .onPositive { _, _ -> deleteType(recordType) }
                 .show()
     }
 
