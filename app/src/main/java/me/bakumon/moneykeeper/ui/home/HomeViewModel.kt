@@ -16,9 +16,9 @@
 
 package me.bakumon.moneykeeper.ui.home
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,7 +41,7 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
     private lateinit var pswLiveData: MutableLiveData<Resource<String>>
 
-    fun getPsw(): MutableLiveData<Resource<String>> {
+    fun getPsw(): LiveData<Resource<String>> {
         pswLiveData = MutableLiveData()
         getClearPsw()
         return pswLiveData
@@ -51,11 +51,11 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         val key = EncryptUtil.key
         val salt = EncryptUtil.salt
 
-        mDisposable.add(Flowable.create(FlowableOnSubscribe<String>({
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<String> {
             val displayPsw = ConfigManager.webDavEncryptPsw
             val psw = if (displayPsw.isEmpty()) "" else EncryptUtil.decrypt(displayPsw, key, salt)
             it.onNext(psw)
-        }), BackpressureStrategy.BUFFER)
+        }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -67,23 +67,43 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         )
     }
 
-    val currentMonthRecordWithTypes: Flowable<List<RecordWithType>>
+    val currentMonthRecordWithTypes: LiveData<List<RecordWithType>>
         get() = mDataSource.getCurrentMonthRecordWithTypes()
 
-    val currentMonthSumMoney: Flowable<List<SumMoneyBean>>
-        get() = mDataSource.getCurrentMonthSumMoney()
+    val currentMonthSumMoney: LiveData<List<SumMoneyBean>>
+        get() = mDataSource.getCurrentMonthSumMoneyLiveData()
 
-    fun initRecordTypes(): Completable {
-        return mDataSource.initRecordTypes()
+    fun initRecordTypes(): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.initRecordTypes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 
-    fun deleteRecord(record: RecordWithType): Completable {
+    fun deleteRecord(record: RecordWithType): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
         val oldType = record.mRecordTypes!![0].type
         if (oldType == RecordType.TYPE_OUTLAY) {
             ConfigManager.addAssets(record.money!!)
         } else {
             ConfigManager.reduceAssets(record.money!!)
         }
-        return mDataSource.deleteRecord(record)
+        mDisposable.add(mDataSource.deleteRecord(record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 }

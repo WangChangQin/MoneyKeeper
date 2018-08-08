@@ -67,7 +67,10 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         })
     }
 
-    fun setSumMoneyBeanList(beanList: List<SumMoneyBean>) {
+    fun setSumMoneyBeanList(beanList: List<SumMoneyBean>?) {
+        if (beanList == null) {
+            return
+        }
         val viewList = listOf(getPagerView(beanList), getPagerView1(beanList))
         mAdapter.mViews = viewList
         mAdapter.notifyDataSetChanged()
@@ -114,10 +117,10 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             tvRightContent.text = tvRightContent.context.getString(R.string.text_set_budget)
-            tvRightContent.setOnClickListener({
+            tvRightContent.setOnClickListener {
                 Floo.navigation(tvRightContent.context, Router.Url.URL_SETTING)
                         .start()
-            })
+            }
         }
 
         return pagerView!!
@@ -155,10 +158,10 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             tvRightContent.text = tvRightContent.context.getString(R.string.text_setting_assets)
-            tvRightContent.setOnClickListener({
+            tvRightContent.setOnClickListener {
                 Floo.navigation(tvRightContent.context, Router.Url.URL_SETTING)
                         .start()
-            })
+            }
         }
         return pagerView1!!
     }

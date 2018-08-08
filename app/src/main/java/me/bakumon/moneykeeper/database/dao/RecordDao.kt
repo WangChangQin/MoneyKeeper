@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.database.dao
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.*
@@ -31,7 +32,7 @@ interface RecordDao {
 
     @Transaction
     @Query("SELECT * from Record WHERE time BETWEEN :from AND :to ORDER BY time DESC, create_time DESC")
-    fun getRangeRecordWithTypes(from: Date, to: Date): Flowable<List<RecordWithType>>
+    fun getRangeRecordWithTypes(from: Date, to: Date): LiveData<List<RecordWithType>>
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
@@ -56,6 +57,9 @@ interface RecordDao {
 
     @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
     fun getSumMoney(from: Date, to: Date): Flowable<List<SumMoneyBean>>
+
+    @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
+    fun getSumMoneyLiveData(from: Date, to: Date): LiveData<List<SumMoneyBean>>
 
     @Query("SELECT count(id) FROM Record WHERE record_type_id = :typeId")
     fun getRecordCountWithTypeId(typeId: Int): Long

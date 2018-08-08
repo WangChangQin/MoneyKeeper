@@ -20,15 +20,12 @@ import android.Manifest
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import io.fabric.sdk.android.Fabric
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_home.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
@@ -37,7 +34,6 @@ import me.bakumon.moneykeeper.api.ApiErrorResponse
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
@@ -71,19 +67,25 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ADD_RECORD).start() }
+        btnAdd.setOnLongClickListener {
+            if (ConfigManager.isSuccessive) {
+                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
+                        .start()
+            }
+            false
+        }
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
+        Fabric.with(this, Crashlytics(), Answers())
         // 快速记账
         if (ConfigManager.isFast) {
             Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
         }
-
-        Fabric.with(this, Crashlytics(), Answers())
-
         // 设置 MultiTypeAdapter
         mAdapter = MultiTypeAdapter()
-        mAdapter.register(RecordWithType::class, RecordViewBinder({ deleteRecord(it) }))
+        mAdapter.register(RecordWithType::class, RecordViewBinder { deleteRecord(it) })
         mAdapter.register(String::class, FooterViewBinder())
         mAdapter.register(Empty::class, EmptyViewBinder())
         rvRecords.adapter = mAdapter
@@ -91,15 +93,14 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         checkPermissionForBackup()
 
         mViewModel = getViewModel()
-
         initData()
-
         getOldPsw()
     }
 
     private fun initData() {
         initRecordTypes()
         getCurrentMonthRecords()
+        getCurrentMoneySumMonty()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -113,21 +114,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
             android.R.id.home -> Floo.navigation(this, Router.Url.URL_SETTING).start()
         }
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getCurrentMoneySumMonty()
-        if (ConfigManager.isSuccessive) {
-            btnAdd.setOnLongClickListener {
-                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
-                        .start()
-                false
-            }
-        } else {
-            btnAdd.setOnLongClickListener(null)
-        }
     }
 
     private fun getOldPsw() {
@@ -150,61 +136,38 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     }
 
     private fun deleteRecord(record: RecordWithType) {
-        mDisposable.add(mViewModel.deleteRecord(record)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_record_delete_fail)
-                        Log.e(TAG, "删除记账记录失败", throwable)
-                    }
-                })
+        mViewModel.deleteRecord(record).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_record_delete_fail)
+                }
+            }
+        })
     }
 
     private fun initRecordTypes() {
-        mDisposable.add(mViewModel.initRecordTypes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ ShortcutUtil.addRecordShortcut(this) }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（初始化类型数据失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_init_types_fail)
-                        Log.e(TAG, "初始化类型数据失败", throwable)
-                    }
-                })
+        mViewModel.initRecordTypes().observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> ShortcutUtil.addRecordShortcut(this)
+                is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_init_types_fail)
+            }
+        })
     }
 
     private fun getCurrentMoneySumMonty() {
-        mDisposable.add(mViewModel.currentMonthSumMoney
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    headPageView.setSumMoneyBeanList(it)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_current_sum_money_fail)
-                    Log.e(TAG, "本月支出收入总数获取失败", throwable)
-                })
+        mViewModel.currentMonthSumMoney.observe(this, Observer {
+            headPageView.setSumMoneyBeanList(it)
+        })
     }
 
     private fun getCurrentMonthRecords() {
-        mDisposable.add(mViewModel.currentMonthRecordWithTypes
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordWithTypes ->
-                    setItems(recordWithTypes)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_records_fail)
-                    Log.e(TAG, "获取记录列表失败", throwable)
-                })
+        mViewModel.currentMonthRecordWithTypes.observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(recordWithTypes: List<RecordWithType>) {
@@ -301,7 +264,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     companion object {
 
-        private val TAG = HomeActivity::class.java.simpleName
         private const val MAX_ITEM_TIP = 5
 
         ///////////////////////////////

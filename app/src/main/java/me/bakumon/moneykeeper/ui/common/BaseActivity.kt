@@ -128,12 +128,12 @@ abstract class BaseActivity : AppCompatActivity() {
      * WebDAV 云备份
      */
     fun cloudBackup(mViewModel: BaseViewModel) {
-        mViewModel.getList().observe(this, Observer {
-            when (it) {
+        mViewModel.getList().observe(this, Observer { response ->
+            when (response) {
                 is ApiEmptyResponse<ResponseBody> -> backupUpload(mViewModel)
                 is ApiSuccessResponse<ResponseBody> -> backupUpload(mViewModel)
                 is ApiErrorResponse<ResponseBody> -> {
-                    if (it.code == 404) {
+                    if (response.code == 404) {
                         mViewModel.createDir().observe(this, Observer {
                             when (it) {
                                 is ApiSuccessResponse<ResponseBody> -> backupUpload(mViewModel)
@@ -142,7 +142,7 @@ abstract class BaseActivity : AppCompatActivity() {
                             }
                         })
                     } else {
-                        onCloudBackupFail(it)
+                        onCloudBackupFail(response)
                     }
                 }
             }

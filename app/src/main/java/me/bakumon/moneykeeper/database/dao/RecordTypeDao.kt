@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.database.dao
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.RecordType

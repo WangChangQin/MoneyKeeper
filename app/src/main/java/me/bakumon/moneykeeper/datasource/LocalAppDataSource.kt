@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.datasource
 
+import android.arch.lifecycle.LiveData
 import android.text.TextUtils
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
@@ -198,7 +199,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getCurrentMonthRecordWithTypes(): Flowable<List<RecordWithType>> {
+    override fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>> {
         val dateFrom = DateUtils.getCurrentMonthStart()
         val dateTo = DateUtils.getCurrentMonthEnd()
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
@@ -220,6 +221,12 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         val dateFrom = DateUtils.getCurrentMonthStart()
         val dateTo = DateUtils.getCurrentMonthEnd()
         return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
+    }
+
+    override fun getCurrentMonthSumMoneyLiveData(): LiveData<List<SumMoneyBean>> {
+        val dateFrom = DateUtils.getCurrentMonthStart()
+        val dateTo = DateUtils.getCurrentMonthEnd()
+        return mAppDatabase.recordDao().getSumMoneyLiveData(dateFrom, dateTo)
     }
 
     override fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>> {

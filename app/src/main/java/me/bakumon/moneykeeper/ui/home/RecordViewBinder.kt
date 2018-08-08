@@ -64,7 +64,7 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
     private fun showOperateDialog(context: Context, record: RecordWithType) {
         MaterialDialog.Builder(context)
                 .items(context.getString(R.string.text_modify), context.getString(R.string.text_delete))
-                .itemsCallback({ _, _, which, _ ->
+                .itemsCallback { _, _, which, _ ->
                     if (which == 0) {
                         Floo.navigation(context, Router.Url.URL_ADD_RECORD)
                                 .putExtra(Router.ExtraKey.KEY_RECORD_BEAN, record)
@@ -72,7 +72,7 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
                     } else {
                         onDeleteClickListener.invoke(record)
                     }
-                })
+                }
                 .show()
     }
 
