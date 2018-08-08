@@ -62,7 +62,7 @@ class BackupActivity : AbsListActivity() {
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
-        adapter.register(NormalItem::class, NormalItemViewBinder({ onNormalItemClick(it) }))
+        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
     }
 
     override fun onItemsCreated(items: Items) {
@@ -105,22 +105,22 @@ class BackupActivity : AbsListActivity() {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDavUrl,
-                        { _, input ->
-                            val url = input.toString().trim()
-                            when {
-                                url.isEmpty() -> {
-                                    updateUrlItem(url)
-                                }
-                                HttpUrl.parse(url) == null -> ToastUtils.show(R.string.text_url_illegal)
-                                else -> {
-                                    updateUrlItem(url)
-                                    // 更新网络配置
-                                    Network.updateDavServiceConfig()
-                                    initDir()
-                                }
-                            }
-                        }).show()
+                .input("", ConfigManager.webDavUrl
+                ) { _, input ->
+                    val url = input.toString().trim()
+                    when {
+                        url.isEmpty() -> {
+                            updateUrlItem(url)
+                        }
+                        HttpUrl.parse(url) == null -> ToastUtils.show(R.string.text_url_illegal)
+                        else -> {
+                            updateUrlItem(url)
+                            // 更新网络配置
+                            Network.updateDavServiceConfig()
+                            initDir()
+                        }
+                    }
+                }.show()
     }
 
     private fun updateUrlItem(url: String) {
@@ -137,13 +137,13 @@ class BackupActivity : AbsListActivity() {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDavAccount,
-                        { _, input ->
-                            updateAccountItem(input.toString().trim())
-                            // 更新网络配置
-                            Network.updateDavServiceConfig()
-                            initDir()
-                        }).show()
+                .input("", ConfigManager.webDavAccount
+                ) { _, input ->
+                    updateAccountItem(input.toString().trim())
+                    // 更新网络配置
+                    Network.updateDavServiceConfig()
+                    initDir()
+                }.show()
     }
 
     private fun updateAccountItem(account: String) {
@@ -166,10 +166,10 @@ class BackupActivity : AbsListActivity() {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDAVPsw,
-                        { _, input ->
-                            savePsw(input.toString())
-                        }).show()
+                .input("", ConfigManager.webDAVPsw
+                ) { _, input ->
+                    savePsw(input.toString())
+                }.show()
     }
 
     private fun savePsw(input: String) {
@@ -247,7 +247,7 @@ class BackupActivity : AbsListActivity() {
                 .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ -> cloudBackup(mViewModel) })
+                .onPositive { _, _ -> cloudBackup(mViewModel) }
                 .show()
     }
 
@@ -265,7 +265,7 @@ class BackupActivity : AbsListActivity() {
                 .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ -> restore() })
+                .onPositive { _, _ -> restore() }
                 .show()
     }
 
@@ -318,9 +318,9 @@ class BackupActivity : AbsListActivity() {
                 .title("\uD83D\uDC7A" + getString(R.string.text_error))
                 .content(R.string.text_restore_fail_rollback)
                 .positiveText(R.string.text_affirm)
-                .onPositive({ _, _ ->
+                .onPositive { _, _ ->
                     ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
-                })
+                }
                 .show()
     }
 
@@ -334,14 +334,14 @@ class BackupActivity : AbsListActivity() {
         MaterialDialog.Builder(this)
                 .title(R.string.text_auto_backup_mode)
                 .items(R.array.text_cloud_auto_backup_mode)
-                .itemsCallbackSingleChoice(index, { _, _, which, _ ->
+                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
                     when (which) {
                         0 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_NO)
                         1 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_LAUNCHER_APP)
                     }
                     updateCloudBackupItem()
                     true
-                })
+                }
                 .positiveText(R.string.text_affirm)
                 .show()
     }

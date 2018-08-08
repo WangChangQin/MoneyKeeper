@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.setting
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.snatik.storage.Storage
 import io.reactivex.BackpressureStrategy
@@ -39,14 +40,25 @@ import java.io.File
  */
 class SettingViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val backupFiles: Flowable<List<BackupBean>>
-        get() = Flowable.create({ e ->
+    fun backupFiles(): LiveData<Resource<List<BackupBean>>> {
+        val liveData = MutableLiveData<Resource<List<BackupBean>>>()
+        Flowable.create(FlowableOnSubscribe<List<BackupBean>> { e ->
             e.onNext(BackupUtil.getBackupFiles())
             e.onComplete()
         }, BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(it)
+                })
+                { throwable ->
+                    liveData.value = Resource.create(throwable)
+                }
+        return liveData
+    }
 
-    fun backupDB(): Completable {
-        return Completable.create { e ->
+    fun backupDB(): LiveData<Resource<Boolean>> {
+        val completable = Completable.create { e ->
             val result = BackupUtil.userBackup()
             if (result) {
                 e.onComplete()
@@ -54,13 +66,24 @@ class SettingViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 e.onError(Exception())
             }
         }
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(completable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 
     fun restoreToDB(restoreFile: String): MutableLiveData<Resource<Boolean>> {
         val resultLiveData = MutableLiveData<Resource<Boolean>>()
         val storage = Storage(App.instance)
         val beforeRestorePath = storage.internalFilesDirectory + File.separator + BACKUP_FILE_BEFORE_RESTORE
-        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean>({
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean> {
             // 先把恢复前的 db 文件备份到内部 file 文件夹下
             val backupResult = BackupUtil.backupDB(beforeRestorePath)
             if (!backupResult) {
@@ -76,7 +99,7 @@ class SettingViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                     it.onNext(true)
                 }
             }
-        }), BackpressureStrategy.BUFFER)
+        }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

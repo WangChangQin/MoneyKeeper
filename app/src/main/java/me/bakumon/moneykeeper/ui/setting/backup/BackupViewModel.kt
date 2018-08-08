@@ -50,14 +50,14 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         val key = EncryptUtil.key
         val salt = EncryptUtil.salt
 
-        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean>({
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean> {
             val result = if (input.isEmpty()) {
                 ConfigManager.setWebDavEncryptPsw("")
             } else {
                 ConfigManager.setWebDavEncryptPsw(EncryptUtil.encrypt(input, key, salt))
             }
             it.onNext(result)
-        }), BackpressureStrategy.BUFFER)
+        }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -79,7 +79,7 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
         val storage = Storage(App.instance)
         // 先把恢复前的 db 文件备份到内部 file 文件夹下
         val beforeRestorePath = storage.internalFilesDirectory + File.separator + BACKUP_FILE_BEFORE_RESTORE
-        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean>({
+        mDisposable.add(Flowable.create(FlowableOnSubscribe<Boolean> {
             val backupResult = BackupUtil.backupDB(beforeRestorePath)
             if (!backupResult) {
                 it.onNext(false)
@@ -101,7 +101,7 @@ class BackupViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                     }
                 }
             }
-        }), BackpressureStrategy.BUFFER)
+        }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

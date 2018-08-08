@@ -18,17 +18,15 @@ package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
-import android.util.Log
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
@@ -62,9 +60,9 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
-        adapter.register(NormalItem::class, NormalItemViewBinder({ onNormalItemClick(it) }))
-        adapter.register(CheckItem::class, CheckItemViewBinder({ item, isCheck -> onCheckItemCheckChange(item, isCheck) }))
-        adapter.register(ImgItem::class, ImgItemViewBinder({ onImgItemClick(it) }))
+        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(CheckItem::class, CheckItemViewBinder { item, isCheck -> onCheckItemCheckChange(item, isCheck) })
+        adapter.register(ImgItem::class, ImgItemViewBinder { onImgItemClick(it) })
     }
 
     override fun onItemsCreated(items: Items) {
@@ -143,14 +141,14 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .inputRange(0, 8)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_budget), oldBudget, { _, input ->
+                .input(getString(R.string.hint_enter_budget), oldBudget) { _, input ->
                     if (!input.isEmpty()) {
                         ConfigManager.setBudget(Integer.parseInt(input.toString()))
                     } else {
                         ConfigManager.setBudget(0)
                     }
                     updateBudgetItem()
-                }).show()
+                }.show()
     }
 
     private fun updateBudgetItem() {
@@ -178,17 +176,17 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .inputRange(0, 10)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_assets), oldAssets,
-                        { _, input ->
-                            val text = input.toString()
-                            if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
-                                ConfigManager.setAssets("NaN")
-                            } else {
-                                val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
-                                ConfigManager.setAssets(saveStr)
-                            }
-                            updateAssetsItem()
-                        }).show()
+                .input(getString(R.string.hint_enter_assets), oldAssets
+                ) { _, input ->
+                    val text = input.toString()
+                    if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
+                        ConfigManager.setAssets("NaN")
+                    } else {
+                        val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
+                        ConfigManager.setAssets(saveStr)
+                    }
+                    updateAssetsItem()
+                }.show()
     }
 
     private fun inputFilter(text: String): String {
@@ -225,14 +223,14 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_symbol)
                 .items(R.array.symbol)
-                .itemsCallbackSingleChoice(index, { _, _, which, _ ->
+                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
                     updateBudgetItem()
                     updateAssetsItem()
                     true
-                })
+                }
                 .positiveText(R.string.text_affirm)
                 .show()
     }
@@ -315,16 +313,14 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .content(R.string.text_backup_save, backupFilepath)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ ->
-                    mDisposable.add(mViewModel.backupDB()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ ToastUtils.show(R.string.toast_backup_success) }
-                            ) { throwable ->
-                                ToastUtils.show(R.string.toast_backup_fail)
-                                Log.e(TAG, "备份失败", throwable)
-                            })
-                })
+                .onPositive { _, _ ->
+                    mViewModel.backupDB().observe(this, Observer {
+                        when (it) {
+                            is SuccessResource<Boolean> -> ToastUtils.show(R.string.toast_backup_success)
+                            is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_backup_fail)
+                        }
+                    })
+                }
                 .show()
     }
 
@@ -342,17 +338,15 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun restore() {
-        mDisposable.add(mViewModel.backupFiles
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ backupBeans ->
-                    val dialog = BackupFliesDialog(this, backupBeans, { restoreDB(it.path) })
+        mViewModel.backupFiles().observe(this, Observer { resource ->
+            when (resource) {
+                is SuccessResource<List<BackupBean>> -> {
+                    val dialog = BackupFliesDialog(this, resource.body) { restoreDB(it.path) }
                     dialog.show()
                 }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_backup_list_fail)
-                    Log.e(TAG, "备份文件列表获取失败", throwable)
-                })
+                is ErrorResource<List<BackupBean>> -> ToastUtils.show(R.string.toast_backup_list_fail)
+            }
+        })
     }
 
     private fun restoreDB(restoreFile: String) {
@@ -387,14 +381,13 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .title("\uD83D\uDC7A" + getString(R.string.text_error))
                 .content(R.string.text_restore_fail_rollback)
                 .positiveText(R.string.text_affirm)
-                .onPositive({ _, _ ->
+                .onPositive { _, _ ->
                     ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
-                })
+                }
                 .show()
     }
 
     companion object {
-        private val TAG = SettingActivity::class.java.simpleName
         @SuppressLint("SdCardPath")
         val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
         @SuppressLint("SdCardPath")
