@@ -43,8 +43,8 @@ class MyBarChart @JvmOverloads constructor(context: Context, attrs: AttributeSet
         this.marker = mv
     }
 
-    fun setChartData(daySumMoneyBeans: List<DaySumMoneyBean>, year: Int, month: Int) {
-        if (daySumMoneyBeans.isEmpty()) {
+    fun setChartData(daySumMoneyBeans: List<DaySumMoneyBean>?, year: Int, month: Int) {
+        if (daySumMoneyBeans == null || daySumMoneyBeans.isEmpty()) {
             this.visibility = View.INVISIBLE
             return
         } else {

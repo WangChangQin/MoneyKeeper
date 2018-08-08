@@ -36,7 +36,7 @@ interface RecordDao {
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
-    fun getRangeRecordWithTypes(from: Date, to: Date, type: Int): Flowable<List<RecordWithType>>
+    fun getRangeRecordWithTypes(from: Date, to: Date, type: Int): LiveData<List<RecordWithType>>
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND Record.record_type_id=:typeId AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
@@ -72,7 +72,7 @@ interface RecordDao {
      * 而直接用 List ，在调用的地方自己写 Flowable 不会自动回调
      */
     @Query("SELECT RecordType.type AS type, Record.time AS time, sum(Record.money) AS daySumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id where (RecordType.type=:type and Record.time BETWEEN :from AND :to) GROUP BY Record.time")
-    fun getDaySumMoney(from: Date, to: Date, type: Int): Flowable<List<DaySumMoneyBean>>
+    fun getDaySumMoney(from: Date, to: Date, type: Int): LiveData<List<DaySumMoneyBean>>
 
     @Query("SELECT t_type.img_name AS imgName,t_type.name AS typeName, Record.record_type_id AS typeId,sum(Record.money) AS typeSumMoney, count(Record.record_type_id) AS count FROM Record LEFT JOIN RecordType AS t_type ON Record.record_type_id=t_type.id where (t_type.type=:type and Record.time BETWEEN :from AND :to) GROUP by Record.record_type_id Order by sum(Record.money) DESC")
     fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>

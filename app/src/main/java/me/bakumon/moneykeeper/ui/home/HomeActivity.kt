@@ -100,6 +100,11 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     private fun initData() {
         initRecordTypes()
         getCurrentMonthRecords()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 设置了预算或者资产，返回首页需要更新
         getCurrentMoneySumMonty()
     }
 

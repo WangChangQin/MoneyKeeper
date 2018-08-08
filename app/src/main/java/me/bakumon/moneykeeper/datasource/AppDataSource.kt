@@ -136,7 +136,7 @@ interface AppDataSource {
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取某一类型某段时间的记账记录数据
@@ -176,7 +176,7 @@ interface AppDataSource {
      * @param month 月
      * @param type  类型
      */
-    fun getDaySumMoney(year: Int, month: Int, type: Int): Flowable<List<DaySumMoneyBean>>
+    fun getDaySumMoney(year: Int, month: Int, type: Int): LiveData<List<DaySumMoneyBean>>
 
     /**
      * 获取按类型汇总数据

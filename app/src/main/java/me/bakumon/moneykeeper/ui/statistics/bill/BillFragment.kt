@@ -16,16 +16,15 @@
 
 package me.bakumon.moneykeeper.ui.statistics.bill
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_bill.*
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseFragment
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
@@ -90,33 +89,23 @@ class BillFragment : BaseFragment() {
     }
 
     private fun deleteRecord(record: RecordWithType) {
-        mDisposable.add(mViewModel.deleteRecord(record)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_record_delete_fail)
-                        Log.e(TAG, "删除记账记录失败", throwable)
-                    }
-                })
+        mViewModel.deleteRecord(record).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_record_delete_fail)
+                }
+            }
+        })
     }
 
-
     private fun getOrderData() {
-        mDisposable.add(mViewModel.getRecordWithTypes(mYear, mMonth, mType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    setItems(it)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_records_fail)
-                    Log.e(TAG, "获取记录列表失败", throwable)
-                })
+        mViewModel.getRecordWithTypes(mYear, mMonth, mType).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
     private fun setItems(beans: List<RecordWithType>) {
@@ -131,29 +120,15 @@ class BillFragment : BaseFragment() {
     }
 
     private fun getDaySumData() {
-        mDisposable.add(mViewModel.getDaySumMoney(mYear, mMonth, mType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    barChart.setChartData(it, mYear, mMonth)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_statistics_fail)
-                    Log.e(TAG, "获取统计数据失败", throwable)
-                })
+        mViewModel.getDaySumMoney(mYear, mMonth, mType).observe(this, Observer {
+            barChart.setChartData(it, mYear, mMonth)
+        })
     }
 
     private fun getMonthSumMoney() {
-        mDisposable.add(mViewModel.getMonthSumMoney(mYear, mMonth)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    sumMoneyChooseView.setSumMoneyBean(it)
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_month_summary_fail)
-                    Log.e(TAG, "获取该月汇总数据失败", throwable)
-                })
+        mViewModel.getMonthSumMoney(mYear, mMonth).observe(this, Observer {
+            sumMoneyChooseView.setSumMoneyBean(it)
+        })
     }
 
     companion object {
