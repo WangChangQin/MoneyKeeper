@@ -145,7 +145,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getAllRecordType(): Flowable<List<RecordType>> {
+    override fun getAllRecordType(): LiveData<List<RecordType>> {
         return mAppDatabase.recordTypeDao().getAllRecordTypes()
     }
 

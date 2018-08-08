@@ -30,7 +30,7 @@ import me.bakumon.moneykeeper.database.entity.RecordType
 interface RecordTypeDao {
 
     @Query("SELECT * FROM RecordType WHERE state = 0 ORDER BY ranking")
-    fun getAllRecordTypes(): Flowable<List<RecordType>>
+    fun getAllRecordTypes(): LiveData<List<RecordType>>
 
     @Query("SELECT count(RecordType.id) FROM RecordType")
     fun getRecordTypeCount(): Long

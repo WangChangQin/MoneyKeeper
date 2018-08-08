@@ -73,7 +73,7 @@ interface AppDataSource {
      *
      * @return 所有记账类型数据
      */
-    fun getAllRecordType(): Flowable<List<RecordType>>
+    fun getAllRecordType(): LiveData<List<RecordType>>
 
     /**
      * 获取指出或收入记账类型数据

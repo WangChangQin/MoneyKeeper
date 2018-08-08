@@ -107,7 +107,10 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         })
     }
 
-    fun setItems(data: List<RecordType>, type: Int, record: RecordWithType? = null) {
+    fun setItems(data: List<RecordType>?, type: Int, record: RecordWithType? = null) {
+        if (data == null) {
+            return
+        }
         val items = Items()
         if (data.isNotEmpty()) {
             for (i in data.indices) {

@@ -16,23 +16,22 @@
 
 package me.bakumon.moneykeeper.ui.add
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.RadioGroup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_record.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
@@ -143,21 +142,15 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mDisposable.add(mViewModel.insertRecord(record, mCurrentType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.insertRecordDone() }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（新增记录失败的时候）", throwable)
-                        insertRecordDone()
-                    } else {
-                        Log.e(TAG, "新增记录失败", throwable)
-                        keyboard.setAffirmEnable(true)
-                        ToastUtils.show(R.string.toast_add_record_fail)
-                    }
-                })
+        mViewModel.insertRecord(record, mCurrentType).observe(this, android.arch.lifecycle.Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> insertRecordDone()
+                is ErrorResource<Boolean> -> {
+                    keyboard.setAffirmEnable(true)
+                    ToastUtils.show(R.string.toast_add_record_fail)
+                }
+            }
+        })
     }
 
     /**
@@ -191,44 +184,31 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mDisposable.add(mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.finish() }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（记录修改失败的时候）", throwable)
-                        finish()
-                    } else {
-                        Log.e(TAG, "记录修改失败", throwable)
-                        keyboard.setAffirmEnable(true)
-                        ToastUtils.show(R.string.toast_modify_record_fail)
-                    }
-                })
+        mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> finish()
+                is ErrorResource<Boolean> -> {
+                    keyboard.setAffirmEnable(true)
+                    ToastUtils.show(R.string.toast_modify_record_fail)
+                }
+            }
+        })
     }
 
     private fun getAllRecordTypes() {
-        mDisposable.add(mViewModel.allRecordTypes
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordTypes ->
-                    if (mCurrentType == RecordType.TYPE_OUTLAY) {
-                        (typeChoose as RadioGroup).check(R.id.rbLeft)
-                    } else {
-                        (typeChoose as RadioGroup).check(R.id.rbRight)
-                    }
-                    typePageOutlay.setItems(recordTypes, RecordType.TYPE_OUTLAY, mRecord)
-                    typePageIncome.setItems(recordTypes, RecordType.TYPE_INCOME, mRecord)
-                }) { throwable ->
-                    ToastUtils.show(R.string.toast_get_types_fail)
-                    Log.e(TAG, "获取类型数据失败", throwable)
-                })
+        mViewModel.allRecordTypes.observe(this, Observer {
+            if (mCurrentType == RecordType.TYPE_OUTLAY) {
+                (typeChoose as RadioGroup).check(R.id.rbLeft)
+            } else {
+                (typeChoose as RadioGroup).check(R.id.rbRight)
+            }
+            typePageOutlay.setItems(it, RecordType.TYPE_OUTLAY, mRecord)
+            typePageIncome.setItems(it, RecordType.TYPE_INCOME, mRecord)
+        })
     }
 
     companion object {
 
-        private val TAG = AddRecordActivity::class.java.simpleName
         private const val TAG_PICKER_DIALOG = "Datepickerdialog"
     }
 }
