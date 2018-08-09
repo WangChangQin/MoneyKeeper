@@ -99,7 +99,13 @@ class BackupActivity : AbsListActivity() {
         return if (ConfigManager.webDAVPsw.isEmpty()) "" else "******"
     }
 
+    private var isDialogShow = false
+
     private fun setUrl() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_webdav_url)
                 .inputType(InputType.TYPE_CLASS_TEXT)
@@ -120,7 +126,8 @@ class BackupActivity : AbsListActivity() {
                             initDir()
                         }
                     }
-                }.show()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun updateUrlItem(url: String) {
@@ -132,6 +139,10 @@ class BackupActivity : AbsListActivity() {
     }
 
     private fun setAccount() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_webdav_account)
                 .inputType(InputType.TYPE_CLASS_TEXT)
@@ -143,7 +154,8 @@ class BackupActivity : AbsListActivity() {
                     // 更新网络配置
                     Network.updateDavServiceConfig()
                     initDir()
-                }.show()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun updateAccountItem(account: String) {
@@ -161,6 +173,10 @@ class BackupActivity : AbsListActivity() {
             ToastUtils.show(R.string.text_saving_psw)
             return
         }
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_webdav_password)
                 .inputType(InputType.TYPE_CLASS_TEXT)
@@ -169,7 +185,8 @@ class BackupActivity : AbsListActivity() {
                 .input("", ConfigManager.webDAVPsw
                 ) { _, input ->
                     savePsw(input.toString())
-                }.show()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun savePsw(input: String) {
@@ -242,12 +259,17 @@ class BackupActivity : AbsListActivity() {
             ToastUtils.show(R.string.text_config_webdav)
             return
         }
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_go_backup)
                 .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
                 .onPositive { _, _ -> cloudBackup(mViewModel) }
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
@@ -260,12 +282,17 @@ class BackupActivity : AbsListActivity() {
             ToastUtils.show(R.string.text_config_webdav)
             return
         }
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_restore)
                 .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
                 .onPositive { _, _ -> restore() }
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
@@ -330,7 +357,10 @@ class BackupActivity : AbsListActivity() {
             ConfigManager.MODE_LAUNCHER_APP -> 1
             else -> 0
         }
-
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_auto_backup_mode)
                 .items(R.array.text_cloud_auto_backup_mode)
@@ -343,6 +373,7 @@ class BackupActivity : AbsListActivity() {
                     true
                 }
                 .positiveText(R.string.text_affirm)
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 

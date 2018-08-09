@@ -130,11 +130,17 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             ConfigManager.symbol + BigDecimalUtil.formatNum(ConfigManager.budget.toString())
     }
 
+    private var isDialogShow = false
+
     private fun setBudget() {
         val oldBudget = if (ConfigManager.budget == 0)
             null
         else
             ConfigManager.budget.toString().replace(",", "")
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_budget)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
@@ -148,7 +154,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                         ConfigManager.setBudget(0)
                     }
                     updateBudgetItem()
-                }.show()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun updateBudgetItem() {
@@ -170,6 +177,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             null
         else
             BigDecimalUtil.fen2YuanNoSeparator(BigDecimal(ConfigManager.assets))
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_setting_assets)
                 .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
@@ -186,7 +197,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                         ConfigManager.setAssets(saveStr)
                     }
                     updateAssetsItem()
-                }.show()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun inputFilter(text: String): String {
@@ -219,7 +231,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 index = i
             }
         }
-
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_symbol)
                 .items(R.array.symbol)
@@ -232,6 +247,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     true
                 }
                 .positiveText(R.string.text_affirm)
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
@@ -308,6 +324,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun backupDB() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_go_backup)
                 .content(R.string.text_backup_save, backupFilepath)
@@ -321,6 +341,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                         }
                     })
                 }
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
@@ -341,12 +362,21 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         mViewModel.backupFiles().observe(this, Observer { resource ->
             when (resource) {
                 is SuccessResource<List<BackupBean>> -> {
-                    val dialog = BackupFliesDialog(this, resource.body) { restoreDB(it.path) }
-                    dialog.show()
+                    showBackupListDialog(resource)
                 }
                 is ErrorResource<List<BackupBean>> -> ToastUtils.show(R.string.toast_backup_list_fail)
             }
         })
+    }
+
+    private fun showBackupListDialog(resource: SuccessResource<List<BackupBean>>) {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        val dialog = BackupFliesDialog(this, resource.body) { restoreDB(it.path) }
+        dialog.getDialog().setOnDismissListener { isDialogShow = false }
+        dialog.show()
     }
 
     private fun restoreDB(restoreFile: String) {

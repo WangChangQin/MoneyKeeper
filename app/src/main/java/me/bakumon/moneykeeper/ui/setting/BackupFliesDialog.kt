@@ -62,6 +62,10 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         mDialog.show()
     }
 
+    fun getDialog(): BottomSheetDialog {
+        return mDialog
+    }
+
     internal inner class FilesViewBinder : ItemViewBinder<BackupBean, FilesViewBinder.ViewHolder>() {
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {

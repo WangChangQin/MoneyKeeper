@@ -101,17 +101,7 @@ class AddRecordActivity : BaseActivity() {
             }
         }
 
-        tvDate.setOnClickListener {
-            val dpd = DatePickerDialog.newInstance(
-                    { _, year, monthOfYear, dayOfMonth ->
-                        mCurrentChooseDate = DateUtils.getDate(year, monthOfYear + 1, dayOfMonth)
-                        mCurrentChooseCalendar.time = mCurrentChooseDate
-                        tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
-                    }, mCurrentChooseCalendar)
-            dpd.maxDate = Calendar.getInstance()
-            @Suppress("DEPRECATION")
-            dpd.show(fragmentManager, TAG_PICKER_DIALOG)
-        }
+        tvDate.setOnClickListener { showDatePickerDialog() }
 
         (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rbLeft) {
@@ -127,6 +117,25 @@ class AddRecordActivity : BaseActivity() {
 
         mViewModel = getViewModel()
         getAllRecordTypes()
+    }
+
+    private var isDialogShow = false
+
+    private fun showDatePickerDialog() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        val dpd = DatePickerDialog.newInstance(
+                { _, year, monthOfYear, dayOfMonth ->
+                    mCurrentChooseDate = DateUtils.getDate(year, monthOfYear + 1, dayOfMonth)
+                    mCurrentChooseCalendar.time = mCurrentChooseDate
+                    tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
+                }, mCurrentChooseCalendar)
+        dpd.maxDate = Calendar.getInstance()
+        @Suppress("DEPRECATION")
+        dpd.show(fragmentManager, TAG_PICKER_DIALOG)
+        dpd.setOnDismissListener { isDialogShow = false }
     }
 
     private fun insertRecord(text: String) {
