@@ -43,8 +43,6 @@ import okhttp3.ResponseBody
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    protected val mDisposable = CompositeDisposable()
-
     /**
      * 子类必须实现，用于创建 view
      *
@@ -185,10 +183,4 @@ abstract class BaseActivity : AppCompatActivity() {
         res.updateConfiguration(config, res.displayMetrics)
         return res
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mDisposable.clear()
-    }
-
 }

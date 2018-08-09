@@ -51,7 +51,6 @@ abstract class BaseFragment : Fragment() {
      * 标志位 判断view已经加载完成 避免空指针操作
      */
     private var isPrepareView = false
-    protected val mDisposable = CompositeDisposable()
 
     /**
      * 子类必须实现，用于创建 view
@@ -111,9 +110,4 @@ abstract class BaseFragment : Fragment() {
      * 加载数据的方法,由子类实现
      */
     protected abstract fun lazyInitData()
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mDisposable.clear()
-    }
 }
