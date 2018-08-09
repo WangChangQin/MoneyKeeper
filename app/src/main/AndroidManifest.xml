@@ -36,13 +36,17 @@
 
         <activity-alias
             android:name=".LauncherActivity"
-            android:targetActivity=".ui.home.HomeActivity">
+            android:targetActivity=".ui.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+        <activity
+            android:name=".ui.LauncherActivity"
+            android:theme="@style/AppTheme.Launcher" />
 
         <!-- 这里 singleTask 导致在非 HomeActivity 时，每次按下 home 键，在点击桌面启动图标再次进入应用会重新打开 HomeActivity，而不是期望的页面 -->
         <!-- 设置成 singleTask 是因为恢复备份失败，使用 process_phoenix 重新启动进程，HomeActivity 会存在两个 -->

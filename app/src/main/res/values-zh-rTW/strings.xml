@@ -193,6 +193,10 @@
     <string name="text_contact_author" formatted="true">聯繫作者： %1$s \n\n更多幫助：%2$s \n\n本應用已開源，歡迎貢獻代碼。\n開源地址：%3$s\n\n*本應用遵循《Android綠色應用公約》\n %4$s</string>
     <string name="text_license">開源許可證</string>
     <string name="text_privacy_policy">隱私政策</string>
+    <string name="text_display">外觀</string>
+    <string name="text_theme">主題</string>
+    <string name="text_theme_dark">暗色主題</string>
+    <string name="text_theme_light">亮色主題</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV雲盤</string>

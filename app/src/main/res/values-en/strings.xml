@@ -193,6 +193,10 @@
     <string name="text_contact_author" formatted="true">Contact author: %1$s \n\nmore help:%2$s \n\nThis application is open source and welcome to contribute code.\nOpen source Url:%3$s\n\n*Comply to "Convention of Green Apps for Android"\n %4$s</string>
     <string name="text_license">Open source license</string>
     <string name="text_privacy_policy">Privacy Policy</string>
+    <string name="text_display">Display</string>
+    <string name="text_theme">Theme</string>
+    <string name="text_theme_dark">Dark theme</string>
+    <string name="text_theme_light">Light theme</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV</string>

@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
@@ -82,6 +83,9 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         items.add(Category(getString(R.string.text_cloud_backup)))
         items.add(ImgItem(getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content), R.drawable.ic_cloud))
 
+        items.add(Category(getString(R.string.text_display)))
+        items.add(NormalItem(getString(R.string.text_theme), getThemeStr()))
+
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
         items.add(NormalItem("", getString(R.string.text_privacy_policy)))
@@ -104,6 +108,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
             getString(R.string.text_go_backup) -> showBackupDialog()
             getString(R.string.text_restore) -> showRestoreDialog()
+            getString(R.string.text_theme) -> showChooseThemeDialog()
             getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
             "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }
@@ -249,6 +254,35 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .positiveText(R.string.text_affirm)
                 .dismissListener { isDialogShow = false }
                 .show()
+    }
+
+    private fun showChooseThemeDialog() {
+        val index = if (ConfigManager.isThemeDark) 0 else 1
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        MaterialDialog.Builder(this)
+                .title(R.string.text_theme)
+                .items(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))
+                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                    val theme = which == 0
+                    if (theme) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                    ConfigManager.setIsThemeDark(theme)
+                    finish()
+                    true
+                }
+                .positiveText(R.string.text_affirm)
+                .dismissListener { isDialogShow = false }
+                .show()
+    }
+
+    private fun getThemeStr(): String {
+        return if (ConfigManager.isThemeDark) getString(R.string.text_theme_dark) else getString(R.string.text_theme_light)
     }
 
     private fun switchAutoBackup(isCheck: Boolean) {

@@ -23,9 +23,9 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.ViewGroup
-import io.reactivex.disposables.CompositeDisposable
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.api.ApiEmptyResponse
 import me.bakumon.moneykeeper.api.ApiErrorResponse
@@ -89,9 +89,16 @@ abstract class BaseActivity : AppCompatActivity() {
             return
         }
         StatusBarUtil.immersive(this)
+        if (isChangeStatusColor() && AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+            StatusBarUtil.darkMode(this)
+        }
         for (view in views) {
             StatusBarUtil.setPaddingSmart(this, view)
         }
+    }
+
+    open fun isChangeStatusColor(): Boolean {
+        return true
     }
 
     /**

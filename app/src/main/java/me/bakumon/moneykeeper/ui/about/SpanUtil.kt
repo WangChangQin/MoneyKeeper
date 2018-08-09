@@ -17,6 +17,7 @@
 package me.bakumon.moneykeeper.ui.about
 
 import android.app.Activity
+import android.support.v4.content.ContextCompat
 import android.text.Layout
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -49,8 +50,8 @@ object SpanUtil {
         val start = 0
         val end = text.length
         val span = SpannableString(text)
-        span.setSpan(ForegroundColorSpan(App.instance.resources.getColor(R.color.colorText)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        span.setSpan(RadiusBackgroundSpan(App.instance.resources.getColor(R.color.colorDonate), 10, 20), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(App.instance, R.color.colorText)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        span.setSpan(RadiusBackgroundSpan(ContextCompat.getColor(App.instance, R.color.colorDonate), 10, 20), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         span.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         span.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {

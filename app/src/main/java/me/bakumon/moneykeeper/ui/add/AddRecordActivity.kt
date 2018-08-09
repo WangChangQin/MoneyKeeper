@@ -18,6 +18,7 @@ package me.bakumon.moneykeeper.ui.add
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.RadioGroup
@@ -134,6 +135,7 @@ class AddRecordActivity : BaseActivity() {
                 }, mCurrentChooseCalendar)
         dpd.maxDate = Calendar.getInstance()
         @Suppress("DEPRECATION")
+        dpd.isThemeDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         dpd.show(fragmentManager, TAG_PICKER_DIALOG)
         dpd.setOnDismissListener { isDialogShow = false }
     }

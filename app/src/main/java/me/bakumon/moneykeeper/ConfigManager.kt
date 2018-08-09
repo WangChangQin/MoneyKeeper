@@ -47,6 +47,7 @@ object ConfigManager {
     private const val KEY_WEBDAV_ENCRYPT_PSW = "webDav_encrypt_psw"
     private const val KEY_CLOUD_BACKUP_MODE = "cloud_backup_mode"
     private const val KEY_CLOUD_ENABLE = "cloud_enable"
+    private const val KEY_IS_THEME_DARK = "is_theme_dark"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -83,6 +84,9 @@ object ConfigManager {
 
     val cloudEnable: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_CLOUD_ENABLE, false)
+
+    val isThemeDark: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_IS_THEME_DARK, true)
 
     /**
      * 自动备份
@@ -179,6 +183,13 @@ object ConfigManager {
      */
     fun setCloudEnable(cloudEnable: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_CLOUD_ENABLE, cloudEnable)
+    }
+
+    /**
+     * 保存主题
+     */
+    fun setIsThemeDark(isDark: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_IS_THEME_DARK, isDark)
     }
 
 }
