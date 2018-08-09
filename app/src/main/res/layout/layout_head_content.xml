@@ -20,8 +20,6 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingBottom="20dp"
-    android:paddingTop="25dp"
     tools:background="@drawable/bg_gradient">
 
     <LinearLayout
@@ -29,7 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="25dp">
 
         <TextView
             android:id="@+id/tvLeftTitle"
@@ -54,18 +54,22 @@
     <View
         android:layout_width="1px"
         android:layout_height="match_parent"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="45dp"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
-        android:background="@android:color/white" />
+        android:layout_marginTop="45dp"
+        android:background="@color/colorHeadTextNormal" />
 
     <LinearLayout
+        android:id="@+id/llRightContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="25dp">
 
         <TextView
             android:id="@+id/tvRightTitle"
@@ -81,7 +85,6 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:textColor="@color/colorHeadTextNormal"
             android:textSize="34sp"
             tools:text="0" />

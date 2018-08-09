@@ -85,6 +85,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val tvLeftContent: TextView = pagerView!!.findViewById(R.id.tvLeftContent)
         val tvRightTitle: TextView = pagerView!!.findViewById(R.id.tvRightTitle)
         val tvRightContent: TextView = pagerView!!.findViewById(R.id.tvRightContent)
+        val llRightContent: LinearLayout = pagerView!!.findViewById(R.id.llRightContent)
 
         tvLeftTitle.setText(R.string.text_month_outlay)
         tvRightTitle.setText(R.string.text_month_remaining_budget)
@@ -113,12 +114,12 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
             tvRightContent.text = budgetStr
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
-            tvRightContent.isClickable = false
+            llRightContent.isClickable = false
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             tvRightContent.text = tvRightContent.context.getString(R.string.text_set_budget)
-            tvRightContent.setOnClickListener {
-                Floo.navigation(tvRightContent.context, Router.Url.URL_SETTING)
+            llRightContent.setOnClickListener {
+                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
                         .start()
             }
         }
@@ -134,6 +135,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val tvLeftContent: TextView = pagerView1!!.findViewById(R.id.tvLeftContent)
         val tvRightTitle: TextView = pagerView1!!.findViewById(R.id.tvRightTitle)
         val tvRightContent: TextView = pagerView1!!.findViewById(R.id.tvRightContent)
+        val llRightContent: LinearLayout = pagerView1!!.findViewById(R.id.llRightContent)
 
         tvLeftTitle.setText(R.string.text_month_income)
         tvRightTitle.setText(R.string.text_assets)
@@ -154,12 +156,12 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
             tvRightContent.text = budgetStr
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
-            tvRightContent.isClickable = false
+            llRightContent.isClickable = false
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             tvRightContent.text = tvRightContent.context.getString(R.string.text_setting_assets)
-            tvRightContent.setOnClickListener {
-                Floo.navigation(tvRightContent.context, Router.Url.URL_SETTING)
+            llRightContent.setOnClickListener {
+                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
                         .start()
             }
         }
