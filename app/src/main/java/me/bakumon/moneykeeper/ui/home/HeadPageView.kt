@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
@@ -77,6 +78,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         indicator.setTotal(mAdapter.count, viewPager.currentItem)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getPagerView(sumMoneyBean: List<SumMoneyBean>): View {
         if (pagerView == null) {
             pagerView = inflater.inflate(R.layout.layout_head_content, null)
@@ -87,8 +89,9 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val tvRightContent: TextView = pagerView!!.findViewById(R.id.tvRightContent)
         val llRightContent: LinearLayout = pagerView!!.findViewById(R.id.llRightContent)
 
-        tvLeftTitle.setText(R.string.text_month_outlay)
-        tvRightTitle.setText(R.string.text_month_remaining_budget)
+        val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
+        tvLeftTitle.text = context.getText(R.string.text_month_outlay).toString() + text
+        tvRightTitle.text = context.getText(R.string.text_month_remaining_budget).toString() + text
 
         var outlayStr = "0"
         if (sumMoneyBean.isNotEmpty()) {
@@ -127,6 +130,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         return pagerView!!
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getPagerView1(sumMoneyBean: List<SumMoneyBean>): View {
         if (pagerView1 == null) {
             pagerView1 = inflater.inflate(R.layout.layout_head_content, null)
@@ -137,8 +141,9 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         val tvRightContent: TextView = pagerView1!!.findViewById(R.id.tvRightContent)
         val llRightContent: LinearLayout = pagerView1!!.findViewById(R.id.llRightContent)
 
-        tvLeftTitle.setText(R.string.text_month_income)
-        tvRightTitle.setText(R.string.text_assets)
+        val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
+        tvLeftTitle.text = context.getText(R.string.text_month_income).toString() + text
+        tvRightTitle.text = context.getText(R.string.text_assets).toString() + text
 
         var incomeStr = "0"
         if (sumMoneyBean.isNotEmpty()) {
