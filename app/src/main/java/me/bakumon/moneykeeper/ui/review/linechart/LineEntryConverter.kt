@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.review.linechart
 
+import android.support.v4.content.ContextCompat
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -81,8 +82,8 @@ object LineEntryConverter {
 
     private fun setupDateSet(set: LineDataSet, isOutlay: Boolean) {
         val colorId = if (isOutlay) R.color.colorOutlay else R.color.colorIncome
-        set.color = App.instance.resources.getColor(colorId)
-        set.circleColors = arrayListOf(App.instance.resources.getColor(colorId))
+        set.color = ContextCompat.getColor(App.instance, colorId)
+        set.circleColors = arrayListOf(ContextCompat.getColor(App.instance, colorId))
         set.setDrawCircleHole(false)
         set.setDrawValues(false)
         set.setDrawHighlightIndicators(false)

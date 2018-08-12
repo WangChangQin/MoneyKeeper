@@ -19,12 +19,14 @@ package me.bakumon.moneykeeper.ui.review.linechart
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
@@ -47,9 +49,9 @@ class LineChartMarkerView(context: Context) : MarkerView(context, R.layout.bar_c
         if (e.y > 0) {
             tvContent.visibility = View.VISIBLE
             if (bean.type == RecordType.TYPE_OUTLAY) {
-                tvContent.setBackgroundColor(resources.getColor(R.color.colorOutlay))
+                tvContent.setBackgroundColor(ContextCompat.getColor(App.instance, R.color.colorOutlay))
             } else {
-                tvContent.setBackgroundColor(resources.getColor(R.color.colorIncome))
+                tvContent.setBackgroundColor(ContextCompat.getColor(App.instance, R.color.colorIncome))
             }
             tvContent.setTextColor(Color.WHITE)
         } else {

@@ -2,6 +2,7 @@ package me.bakumon.moneykeeper.ui.statistics.reports
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.GradientDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
@@ -52,7 +54,7 @@ class ReportsViewBinder constructor(private val onItemClickListener: ((TypeSumMo
         if (colors.size > holder.adapterPosition) {
             gradient.setColor(colors[holder.adapterPosition])
         } else {
-            gradient.setColor(holder.viewLength.context.resources.getColor(R.color.colorPieChart1))
+            gradient.setColor(ContextCompat.getColor(App.instance, R.color.colorPieChart1))
         }
 
         holder.llItemReport.setOnClickListener { onItemClickListener.invoke(item) }

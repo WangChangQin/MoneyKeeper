@@ -1,11 +1,13 @@
 package me.bakumon.moneykeeper.ui.setting
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.drakeet.multitype.ItemViewBinder
 
@@ -27,12 +29,12 @@ class NormalItemViewBinder constructor(private val onNormalItemClickListener: (N
         holder.llItemSettingNormal.setOnClickListener { onNormalItemClickListener.invoke(item) }
         if (item.clickEnable) {
             holder.llItemSettingNormal.isClickable = true
-            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorTextSettingItemTitle))
-            holder.tvContent.setTextColor(holder.tvContent.context.resources.getColor(R.color.colorTextSettingItemContent))
+            holder.tvTitle.setTextColor(ContextCompat.getColor(App.instance, R.color.colorTextSettingItemTitle))
+            holder.tvContent.setTextColor(ContextCompat.getColor(App.instance, R.color.colorTextSettingItemContent))
         } else {
             holder.llItemSettingNormal.isClickable = false
-            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorTextDisable))
-            holder.tvContent.setTextColor(holder.tvContent.context.resources.getColor(R.color.colorTextDisable))
+            holder.tvTitle.setTextColor(ContextCompat.getColor(App.instance, R.color.colorTextDisable))
+            holder.tvContent.setTextColor(ContextCompat.getColor(App.instance, R.color.colorTextDisable))
         }
     }
 

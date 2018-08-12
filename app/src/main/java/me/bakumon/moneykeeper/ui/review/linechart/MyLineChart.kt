@@ -2,6 +2,7 @@ package me.bakumon.moneykeeper.ui.review.linechart
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -16,14 +17,14 @@ class MyLineChart @JvmOverloads constructor(context: Context, attrs: AttributeSe
         this.setScaleEnabled(false)
         this.description.isEnabled = false
         this.legend.isEnabled = true
-        this.legend.textColor = resources.getColor(R.color.colorText)
+        this.legend.textColor = ContextCompat.getColor(context, R.color.colorText)
         val marker = LineChartMarkerView(context)
         marker.chartView = this
         this.marker = marker
 
         val xAxis = this.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = resources.getColor(R.color.colorTextHint)
+        xAxis.textColor = ContextCompat.getColor(context, R.color.colorTextHint)
         xAxis.setLabelCount(12, true)
         xAxis.setValueFormatter { value, _ ->
             val intValue = value.toInt()

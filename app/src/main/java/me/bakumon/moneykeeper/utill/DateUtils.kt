@@ -233,8 +233,6 @@ object DateUtils {
         c.set(Calendar.YEAR, year)
         c.set(Calendar.MONTH, month - 1)
 
-        Log.e("mafei", "getActualMinimum:" + c.getActualMinimum(Calendar.DAY_OF_MONTH))
-
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
@@ -259,8 +257,6 @@ object DateUtils {
         c.clear()
         c.set(Calendar.YEAR, year)
         c.set(Calendar.MONTH, month - 1)
-
-        Log.e("mafei", "getActualMaximum:" + c.getActualMaximum(Calendar.DAY_OF_MONTH))
 
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)

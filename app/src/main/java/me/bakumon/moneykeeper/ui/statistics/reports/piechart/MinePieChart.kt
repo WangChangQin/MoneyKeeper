@@ -2,6 +2,7 @@ package me.bakumon.moneykeeper.ui.statistics.reports.piechart
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import com.github.mikephil.charting.data.Entry
@@ -20,14 +21,14 @@ class MinePieChart @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     init {
         this.description.isEnabled = true
-        this.description.textColor = context.resources.getColor(R.color.colorTextHint)
+        this.description.textColor = ContextCompat.getColor(context, R.color.colorTextHint)
         this.description.text = context.getString(R.string.text_small_tip)
         this.setNoDataText("")
         this.setUsePercentValues(true)
         this.isDrawHoleEnabled = true
         this.setHoleColor(Color.TRANSPARENT)
         this.isRotationEnabled = false
-        this.setEntryLabelColor(context.resources.getColor(R.color.colorText))
+        this.setEntryLabelColor(ContextCompat.getColor(context, R.color.colorText))
         this.rotationAngle = 20f
 
         this.legend.isEnabled = false
@@ -74,14 +75,14 @@ class MinePieChart @JvmOverloads constructor(context: Context, attrs: AttributeS
             dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
             dataSet.yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             dataSet.isValueLineVariableLength = false
-            dataSet.valueLineColor = resources.getColor(R.color.colorText)
+            dataSet.valueLineColor = ContextCompat.getColor(context, R.color.colorText)
 
             dataSet.colors = PieColorsCreator.colors(this.context, entries.size)
 
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter())
             data.setValueTextSize(9f)
-            data.setValueTextColor(context.resources.getColor(R.color.colorText))
+            data.setValueTextColor(ContextCompat.getColor(context, R.color.colorText))
 
             this.data = data
         }

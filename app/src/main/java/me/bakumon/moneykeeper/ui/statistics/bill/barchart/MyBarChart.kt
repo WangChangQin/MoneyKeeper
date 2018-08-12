@@ -1,6 +1,7 @@
 package me.bakumon.moneykeeper.ui.statistics.bill.barchart
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import com.github.mikephil.charting.components.XAxis
@@ -27,7 +28,7 @@ class MyBarChart @JvmOverloads constructor(context: Context, attrs: AttributeSet
         val xAxis = this.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
-        xAxis.textColor = resources.getColor(R.color.colorTextHint)
+        xAxis.textColor = ContextCompat.getColor(context, R.color.colorTextHint)
         xAxis.labelCount = 5
         xAxis.setValueFormatter { value, _ ->
             val intValue = value.toInt()
@@ -64,7 +65,7 @@ class MyBarChart @JvmOverloads constructor(context: Context, attrs: AttributeSet
             set1 = BarDataSet(barEntries, "")
             set1.setDrawIcons(false)
             set1.setDrawValues(false)
-            set1.color = resources.getColor(R.color.colorAccent)
+            set1.color = ContextCompat.getColor(context, R.color.colorAccent)
             set1.highLightAlpha = 70
 
             val dataSets = ArrayList<IBarDataSet>()
