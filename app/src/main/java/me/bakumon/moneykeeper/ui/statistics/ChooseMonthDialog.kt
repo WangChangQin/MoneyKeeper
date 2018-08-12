@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.statistics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -70,6 +71,7 @@ class ChooseMonthDialog {
         setupDialog()
     }
 
+    @SuppressLint("InflateParams")
     private fun setupDialog() {
         val layoutInflater = LayoutInflater.from(mContext)
         val contentView = layoutInflater.inflate(R.layout.dialog_choose_month, null, false)

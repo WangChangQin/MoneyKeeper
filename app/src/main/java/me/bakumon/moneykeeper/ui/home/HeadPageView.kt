@@ -78,7 +78,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         indicator.setTotal(mAdapter.count, viewPager.currentItem)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InflateParams")
     private fun getPagerView(sumMoneyBean: List<SumMoneyBean>): View {
         if (pagerView == null) {
             pagerView = inflater.inflate(R.layout.layout_head_content, null)
@@ -130,7 +130,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         return pagerView!!
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InflateParams")
     private fun getPagerView1(sumMoneyBean: List<SumMoneyBean>): View {
         if (pagerView1 == null) {
             pagerView1 = inflater.inflate(R.layout.layout_head_content, null)

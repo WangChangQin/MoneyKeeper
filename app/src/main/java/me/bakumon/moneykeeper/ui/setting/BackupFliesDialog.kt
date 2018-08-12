@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.setting
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.RecyclerView
@@ -42,6 +43,7 @@ class BackupFliesDialog(private val mContext: Context, private val mBackupBeans:
         setupDialog()
     }
 
+    @SuppressLint("InflateParams")
     private fun setupDialog() {
         val layoutInflater = LayoutInflater.from(mContext)
         val contentView = layoutInflater.inflate(R.layout.dialog_backup_files, null, false)
