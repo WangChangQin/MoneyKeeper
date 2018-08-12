@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.ui.about
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,6 +31,7 @@ import me.bakumon.moneykeeper.utill.Pi
 import me.bakumon.moneykeeper.utill.StatusBarUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
+import me.drakeet.multitype.register
 import me.drakeet.support.about.*
 import me.drakeet.support.about.extension.RecommendedLoaderDelegate
 import me.drakeet.support.about.extension.provided.MoshiJsonConverter
@@ -70,12 +70,9 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
     }
 
     override fun onItemsCreated(items: Items) {
+        adapter.register(CardWithAction::class, CardWithActionViewBinder())
         items.add(Category(getString(R.string.text_about_Introduction)))
-        val summaryText = getString(R.string.text_about_detail, Constant.URL_HELP)
-        val summarySpan = SpannableStringBuilder(summaryText)
-                // 捐赠按钮
-                .append(SpanUtil.getDonateSpannable(this))
-        items.add(Card(summarySpan))
+        items.add(CardWithAction(getString(R.string.text_about_detail), getString(R.string.text_donate)) { AndroidUtil.alipay(this) })
 
         items.add(Category(getString(R.string.text_dev_designer)))
         items.add(Contributor(R.mipmap.avatar_markcrs, "Markcrs", getString(R.string.text_designer)))

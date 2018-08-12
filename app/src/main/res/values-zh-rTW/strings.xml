@@ -182,7 +182,7 @@
     <string name="text_about">關於</string>
     <string name="text_slogan">簡單，純粹的記賬應用</string>
     <string name="text_about_Introduction">介紹</string>
-    <string name="text_about_detail" formatted="true">　　一款輕量級的記賬工具。\n\n　　這是我第一個用心的作品，起源於從小到大的一個「不可思議」（錢到底花在了哪兒），工作以後尤為明顯。於是「那樣記賬」誕生了，目的是讓大家以最簡單、直接的方式來記賬，讓這個「不可思議」不再不可思議，慢慢建立起良好的消費習慣。\n\n　　沒有任何多餘的權限，沒有廣告，沒有用戶系統，不保存用戶任何信息，只是單純的記錄收支情況。\n\n　　「那樣記賬」名稱取自一個人名字「娜」的諧音。\n\n　　更多幫助：%1$s</string>
+    <string name="text_about_detail">　　一款輕量級的記賬工具。\n\n　　這是我第一個用心的作品，起源於從小到大的一個「不可思議」（錢到底花在了哪兒），工作以後尤為明顯。於是「那樣記賬」誕生了，目的是讓大家以最簡單、直接的方式來記賬，讓這個「不可思議」不再不可思議，慢慢建立起良好的消費習慣。\n\n　　沒有任何多餘的權限，沒有廣告，沒有用戶系統，不保存用戶任何信息，只是單純的記錄收支情況。\n\n　　「那樣記賬」名稱取自一個人名字「娜」的諧音。</string>
     <string name="text_dev_designer">設計和開發</string>
     <string name="text_designer">總體設計</string>
     <string name="text_launcher_designer">啟動圖標設計</string>

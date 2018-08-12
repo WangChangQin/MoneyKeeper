@@ -61,7 +61,7 @@
     <color name="colorCircle">#FFFFFF</color>
 
     <!-- 捐赠按钮 -->
-    <color name="colorDonate">#1565C0</color>
+    <color name="colorDonate">#2196f3</color>
 
     <!-- 收入和支出 -->
     <color name="colorOutlay">#FF6F6F</color>
