@@ -48,7 +48,7 @@
             android:maxLength="5"
             android:singleLine="true"
             android:textColor="@color/colorText"
-            android:textColorHint="@color/colorText3" />
+            android:textColorHint="@color/colorTextHint" />
     </LinearLayout>
 
     <View
@@ -57,12 +57,15 @@
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:background="@color/colorItemBackground" />
+        android:background="@color/colorDivider" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_type"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="20dp"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:spanCount="4"
         tools:listitem="@layout/item_type_img" />

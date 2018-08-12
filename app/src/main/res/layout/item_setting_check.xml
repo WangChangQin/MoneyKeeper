@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextSettingItemTitle"
             android:textSize="16sp"
             tools:text="极速记账" />
 
@@ -47,7 +47,7 @@
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText3"
+            android:textColor="@color/colorTextSettingItemContent"
             android:textSize="14sp"
             tools:text="打开应用直接记账" />
     </LinearLayout>

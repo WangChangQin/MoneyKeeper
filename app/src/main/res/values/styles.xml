@@ -23,88 +23,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- 影响 checkbox 等的次颜色 -->
-        <item name="android:textColorSecondary">@color/colorText3</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">#b3b0b0</item>
+        <item name="android:navigationBarColor">@color/colorWindowBackground</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
     </style>
 
     <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@color/colorPrimary</item>
-    </style>
-
-    <!-- 覆盖 AboutPage.CardContent 增加行间距 和 email -->
-    <style name="AboutPage.CardContent">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:autoLink">web|email</item>
-        <item name="android:textColorLink">@color/about_page_link_text_color</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:lineSpacingMultiplier">1.2</item>
-        <item name="android:textColor">@color/about_page_card_text_color</item>
-    </style>
-
-    <!-- 覆盖 AboutPage.Header.Icon 增加上外边距 -->
-    <style name="AboutPage.Header.Icon">
-        <item name="android:layout_width">90dp</item>
-        <item name="android:layout_height">90dp</item>
-        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
     </style>
 
     <style name="About" parent="AppTheme">
         <item name="aboutPageHeaderBackground">@color/colorAccent</item>
-    </style>
-
-    <style name="AppCompatToolBar" parent="Theme.AppCompat.Light">
-        <item name="android:textColorSecondary">@color/colorText</item>
-        <item name="titleTextColor">@color/colorText</item>
-        <item name="actionMenuTextColor">@color/colorText</item>
-    </style>
-
-    <style name="ToolBar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-    </style>
-
-    <style name="ToolBar.Title">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <!-- 键盘 -->
-    <style name="bg_press">
-        <item name="android:foreground">?attr/selectableItemBackground</item>
-    </style>
-
-    <!-- 键盘 -->
-    <style name="text_view_input" parent="bg_press">
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorText</item>
-    </style>
-
-    <!-- 键盘数字 -->
-    <style name="text_view_input_num" parent="text_view_input">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">28sp</item>
-    </style>
-
-    <!-- 键盘确定 -->
-    <style name="text_view_input_affirm" parent="text_view_input">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@color/colorAccentButtonTextNormal</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:background">@drawable/bg_gradient_315</item>
     </style>
 
 </resources>

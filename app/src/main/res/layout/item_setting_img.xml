@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:src="@drawable/ic_cloud"
-        android:tint="@color/colorText" />
+        android:tint="@color/colorTextSettingItemTitle" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextSettingItemTitle"
             android:textSize="16sp"
             tools:text="云盘备份" />
 
@@ -54,7 +54,7 @@
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText3"
+            android:textColor="@color/colorTextSettingItemContent"
             android:textSize="14sp"
             tools:text="WebDav" />
     </LinearLayout>

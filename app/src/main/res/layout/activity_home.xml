@@ -44,19 +44,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvRecords"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        style="@style/LinearRecyclerView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_record" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnAdd"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="25dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@drawable/ic_add" />
+        style="@style/AddFAB" />
 </android.support.design.widget.CoordinatorLayout>

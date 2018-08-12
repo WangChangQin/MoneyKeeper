@@ -20,13 +20,14 @@ class MinePieChart @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     init {
         this.description.isEnabled = true
-        this.description.textColor = context.resources.getColor(R.color.colorText3)
+        this.description.textColor = context.resources.getColor(R.color.colorTextHint)
         this.description.text = context.getString(R.string.text_small_tip)
         this.setNoDataText("")
         this.setUsePercentValues(true)
         this.isDrawHoleEnabled = true
         this.setHoleColor(Color.TRANSPARENT)
         this.isRotationEnabled = false
+        this.setEntryLabelColor(context.resources.getColor(R.color.colorText))
         this.rotationAngle = 20f
 
         this.legend.isEnabled = false
@@ -80,7 +81,7 @@ class MinePieChart @JvmOverloads constructor(context: Context, attrs: AttributeS
             val data = PieData(dataSet)
             data.setValueFormatter(PercentFormatter())
             data.setValueTextSize(9f)
-            data.setValueTextColor(Color.WHITE)
+            data.setValueTextColor(context.resources.getColor(R.color.colorText))
 
             this.data = data
         }

@@ -15,35 +15,53 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorPrimary">#9576fc</color>
+    <color name="colorPrimaryDark">#f9f9fa</color>
     <color name="colorAccent">#9576fc</color>
 
     <color name="colorAccentStart">#71b8fb</color>
-    <color name="colorAccentEnd">#9576fc</color>
+    <color name="colorAccentEnd">@color/colorAccent</color>
+
+    <color name="colorLauncherWindowBackground">#3d3e51</color>
 
     <color name="colorWindowBackground">#f9f9fa</color>
     <color name="colorItemBackground">#ffffff</color>
 
-    <color name="colorHeadTextNormal">#ffffffff</color>
-    <color name="colorHeadTextSecond">#fff6f6f6</color>
+    <color name="colorDivider">#ededed</color>
 
-    <color name="colorAccentButtonTextNormal">#FFFFFF</color>
-    <color name="colorAccentButtonTextSecond">#73798c</color>
+    <color name="colorTextTitle">#202020</color>
 
-    <color name="colorAccentIcon">#ffffffff</color>
-    <color name="colorIcon">#ffffffff</color>
+    <!-- 首页 Head -->
+    <color name="colorHeadTextTitle">#f6f6f6</color>
+    <color name="colorHeadTextContent">#ffffff</color>
+    <color name="colorHeadIcon">#ffffff</color>
+
+    <color name="colorIconAdd">#ffffff</color>
 
     <color name="colorText">#202020</color>
-    <color name="colorText1">#e7e5e5</color>
-    <color name="colorText2">#e9e8e8</color>
-    <color name="colorText3">#b3b0b0</color>
+    <color name="colorTextDisable">#b3b0b0</color>
     <color name="colorTextHint">#737373</color>
 
-    <color name="colorDialogText">#333333</color>
+    <color name="colorTextChooseTypeChecked">#FFFFFF</color>
+    <color name="colorTextChooseTypeUnUnChecked">#4d4f59</color>
+
+    <color name="colorTextRecordItemTitle">#202020</color>
+    <color name="colorTextRecordItemContent">#737373</color>
+
+    <color name="colorTextSettingItemTitle">#333333</color>
+    <color name="colorTextSettingItemContent">#5c5c5c</color>
+
+    <color name="colorBackgroundBottomSheetDialog">#ffffff</color>
+    <color name="colorTextBottomSheetDialog">#202020</color>
+    <color name="colorTextHintBottomSheetDialog">#5c5c5c</color>
+
+    <color name="colorTextKeyboard">#5c5c5c</color>
+
+    <!-- 记一笔界面 指示器 -->
+    <color name="colorCircle">#979595</color>
 
     <!-- 捐赠按钮 -->
-    <color name="colorDonate">#44cef6</color>
+    <color name="colorDonate">#2196f3</color>
 
     <!-- 收入和支出 -->
     <color name="colorOutlay">#FF6F6F</color>

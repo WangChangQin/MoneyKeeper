@@ -46,7 +46,7 @@
             android:id="@+id/tvTypeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextRecordItemTitle"
             android:textSize="16sp"
             tools:text="餐饮" />
 
@@ -57,7 +57,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:singleLine="true"
-            android:textColor="@color/colorTextHint"
+            android:textColor="@color/colorTextRecordItemContent"
             android:textSize="14sp"
             tools:text="请客吃早点" />
 
@@ -73,7 +73,7 @@
             android:id="@+id/tvMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextRecordItemTitle"
             android:textSize="16sp"
             tools:text="-43" />
 
@@ -81,7 +81,7 @@
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorTextHint"
+            android:textColor="@color/colorTextRecordItemContent"
             tools:text="4月11日" />
     </LinearLayout>
 </LinearLayout>

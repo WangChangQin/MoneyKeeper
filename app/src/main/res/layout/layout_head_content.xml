@@ -22,31 +22,16 @@
     android:orientation="horizontal"
     tools:background="@drawable/bg_gradient">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingTop="25dp">
+    <LinearLayout style="@style/Head.Content">
 
         <TextView
             android:id="@+id/tvLeftTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorHeadTextSecond"
+            style="@style/Head.Title"
             tools:text="@string/text_month_outlay" />
 
         <TextView
             android:id="@+id/tvLeftContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/colorHeadTextNormal"
-            android:textSize="34sp"
+            style="@style/Head.Money"
             tools:text="0" />
 
     </LinearLayout>
@@ -58,35 +43,20 @@
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="45dp"
-        android:background="@color/colorHeadTextNormal" />
+        android:background="@color/colorHeadTextContent" />
 
     <LinearLayout
         android:id="@+id/llRightContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingTop="25dp">
+        style="@style/Head.Content.Click">
 
         <TextView
             android:id="@+id/tvRightTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorHeadTextSecond"
+            style="@style/Head.Title"
             tools:text="@string/text_month_remaining_budget" />
 
         <TextView
             android:id="@+id/tvRightContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/colorHeadTextNormal"
-            android:textSize="34sp"
+            style="@style/Head.Money"
             tools:text="0" />
     </LinearLayout>
 </LinearLayout>

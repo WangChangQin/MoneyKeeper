@@ -18,4 +18,8 @@ open class NoSmallPieChart @JvmOverloads constructor(context: Context, attrs: At
     override fun setHoleColor(color: Int) {
         (mRenderer as NoSmallPieChartRenderer).paintHole.color = color
     }
+
+    override fun setEntryLabelColor(color: Int) {
+        (mRenderer as NoSmallPieChartRenderer).paintEntryLabels.color = color
+    }
 }

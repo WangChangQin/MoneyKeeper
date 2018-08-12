@@ -16,7 +16,7 @@ class MyLineChart @JvmOverloads constructor(context: Context, attrs: AttributeSe
         this.setScaleEnabled(false)
         this.description.isEnabled = false
         this.legend.isEnabled = true
-        this.legend.textColor = resources.getColor(R.color.colorText1)
+        this.legend.textColor = resources.getColor(R.color.colorText)
         val marker = LineChartMarkerView(context)
         marker.chartView = this
         this.marker = marker

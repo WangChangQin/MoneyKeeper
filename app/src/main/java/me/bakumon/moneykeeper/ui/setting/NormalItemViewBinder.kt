@@ -27,10 +27,12 @@ class NormalItemViewBinder constructor(private val onNormalItemClickListener: (N
         holder.llItemSettingNormal.setOnClickListener { onNormalItemClickListener.invoke(item) }
         if (item.clickEnable) {
             holder.llItemSettingNormal.isClickable = true
-            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorText))
+            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorTextSettingItemTitle))
+            holder.tvContent.setTextColor(holder.tvContent.context.resources.getColor(R.color.colorTextSettingItemContent))
         } else {
             holder.llItemSettingNormal.isClickable = false
-            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorText3))
+            holder.tvTitle.setTextColor(holder.tvTitle.context.resources.getColor(R.color.colorTextDisable))
+            holder.tvContent.setTextColor(holder.tvContent.context.resources.getColor(R.color.colorTextDisable))
         }
     }
 

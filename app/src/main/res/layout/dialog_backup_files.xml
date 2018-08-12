@@ -22,13 +22,13 @@
     android:gravity="top"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:background="@android:color/white">
+    android:background="@color/colorBackgroundBottomSheetDialog">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_restore"
-        android:textColor="@color/colorDialogText"
+        android:textColor="@color/colorTextBottomSheetDialog"
         android:textSize="19sp"
         android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
         android:paddingBottom="3dp"
         android:paddingTop="20dp"
         android:text="@string/text_restore_tip"
-        android:textColor="@color/colorTextHint"
+        android:textColor="@color/colorTextHintBottomSheetDialog"
         android:textSize="14sp" />
 
     <TextView
@@ -47,7 +47,7 @@
         android:paddingBottom="3dp"
         android:paddingTop="5dp"
         android:text="@string/text_list_restore"
-        android:textColor="@color/colorTextHint"
+        android:textColor="@color/colorTextHintBottomSheetDialog"
         android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView

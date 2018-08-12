@@ -15,7 +15,6 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,10 +42,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvReview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/LinearRecyclerView"
         android:clipToPadding="false"
         android:paddingBottom="20dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/item_review" />
 </LinearLayout>

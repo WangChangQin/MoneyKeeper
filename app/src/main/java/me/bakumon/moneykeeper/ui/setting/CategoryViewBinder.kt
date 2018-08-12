@@ -16,7 +16,7 @@ import me.drakeet.multitype.ItemViewBinder
 class CategoryViewBinder : ItemViewBinder<Category, CategoryViewBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        val root = inflater.inflate(R.layout.item_category, parent, false)
+        val root = inflater.inflate(R.layout.item_setting_category, parent, false)
         return ViewHolder(root)
     }
 

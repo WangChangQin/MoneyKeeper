@@ -18,6 +18,7 @@ package me.bakumon.moneykeeper.ui.review.linechart
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
@@ -50,7 +51,7 @@ class LineChartMarkerView(context: Context) : MarkerView(context, R.layout.bar_c
             } else {
                 tvContent.setBackgroundColor(resources.getColor(R.color.colorIncome))
             }
-            tvContent.setTextColor(resources.getColor(R.color.colorText1))
+            tvContent.setTextColor(Color.WHITE)
         } else {
             tvContent.visibility = View.GONE
         }

@@ -37,10 +37,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvRecordBill"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/LinearRecyclerView"
         android:clipToPadding="false"
         android:paddingBottom="20dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/item_record" />
 </LinearLayout>

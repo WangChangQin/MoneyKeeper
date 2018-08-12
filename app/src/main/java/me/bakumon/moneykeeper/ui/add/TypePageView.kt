@@ -63,7 +63,7 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         pageSnapHelper.attachToRecyclerView(recyclerType)
 
         adapter = MultiTypeAdapter()
-        adapter.register(RecordType::class).to(TypeViewBinder({ recordType, position ->
+        adapter.register(RecordType::class).to(TypeViewBinder { recordType, position ->
             mCurrentTypeId = recordType.id
             mCurrentTypeIndex = position
             // 更新所有 item 的选中状态
@@ -72,7 +72,7 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 item.isChecked = index == position
             }
             adapter.notifyDataSetChanged()
-        }), TypeSettingViewBinder())
+        }, TypeSettingViewBinder())
                 .withKClassLinker { _, data ->
                     if (data.isSetting) {
                         TypeSettingViewBinder::class
@@ -83,8 +83,8 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         recyclerType.adapter = adapter
 
         mLayoutManager.setPageListener(object : PagerGridLayoutManager.PageListener {
-            internal var currentPageIndex: Int = 0
-            internal var pageSize: Int = 0
+            var currentPageIndex: Int = 0
+            var pageSize: Int = 0
 
             override fun onPageSizeChanged(pageSize: Int) {
                 this.pageSize = pageSize
