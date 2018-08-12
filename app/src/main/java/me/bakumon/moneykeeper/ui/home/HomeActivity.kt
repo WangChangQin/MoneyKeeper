@@ -20,7 +20,6 @@ import android.Manifest
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatDelegate
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -60,14 +59,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     private lateinit var mViewModel: HomeViewModel
     private lateinit var mAdapter: MultiTypeAdapter
     private var isUserFirst: Boolean = false
-
-    init {
-        if (ConfigManager.isThemeDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
 
     override val layoutId: Int
         get() = R.layout.activity_home

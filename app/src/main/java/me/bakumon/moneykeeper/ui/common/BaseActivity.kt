@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.ViewGroup
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.api.ApiEmptyResponse
 import me.bakumon.moneykeeper.api.ApiErrorResponse
@@ -42,6 +43,14 @@ import okhttp3.ResponseBody
  * @date 18-1-17
  */
 abstract class BaseActivity : AppCompatActivity() {
+
+    init {
+        if (ConfigManager.isThemeDark) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
 
     /**
      * 子类必须实现，用于创建 view
