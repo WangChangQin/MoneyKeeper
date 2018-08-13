@@ -63,6 +63,9 @@ object Network {
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
 
         val url = ConfigManager.webDavUrl
+        if (url.isEmpty()) {
+            return
+        }
         val baseUrl = if (url.endsWith("/")) url else "$url/"
         val retrofit = retrofitBuilder.baseUrl(baseUrl)
                 .build()
