@@ -89,6 +89,7 @@
     <string name="text_type_manage">Management</string>
     <string name="text_delete">delete</string>
     <string name="text_delete_type_note">After you delete this category, you will not be able to select this category on the bookkeeping page. The original bills under this category will remain unchanged.</string>
+    <string name="text_delete_record_note">Are you sure you want to delete this record?</string>
     <string name="text_affirm_delete">delete</string>
     <string name="text_affirm">OK</string>
     <string name="text_cancel">Cancel</string>

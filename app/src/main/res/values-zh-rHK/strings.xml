@@ -89,7 +89,8 @@
     <string name="text_type_manage">分類管理</string>
     <string name="text_delete">刪除</string>
     <string name="text_delete_type_note">刪除該分類後，將無法在記賬頁選擇該分類，該分類下原有賬單仍保持不變</string>
-    <string name="text_affirm_delete">確認刪除</string>
+    <string name="text_delete_record_note">確定刪除該記錄？</string>
+    <string name="text_affirm_delete">刪除</string>
     <string name="text_affirm">確定</string>
     <string name="text_cancel">取消</string>
 

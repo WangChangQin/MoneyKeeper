@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
@@ -47,7 +48,13 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
         // 费用
         holder.tvMoney.text = getMoneyText(item)
 
-        holder.tvItemClick.setOnLongClickListener {
+        holder.llItemClick.setOnClickListener {
+            Floo.navigation(holder.llItemClick.context, Router.Url.URL_ADD_RECORD)
+                    .putExtra(Router.ExtraKey.KEY_RECORD_BEAN, item)
+                    .start()
+        }
+
+        holder.llItemClick.setOnLongClickListener {
             showOperateDialog(holder.tvMoney.context, item)
             false
         }
@@ -62,17 +69,13 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
     }
 
     private fun showOperateDialog(context: Context, record: RecordWithType) {
+        val money = " (" + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(record.money) + ")"
         MaterialDialog.Builder(context)
-                .items(context.getString(R.string.text_modify), context.getString(R.string.text_delete))
-                .itemsCallback { _, _, which, _ ->
-                    if (which == 0) {
-                        Floo.navigation(context, Router.Url.URL_ADD_RECORD)
-                                .putExtra(Router.ExtraKey.KEY_RECORD_BEAN, record)
-                                .start()
-                    } else {
-                        onDeleteClickListener.invoke(record)
-                    }
-                }
+                .title(record.mRecordTypes!![0].name + money)
+                .content(R.string.text_delete_record_note)
+                .positiveText(R.string.text_affirm_delete)
+                .negativeText(R.string.text_cancel)
+                .onPositive { _, _ -> onDeleteClickListener.invoke(record) }
                 .show()
     }
 
@@ -82,6 +85,6 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
         val tvTypeName: TextView = itemView.findViewById(R.id.tv_type_name)
         val tvRemark: TextView = itemView.findViewById(R.id.tv_remark)
         val tvMoney: TextView = itemView.findViewById(R.id.tv_money)
-        val tvItemClick: View = itemView.findViewById(R.id.ll_item_click)
+        val llItemClick: View = itemView.findViewById(R.id.ll_item_click)
     }
 }

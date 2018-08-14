@@ -67,13 +67,6 @@ class TypeListFragment : AbsListFragment() {
     }
 
     private fun initData() {
-//        mDisposable.add(mViewModel.getRecordTypes(mType!!).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({ setItems(it) }
-//                ) { throwable ->
-//                    ToastUtils.show(R.string.toast_get_types_fail)
-//                    Log.e(TAG, "获取类型数据失败", throwable)
-//                })
         mViewModel.getRecordTypes(mType!!).observe(this, Observer {
             if (it != null){
                 setItems(it)
@@ -132,8 +125,6 @@ class TypeListFragment : AbsListFragment() {
     }
 
     companion object {
-        private val TAG = TypeListFragment::class.java.simpleName
-
         fun newInstance(type: Int): TypeListFragment {
             val fragment = TypeListFragment()
             val bundle = Bundle()
