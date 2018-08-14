@@ -8,14 +8,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.utill.ResourcesUtil
+import me.drakeet.floo.Floo
 import me.drakeet.multitype.ItemViewBinder
 
 /**
  * @author Bakumon https://bakumon.me
  */
-class TypeListViewBinder constructor(private val onClickItemListener: ((RecordType) -> Unit), private val onLongClickItemListener: ((RecordType) -> Unit)) : ItemViewBinder<RecordType, TypeListViewBinder.ViewHolder>() {
+class TypeListViewBinder constructor(private val onLongClickItemListener: ((RecordType) -> Unit)) : ItemViewBinder<RecordType, TypeListViewBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         val root = inflater.inflate(R.layout.item_type_manage, parent, false)
@@ -26,7 +28,10 @@ class TypeListViewBinder constructor(private val onClickItemListener: ((RecordTy
         holder.tvTypeName.text = item.name
         holder.ivTypeImg.setImageResource(ResourcesUtil.getTypeImgId(holder.ivTypeImg.context, item.imgName))
         holder.llItemRecordType.setOnClickListener {
-            onClickItemListener.invoke(item)
+            Floo.navigation(holder.llItemRecordType.context, Router.Url.URL_ADD_TYPE)
+                    .putExtra(Router.ExtraKey.KEY_TYPE_BEAN, item)
+                    .putExtra(Router.ExtraKey.KEY_TYPE, item.type)
+                    .start()
         }
         holder.llItemRecordType.setOnLongClickListener {
             onLongClickItemListener.invoke(item)

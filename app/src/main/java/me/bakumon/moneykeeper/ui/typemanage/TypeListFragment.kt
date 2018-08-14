@@ -19,19 +19,14 @@ package me.bakumon.moneykeeper.ui.typemanage
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.datasource.BackupFailException
 import me.bakumon.moneykeeper.ui.common.AbsListFragment
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -47,7 +42,7 @@ class TypeListFragment : AbsListFragment() {
     private lateinit var mViewModel: TypeManageViewModel
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
-        val viewBinder = TypeListViewBinder({ onClickItem(it) }, { onLongClickItem(it) })
+        val viewBinder = TypeListViewBinder { onLongClickItem(it) }
         adapter.register(RecordType::class, viewBinder)
     }
 
@@ -68,7 +63,7 @@ class TypeListFragment : AbsListFragment() {
 
     private fun initData() {
         mViewModel.getRecordTypes(mType!!).observe(this, Observer {
-            if (it != null){
+            if (it != null) {
                 setItems(it)
             }
         })
@@ -79,16 +74,6 @@ class TypeListFragment : AbsListFragment() {
         items.addAll(recordTypes)
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
-    }
-
-    private fun onClickItem(item: RecordType) {
-        if (context == null) {
-            return
-        }
-        Floo.navigation(context!!, Router.Url.URL_ADD_TYPE)
-                .putExtra(Router.ExtraKey.KEY_TYPE_BEAN, item)
-                .putExtra(Router.ExtraKey.KEY_TYPE, item.type)
-                .start()
     }
 
     private fun onLongClickItem(item: RecordType) {
