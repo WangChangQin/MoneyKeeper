@@ -152,7 +152,8 @@ class AddTypeActivity : BaseActivity() {
             when (it) {
                 is SuccessResource<Boolean> -> finish()
                 is ErrorResource<Boolean> -> {
-                    ToastUtils.show(R.string.toast_type_save_fail)
+                    isSaveEnable = true
+                    ToastUtils.show(getString(R.string.toast_type_save_fail) + "\n" + it.errorMessage)
                 }
             }
         })
