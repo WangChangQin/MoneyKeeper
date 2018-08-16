@@ -56,7 +56,7 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
 
         holder.llItemClick.setOnLongClickListener {
             showOperateDialog(holder.tvMoney.context, item)
-            false
+            true
         }
     }
 

@@ -181,7 +181,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (sb.isNotEmpty()) {
                 setText("")
             }
-            false
+            true
         }
     }
 
