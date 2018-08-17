@@ -262,6 +262,10 @@
                     android:scheme="@string/scheme" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".CloudBackupService"
+            android:exported="false" />
     </application>
 
 </manifest>

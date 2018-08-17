@@ -11,6 +11,7 @@ import me.bakumon.moneykeeper.ConfigManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
@@ -61,6 +62,7 @@ object Network {
                 .client(okHttpClient)
                 .addConverterFactory(EmptyConverterFactory())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
         val url = ConfigManager.webDavUrl
         if (url.isEmpty()) {

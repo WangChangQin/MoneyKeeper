@@ -134,8 +134,8 @@ class AddRecordActivity : BaseActivity() {
                     tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
                 }, mCurrentChooseCalendar)
         dpd.maxDate = Calendar.getInstance()
-        @Suppress("DEPRECATION")
         dpd.isThemeDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        @Suppress("DEPRECATION")
         dpd.show(fragmentManager, TAG_PICKER_DIALOG)
         dpd.setOnDismissListener { isDialogShow = false }
     }

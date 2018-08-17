@@ -24,6 +24,7 @@ import android.text.InputType
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.processphoenix.ProcessPhoenix
+import me.bakumon.moneykeeper.CloudBackupService
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
@@ -70,8 +71,8 @@ class BackupActivity : AbsListActivity() {
         items.add(NormalItem(getString(R.string.text_webdav_url), ConfigManager.webDavUrl))
         items.add(NormalItem(getString(R.string.text_webdav_account), ConfigManager.webDavAccount))
         items.add(NormalItem(getString(R.string.text_webdav_password), getItemDisplayPsw()))
-        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)))
-        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_backup_save, getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE))))
+        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE)))
+        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_backup_save, getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE))))
         items.add(NormalItem(getString(R.string.text_auto_backup_mode_title), getBackupModeStr(), ConfigManager.cloudEnable))
         items.add(NormalItem(getString(R.string.text_webdav_help), Constant.NUTSTORE_HELP_URL))
     }
@@ -223,7 +224,7 @@ class BackupActivity : AbsListActivity() {
             updateBackupEnable(false)
             return
         }
-        mViewModel.getList().observe(this, Observer {
+        mViewModel.getListLiveData().observe(this, Observer {
             when (it) {
                 is ApiErrorResponse<ResponseBody> -> {
                     if (it.code == 404) {
@@ -241,7 +242,7 @@ class BackupActivity : AbsListActivity() {
     }
 
     private fun createDir() {
-        mViewModel.createDir().observe(this, Observer {
+        mViewModel.createDirLiveData().observe(this, Observer {
             when (it) {
                 is ApiErrorResponse<ResponseBody> -> {
                     updateBackupEnable(false)
@@ -265,16 +266,14 @@ class BackupActivity : AbsListActivity() {
         isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_go_backup)
-                .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
+                .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive { _, _ -> cloudBackup(mViewModel) }
+                .onPositive { _, _ ->
+                    CloudBackupService.startBackup(this, true)
+                }
                 .dismissListener { isDialogShow = false }
                 .show()
-    }
-
-    override fun onCloudBackupSuccess() {
-        ToastUtils.show(R.string.toast_backup_success)
     }
 
     private fun showRestoreDialog() {
@@ -288,7 +287,7 @@ class BackupActivity : AbsListActivity() {
         isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_restore)
-                .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupViewModel.BACKUP_FILE)
+                .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
                 .onPositive { _, _ -> restore() }

@@ -214,7 +214,8 @@
     <string name="text_config_webdav">请先配置WebDAV</string>
     <string name="text_auto_backup_mode_title">自动备份模式</string>
     <string name="text_auto_backup_mode">选择自动备份模式</string>
-    <string name="text_auto_backup_fail">自动云备份失败！</string>
+    <string name="text_auto_backup_success">云备份成功！</string>
+    <string name="text_auto_backup_fail">云备份失败！</string>
     <string-array name="text_cloud_auto_backup_mode">
         <item>不自动备份</item>
         <item>打开应用时备份</item>

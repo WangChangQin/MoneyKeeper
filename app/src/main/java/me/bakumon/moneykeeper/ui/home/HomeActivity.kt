@@ -27,10 +27,10 @@ import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_home.*
+import me.bakumon.moneykeeper.CloudBackupService
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.api.ApiErrorResponse
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
@@ -44,7 +44,6 @@ import me.drakeet.floo.StackCallback
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
-import okhttp3.ResponseBody
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -132,16 +131,12 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
                     ConfigManager.webDAVPsw = it.body
                     // 自动云备份
                     if (ConfigManager.cloudEnable && ConfigManager.cloudBackupMode == ConfigManager.MODE_LAUNCHER_APP) {
-                        cloudBackup(mViewModel)
+                        CloudBackupService.startBackup(this)
                     }
                 }
                 is ErrorResource<String> -> ToastUtils.show(it.errorMessage)
             }
         })
-    }
-
-    override fun onCloudBackupFail(errorResponse: ApiErrorResponse<ResponseBody>) {
-        ToastUtils.show(getString(R.string.text_auto_backup_fail) + errorResponse.errorMessage)
     }
 
     private fun deleteRecord(record: RecordWithType) {

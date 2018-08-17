@@ -214,7 +214,8 @@
     <string name="text_config_webdav">Please configure WebDAV first.</string>
     <string name="text_auto_backup_mode_title">Automatic backup mode</string>
     <string name="text_auto_backup_mode">Select backup mode</string>
-    <string name="text_auto_backup_fail">Automatic cloud backup failed!</string>
+    <string name="text_auto_backup_success">Cloud backup succeeded!</string>
+    <string name="text_auto_backup_fail">Cloud backup failed!</string>
     <string-array name="text_cloud_auto_backup_mode">
         <item>Do not automatically backup</item>
         <item>when opening app</item>

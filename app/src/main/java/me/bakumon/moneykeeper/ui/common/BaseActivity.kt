@@ -16,7 +16,6 @@
 
 package me.bakumon.moneykeeper.ui.common
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -28,12 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
-import me.bakumon.moneykeeper.api.ApiEmptyResponse
-import me.bakumon.moneykeeper.api.ApiErrorResponse
-import me.bakumon.moneykeeper.api.ApiSuccessResponse
 import me.bakumon.moneykeeper.utill.StatusBarUtil
-import me.bakumon.moneykeeper.utill.ToastUtils
-import okhttp3.ResponseBody
 
 /**
  * 1.沉浸式状态栏
@@ -136,58 +130,6 @@ abstract class BaseActivity : AppCompatActivity() {
     inline fun <reified T : BaseViewModel> getViewModel(): T {
         val viewModelFactory = Injection.provideViewModelFactory()
         return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
-    }
-
-    /**
-     * WebDAV 云备份
-     */
-    fun cloudBackup(mViewModel: BaseViewModel) {
-        mViewModel.getList().observe(this, Observer { response ->
-            when (response) {
-                is ApiEmptyResponse<ResponseBody> -> backupUpload(mViewModel)
-                is ApiSuccessResponse<ResponseBody> -> backupUpload(mViewModel)
-                is ApiErrorResponse<ResponseBody> -> {
-                    if (response.code == 404) {
-                        mViewModel.createDir().observe(this, Observer {
-                            when (it) {
-                                is ApiSuccessResponse<ResponseBody> -> backupUpload(mViewModel)
-                                is ApiEmptyResponse<ResponseBody> -> backupUpload(mViewModel)
-                                is ApiErrorResponse<ResponseBody> -> ToastUtils.show(it.errorMessage)
-                            }
-                        })
-                    } else {
-                        onCloudBackupFail(response)
-                    }
-                }
-            }
-        })
-    }
-
-    private fun backupUpload(mViewModel: BaseViewModel) {
-        // 上传文件
-        mViewModel.backup().observe(this, Observer {
-            when (it) {
-                is ApiSuccessResponse<ResponseBody> -> onCloudBackupSuccess()
-                is ApiEmptyResponse<ResponseBody> -> onCloudBackupSuccess()
-                is ApiErrorResponse<ResponseBody> -> onCloudBackupFail(it)
-            }
-        })
-    }
-
-    /**
-     * WebDAV 云备份成功
-     * 子类可以重写此方法
-     */
-    open fun onCloudBackupSuccess() {
-
-    }
-
-    /**
-     * WebDAV 云备份失败
-     * 子类可以重写此方法
-     */
-    open fun onCloudBackupFail(errorResponse: ApiErrorResponse<ResponseBody>) {
-        ToastUtils.show(errorResponse.errorMessage)
     }
 
     @Suppress("DEPRECATION")

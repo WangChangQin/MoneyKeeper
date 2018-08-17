@@ -200,6 +200,7 @@ dependencies {
     implementation deps.rxandroid
     // retrofit2
     implementation deps.retrofit2.retrofit
+    implementation deps.retrofit2.adapter_rxjava2
     // okhttp 日志拦截器
     implementation deps.okhttp3.logging
     // 路由

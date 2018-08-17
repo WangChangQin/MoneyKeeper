@@ -17,9 +17,10 @@ package me.bakumon.moneykeeper.api
 
 
 import android.arch.lifecycle.LiveData
-
+import io.reactivex.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 
 /**
@@ -29,10 +30,16 @@ import retrofit2.http.*
  */
 interface DavService {
     @HTTP(method = "MKCOL")
-    fun createDir(@Url url: String): LiveData<ApiResponse<ResponseBody>>
+    fun createDirLiveData(@Url url: String): LiveData<ApiResponse<ResponseBody>>
+
+    @HTTP(method = "MKCOL")
+    fun createDir(@Url url: String): Observable<Response<ResponseBody>>
 
     @HTTP(method = "PROPFIND")
-    fun list(@Url url: String): LiveData<ApiResponse<ResponseBody>>
+    fun listLiveData(@Url url: String): LiveData<ApiResponse<ResponseBody>>
+
+    @HTTP(method = "PROPFIND")
+    fun list(@Url url: String): Observable<Response<ResponseBody>>
 
     @Streaming
     @GET
@@ -44,6 +51,9 @@ interface DavService {
 
     // 使用 @Multipart 会导致文件异常
     // https://blog.csdn.net/ZZB_Bin/article/details/62895852
+//    @PUT
+//    fun upload(@Url url: String, @Body body: RequestBody): LiveData<ApiResponse<ResponseBody>>
+
     @PUT
-    fun upload(@Url url: String, @Body body: RequestBody): LiveData<ApiResponse<ResponseBody>>
+    fun uploadCall(@Url url: String, @Body body: RequestBody): Observable<Response<ResponseBody>>
 }
