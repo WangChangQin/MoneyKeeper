@@ -39,6 +39,7 @@ import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.ShortcutUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.floo.Floo
 import me.drakeet.floo.StackCallback
 import me.drakeet.multitype.Items
@@ -109,6 +110,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         super.onResume()
         // 设置了预算或者资产，返回首页需要更新
         getCurrentMoneySumMonty()
+        // 更新 widget
+        WidgetProvider.updateWidget(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -143,6 +146,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         mViewModel.deleteRecord(record).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
                 }
                 is ErrorResource<Boolean> -> {
                     ToastUtils.show(R.string.toast_record_delete_fail)

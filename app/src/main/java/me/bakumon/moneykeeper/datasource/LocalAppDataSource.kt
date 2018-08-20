@@ -234,4 +234,16 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
     override fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>> {
         return mAppDatabase.recordDao().getMonthOfYearSumMoney(from, to)
     }
+
+    override fun getTodayOutlay(): List<DaySumMoneyBean> {
+        val dateFrom = DateUtils.getTodayStart()
+        val dateTo = DateUtils.getTodayEnd()
+        return mAppDatabase.recordDao().getDaySumMoneyData(dateFrom, dateTo, RecordType.TYPE_OUTLAY)
+    }
+
+    override fun getCurrentOutlay(): List<SumMoneyBean> {
+        val dateFrom = DateUtils.getCurrentMonthStart()
+        val dateTo = DateUtils.getCurrentMonthEnd()
+        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
+    }
 }

@@ -37,6 +37,7 @@ import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -159,6 +160,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                         ConfigManager.setBudget(0)
                     }
                     updateBudgetItem()
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
                 }.dismissListener { isDialogShow = false }
                 .show()
     }
@@ -249,6 +252,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     // 更新预算和资产符号
                     updateBudgetItem()
                     updateAssetsItem()
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
                     true
                 }
                 .positiveText(R.string.text_affirm)

@@ -48,6 +48,9 @@
     <string name="toast_get_review_sum_money_fail">Failed to get review summary data</string>
 
     <!-- 首页 -->
+    <string name="text_widget_today_outlay">Today</string>
+    <string name="text_widget_month_outlay">Month</string>
+    <string name="text_widget_month_budget">Budget</string>
     <string name="text_month_outlay">Pay</string>
     <string name="text_month_income">Earn</string>
     <string name="text_month_remaining_budget">Remaining budget</string>

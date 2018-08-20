@@ -48,6 +48,7 @@ object ConfigManager {
     private const val KEY_CLOUD_BACKUP_MODE = "cloud_backup_mode"
     private const val KEY_CLOUD_ENABLE = "cloud_enable"
     private const val KEY_IS_THEME_DARK = "is_theme_dark"
+    private const val KEY_WIDGET_ENABLE = "is_widget_enable"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -87,6 +88,9 @@ object ConfigManager {
 
     val isThemeDark: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_IS_THEME_DARK, true)
+
+    val isWidgetEnable: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_WIDGET_ENABLE, false)
 
     /**
      * 自动备份
@@ -190,6 +194,13 @@ object ConfigManager {
      */
     fun setIsThemeDark(isDark: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_IS_THEME_DARK, isDark)
+    }
+
+    /**
+     * 保存主题
+     */
+    fun setIsWidgetEnable(enable: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_WIDGET_ENABLE, enable)
     }
 
 }

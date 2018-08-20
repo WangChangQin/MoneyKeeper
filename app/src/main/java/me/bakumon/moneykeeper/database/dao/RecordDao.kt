@@ -56,7 +56,7 @@ interface RecordDao {
     fun deleteRecord(record: Record)
 
     @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
-    fun getSumMoney(from: Date, to: Date): Flowable<List<SumMoneyBean>>
+    fun getSumMoney(from: Date, to: Date): List<SumMoneyBean>
 
     @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
     fun getSumMoneyLiveData(from: Date, to: Date): LiveData<List<SumMoneyBean>>
@@ -79,4 +79,8 @@ interface RecordDao {
 
     @Query("SELECT substr(datetime(substr(Record.time, 1, 10), 'unixepoch', 'localtime'), 1, 7) as month, RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type, month ORDER BY Record.time DESC")
     fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
+
+    @Query("SELECT RecordType.type AS type, Record.time AS time, sum(Record.money) AS daySumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id where (RecordType.type=:type and Record.time BETWEEN :from AND :to) GROUP BY Record.time")
+    fun getDaySumMoneyData(from: Date, to: Date, type: Int): List<DaySumMoneyBean>
+
 }

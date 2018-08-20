@@ -179,4 +179,14 @@ interface AppDataSource {
      * 获取某年（或某段时间）内所有月份的收支总数
      */
     fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
+
+    /**
+     * 获取今日支出
+     */
+    fun getTodayOutlay(): List<DaySumMoneyBean>
+
+    /**
+     * 获取今日支出
+     */
+    fun getCurrentOutlay(): List<SumMoneyBean>
 }

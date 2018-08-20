@@ -38,6 +38,7 @@ import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.SoftInputUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import java.util.*
 
 /**
@@ -168,6 +169,8 @@ class AddRecordActivity : BaseActivity() {
      * 新增记账记录完成
      */
     private fun insertRecordDone() {
+        // 更新 widget
+        WidgetProvider.updateWidget(this)
         if (mIsSuccessive) {
             // 继续记账，清空输入
             keyboard.setText("")
@@ -197,7 +200,11 @@ class AddRecordActivity : BaseActivity() {
 
         mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType).observe(this, Observer {
             when (it) {
-                is SuccessResource<Boolean> -> finish()
+                is SuccessResource<Boolean> -> {
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
+                    finish()
+                }
                 is ErrorResource<Boolean> -> {
                     keyboard.setAffirmEnable(true)
                     ToastUtils.show(R.string.toast_modify_record_fail)
