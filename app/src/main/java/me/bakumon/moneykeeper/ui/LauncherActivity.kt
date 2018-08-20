@@ -16,23 +16,20 @@
 
 package me.bakumon.moneykeeper.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-
-import me.bakumon.moneykeeper.Router
-import me.drakeet.floo.Floo
+import me.bakumon.moneykeeper.ui.home.HomeActivity
 
 /**
- * LauncherActivity
+ * 关于
  *
- * @author bakumon https://bakumon.me
- * @date 2018/5/2
+ * @author Bakumon https://bakumon.me
  */
 class LauncherActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Floo.navigation(this, Router.Url.URL_HOME).start()
+        startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
 }

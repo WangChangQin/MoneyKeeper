@@ -14,26 +14,17 @@
   ~  limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_content"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp">
-
-    <TextView
-        android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorItem"
-        android:ellipsize="end"
-        android:paddingBottom="2dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="2dp"
-        android:singleLine="true"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
-
-</RelativeLayout>
+    android:layout_marginBottom="5dp"
+    android:background="@color/colorItemBackground"
+    android:paddingBottom="2dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2dp"
+    android:textColor="@color/colorText"
+    android:textSize="12sp"
+    tools:text="2日 ¥123,4" />

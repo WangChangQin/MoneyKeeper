@@ -16,10 +16,9 @@
 
 package me.bakumon.moneykeeper.datasource
 
+import android.arch.lifecycle.LiveData
 import android.text.TextUtils
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
@@ -57,6 +56,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                 mAppDatabase.recordTypeDao().insertRecordTypes(*RecordTypeInitCreator.createRecordTypeData())
             }
         }
+    }
+
+    override fun getRecordTypeCount(): Long {
+        return mAppDatabase.recordTypeDao().getRecordTypeCount()
     }
 
     override fun addRecordType(type: Int, imgName: String, name: String): Completable {
@@ -140,11 +143,11 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getAllRecordType(): Flowable<List<RecordType>> {
+    override fun getAllRecordType(): LiveData<List<RecordType>> {
         return mAppDatabase.recordTypeDao().getAllRecordTypes()
     }
 
-    override fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
+    override fun getRecordTypes(type: Int): LiveData<List<RecordType>> {
         return mAppDatabase.recordTypeDao().getRecordTypes(type)
     }
 
@@ -165,12 +168,8 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>> {
-        return Flowable.create({ e ->
-            val beans = TypeImgListCreator.createTypeImgBeanData(type)
-            e.onNext(beans)
-            e.onComplete()
-        }, BackpressureStrategy.BUFFER)
+    override fun getAllTypeImgBeans(type: Int): List<TypeImgBean> {
+        return TypeImgListCreator.createTypeImgBeanData(type)
     }
 
     override fun insertRecord(record: Record): Completable {
@@ -194,45 +193,45 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getCurrentMonthRecordWithTypes(): Flowable<List<RecordWithType>> {
+    override fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>> {
         val dateFrom = DateUtils.getCurrentMonthStart()
         val dateTo = DateUtils.getCurrentMonthEnd()
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
     }
 
-    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>> {
+    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): LiveData<List<RecordWithType>> {
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type)
     }
 
-    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+    override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>> {
         return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo, type, typeId)
     }
 
-    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>> {
+    override fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>> {
         return mAppDatabase.recordDao().getRecordWithTypesSortMoney(dateFrom, dateTo, type, typeId)
     }
 
-    override fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>> {
+    override fun getCurrentMonthSumMoneyLiveData(): LiveData<List<SumMoneyBean>> {
         val dateFrom = DateUtils.getCurrentMonthStart()
         val dateTo = DateUtils.getCurrentMonthEnd()
-        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
+        return mAppDatabase.recordDao().getSumMoneyLiveData(dateFrom, dateTo)
     }
 
-    override fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>> {
-        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
+    override fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>> {
+        return mAppDatabase.recordDao().getSumMoneyLiveData(dateFrom, dateTo)
     }
 
-    override fun getDaySumMoney(year: Int, month: Int, type: Int): Flowable<List<DaySumMoneyBean>> {
+    override fun getDaySumMoney(year: Int, month: Int, type: Int): LiveData<List<DaySumMoneyBean>> {
         val dateFrom = DateUtils.getMonthStart(year, month)
         val dateTo = DateUtils.getMonthEnd(year, month)
         return mAppDatabase.recordDao().getDaySumMoney(dateFrom, dateTo, type)
     }
 
-    override fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>> {
+    override fun getTypeSumMoney(from: Date, to: Date, type: Int): LiveData<List<TypeSumMoneyBean>> {
         return mAppDatabase.recordDao().getTypeSumMoney(from, to, type)
     }
 
-    override fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>> {
+    override fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>> {
         return mAppDatabase.recordDao().getMonthOfYearSumMoney(from, to)
     }
 }

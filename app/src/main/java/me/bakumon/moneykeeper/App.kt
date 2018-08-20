@@ -17,15 +17,12 @@
 package me.bakumon.moneykeeper
 
 import android.app.Application
-
 import com.squareup.leakcanary.LeakCanary
-
-import java.util.HashMap
-
 import me.drakeet.floo.Floo
 import me.drakeet.floo.Target
 import me.drakeet.floo.extensions.LogInterceptor
 import me.drakeet.floo.extensions.OpenDirectlyHandler
+import java.util.*
 
 /**
  * @author Bakumon https://bakumon.me
@@ -51,9 +48,9 @@ class App : Application() {
         mappings[Router.Url.URL_STATISTICS] = Target("mk://bakumon.me/statistics")
         mappings[Router.Url.URL_TYPE_RECORDS] = Target("mk://bakumon.me/typeRecords")
         mappings[Router.Url.URL_SETTING] = Target("mk://bakumon.me/setting")
-        mappings[Router.Url.URL_OPEN_SOURCE] = Target("mk://bakumon.me/openSource")
         mappings[Router.Url.URL_ABOUT] = Target("mk://bakumon.me/about")
         mappings[Router.Url.URL_REVIEW] = Target("mk://bakumon.me/review")
+        mappings[Router.Url.URL_BACKUP] = Target("mk://bakumon.me/backup")
 
         Floo.configuration()
                 .setDebugEnabled(BuildConfig.DEBUG)

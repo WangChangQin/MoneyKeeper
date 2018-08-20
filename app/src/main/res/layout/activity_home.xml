@@ -14,97 +14,41 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="me.bakumon.moneykeeper.ui.home.HomeActivity">
 
-    <data>
-
-        <import type="java.util.List" />
-
-        <import type="me.bakumon.moneykeeper.database.entity.SumMoneyBean" />
-
-        <variable
-            name="sumMoneyBeanList"
-            type="List&lt;SumMoneyBean>" />
-    </data>
-
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient"
+        android:paddingBottom="10dp">
 
-        <android.support.design.widget.AppBarLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationContentDescription="@string/text_setting"
+            app:navigationIcon="@drawable/ic_setting" />
+
+        <me.bakumon.moneykeeper.ui.home.HeadPageView
+            android:id="@+id/headPageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_gradient"
-            android:paddingBottom="10dp"
-            android:paddingTop="15dp">
+            tools:layout_height="150dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp">
+    </android.support.design.widget.AppBarLayout>
 
-                <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_setting"
-                    android:onClick="settingClick" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvRecords"
+        style="@style/LinearRecyclerView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_record" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="22sp" />
-                </LinearLayout>
-
-                <me.bakumon.moneykeeper.view.qmui.QMUIAlphaImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_statistics"
-                    android:onClick="statisticsClick" />
-
-            </LinearLayout>
-
-            <me.bakumon.moneykeeper.ui.home.HeadPageView
-                android:id="@+id/head_page_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:sumMoneyBeanList="@{sumMoneyBeanList}"
-                tools:layout_height="150dp" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_home" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btn_add_record"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="25dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="addRecordClick"
-            app:srcCompat="@drawable/ic_add" />
-    </android.support.design.widget.CoordinatorLayout>
-</layout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAdd"
+        style="@style/AddFAB" />
+</android.support.design.widget.CoordinatorLayout>

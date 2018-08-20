@@ -14,83 +14,36 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="me.bakumon.moneykeeper.ui.review.ReviewActivity">
 
-    <data>
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/layout_tool_bar" />
 
-        <import type="java.util.List" />
-
-        <import type="me.bakumon.moneykeeper.database.entity.SumMoneyBean" />
-
-        <variable
-            name="sumMoneyBeanList"
-            type="List&lt;SumMoneyBean>" />
-    </data>
-
-    <LinearLayout
+    <me.bakumon.moneykeeper.ui.statistics.SumMoneyChooseView
+        android:id="@+id/sumMoneyView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp" />
 
-        <include
-            android:id="@+id/title_bar"
-            layout="@layout/layout_title_bar" />
+    <me.bakumon.moneykeeper.ui.review.linechart.MyLineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            tools:background="@color/colorPrimary">
-
-            <TextView
-                android:id="@+id/tv_outlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_red"
-                android:textColor="@color/colorTextWhite2"
-                app:text_statistics_outlay="@{sumMoneyBeanList}"
-                tools:text="支出 ¥3580" />
-
-            <TextView
-                android:id="@+id/tv_income"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_green"
-                android:textColor="@color/colorTextWhite2"
-                app:text_statistics_income="@{sumMoneyBeanList}"
-                tools:text="收入 ¥9827" />
-
-            <TextView
-                android:id="@+id/tv_overage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:textColor="@color/colorTextWhite3"
-                app:text_statistics_overage="@{sumMoneyBeanList}"
-                tools:text="结余 ¥3498.89" />
-        </LinearLayout>
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/line_chart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="15dp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_review"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-</layout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvReview"
+        style="@style/LinearRecyclerView"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        tools:listitem="@layout/item_review" />
+</LinearLayout>

@@ -60,8 +60,6 @@
     <string name="text_storage">開啟存儲權限</string>
     <string name="text_storage_content">為了自動備份您的記賬數據，需要開啟存儲權限。</string>
     <string name="text_storage_permission_tip">備份相關操作需要存儲權限，去設置界面開啟權限</string>
-    <string name="text_close_auto_backup">關閉自動備份</string>
-    <string name="text_close_auto_backup_tip">關閉自動備份後，需要手動點擊「立即備份」來備份數據，可能會丟失部分最新的數據。</string>
     <string name="text_tip_backup_fail">自動備份失敗</string>
 
     <!-- 记一笔 -->
@@ -91,7 +89,8 @@
     <string name="text_type_manage">分類管理</string>
     <string name="text_delete">刪除</string>
     <string name="text_delete_type_note">刪除該分類後，將無法在記賬頁選擇該分類，該分類下原有賬單仍保持不變</string>
-    <string name="text_affirm_delete">確認刪除</string>
+    <string name="text_delete_record_note">確定刪除該記錄？</string>
+    <string name="text_affirm_delete">刪除</string>
     <string name="text_affirm">確定</string>
     <string name="text_cancel">取消</string>
 
@@ -118,6 +117,7 @@
     <string name="text_sort_time">按時間</string>
     <string name="text_sort_money">按金額</string>
     <string name="text_empty_tip">每一筆賬單，都是生活的點滴</string>
+    <string name="text_small_tip">注：小於1.9%不顯示</string>
 
     <!-- 回顾 -->
     <string name="text_review">回顧</string>
@@ -137,11 +137,12 @@
     <string name="text_set_symbol">選擇貨幣符號</string>
     <string name="text_content_symbol">只改變貨號，不轉換匯率</string>
     <string name="text_setting_type_manage">收支類型管理</string>
+    <string name="text_setting_type_manage_content">添加、修改和排序</string>
     <string name="text_fast_accounting">快速記帳</string>
     <string name="text_fast_tip">打開APP直接記賬</string>
     <string name="text_successive_record">連續記賬</string>
     <string name="text_successive_record_tip">長按首頁添加按鈕，連續記賬</string>
-    <string name="text_backup">備份</string>
+    <string name="text_backup">本地備份</string>
     <string name="text_go_backup">立即備份</string>
     <string name="text_backup_save" formatted="true">備份文件將保存到%1$s</string>
     <string name="text_restore">恢復備份</string>
@@ -150,7 +151,10 @@
     <string name="text_list_restore">以下是備份文件，點擊恢復：</string>
     <string name="text_auto_backup">自動備份</string>
     <string name="text_auto_backup_content">數據有改變自動備份（建議開啟）</string>
-    <string name="text_about_and_help">關於|幫助</string>
+    <string name="text_cloud_backup">雲備份</string>
+    <string name="text_cloud_backup_title">雲盤備份</string>
+    <string name="text_cloud_backup_content">WebDAV</string>
+    <string name="text_about_and_more">關於 | 更多</string>
     <string name="text_about_content">了解我們的設計理念</string>
     <string-array name="symbol">
         <item>人民幣(¥)</item>
@@ -178,22 +182,42 @@
     <!-- 关于 -->
     <string name="text_about">關於</string>
     <string name="text_slogan">簡單，純粹的記賬應用</string>
-    <string name="text_share_to">分享到</string>
-    <string name="text_share_content" formatted="true">我發現了一個簡單，純粹的記賬應用，點擊鏈接下載 %1$s</string>
+    <string name="text_about_Introduction">介紹</string>
+    <string name="text_about_detail">　　一款輕量級的記賬工具。\n\n　　這是我第一個用心的作品，起源於從小到大的一個「不可思議」（錢到底花在了哪兒），工作以後尤為明顯。於是「那樣記賬」誕生了，目的是讓大家以最簡單、直接的方式來記賬，讓這個「不可思議」不再不可思議，慢慢建立起良好的消費習慣。\n\n　　沒有任何多餘的權限，沒有廣告，沒有用戶系統，不保存用戶任何信息，只是單純的記錄收支情況。\n\n　　「那樣記賬」名稱取自一個人名字「娜」的諧音。</string>
     <string name="text_dev_designer">設計和開發</string>
     <string name="text_designer">總體設計</string>
     <string name="text_launcher_designer">啟動圖標設計</string>
     <string name="text_developer_designer">開發和部分設計</string>
-    <string name="text_more">更多</string>
+    <string name="text_links">更多</string>
     <string name="text_score">評分</string>
-    <string name="text_donate">捐贈</string>
-    <string name="text_contact_author">聯繫作者</string>
-    <string name="text_feedback">反饋：</string>
-    <string name="text_phone_brand">手機品牌：</string>
-    <string name="text_phone_model">手機型號：</string>
-    <string name="text_system_version">系統版本：</string>
-    <string name="text_app_version">應用版本：</string>
+    <string name="text_donate">捐贈作者</string>
+    <string name="text_contact_author" formatted="true">聯繫作者： %1$s \n\n更多幫助：%2$s \n\n本應用已開源，歡迎貢獻代碼。\n開源地址：%3$s\n\n*本應用遵循《Android綠色應用公約》\n %4$s</string>
     <string name="text_license">開源許可證</string>
     <string name="text_privacy_policy">隱私政策</string>
-    <string name="text_help">幫助</string>
+    <string name="text_display">外觀</string>
+    <string name="text_theme">主題</string>
+    <string name="text_theme_dark">暗色主題</string>
+    <string name="text_theme_light">亮色主題</string>
+
+    <!-- 云备份 -->
+    <string name="text_webdav">WebDAV雲盤</string>
+    <string name="text_webdav_url">WebDAV地址</string>
+    <string name="text_webdav_account">WebDAV授權賬號</string>
+    <string name="text_webdav_password">WebDAV授權密碼</string>
+    <string name="text_webdav_help">堅果雲授權教程</string>
+    <string name="text_tip_auth_fail">授權賬號或密碼不正確</string>
+    <string name="text_error">出錯了</string>
+    <string name="text_restore_fail_rollback">恢復失敗，已回滾至恢復前狀態，點擊確定按鈕重啟應用。</string>
+    <string name="text_backup_file_not_exist">備份文件不存在</string>
+    <string name="text_saving_psw">正在加密保存密碼&#8230;</string>
+    <string name="text_url_illegal">WebDAV地址不合法</string>
+    <string name="text_config_webdav">請先配置WebDAV</string>
+    <string name="text_auto_backup_mode_title">自動備份模式</string>
+    <string name="text_auto_backup_mode">選擇自動備份模式</string>
+    <string name="text_auto_backup_success">雲備份成功</string>
+    <string name="text_auto_backup_fail">雲備份失敗！</string>
+    <string-array name="text_cloud_auto_backup_mode">
+        <item>不自動備份</item>
+        <item>打開應用時備份</item>
+    </string-array>
 </resources>

@@ -16,99 +16,101 @@
 
 package me.bakumon.moneykeeper.ui.typesort
 
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.Injection
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.TextView
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.databinding.ActivityTypeSortBinding
-import me.bakumon.moneykeeper.datasource.BackupFailException
+import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 
 /**
  * 类型排序
  *
  * @author bakumon https://bakumon.me
- * @date 2018/5/10
  */
-class TypeSortActivity : BaseActivity() {
+class TypeSortActivity : AbsListActivity() {
 
-    private lateinit var mBinding: ActivityTypeSortBinding
     private lateinit var mViewModel: TypeSortViewModel
-    private lateinit var mAdapter: TypeSortAdapter
-    private var mType: Int = 0
+    private var mType: Int = RecordType.TYPE_OUTLAY
 
-    override val layoutId: Int
-        get() = R.layout.activity_type_sort
+    override fun onSetupTitle(tvTitle: TextView) {
+        tvTitle.text = getString(R.string.text_drag_sort)
+    }
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(TypeSortViewModel::class.java)
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
+        adapter.register(RecordType::class, TypeSortViewBinder())
+    }
 
-        initView()
+    override fun onItemsCreated(items: Items) {
+
+    }
+
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
+
+        recyclerView.layoutManager = GridLayoutManager(this, 4)
+
+
+        val callback = SortDragCallback(mAdapter)
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
+        mViewModel = getViewModel()
         initData()
     }
 
-    private fun initView() {
-        mType = intent.getIntExtra(Router.ExtraKey.KEY_TYPE, RecordType.TYPE_OUTLAY)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_sort, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_drag_sort)
-        mBinding.titleBar?.tvRight?.text = getString(R.string.text_done)
-        mBinding.titleBar?.tvRight?.setOnClickListener { sortRecordTypes() }
-
-        mBinding.rvType.layoutManager = GridLayoutManager(this, COLUMN)
-        mAdapter = TypeSortAdapter(null)
-        mBinding.rvType.adapter = mAdapter
-
-        val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(mAdapter)
-        val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
-        itemTouchHelper.attachToRecyclerView(mBinding.rvType)
-
-        // open drag
-        mAdapter.enableDragItem(itemTouchHelper)
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_done -> sortRecordTypes()
+            android.R.id.home -> finish()
+        }
+        return true
     }
 
     private fun sortRecordTypes() {
-        mBinding.titleBar?.tvRight?.isEnabled = false
-        mDisposable.add(mViewModel.sortRecordTypes(mAdapter.data).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.finish() }) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（类型排序失败的时候）", throwable)
-                        finish()
-                    } else {
-                        mBinding.titleBar?.tvRight?.isEnabled = true
-                        ToastUtils.show(R.string.toast_sort_fail)
-                        Log.e(TAG, "类型排序失败", throwable)
-                    }
-                })
+        mViewModel.sortRecordTypes(mAdapter.items as List<RecordType>).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> finish()
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_sort_fail)
+                }
+            }
+        })
     }
 
     private fun initData() {
-        mDisposable.add(mViewModel.getRecordTypes(mType).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordTypes -> mAdapter.setNewData(recordTypes) }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_get_types_fail)
-                    Log.e(TAG, "获取类型数据失败", throwable)
-                })
+        mViewModel.getRecordTypes(mType).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
+    }
+
+    private fun setItems(data: List<RecordType>) {
+        val items = Items()
+        items.addAll(data)
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 
     companion object {
-
         private val TAG = TypeSortActivity::class.java.simpleName
-
-        private const val COLUMN = 4
     }
 }

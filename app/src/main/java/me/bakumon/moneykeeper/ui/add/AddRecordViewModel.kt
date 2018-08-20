@@ -16,13 +16,17 @@
 
 package me.bakumon.moneykeeper.ui.add
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.base.BaseViewModel
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import java.math.BigDecimal
 
 /**
@@ -32,19 +36,29 @@ import java.math.BigDecimal
  */
 class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val allRecordTypes: Flowable<List<RecordType>>
+    val allRecordTypes: LiveData<List<RecordType>>
         get() = mDataSource.getAllRecordType()
 
-    fun insertRecord(record: Record, type: Int): Completable {
+    fun insertRecord(record: Record, type: Int): LiveData<Resource<Boolean>> {
         if (type == RecordType.TYPE_OUTLAY) {
             ConfigManager.reduceAssets(record.money!!)
         } else {
             ConfigManager.addAssets(record.money!!)
         }
-        return mDataSource.insertRecord(record)
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.insertRecord(record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 
-    fun updateRecord(record: Record, newType: Int, oldMoney: BigDecimal, oldType: Int): Completable {
+    fun updateRecord(record: Record, newType: Int, oldMoney: BigDecimal, oldType: Int): LiveData<Resource<Boolean>> {
         if (oldType == RecordType.TYPE_OUTLAY) {
             ConfigManager.addAssets(oldMoney)
         } else {
@@ -55,6 +69,17 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
         } else {
             ConfigManager.addAssets(record.money!!)
         }
-        return mDataSource.updateRecord(record)
+
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.updateRecord(record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 }

@@ -6,15 +6,28 @@
 
 ## 诞生记
 
-2017 年回家过年的时候，查看了一下自己这一年攒的钱，少的让人费解，钱都花哪去了。
+   一款轻量级的记账工具。
+   
+   这是我第一个用心的作品，起源于从小到大的一个「不可思议」（钱到底花在了哪儿），工作以后尤为明显。于是「那样记账」诞生了，目的是让大家以最简单、直接的方式来记账，让这个「不可思议」不再不可思议，慢慢建立起良好的消费习惯。
+   
+   没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况。
+   
+   「那样记账」名称取自一个人名字「娜」的谐音。
+   
+   [更多帮助](https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md)
 
-于是，决定从 2018 年 3 月开始规划自己的支出，首先得先知道自己每个月花了多少钱吧，为了这个目的，疯狂的找记账软件，国内的，国外的，但是总是不那么满意，国内的普遍包含理财部分，并且占用资源很大，国外的虽然简洁但是用起来没有国内的顺手，最后选择了网易出品的《网易有钱记账》。
+## 特点
 
-记了一段时间的账，突然想自己能不能做一个只是纯粹、轻量的记账应用，于是在站酷上找到了一个[颜值很高的设计](https://www.zcool.com.cn/work/ZMjExOTI4OTY=.html)，征得作者同意后（非常感谢），经历了从开发到部分设计，直到第一个完整的版本出世。
+- 【快速记账】：多种直接记账方式
+- 【自定义】：自定义收支分类、记账时间、随时修改
+- 【多维度统计】：多维度统计收支流水
+- 【预算功能】：控制消费，减少开支
+- 【云端备份】：本地备份/云备份数据，保证数据不丢失
+- 【剩余资产】：展示净资产金额
 
-## 下载使用
+## 下载
 
-已经发布在以下平台：
+发布在以下平台：
 
 | 平台 | 下载地址 |
 | ---- | ---- |
@@ -29,21 +42,28 @@
 
 ## 架构和技术
 
-架构使用了 Google 官方的 [Architecture Components](https://developer.android.com/topic/libraries/architecture/)，包括 Lifecycle、LiveData 和 ViewModel，数据库使用 [Room](https://developer.android.com/topic/libraries/architecture/room)。
+### 架构
 
-![Architecture Components](https://ws1.sinaimg.cn/large/006tKfTcly1fs7957cwd7j31di0gumxz.jpg)
+架构使用了 Google 官方的 [Architecture Components](https://developer.android.com/topic/libraries/architecture/)，包括 Lifecycle、LiveData 和 ViewModel，数据库使用 [Room](https://developer.android.com/topic/libraries/architecture/room)。
 这里有一篇介绍 Architecture Components 的[文章](https://medium.com/google-developers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54)。
 
-Room 和 RxJava 配合起来使用真的很方便。
 
-```java
-@Query("SELECT * FROM record")
-Flowable<List<Record>> getRecords();
-```
+![Architecture Components](https://ws1.sinaimg.cn/large/006tKfTcly1fs7957cwd7j31di0gumxz.jpg)
 
-Room 返回的数据使用 Flowable 包装，并且使用 ViewModel 在 Activity 中被观察，当数据库中 `record` 表发生改变时，不需要手动更新 View，ViewModel 会自动触发回调。
+### 其他技术
 
-比如，列表界面展示`record` 表的所有数据，我们在详情界面中修改了`record` 表中的某一条数据，列表界面会自动回调数据改变的方法，而不用我们去手动再次请求`record` 表的所有数据来刷新界面。
+- AES 加密
+- WebDAV
+
+## 开源库
+
+- [[ProcessPhoenix]-JakeWharton](https://github.com/JakeWharton/ProcessPhoenix)
+- [[java-aes-crypto]-tozny](https://github.com/tozny/java-aes-crypto)
+- [[Cipher.so]-MEiDIK](https://github.com/MEiDIK/Cipher.so)
+- [[okhttp-digest]-rburgst](https://github.com/rburgst/okhttp-digest)
+- [[android-storage]-sromku](https://github.com/sromku/android-storage)
+- [[prettytime]-ocpsoft](https://github.com/ocpsoft/prettytime)
+- [[Floo]-drakeet](https://github.com/drakeet/Floo)
 
 ## 相关链接：
 

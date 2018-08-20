@@ -16,23 +16,37 @@
 
 package me.bakumon.moneykeeper.ui.typemanage
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
- * 记一笔界面 ViewModel
+ * 分类管理 ViewModel
  *
  * @author Bakumon https://bakumon.me
  */
 class TypeManageViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val allRecordTypes: Flowable<List<RecordType>>
-        get() = mDataSource.getAllRecordType()
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>> {
+        return mDataSource.getRecordTypes(type)
+    }
 
-    fun deleteRecordType(recordType: RecordType): Completable {
-        return mDataSource.deleteRecordType(recordType)
+    fun deleteRecordType(recordType: RecordType): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.deleteRecordType(recordType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 }

@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">ThatKeeper</string>
+    <string name="app_name">ThatMoney</string>
 
     <string name="toast_add_record_fail">Billing failed, please try again</string>
     <string name="toast_modify_record_fail">Failed to modify record</string>
@@ -60,8 +60,6 @@
     <string name="text_storage">Storage permissions</string>
     <string name="text_storage_content">In order to back up your accounting data automatically, you need to open the storage permission.</string>
     <string name="text_storage_permission_tip">Backup related operations require storage permissions to set open permissions</string>
-    <string name="text_close_auto_backup">Turn off automatic backup</string>
-    <string name="text_close_auto_backup_tip">After the automatic backup is turned off, you need to manually click 「Back up now」 to back up the data and you may lose some of the latest data.</string>
     <string name="text_tip_backup_fail">Auto backup failed</string>
 
     <!-- 记一笔 -->
@@ -91,6 +89,7 @@
     <string name="text_type_manage">Management</string>
     <string name="text_delete">delete</string>
     <string name="text_delete_type_note">After you delete this category, you will not be able to select this category on the bookkeeping page. The original bills under this category will remain unchanged.</string>
+    <string name="text_delete_record_note">Are you sure you want to delete this record?</string>
     <string name="text_affirm_delete">delete</string>
     <string name="text_affirm">OK</string>
     <string name="text_cancel">Cancel</string>
@@ -118,6 +117,7 @@
     <string name="text_sort_time">By time</string>
     <string name="text_sort_money">By amount</string>
     <string name="text_empty_tip">Every bill is a bit of life</string>
+    <string name="text_small_tip">Note: no less than 1.9%</string>
 
     <!-- 回顾 -->
     <string name="text_review">review</string>
@@ -137,11 +137,12 @@
     <string name="text_set_symbol">Select currency symbol</string>
     <string name="text_content_symbol">Only change the item number, do not convert the exchange rate</string>
     <string name="text_setting_type_manage">type management</string>
+    <string name="text_setting_type_manage_content">Add, modify, and sort</string>
     <string name="text_fast_accounting">Quick accounting</string>
     <string name="text_fast_tip">Open APP directly bookkeeping</string>
     <string name="text_successive_record">Continuous accounting</string>
     <string name="text_successive_record_tip">Long press home add button, continuous accounting</string>
-    <string name="text_backup">Backup</string>
+    <string name="text_backup">Local backup</string>
     <string name="text_go_backup">Back up now</string>
     <string name="text_backup_save" formatted="true">Backup file will be saved to%1$s</string>
     <string name="text_restore">Restore</string>
@@ -150,7 +151,10 @@
     <string name="text_list_restore">The following is the backup file, click restore:</string>
     <string name="text_auto_backup">Automatic backup</string>
     <string name="text_auto_backup_content">Data change automatic backup (recommended to open)</string>
-    <string name="text_about_and_help">About|Help</string>
+    <string name="text_cloud_backup">Cloud backup</string>
+    <string name="text_cloud_backup_title">Cloud disk backup</string>
+    <string name="text_cloud_backup_content">WebDAV</string>
+    <string name="text_about_and_more">About | More</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
         <item>RMB(¥)</item>
@@ -178,22 +182,42 @@
     <!-- 关于 -->
     <string name="text_about">about</string>
     <string name="text_slogan">Simple, pure accounting application</string>
-    <string name="text_share_to">Share to</string>
-    <string name="text_share_content" formatted="true">I found a simple, pure billing application, click on the link to download %1$s</string>
+    <string name="text_about_Introduction">Introduction</string>
+    <string name="text_about_detail">　　A simple billing application.\n\n　　This is my first work of heart, which originated from an "incredible" from childhood to adulthood (where the money was spent), especially after work. So "ThatMoney" was born, the purpose is to let everyone in the simplest and direct way to keep accounts, so that this "incredible" is no longer incredible, and slowly establish good consumption habits.\n\n　　There are no unnecessary permissions, no advertisements, no user system, no information stored by the user, just a simple record of revenue and expenditure.\n\n　　「那样记账」名称取自一个人名字「娜」的谐音。</string>
     <string name="text_dev_designer">Developer &amp; Designer</string>
     <string name="text_designer">Designer</string>
     <string name="text_launcher_designer">Launcher icon design</string>
     <string name="text_developer_designer">Developer &amp; Designer</string>
-    <string name="text_more">more</string>
+    <string name="text_links">more</string>
     <string name="text_score">score</string>
     <string name="text_donate">Donate</string>
-    <string name="text_contact_author">Contact author</string>
-    <string name="text_feedback">Feedback:</string>
-    <string name="text_phone_brand">phone brand:</string>
-    <string name="text_phone_model">Phone model:</string>
-    <string name="text_system_version">System version:</string>
-    <string name="text_app_version">App version:</string>
+    <string name="text_contact_author" formatted="true">Contact author: %1$s \n\nmore help:%2$s \n\nThis application is open source and welcome to contribute code.\nOpen source Url:%3$s\n\n*Comply to "Convention of Green Apps for Android"\n %4$s</string>
     <string name="text_license">Open source license</string>
     <string name="text_privacy_policy">Privacy Policy</string>
-    <string name="text_help">help</string>
+    <string name="text_display">Display</string>
+    <string name="text_theme">Theme</string>
+    <string name="text_theme_dark">Dark theme</string>
+    <string name="text_theme_light">Light theme</string>
+
+    <!-- 云备份 -->
+    <string name="text_webdav">WebDAV</string>
+    <string name="text_webdav_url">WebDAV address</string>
+    <string name="text_webdav_account">WebDAV authorized account</string>
+    <string name="text_webdav_password">WebDAV authorization password</string>
+    <string name="text_webdav_help">Nutstore tutorial</string>
+    <string name="text_tip_auth_fail">Authorized account or password is incorrect</string>
+    <string name="text_error">Error</string>
+    <string name="text_restore_fail_rollback">The recovery failed, has been rolled back to the pre-recovery state, click the OK button to restart the application.</string>
+    <string name="text_backup_file_not_exist">Backup file does not exist</string>
+    <string name="text_saving_psw">Encrypting password saved&#8230;</string>
+    <string name="text_url_illegal">WebDAV address is illegal</string>
+    <string name="text_config_webdav">Please configure WebDAV first.</string>
+    <string name="text_auto_backup_mode_title">Automatic backup mode</string>
+    <string name="text_auto_backup_mode">Select backup mode</string>
+    <string name="text_auto_backup_success">Cloud backup succeeded!</string>
+    <string name="text_auto_backup_fail">Cloud backup failed!</string>
+    <string-array name="text_cloud_auto_backup_mode">
+        <item>Do not automatically backup</item>
+        <item>when opening app</item>
+    </string-array>
 </resources>

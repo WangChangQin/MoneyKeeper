@@ -14,139 +14,126 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="reviewItemBean"
-            type="me.bakumon.moneykeeper.ui.review.ReviewItemBean" />
-    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="15dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/bg_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:padding="15dp">
 
     <LinearLayout
-        android:id="@+id/ll_item_click"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_item"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center_vertical"
-        android:padding="15dp">
+        android:layout_weight="1"
+        android:gravity="start"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvMonth"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:orientation="vertical">
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="14sp"
+            tools:text="7月" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{reviewItemBean.month + @string/text_month}"
-                android:textColor="@color/colorTextWhite2"
-                android:textSize="16sp"
-                tools:text="7月" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@{reviewItemBean.year + @string/text_year}"
-                android:textColor="@color/colorTextWhite3"
-                android:textSize="14sp"
-                tools:text="2018年" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="13dp"
-            android:layout_marginTop="13dp"
-            android:background="@color/colorTextWhite" />
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_outlay"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/colorOutlay"
-                android:textSize="14sp"
-                app:text_money_with_prefix="@{reviewItemBean.outlay}"
-                tools:text="¥28989" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_income"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/colorIncome"
-                android:textSize="14sp"
-                app:text_money_with_prefix="@{reviewItemBean.income}"
-                tools:text="¥28989" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_overage"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/colorTextGray"
-                android:textSize="14sp"
-                app:text_money_with_prefix="@{reviewItemBean.overage}"
-                tools:text="¥28989" />
-
-        </LinearLayout>
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="14sp"
+            tools:text="2018年" />
 
     </LinearLayout>
-</layout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="13dp"
+        android:background="@color/colorTextRecordItemContent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_outlay"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvOutlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorOutlay"
+            android:textSize="14sp"
+            tools:text="¥28989" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_income"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorIncome"
+            android:textSize="14sp"
+            tools:text="¥28989" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_overage"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvOverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorTextRecordItemContent"
+            android:textSize="14sp"
+            tools:text="¥28989" />
+
+    </LinearLayout>
+
+</LinearLayout>

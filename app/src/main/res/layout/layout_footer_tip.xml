@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +15,13 @@
   -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_footer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center|bottom"
-    android:paddingTop="20dp"
-    android:textSize="12sp"
     android:paddingBottom="3dp"
-    android:textColor="@color/colorTextGray"
-    android:text="@string/text_home_footer_tip">
-
-</TextView>
+    android:paddingTop="20dp"
+    android:textColor="@color/colorTextHint"
+    android:textSize="12sp"
+    tools:text="@string/text_home_footer_tip" />

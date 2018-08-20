@@ -16,8 +16,8 @@
 
 package me.bakumon.moneykeeper.datasource
 
+import android.arch.lifecycle.LiveData
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import java.util.*
@@ -33,6 +33,11 @@ interface AppDataSource {
      * 初始化默认的记账类型
      */
     fun initRecordTypes(): Completable
+
+    /**
+     * 获取类型表记录数
+     */
+    fun getRecordTypeCount(): Long
 
     /**
      * 添加记账类型
@@ -66,7 +71,7 @@ interface AppDataSource {
      *
      * @return 所有记账类型数据
      */
-    fun getAllRecordType(): Flowable<List<RecordType>>
+    fun getAllRecordType(): LiveData<List<RecordType>>
 
     /**
      * 获取指出或收入记账类型数据
@@ -77,7 +82,7 @@ interface AppDataSource {
      *
      * @see RecordType.TYPE_INCOME
      */
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>>
 
     /**
      * 记账类型排序
@@ -95,7 +100,7 @@ interface AppDataSource {
      *
      * @see RecordType.TYPE_INCOME
      */
-    fun getAllTypeImgBeans(type: Int): Flowable<List<TypeImgBean>>
+    fun getAllTypeImgBeans(type: Int): List<TypeImgBean>
 
     /**
      * 新增一条记账记录
@@ -123,38 +128,38 @@ interface AppDataSource {
      *
      * @return 当前月份的记录数据的 Flowable 对象
      */
-    fun getCurrentMonthRecordWithTypes(): Flowable<List<RecordWithType>>
+    fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>>
 
     /**
      * 根据类型获取某段时间的记账记录数据
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取某一类型某段时间的记账记录数据
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取某一类型某段时间的记账记录数据，money 排序
      *
      * @return 包含记录数据的 Flowable 对象
      */
-    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): Flowable<List<RecordWithType>>
+    fun getRecordWithTypesSortMoney(dateFrom: Date, dateTo: Date, type: Int, typeId: Int): LiveData<List<RecordWithType>>
 
     /**
      * 获取本月支出和收入总数
      */
-    fun getCurrentMonthSumMoney(): Flowable<List<SumMoneyBean>>
+    fun getCurrentMonthSumMoneyLiveData(): LiveData<List<SumMoneyBean>>
 
     /**
      * 获取某月支出和收入总数
      */
-    fun getMonthSumMoney(dateFrom: Date, dateTo: Date): Flowable<List<SumMoneyBean>>
+    fun getMonthSumMoneyLiveData(dateFrom: Date, dateTo: Date): LiveData<List<SumMoneyBean>>
 
     /**
      * 获取某天的合计
@@ -163,15 +168,15 @@ interface AppDataSource {
      * @param month 月
      * @param type  类型
      */
-    fun getDaySumMoney(year: Int, month: Int, type: Int): Flowable<List<DaySumMoneyBean>>
+    fun getDaySumMoney(year: Int, month: Int, type: Int): LiveData<List<DaySumMoneyBean>>
 
     /**
      * 获取按类型汇总数据
      */
-    fun getTypeSumMoney(from: Date, to: Date, type: Int): Flowable<List<TypeSumMoneyBean>>
+    fun getTypeSumMoney(from: Date, to: Date, type: Int): LiveData<List<TypeSumMoneyBean>>
 
     /**
      * 获取某年（或某段时间）内所有月份的收支总数
      */
-    fun getMonthOfYearSumMoney(from: Date, to: Date): Flowable<List<MonthSumMoneyBean>>
+    fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
 }

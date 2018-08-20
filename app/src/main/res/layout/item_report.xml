@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,85 +14,94 @@
   ~  limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llItemReport"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:paddingBottom="15dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="15dp"
+    android:paddingTop="15dp">
 
-    <data>
-
-        <variable
-            name="typeSumMoney"
-            type="me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean" />
-    </data>
+    <ImageView
+        android:id="@+id/ivTypeImg"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        tools:src="@mipmap/type_eat" />
 
     <LinearLayout
-        android:id="@+id/ll_item_click"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/bg_item"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center_vertical"
-        android:paddingBottom="15dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="15dp"
-        android:paddingTop="15dp">
+        android:layout_marginStart="15dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            app:src_img_name="@{typeSumMoney.imgName}"
-            tools:src="@mipmap/type_eat" />
+        <TextView
+            android:id="@+id/tvTypeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="16sp"
+            tools:text="餐饮" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{typeSumMoney.typeName}"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="16sp"
-                tools:text="餐饮" />
+            <View
+                android:id="@+id/viewLength"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_length" />
 
+            <View
+                android:id="@+id/viewLengthEnd"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:gravity="end"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="16sp"
-                app:text_money_with_prefix="@{typeSumMoney.typeSumMoney}"
-                tools:text="¥12312" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text='@{typeSumMoney.count+@string/text_unit_account}'
-                android:textColor="@color/colorTextGray"
-                android:textSize="16sp"
-                tools:text="43笔" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/ic_arrow_right" />
     </LinearLayout>
-</layout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:minWidth="80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSumMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextRecordItemTitle"
+            android:textSize="16sp"
+            tools:text="¥12312" />
+
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextRecordItemContent"
+            android:textSize="16sp"
+            tools:text="43笔" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_arrow_right" />
+</LinearLayout>

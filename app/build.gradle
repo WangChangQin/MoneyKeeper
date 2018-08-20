@@ -1,5 +1,8 @@
+apply plugin: 'cipher.so'
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'AndResGuard'
 
@@ -20,14 +23,19 @@ apply plugin: 'AndResGuard'
 
 */
 
+// 加载 encrypt.properties 文件
+def encryptPropertiesFile = rootProject.file("encrypt.properties")
+def encryptProperties = new Properties()
+encryptProperties.load(new FileInputStream(encryptPropertiesFile))
+
 android {
     compileSdkVersion build_versions.compile_sdk
     defaultConfig {
         applicationId "me.bakumon.moneykeeper"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 11
-        versionName "1.6.1"
+        versionCode 19
+        versionName "2.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // 指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -35,9 +43,9 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-    }
-    dataBinding {
-        enabled = true
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -86,6 +94,18 @@ android {
     }
 }
 
+cipher.so {
+    keys {
+        aesKey {
+            value = encryptProperties['KEY']
+        }
+        aesSalt {
+            value = encryptProperties['SALT']
+        }
+    }
+    encryptSeed = encryptProperties['CIPHER_SO_SEED']
+}
+
 andResGuard {
     // mappingFile = file("./resource_mapping.txt")
     mappingFile = null
@@ -95,6 +115,8 @@ andResGuard {
     keepRoot = false
 
     whiteList = [
+            // fabric
+            "me.bakumon.moneykeeper.R.string.com.crashlytics.*",
             // your icon
             "R.mipmap.type_item_default",
             "R.mipmap.type_item_setting",
@@ -145,7 +167,7 @@ andResGuard {
      * Optional: Specifies the name of the message digest algorithm to user when digesting the entries of JAR file
      * Only works in V1signing, default value is "SHA-1"
      **/
-     digestalg = "SHA-256"
+    digestalg = "SHA-256"
 }
 
 dependencies {
@@ -157,8 +179,6 @@ dependencies {
     androidTestImplementation deps.spresso_core
     // kotlin
     implementation deps.kotlin.stdlib
-    // Data Binding
-    kapt deps.databinding.compiler
     // 支持库
     implementation deps.support.app_compat
     implementation deps.support.design
@@ -174,13 +194,11 @@ dependencies {
     // 第三方库
     implementation deps.rxjava2
     implementation deps.rxandroid
-    // retrofit2 会自动依赖 okhttp3 okio rxjava2 gson
-    // rxjava 版本以上面 deps.rxjava 为准
-//    implementation deps.retrofit2.retrofit
-//    implementation deps.retrofit2.adapter_rxjava2
-//    implementation deps.retrofit2.converter_gson
-    // base adapter
-    implementation deps.BRVAH
+    // retrofit2
+    implementation deps.retrofit2.retrofit
+    implementation deps.retrofit2.adapter_rxjava2
+    // okhttp 日志拦截器
+    implementation deps.okhttp3.logging
     // 路由
     implementation deps.floo
     // 日期时间选择器
@@ -196,8 +214,24 @@ dependencies {
     implementation deps.storage
     // 时间格式化
     implementation deps.prettytime
-    // 圆形 ImageView
-    implementation deps.circleimageview
     // 对话框
     implementation deps.material_dialogs
+    // aes 加密解密
+    implementation deps.aes_crypto
+    // 重启进程
+    implementation deps.process_phoenix
+    // okhttp 支持 digest 认证
+    implementation deps.okhttp_digest
+    implementation deps.fabric_crashlytics, { transitive = true }
+    // about 页面
+    implementation deps.about
+    // Android Links 扩展
+    implementation deps.about_extension
+    // 列表多布局
+    implementation deps.multitype
+    implementation deps.multitype_kotlin
+    // 图片加载
+    implementation deps.picasso
+    // json 解析
+    implementation deps.moshi
 }

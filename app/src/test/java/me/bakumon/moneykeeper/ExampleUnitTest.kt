@@ -38,15 +38,6 @@ class ExampleUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun random() {
-        for (i in 0..100) {
-            val pi = Pi.randomPi()
-            System.out.print(pi)
-        }
-    }
-
-    @Test
-    @Throws(Exception::class)
     fun inputFilter(){
         val text = "1234590.09"
         var result = ""

@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.database.dao
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.RecordType
@@ -29,13 +30,13 @@ import me.bakumon.moneykeeper.database.entity.RecordType
 interface RecordTypeDao {
 
     @Query("SELECT * FROM RecordType WHERE state = 0 ORDER BY ranking")
-    fun getAllRecordTypes(): Flowable<List<RecordType>>
+    fun getAllRecordTypes(): LiveData<List<RecordType>>
 
     @Query("SELECT count(RecordType.id) FROM RecordType")
     fun getRecordTypeCount(): Long
 
     @Query("SELECT * FROM RecordType WHERE state = 0 AND type = :type ORDER BY ranking")
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>>
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>>
 
     @Query("SELECT * FROM RecordType WHERE type = :type AND name = :name")
     fun getTypeByName(type: Int, name: String): RecordType?

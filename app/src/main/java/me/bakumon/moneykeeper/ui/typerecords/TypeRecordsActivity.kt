@@ -16,69 +16,39 @@
 
 package me.bakumon.moneykeeper.ui.typerecords
 
-import android.os.Bundle
-
+import android.support.v4.app.Fragment
+import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_two_tab.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
-import me.bakumon.moneykeeper.databinding.ActivityStatisticsBinding
-import me.bakumon.moneykeeper.ui.statistics.ViewPagerAdapter
+import me.bakumon.moneykeeper.ui.common.AbsTwoTabActivity
+import java.util.*
 
 /**
  * 某一类型的记账记录
  *
  * @author Bakumon https://bakumon
  */
-class TypeRecordsActivity : BaseActivity() {
+class TypeRecordsActivity : AbsTwoTabActivity() {
 
-    private lateinit var mBinding: ActivityStatisticsBinding
-
-    private var mRecordType: Int = 0
-    private var mRecordTypeId: Int = 0
-    private var mYear: Int = 0
-    private var mMonth: Int = 0
-
-    override val layoutId: Int
-        get() = R.layout.activity_statistics
-
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-
-        initView()
+    override fun onSetupTitle(tvTitle: TextView) {
+        toolbarLayout.tvTitle.text = intent.getStringExtra(Router.ExtraKey.KEY_TYPE_NAME)
     }
 
-    private fun initView() {
-        if (intent != null) {
-            mBinding.titleBar?.title = intent.getStringExtra(Router.ExtraKey.KEY_TYPE_NAME)
-            mRecordType = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE, 0)
-            mRecordTypeId = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE_ID, 0)
-            mYear = intent.getIntExtra(Router.ExtraKey.KEY_YEAR, 0)
-            mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
-        }
-
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.typeChoice?.rbOutlay?.setText(R.string.text_sort_time)
-        mBinding.typeChoice?.rbIncome?.setText(R.string.text_sort_money)
-
-        setUpFragment()
+    override fun getTwoTabText(): ArrayList<String> {
+        return arrayListOf(getString(R.string.text_sort_time), getString(R.string.text_sort_money))
     }
 
-    private fun setUpFragment() {
-        val infoPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-        val timeSortFragment = TypeRecordsFragment.newInstance(TypeRecordsFragment.SORT_TIME, mRecordType, mRecordTypeId, mYear, mMonth)
-        val moneySortFragment = TypeRecordsFragment.newInstance(TypeRecordsFragment.SORT_MONEY, mRecordType, mRecordTypeId, mYear, mMonth)
-        infoPagerAdapter.addFragment(timeSortFragment)
-        infoPagerAdapter.addFragment(moneySortFragment)
-        mBinding.viewPager.adapter = infoPagerAdapter
-        mBinding.viewPager.offscreenPageLimit = 2
+    override fun getTwoFragments(): ArrayList<Fragment> {
+        val mRecordType = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE, 0)
+        val mRecordTypeId = intent.getIntExtra(Router.ExtraKey.KEY_RECORD_TYPE_ID, 0)
+        val mYear = intent.getIntExtra(Router.ExtraKey.KEY_YEAR, 0)
+        val mMonth = intent.getIntExtra(Router.ExtraKey.KEY_MONTH, 0)
 
-        mBinding.typeChoice?.rgType?.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rb_outlay) {
-                mBinding.viewPager.setCurrentItem(0, false)
-            } else {
-                mBinding.viewPager.setCurrentItem(1, false)
-            }
-        }
-        mBinding.typeChoice?.rgType?.check(R.id.rb_outlay)
+        val timeSortFragment = TypeRecordsByTimeFragment.newInstance(mRecordType, mRecordTypeId, mYear, mMonth)
+        val moneySortFragment = TypeRecordsByMoneyFragment.newInstance(mRecordType, mRecordTypeId, mYear, mMonth)
+
+        return arrayListOf(timeSortFragment, moneySortFragment)
     }
 }

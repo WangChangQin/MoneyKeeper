@@ -16,23 +16,21 @@
 
 package me.bakumon.moneykeeper.ui.review
 
-import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
+import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.View
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.Injection
+import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import kotlinx.android.synthetic.main.activity_review.*
+import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.base.BaseActivity
 import me.bakumon.moneykeeper.database.entity.MonthSumMoneyBean
-import me.bakumon.moneykeeper.databinding.ActivityReviewBinding
+import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.Empty
+import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.DateUtils
-import me.bakumon.moneykeeper.utill.ToastUtils
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 
 /**
  * 回顾
@@ -41,91 +39,49 @@ import me.bakumon.moneykeeper.utill.ToastUtils
  * @author Bakumon https://bakumon
  */
 class ReviewActivity : BaseActivity() {
-    private lateinit var mBinding: ActivityReviewBinding
-    private lateinit var mViewModel: ReviewModel
-    private lateinit var mAdapter: ReviewAdapter
+
+    private lateinit var mViewModel: ReviewViewModel
+    private lateinit var mAdapter: MultiTypeAdapter
 
     private var mCurrentYear = DateUtils.getCurrentYear()
 
     override val layoutId: Int
         get() = R.layout.activity_review
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReviewModel::class.java)
+    override fun onInitView(savedInstanceState: Bundle?) {
+        toolbarLayout.tvTitle.text = mCurrentYear.toString()
+        toolbarLayout.tvTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+        toolbarLayout.tvTitle.compoundDrawablePadding = 10
+        toolbarLayout.tvTitle.setOnClickListener { chooseYear() }
+        setSupportActionBar(toolbarLayout as Toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        initView()
+        sumMoneyView.setCheckNotEnable()
     }
 
-    private fun initView() {
-        mBinding.titleBar?.title = mCurrentYear.toString()
-        mBinding.titleBar?.ivTitle?.visibility = View.VISIBLE
-        mBinding.titleBar?.llTitle?.setOnClickListener { chooseYear() }
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
+    override fun onInit(savedInstanceState: Bundle?) {
+        mAdapter = MultiTypeAdapter()
+        mAdapter.register(ReviewItemBean::class, ReviewViewBinder())
+        mAdapter.register(Empty::class, EmptyViewBinder())
+        rvReview.adapter = mAdapter
 
-        mBinding.rvReview.layoutManager = LinearLayoutManager(this)
-        mAdapter = ReviewAdapter(null)
-        mBinding.rvReview.adapter = mAdapter
-
-        initLineChart()
-
+        mViewModel = getViewModel()
         updateData(mCurrentYear)
     }
 
     private fun chooseYear() {
-        mBinding.titleBar?.llTitle?.isEnabled = false
+        toolbarLayout.tvTitle.isEnabled = false
         val chooseYearDialog = ChooseYearDialog(this, mCurrentYear)
         chooseYearDialog.mOnDismissListener = {
-            mBinding.titleBar?.llTitle?.isEnabled = true
+            toolbarLayout.tvTitle.isEnabled = true
         }
         chooseYearDialog.mOnChooseListener = { year ->
             mCurrentYear = year
-            mBinding.titleBar?.title = mCurrentYear.toString()
+            toolbarLayout.tvTitle.text = mCurrentYear.toString()
             updateData(mCurrentYear)
         }
         chooseYearDialog.show()
-    }
-
-    private fun initLineChart() {
-        mBinding.lineChart.setNoDataText("")
-        mBinding.lineChart.setScaleEnabled(false)
-        mBinding.lineChart.description.isEnabled = false
-        mBinding.lineChart.legend.isEnabled = true
-        mBinding.lineChart.legend.textColor = resources.getColor(R.color.colorTextWhite1)
-
-        val marker = LineChartMarkerView(this)
-        marker.chartView = mBinding.lineChart
-        mBinding.lineChart.marker = marker
-
-        val xAxis = mBinding.lineChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = resources.getColor(R.color.colorTextGray)
-        xAxis.setLabelCount(12, true)
-        xAxis.setValueFormatter { value, _ ->
-            val intValue = value.toInt()
-            if (intValue >= 0) {
-                (intValue + 1).toString() + getString(R.string.text_month)
-            } else {
-                ""
-            }
-        }
-
-        val leftAxis = mBinding.lineChart.axisLeft
-        leftAxis.axisMinimum = 0f
-        leftAxis.setDrawAxisLine(true)
-        leftAxis.setDrawGridLines(false)
-        leftAxis.textSize = 0f
-        leftAxis.textColor = Color.TRANSPARENT
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-        val rightAxis = mBinding.lineChart.axisRight
-        rightAxis.axisMinimum = 0f
-        rightAxis.setDrawAxisLine(true)
-        rightAxis.setDrawGridLines(false)
-        rightAxis.textSize = 0f
-        rightAxis.textColor = Color.TRANSPARENT
-        rightAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-
     }
 
     private fun updateData(year: Int) {
@@ -134,45 +90,29 @@ class ReviewActivity : BaseActivity() {
     }
 
     private fun getYearSumMoney(year: Int) {
-        mDisposable.add(mViewModel.getYearSumMoney(year)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mBinding.sumMoneyBeanList = it
-                }
-                ) {
-                    ToastUtils.show(R.string.toast_get_review_sum_money_fail)
-                    Log.e(TAG, "获取回顾数据失败", it)
-                })
+        mViewModel.getYearSumMoney(year).observe(this, Observer {
+            sumMoneyView.setSumMoneyBean(it)
+
+        })
     }
 
     private fun getMonthOfYearSumMoney(year: Int) {
-        mDisposable.add(mViewModel.getMonthOfYearSumMoney(year)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mAdapter.setNewData(ReviewItemDataConverter.getBarEntryList(it))
-                    if (it.isEmpty()) {
-                        mBinding.lineChart.clear()
-                        mAdapter.emptyView = inflate(R.layout.layout_statistics_empty)
-                    } else {
-                        setLineChartData(it)
-                    }
-                }
-                ) {
-                    ToastUtils.show(R.string.toast_get_review_fail)
-                    Log.e(TAG, "获取回顾数据失败", it)
-                })
+        mViewModel.getMonthOfYearSumMoney(year).observe(this, Observer {
+            if (it != null) {
+                lineChart.setLineChartData(it)
+                setItems(it)
+            }
+        })
     }
 
-    private fun setLineChartData(beans: List<MonthSumMoneyBean>) {
-        mBinding.lineChart.clear()
-        val lineData = LineEntryConverter.getBarEntryList(beans)
-        mBinding.lineChart.data = lineData
-        mBinding.lineChart.animateY(1000)
-    }
-
-    companion object {
-        private val TAG = ReviewActivity::class.java.simpleName
+    private fun setItems(beans: List<MonthSumMoneyBean>) {
+        val items = Items()
+        if (beans.isEmpty()) {
+            items.add(Empty(getString(R.string.text_empty_tip), Gravity.CENTER_HORIZONTAL))
+        } else {
+            items.addAll(ReviewItemDataConverter.getBarEntryList(beans))
+        }
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 }

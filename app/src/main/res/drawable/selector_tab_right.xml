@@ -25,7 +25,7 @@
     <item>
         <shape>
             <corners android:bottomRightRadius="5dp" android:topRightRadius="5dp" />
-            <solid android:color="@color/colorItem" />
+            <solid android:color="@color/colorItemBackground" />
         </shape>
     </item>
 </selector>

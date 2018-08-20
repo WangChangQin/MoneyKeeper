@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Bakumon. https://github.com/Bakumon
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +15,20 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="@color/colorBackgroundBottomSheetDialog">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_restore"
+        android:textColor="@color/colorTextBottomSheetDialog"
         android:textSize="19sp"
         android:textStyle="bold" />
 
@@ -35,7 +38,7 @@
         android:paddingBottom="3dp"
         android:paddingTop="20dp"
         android:text="@string/text_restore_tip"
-        android:textColor="@color/colorTextWhite3"
+        android:textColor="@color/colorTextHintBottomSheetDialog"
         android:textSize="14sp" />
 
     <TextView
@@ -44,12 +47,14 @@
         android:paddingBottom="3dp"
         android:paddingTop="5dp"
         android:text="@string/text_list_restore"
-        android:textColor="@color/colorTextWhite3"
+        android:textColor="@color/colorTextHintBottomSheetDialog"
         android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_files"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_backup_file" />
 
 </LinearLayout>

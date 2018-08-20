@@ -5,7 +5,6 @@ import java.util.*
 /**
  * 皮一下
  */
-
 object Pi {
     private val piList = listOf("\uD83D\uDE00", "\uD83D\uDE01", "\uD83D\uDE02", "\uD83E\uDD23",
             "\uD83E\uDD23", "\uD83D\uDE03", "\uD83D\uDE04", "\uD83D\uDE0A",

@@ -17,31 +17,36 @@
 package me.bakumon.moneykeeper.ui.home
 
 import android.Manifest
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
+import io.fabric.sdk.android.Fabric
+import kotlinx.android.synthetic.main.activity_home.*
+import me.bakumon.moneykeeper.CloudBackupService
 import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.databinding.ActivityHomeBinding
-import me.bakumon.moneykeeper.datasource.BackupFailException
+import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.Empty
+import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.ShortcutUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.floo.StackCallback
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-
 
 /**
  * HomeActivity
@@ -50,102 +55,49 @@ import pub.devrel.easypermissions.PermissionRequest
  * @date 2018/4/9
  */
 class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
-    private lateinit var mBinding: ActivityHomeBinding
     private lateinit var mViewModel: HomeViewModel
-    private lateinit var mAdapter: HomeAdapter
+    private lateinit var mAdapter: MultiTypeAdapter
     private var isUserFirst: Boolean = false
 
     override val layoutId: Int
         get() = R.layout.activity_home
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        val viewModelFactory = Injection.provideViewModelFactory()
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
-
-        initView()
-        initData()
-        checkPermissionForBackup()
-
-        // 快速记账
-        if (ConfigManager.isFast) {
-            Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
-        }
+    override fun isChangeStatusColor(): Boolean {
+        return false
     }
 
-    private fun initView() {
-        mBinding.rvHome.layoutManager = LinearLayoutManager(this)
-        mAdapter = HomeAdapter(null)
-        mBinding.rvHome.adapter = mAdapter
-
-        mAdapter.setOnItemChildLongClickListener { _, _, position ->
-            showOperateDialog(mAdapter.data[position])
+    override fun onInitView(savedInstanceState: Bundle?) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ADD_RECORD).start() }
+        btnAdd.setOnLongClickListener {
+            if (ConfigManager.isSuccessive) {
+                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
+                        .start()
+            }
             false
         }
     }
 
-    fun settingClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_SETTING)
-                .start()
-    }
-
-    fun statisticsClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_STATISTICS)
-                .start()
-    }
-
-    fun addRecordClick(view: View) {
-        Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getCurrentMontySumMonty()
-        if (ConfigManager.isSuccessive) {
-            mBinding.btnAddRecord.setOnLongClickListener {
-                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
-                        .start()
-                false
-            }
-        } else {
-            mBinding.btnAddRecord.setOnLongClickListener(null)
+    override fun onInit(savedInstanceState: Bundle?) {
+        Fabric.with(this, Crashlytics(), Answers())
+        // 快速记账
+        if (ConfigManager.isFast) {
+            Floo.navigation(this, Router.Url.URL_ADD_RECORD).start()
         }
-    }
+        // 设置 MultiTypeAdapter
+        mAdapter = MultiTypeAdapter()
+        mAdapter.register(RecordWithType::class, RecordViewBinder { deleteRecord(it) })
+        mAdapter.register(String::class, FooterViewBinder())
+        mAdapter.register(Empty::class, EmptyViewBinder())
+        rvRecords.adapter = mAdapter
 
-    private fun showOperateDialog(record: RecordWithType) {
-        MaterialDialog.Builder(this)
-                .items(getString(R.string.text_modify), getString(R.string.text_delete))
-                .itemsCallback({ _, _, which, _ ->
-                    if (which == 0) {
-                        modifyRecord(record)
-                    } else {
-                        deleteRecord(record)
-                    }
-                })
-                .show()
-    }
+        checkPermissionForBackup()
 
-    private fun modifyRecord(record: RecordWithType) {
-        Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                .putExtra(Router.ExtraKey.KEY_RECORD_BEAN, record)
-                .start()
-    }
-
-    private fun deleteRecord(record: RecordWithType) {
-        mDisposable.add(mViewModel.deleteRecord(record)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（删除记账记录失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_record_delete_fail)
-                        Log.e(TAG, "删除记账记录失败", throwable)
-                    }
-                })
+        mViewModel = getViewModel()
+        initData()
+        getOldPsw()
     }
 
     private fun initData() {
@@ -153,61 +105,87 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         getCurrentMonthRecords()
     }
 
-    private fun initRecordTypes() {
-        mDisposable.add(mViewModel.initRecordTypes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ ShortcutUtil.addRecordShortcut(this) }
-                ) { throwable ->
-                    if (throwable is BackupFailException) {
-                        ToastUtils.show(throwable.message)
-                        Log.e(TAG, "备份失败（初始化类型数据失败的时候）", throwable)
-                    } else {
-                        ToastUtils.show(R.string.toast_init_types_fail)
-                        Log.e(TAG, "初始化类型数据失败", throwable)
-                    }
-                })
+    override fun onResume() {
+        super.onResume()
+        // 设置了预算或者资产，返回首页需要更新
+        getCurrentMoneySumMonty()
     }
 
-    private fun getCurrentMontySumMonty() {
-        mDisposable.add(mViewModel.currentMonthSumMoney
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ mBinding.sumMoneyBeanList = it }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_current_sum_money_fail)
-                    Log.e(TAG, "本月支出收入总数获取失败", throwable)
-                })
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_statistics -> Floo.navigation(this, Router.Url.URL_STATISTICS).start()
+            android.R.id.home -> Floo.navigation(this, Router.Url.URL_SETTING).start()
+        }
+        return true
+    }
+
+    private fun getOldPsw() {
+        mViewModel.getPsw().observe(this, Observer {
+            when (it) {
+                is SuccessResource<String> -> {
+                    ConfigManager.webDAVPsw = it.body
+                    // 自动云备份
+                    if (ConfigManager.cloudEnable && ConfigManager.cloudBackupMode == ConfigManager.MODE_LAUNCHER_APP) {
+                        CloudBackupService.startBackup(this)
+                    }
+                }
+                is ErrorResource<String> -> ToastUtils.show(it.errorMessage)
+            }
+        })
+    }
+
+    private fun deleteRecord(record: RecordWithType) {
+        mViewModel.deleteRecord(record).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_record_delete_fail)
+                }
+            }
+        })
+    }
+
+    private fun initRecordTypes() {
+        mViewModel.initRecordTypes().observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> ShortcutUtil.addRecordShortcut(this)
+                is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_init_types_fail)
+            }
+        })
+    }
+
+    private fun getCurrentMoneySumMonty() {
+        mViewModel.currentMonthSumMoney.observe(this, Observer {
+            headPageView.setSumMoneyBeanList(it)
+        })
     }
 
     private fun getCurrentMonthRecords() {
-        mDisposable.add(mViewModel.currentMonthRecordWithTypes
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ recordWithTypes ->
-                    setListData(recordWithTypes)
-                    if (recordWithTypes == null || recordWithTypes.isEmpty()) {
-                        setEmptyView()
-                    }
-                }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_records_fail)
-                    Log.e(TAG, "获取记录列表失败", throwable)
-                })
+        mViewModel.currentMonthRecordWithTypes.observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
     }
 
-    private fun setListData(recordWithTypes: List<RecordWithType>?) {
-        mAdapter.setNewData(recordWithTypes)
-        val isShowFooter = recordWithTypes != null && recordWithTypes.size > MAX_ITEM_TIP
-        if (isShowFooter) {
-            mAdapter.setFooterView(inflate(R.layout.layout_footer_tip))
+    private fun setItems(recordWithTypes: List<RecordWithType>) {
+        val items = Items()
+        if (recordWithTypes.isEmpty()) {
+            items.add(Empty(getString(R.string.text_current_month_empty_tip), Gravity.CENTER))
         } else {
-            mAdapter.removeAllFooterView()
+            items.addAll(recordWithTypes)
+            if (recordWithTypes.size > MAX_ITEM_TIP) {
+                items.add(getString(R.string.text_home_footer_tip))
+            }
         }
-    }
-
-    private fun setEmptyView() {
-        mAdapter.emptyView = inflate(R.layout.layout_home_empty)
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun indexKeyForStackTarget(): String? {
@@ -290,7 +268,6 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     companion object {
 
-        private val TAG = HomeActivity::class.java.simpleName
         private const val MAX_ITEM_TIP = 5
 
         ///////////////////////////////

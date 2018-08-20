@@ -72,4 +72,13 @@ class SPUtils private constructor(spName: String) {
         return sp.getBoolean(key, defaultValue)
     }
 
+    fun put(key: String, value: Long): Boolean {
+        return sp.edit().putLong(key, value).commit()
+    }
+
+    @JvmOverloads
+    fun getLong(key: String, defaultValue: Long = -1L): Long {
+        return sp.getLong(key, defaultValue)
+    }
+
 }

@@ -18,6 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.bakumon.moneykeeper">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -29,18 +30,30 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity
-            android:name=".ui.LauncherActivity"
-            android:theme="@style/AppTheme.Translucent">
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="78cc0e1b5afde4c17c153efa4cf5bcb10265d7e1" />
+
+        <activity-alias
+            android:name=".LauncherActivity"
+            android:targetActivity=".ui.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <activity
+            android:name=".ui.LauncherActivity"
+            android:theme="@style/AppTheme.Launcher" />
+
+        <!-- 这里 singleTask 导致在非 HomeActivity 时，每次按下 home 键，在点击桌面启动图标再次进入应用会重新打开 HomeActivity，而不是期望的页面 -->
+        <!-- 设置成 singleTask 是因为恢复备份失败，使用 process_phoenix 重新启动进程，HomeActivity 会存在两个 -->
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
@@ -59,6 +72,7 @@
             android:name=".ui.add.AddRecordActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
@@ -132,6 +146,7 @@
             android:name=".ui.statistics.StatisticsActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -151,6 +166,7 @@
             android:name=".ui.typerecords.TypeRecordsActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.statistics.StatisticsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -170,6 +186,7 @@
             android:name=".ui.setting.SettingActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -186,29 +203,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.opensource.OpenSourceActivity"
+            android:name=".ui.about.AboutActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="AppLinkUrlError">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="bakumon.me"
-                    android:path="/openSource"
-                    android:scheme="@string/scheme" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="me.bakumon.moneykeeper.ui.about.AboutActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            android:theme="@style/About"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
@@ -224,9 +223,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="me.bakumon.moneykeeper.ui.review.ReviewActivity"
+            android:name=".ui.review.ReviewActivity"
             android:exported="false"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.statistics.StatisticsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="AppLinkUrlError">
@@ -242,6 +242,30 @@
                     android:scheme="@string/scheme" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.setting.backup.BackupActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.setting.SettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="bakumon.me"
+                    android:path="/backup"
+                    android:scheme="@string/scheme" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".CloudBackupService"
+            android:exported="false" />
     </application>
 
 </manifest>

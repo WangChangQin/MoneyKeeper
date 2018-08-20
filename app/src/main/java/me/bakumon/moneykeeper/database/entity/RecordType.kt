@@ -66,11 +66,25 @@ class RecordType : Serializable {
     @Ignore
     var isChecked: Boolean = false
 
+    /**
+     * 是否是设置
+     */
+    @Ignore
+    var isSetting: Boolean = false
+
     @Ignore
     constructor(name: String, imgName: String, type: Int) {
         this.name = name
         this.imgName = imgName
         this.type = type
+    }
+
+    @Ignore
+    constructor(name: String, type: Int, isSetting: Boolean) {
+        this.name = name
+        this.imgName = "type_item_setting"
+        this.type = type
+        this.isSetting = isSetting
     }
 
     @Ignore

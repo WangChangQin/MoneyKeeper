@@ -17,49 +17,23 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/colorTextWhite3</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <!-- 影响 checkbox 等的次颜色 -->
+        <item name="android:textColorSecondary">#b3b0b0</item>
+        <item name="android:navigationBarColor">@color/colorWindowBackground</item>
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
     </style>
 
-    <style name="AppTheme.Translucent">
-        <!-- 避免启动白屏，打开的一瞬间 activity 透明 -->
-        <!-- 一下两个设置缺一不可 -->
-        <!-- Note:activity 不能用这个属性，android:screenOrientation="portrait" ，否则8。0以上设置会奔溃-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
     </style>
 
-    <!-- 键盘 -->
-    <style name="bg_press">
-        <item name="android:foreground">?attr/selectableItemBackground</item>
-    </style>
-
-    <!-- 键盘 -->
-    <style name="text_view_input" parent="bg_press">
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
-    </style>
-
-    <!-- 键盘数字 -->
-    <style name="text_view_input_num" parent="text_view_input">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">28sp</item>
-    </style>
-
-    <!-- 键盘确定 -->
-    <style name="text_view_input_affirm" parent="text_view_input">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:background">@drawable/bg_gradient_315</item>
+    <style name="About" parent="AppTheme">
+        <item name="aboutPageHeaderBackground">@color/colorAccent</item>
     </style>
 
 </resources>

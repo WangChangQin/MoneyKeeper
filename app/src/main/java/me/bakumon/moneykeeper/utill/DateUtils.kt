@@ -17,6 +17,7 @@
 package me.bakumon.moneykeeper.utill
 
 import android.annotation.SuppressLint
+import android.util.Log
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import java.text.DateFormat
@@ -197,6 +198,7 @@ object DateUtils {
      */
     fun getYearMonthFormatString(year: Int, month: Int): String {
         val calendar = Calendar.getInstance()
+        calendar.clear()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
         return date2String(calendar.time, FORMAT)
@@ -211,6 +213,7 @@ object DateUtils {
      */
     fun getDayCount(year: Int, month: Int): Int {
         val calendar = Calendar.getInstance()
+        calendar.clear()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
 
@@ -225,14 +228,19 @@ object DateUtils {
      * @return 当前月份开始的 Date
      */
     fun getMonthStart(year: Int, month: Int): Date {
+        val c = Calendar.getInstance()
+        c.clear()
+        c.set(Calendar.YEAR, year)
+        c.set(Calendar.MONTH, month - 1)
+
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH))
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE))
-        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND))
-        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND))
+        calendar.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, c.getActualMinimum(Calendar.MILLISECOND))
         return calendar.time
     }
 
@@ -244,14 +252,20 @@ object DateUtils {
      * @return 当前月份结束的 Date
      */
     fun getMonthEnd(year: Int, month: Int): Date {
+        val c = Calendar.getInstance()
+        // 解决 getActualMaximum 总是当前月份的最大天数
+        c.clear()
+        c.set(Calendar.YEAR, year)
+        c.set(Calendar.MONTH, month - 1)
+
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month - 1)
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE))
-        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND))
-        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND))
+        calendar.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, c.getActualMaximum(Calendar.MILLISECOND))
         return calendar.time
     }
 

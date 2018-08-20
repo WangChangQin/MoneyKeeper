@@ -18,47 +18,81 @@ package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.app.AppCompatDelegate
+import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
-import android.util.Log
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.*
-import me.bakumon.moneykeeper.base.BaseActivity
-import me.bakumon.moneykeeper.databinding.ActivitySettingBinding
+import me.bakumon.moneykeeper.base.EmptyResource
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
+import me.bakumon.moneykeeper.ui.common.AbsListActivity
+import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * 设置
  *
  * @author Bakumon https://bakumon.me
  */
-class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
-    private lateinit var mBinding: ActivitySettingBinding
+class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
+
     private lateinit var mViewModel: SettingViewModel
-    private lateinit var mAdapter: SettingAdapter
 
-    override val layoutId: Int
-        get() = R.layout.activity_setting
+    override fun onSetupTitle(tvTitle: TextView) {
+        tvTitle.text = getString(R.string.text_setting)
+    }
 
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-        mViewModel = ViewModelProviders.of(this).get(SettingViewModel::class.java)
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
+        adapter.register(Category::class, CategoryViewBinder())
+        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(CheckItem::class, CheckItemViewBinder { item, isCheck -> onCheckItemCheckChange(item, isCheck) })
+        adapter.register(ImgItem::class, ImgItemViewBinder { onImgItemClick(it) })
+    }
 
-        initView()
+    override fun onItemsCreated(items: Items) {
+        items.add(Category(getString(R.string.text_money)))
+        items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
+        items.add(NormalItem(getString(R.string.text_setting_assets), getAssetsStr()))
+        items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
+        items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
+        items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
+        items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
+
+        items.add(Category(getString(R.string.text_backup)))
+        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir)))
+        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir)))
+        items.add(CheckItem(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup))
+
+        items.add(Category(getString(R.string.text_cloud_backup)))
+        items.add(ImgItem(getString(R.string.text_cloud_backup_title), getString(R.string.text_cloud_backup_content), R.drawable.ic_cloud))
+
+        items.add(Category(getString(R.string.text_display)))
+        items.add(NormalItem(getString(R.string.text_theme), getThemeStr()))
+
+        items.add(Category(getString(R.string.text_about_and_more)))
+        items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
+        items.add(NormalItem("", getString(R.string.text_privacy_policy)))
+    }
+
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
+        mViewModel = getViewModel()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -66,62 +100,31 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-    private fun initView() {
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_setting)
-
-        mBinding.rvSetting.layoutManager = LinearLayoutManager(this)
-        mAdapter = SettingAdapter(null)
-
-        val list = ArrayList<SettingSectionEntity>()
-
-        list.add(SettingSectionEntity(getString(R.string.text_money)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_monty_budget), getBudgetStr())))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_assets), getAssetsStr())))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_setting_type_manage), null)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive)))
-
-
-        list.add(SettingSectionEntity(getString(R.string.text_backup)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup)))
-
-        list.add(SettingSectionEntity(getString(R.string.text_about_and_help)))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_about), getString(R.string.text_about_content))))
-        list.add(SettingSectionEntity(SettingSectionEntity.Item(getString(R.string.text_help))))
-
-        mAdapter.setNewData(list)
-        addListener()
-        mBinding.rvSetting.adapter = mAdapter
+    private fun onNormalItemClick(item: NormalItem) {
+        when (item.title) {
+            getString(R.string.text_monty_budget) -> setBudget()
+            getString(R.string.text_setting_assets) -> setAssets()
+            getString(R.string.text_title_symbol) -> setSymbol()
+            getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
+            getString(R.string.text_go_backup) -> showBackupDialog()
+            getString(R.string.text_restore) -> showRestoreDialog()
+            getString(R.string.text_theme) -> showChooseThemeDialog()
+            getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+            "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
+        }
     }
 
-    private fun addListener() {
-        mAdapter.setOnItemClickListener { _, _, position ->
-            when (position) {
-                1 -> setBudget(position)
-                2 -> setAssets(position)
-                3 -> setSymbol()
-                4 -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
-                8 -> showBackupDialog()
-                9 -> showRestoreDialog()
-                12 -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
-                13 -> AndroidUtil.openWeb(this, Constant.URL_HELP)
-                else -> {
-                }
-            }
+    private fun onCheckItemCheckChange(item: CheckItem, isCheck: Boolean) {
+        when (item.title) {
+            getString(R.string.text_fast_accounting) -> ConfigManager.setIsFast(isCheck)
+            getString(R.string.text_successive_record) -> ConfigManager.setIsSuccessive(isCheck)
+            getString(R.string.text_auto_backup) -> switchAutoBackup(isCheck)
         }
-        // Switch
-        mAdapter.setOnItemChildClickListener { _, _, position ->
-            when (position) {
-                5 -> switchFast()
-                6 -> switchSuccessive()
-                10 -> switchAutoBackup(position)
-                else -> {
-                }
-            }
+    }
+
+    private fun onImgItemClick(item: ImgItem) {
+        when (item.title) {
+            getString(R.string.text_cloud_backup_title) -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
         }
     }
 
@@ -132,32 +135,38 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             ConfigManager.symbol + BigDecimalUtil.formatNum(ConfigManager.budget.toString())
     }
 
-    private fun setBudget(position: Int) {
+    private var isDialogShow = false
+
+    private fun setBudget() {
         val oldBudget = if (ConfigManager.budget == 0)
             null
         else
             ConfigManager.budget.toString().replace(",", "")
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_budget)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .inputRange(0, 8)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_budget), oldBudget,
-                        { _, input ->
-                            val text = input.toString()
-                            if (!TextUtils.isEmpty(text)) {
-                                ConfigManager.setBudget(Integer.parseInt(text))
-                            } else {
-                                ConfigManager.setBudget(0)
-                            }
-                            resetBudgetItem(position)
-                        }).show()
+                .input(getString(R.string.hint_enter_budget), oldBudget) { _, input ->
+                    if (!input.isEmpty()) {
+                        ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                    } else {
+                        ConfigManager.setBudget(0)
+                    }
+                    updateBudgetItem()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
-    private fun resetBudgetItem(position: Int) {
-        mAdapter.data[position].t.content = getBudgetStr()
-        mBinding.rvSetting.itemAnimator.changeDuration = 250
+    private fun updateBudgetItem() {
+        val position = 1
+        (mAdapter.items[position] as NormalItem).content = getBudgetStr()
+        mRecyclerView.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
@@ -168,28 +177,33 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
             ConfigManager.symbol + BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
     }
 
-    private fun setAssets(position: Int) {
+    private fun setAssets() {
         val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
             null
         else
             BigDecimalUtil.fen2YuanNoSeparator(BigDecimal(ConfigManager.assets))
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_setting_assets)
                 .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
                 .inputRange(0, 10)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_assets), oldAssets,
-                        { _, input ->
-                            val text = input.toString()
-                            if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
-                                ConfigManager.setAssets("NaN")
-                            } else {
-                                val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
-                                ConfigManager.setAssets(saveStr)
-                            }
-                            resetAssetsItem(position)
-                        }).show()
+                .input(getString(R.string.hint_enter_assets), oldAssets
+                ) { _, input ->
+                    val text = input.toString()
+                    if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
+                        ConfigManager.setAssets("NaN")
+                    } else {
+                        val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
+                        ConfigManager.setAssets(saveStr)
+                    }
+                    updateAssetsItem()
+                }.dismissListener { isDialogShow = false }
+                .show()
     }
 
     private fun inputFilter(text: String): String {
@@ -205,9 +219,10 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun resetAssetsItem(position: Int) {
-        mAdapter.data[position].t.content = getAssetsStr()
-        mBinding.rvSetting.itemAnimator.changeDuration = 250
+    private fun updateAssetsItem() {
+        val position = 2
+        (mAdapter.items[position] as NormalItem).content = getAssetsStr()
+        mRecyclerView.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
 
@@ -221,48 +236,61 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
                 index = i
             }
         }
-
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_set_symbol)
                 .items(R.array.symbol)
-                .itemsCallbackSingleChoice(index, { _, _, which, _ ->
+                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
-                    resetBudgetItem(1)
-                    resetAssetsItem(2)
+                    updateBudgetItem()
+                    updateAssetsItem()
                     true
-                })
+                }
                 .positiveText(R.string.text_affirm)
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
-    private fun switchFast() {
-        val oldIsConfigOpen = ConfigManager.isFast
-        ConfigManager.setIsFast(!oldIsConfigOpen)
+    private fun showChooseThemeDialog() {
+        val index = if (ConfigManager.isThemeDark) 0 else 1
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        MaterialDialog.Builder(this)
+                .title(R.string.text_theme)
+                .items(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))
+                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                    val theme = which == 0
+                    if (theme) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                    ConfigManager.setIsThemeDark(theme)
+                    finish()
+                    true
+                }
+                .positiveText(R.string.text_affirm)
+                .dismissListener { isDialogShow = false }
+                .show()
     }
 
-    private fun switchSuccessive() {
-        val oldIsConfigOpen = ConfigManager.isSuccessive
-        ConfigManager.setIsSuccessive(!oldIsConfigOpen)
+    private fun getThemeStr(): String {
+        return if (ConfigManager.isThemeDark) getString(R.string.text_theme_dark) else getString(R.string.text_theme_light)
     }
 
-    private fun switchAutoBackup(position: Int) {
-        val oldIsConfigOpen = mAdapter.data[position].t.isConfigOpen
-        if (oldIsConfigOpen) {
-            MaterialDialog.Builder(this)
-                    .cancelable(false)
-                    .title(R.string.text_close_auto_backup)
-                    .content(R.string.text_close_auto_backup_tip)
-                    .positiveText(R.string.text_affirm)
-                    .negativeText(R.string.text_cancel)
-                    .onNegative({ _, _ -> mAdapter.notifyItemChanged(position) })
-                    .onPositive({ _, _ -> setAutoBackup(position, false) })
-                    .show()
-
+    private fun switchAutoBackup(isCheck: Boolean) {
+        if (!isCheck) {
+            ConfigManager.setIsAutoBackup(false)
         } else {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                setAutoBackup(position, true)
+                ConfigManager.setIsAutoBackup(true)
                 return
             }
             EasyPermissions.requestPermissions(
@@ -278,7 +306,6 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         when (requestCode) {
             11 -> {
                 ConfigManager.setIsAutoBackup(true)
-                initView()
             }
             12 -> backupDB()
             13 -> restore()
@@ -287,7 +314,18 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
+    private fun updateAutoBackupItem(isCheck: Boolean) {
+        val position = 10
+        (mAdapter.items[position] as CheckItem).isCheck = isCheck
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
+    }
+
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (requestCode == 11) {
+            // 更新自动备份 item
+            updateAutoBackupItem(false)
+        }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this)
                     .setRationale(R.string.text_storage_permission_tip)
@@ -299,19 +337,11 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
-            initView()
+            onInit(null)
         }
-    }
-
-    private fun setAutoBackup(position: Int, isBackup: Boolean) {
-        ConfigManager.setIsAutoBackup(isBackup)
-        mAdapter.data[position].t.isConfigOpen = isBackup
-        // 取消 item 动画
-        mBinding.rvSetting.itemAnimator.changeDuration = 0
-        mAdapter.notifyItemChanged(position)
     }
 
     private fun showBackupDialog() {
@@ -328,21 +358,24 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun backupDB() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         MaterialDialog.Builder(this)
                 .title(R.string.text_go_backup)
                 .content(R.string.text_backup_save, backupFilepath)
                 .positiveText(R.string.text_affirm)
                 .negativeText(R.string.text_cancel)
-                .onPositive({ _, _ ->
-                    mDisposable.add(mViewModel.backupDB()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ ToastUtils.show(R.string.toast_backup_success) }
-                            ) { throwable ->
-                                ToastUtils.show(R.string.toast_backup_fail)
-                                Log.e(TAG, "备份失败", throwable)
-                            })
-                })
+                .onPositive { _, _ ->
+                    mViewModel.backupDB().observe(this, Observer {
+                        when (it) {
+                            is SuccessResource<Boolean> -> ToastUtils.show(R.string.toast_backup_success)
+                            is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_backup_fail)
+                        }
+                    })
+                }
+                .dismissListener { isDialogShow = false }
                 .show()
     }
 
@@ -360,41 +393,65 @@ class SettingActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun restore() {
-        mDisposable.add(mViewModel.backupFiles
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ backupBeans ->
-                    val dialog = BackupFliesDialog(this, backupBeans)
-                    dialog.mOnItemClickListener = {
-                        restoreDB(it.path)
-                    }
-                    dialog.show()
+        mViewModel.backupFiles().observe(this, Observer { resource ->
+            when (resource) {
+                is SuccessResource<List<BackupBean>> -> {
+                    showBackupListDialog(resource)
                 }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_backup_list_fail)
-                    Log.e(TAG, "备份文件列表获取失败", throwable)
-                })
+                is ErrorResource<List<BackupBean>> -> ToastUtils.show(R.string.toast_backup_list_fail)
+            }
+        })
+    }
+
+    private fun showBackupListDialog(resource: SuccessResource<List<BackupBean>>) {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        val dialog = BackupFliesDialog(this, resource.body) { restoreDB(it.path) }
+        dialog.getDialog().setOnDismissListener { isDialogShow = false }
+        dialog.show()
     }
 
     private fun restoreDB(restoreFile: String) {
-        mDisposable.add(mViewModel.restoreDB(restoreFile)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    ToastUtils.show(R.string.toast_restore_success)
-                    Floo.stack(this)
-                            .target(Router.IndexKey.INDEX_KEY_HOME)
-                            .result("refresh")
-                            .start()
+        mViewModel.restoreToDB(restoreFile).observe(this, android.arch.lifecycle.Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    if (it.body) {
+                        ToastUtils.show(R.string.toast_restore_success)
+                        backHome()
+                    } else {
+                        ToastUtils.show(R.string.toast_restore_fail)
+                    }
                 }
-                ) { throwable ->
-                    ToastUtils.show(R.string.toast_restore_fail)
-                    Log.e(TAG, "恢复备份失败", throwable)
-                })
+                is EmptyResource -> {
+                    restartApp()
+                }
+                is ErrorResource<Boolean> -> ToastUtils.show(getString(R.string.toast_restore_fail) + "\n" + it.errorMessage)
+            }
+        })
+    }
+
+    private fun backHome() {
+        Floo.stack(this)
+                .target(Router.IndexKey.INDEX_KEY_HOME)
+                .result("refresh")
+                .start()
+    }
+
+    private fun restartApp() {
+        MaterialDialog.Builder(this)
+                .cancelable(false)
+                .title("\uD83D\uDC7A" + getString(R.string.text_error))
+                .content(R.string.text_restore_fail_rollback)
+                .positiveText(R.string.text_affirm)
+                .onPositive { _, _ ->
+                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
+                }
+                .show()
     }
 
     companion object {
-        private val TAG = SettingActivity::class.java.simpleName
         @SuppressLint("SdCardPath")
         val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
         @SuppressLint("SdCardPath")

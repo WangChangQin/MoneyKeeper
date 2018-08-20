@@ -16,105 +16,105 @@
 
 package me.bakumon.moneykeeper.ui.about
 
-import android.content.Intent
-import android.net.Uri
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-
+import android.widget.ImageView
+import android.widget.TextView
 import me.bakumon.moneykeeper.BuildConfig
 import me.bakumon.moneykeeper.Constant
 import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.base.BaseActivity
-import me.bakumon.moneykeeper.databinding.ActivityAboutBinding
-import me.bakumon.moneykeeper.utill.AlipayZeroSdk
 import me.bakumon.moneykeeper.utill.AndroidUtil
 import me.bakumon.moneykeeper.utill.Pi
+import me.bakumon.moneykeeper.utill.StatusBarUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
-import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.register
+import me.drakeet.support.about.*
+import me.drakeet.support.about.extension.RecommendedLoaderDelegate
+import me.drakeet.support.about.extension.provided.MoshiJsonConverter
+import me.drakeet.support.about.provided.PicassoImageLoader
 
 /**
  * 关于
  *
  * @author Bakumon https://bakumon.me
  */
-class AboutActivity : BaseActivity() {
-    private lateinit var mBinding: ActivityAboutBinding
+class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContributorClickedListener {
 
-    override val layoutId: Int
-        get() = R.layout.activity_about
-
-    override fun onInit(savedInstanceState: Bundle?) {
-        mBinding = getDataBinding()
-
-        initView()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setImmersiveStatus()
+        setImageLoader(PicassoImageLoader())
+        onRecommendedClickedListener = this
+        onContributorClickedListener = this
+        toolbar.setNavigationOnClickListener { finish() }
     }
 
-    private fun initView() {
-        mBinding.titleBar?.ibtClose?.setOnClickListener { finish() }
-        mBinding.titleBar?.title = getString(R.string.text_about)
-        mBinding.titleBar?.ibtRight?.visibility = View.VISIBLE
-        mBinding.titleBar?.ibtRight?.setOnClickListener { share() }
-
-        val version = "v" + BuildConfig.VERSION_NAME
-        mBinding.tvVersion.text = version
+    /**
+     * 设置沉浸式状态栏
+     */
+    private fun setImmersiveStatus() {
+        val view = toolbar
+        StatusBarUtil.immersive(this)
+        StatusBarUtil.setPaddingSmart(this, view)
     }
 
-    fun piYiXia(view: View) {
-        ToastUtils.show(Pi.randomPi())
+    @SuppressLint("SetTextI18n")
+    override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {
+        icon.setImageResource(R.mipmap.ic_launcher_about)
+        slogan.setText(R.string.text_slogan)
+        version.text = "v${BuildConfig.VERSION_NAME}"
     }
 
-    private fun share() {
-        AndroidUtil.share(this, getString(R.string.text_share_content, Constant.URL_APP_DOWNLOAD))
+    override fun onItemsCreated(items: Items) {
+        adapter.register(CardWithAction::class, CardWithActionViewBinder())
+        items.add(Category(getString(R.string.text_about_Introduction)))
+        items.add(CardWithAction(getString(R.string.text_about_detail), getString(R.string.text_donate)) { AndroidUtil.alipay(this) })
+
+        items.add(Category(getString(R.string.text_dev_designer)))
+        items.add(Contributor(R.mipmap.avatar_markcrs, "Markcrs", getString(R.string.text_designer)))
+        items.add(Contributor(R.mipmap.avatar_liangyue, "梁月", getString(R.string.text_launcher_designer)))
+        items.add(Contributor(R.mipmap.avatar_bakumon, "Bakumon", getString(R.string.text_developer_designer), Constant.AUTHOR_URL))
+
+        items.add(Category(getString(R.string.text_links)))
+        val linksText = getString(R.string.text_contact_author,
+                Constant.AUTHOR_EMAIL,
+                Constant.URL_HELP,
+                Constant.APP_OPEN_SOURCE_URL,
+                Constant.URL_GREEN_ANDROID)
+        items.add(Card(linksText))
+
+        // Android 应用友链
+        RecommendedLoaderDelegate.attach(this, items.size, MoshiJsonConverter())
+
+        items.add(Category(getString(R.string.text_license)))
+        OpenSourceListCreator.addAll(items)
     }
 
-    fun market(view: View) {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("market://details?id=$packageName")
-            startActivity(intent)
-        } catch (e: Exception) {
-            ToastUtils.show(R.string.toast_not_install_market)
-            e.printStackTrace()
+    override fun onContributorClicked(itemView: View, contributor: Contributor): Boolean {
+        if (contributor.name == "Markcrs" || contributor.name == "梁月") {
+            ToastUtils.show(Pi.randomPi())
+            return true
         }
+        return false
     }
 
-    fun alipay(view: View) {
-        if (AlipayZeroSdk.hasInstalledAlipayClient(this)) {
-            AlipayZeroSdk.startAlipayClient(this, Constant.ALIPAY_CODE)
-        } else {
-            ToastUtils.show(R.string.toast_not_install_alipay)
+    override fun onRecommendedClicked(itemView: View, recommended: Recommended): Boolean {
+        return false
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_about, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.action_favorite -> AndroidUtil.goMarket(this)
         }
-    }
-
-    fun goOpenSource(view: View) {
-        Floo.navigation(this, Router.Url.URL_OPEN_SOURCE)
-                .start()
-    }
-
-    fun contactAuthor(view: View) {
-        try {
-            val data = Intent(Intent.ACTION_SENDTO)
-            data.data = Uri.parse("mailto:" + Constant.AUTHOR_EMAIL)
-            data.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.text_feedback) + getString(R.string.app_name))
-            val content = "\n\n\n\n\n\n______________________________" +
-                    "\n" + getString(R.string.text_phone_brand) + android.os.Build.BRAND +
-                    "\n" + getString(R.string.text_phone_model) + android.os.Build.MODEL +
-                    "\n" + getString(R.string.text_system_version) + android.os.Build.VERSION.RELEASE +
-                    "\n" + getString(R.string.text_app_version) + BuildConfig.VERSION_NAME
-            data.putExtra(Intent.EXTRA_TEXT, content)
-            startActivity(data)
-        } catch (e: Exception) {
-            ToastUtils.show(R.string.toast_not_install_email)
-            e.printStackTrace()
-        }
-    }
-
-    fun goPrivacy(view: View) {
-        AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
-    }
-
-    fun goHelp(view: View) {
-        AndroidUtil.openWeb(this, Constant.URL_HELP)
+        return true
     }
 }

@@ -16,20 +16,27 @@
 
 package me.bakumon.moneykeeper.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
+import kotlinx.android.synthetic.main.layout_head_page.view.*
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
-import me.bakumon.moneykeeper.databinding.LayoutHeadPageBinding
-import me.bakumon.moneykeeper.databinding.LayoutHeadPageContent1Binding
-import me.bakumon.moneykeeper.databinding.LayoutHeadPageContentBinding
+import me.bakumon.moneykeeper.utill.BigDecimalUtil
+import me.drakeet.floo.Floo
+import java.math.BigDecimal
 
 /**
  * 首页 Head
@@ -38,38 +45,135 @@ import me.bakumon.moneykeeper.databinding.LayoutHeadPageContentBinding
  */
 class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var mBinding: LayoutHeadPageBinding
-    private var mContentBinding: LayoutHeadPageContentBinding
-    private var mContentBinding1: LayoutHeadPageContent1Binding
     private val inflater = LayoutInflater.from(context)
+
+    private var pagerView: View? = null
+    private var pagerView1: View? = null
+
+    private var mAdapter: HeadPagerAdapter
 
     init {
         orientation = LinearLayout.VERTICAL
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.layout_head_page, this, true)
-        mContentBinding = DataBindingUtil.inflate(inflater, R.layout.layout_head_page_content, null, true)
-        mContentBinding1 = DataBindingUtil.inflate(inflater, R.layout.layout_head_page_content1, null, true)
+        inflater.inflate(R.layout.layout_head_page, this, true)
 
-        val viewList = listOf(mContentBinding.root, mContentBinding1.root)
-        val adapter = HeadPagerAdapter(viewList)
-        mBinding.viewPager.adapter = adapter
+        mAdapter = HeadPagerAdapter(arrayListOf())
+        viewPager.adapter = mAdapter
 
-        mBinding.indicator.setTotal(adapter.count, mBinding.viewPager.currentItem)
-
-        mBinding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
-                mBinding.indicator.setTotal(mBinding.viewPager.childCount, position)
+                indicator.setTotal(viewPager.childCount, position)
             }
         })
     }
 
     fun setSumMoneyBeanList(beanList: List<SumMoneyBean>?) {
-        mContentBinding.sumMoneyBeanList = beanList
-        mContentBinding1.sumMoneyBeanList = beanList
+        if (beanList == null) {
+            return
+        }
+        val viewList = listOf(getPagerView(beanList), getPagerView1(beanList))
+        mAdapter.mViews = viewList
+        mAdapter.notifyDataSetChanged()
+        indicator.setTotal(mAdapter.count, viewPager.currentItem)
     }
 
-    internal inner class HeadPagerAdapter(private val mViews: List<View>) : PagerAdapter() {
+    @SuppressLint("SetTextI18n", "InflateParams")
+    private fun getPagerView(sumMoneyBean: List<SumMoneyBean>): View {
+        if (pagerView == null) {
+            pagerView = inflater.inflate(R.layout.layout_head_content, null)
+        }
+        val tvLeftTitle: TextView = pagerView!!.findViewById(R.id.tvLeftTitle)
+        val tvLeftContent: TextView = pagerView!!.findViewById(R.id.tvLeftContent)
+        val tvRightTitle: TextView = pagerView!!.findViewById(R.id.tvRightTitle)
+        val tvRightContent: TextView = pagerView!!.findViewById(R.id.tvRightContent)
+        val llRightContent: LinearLayout = pagerView!!.findViewById(R.id.llRightContent)
+
+        val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
+        tvLeftTitle.text = context.getText(R.string.text_month_outlay).toString() + text
+        tvRightTitle.text = context.getText(R.string.text_month_remaining_budget).toString() + text
+
+        var outlayStr = "0"
+        if (sumMoneyBean.isNotEmpty()) {
+            for ((type, sumMoney) in sumMoneyBean) {
+                if (type == RecordType.TYPE_OUTLAY) {
+                    outlayStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                }
+            }
+        }
+        tvLeftContent.text = outlayStr
+
+
+        var outlay = BigDecimal(0)
+        if (sumMoneyBean.isNotEmpty()) {
+            for ((type, sumMoney) in sumMoneyBean) {
+                if (type == RecordType.TYPE_OUTLAY) {
+                    outlay = sumMoney
+                }
+            }
+        }
+        val budget = ConfigManager.budget
+        if (budget > 0) {
+            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
+            tvRightContent.text = budgetStr
+            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
+            llRightContent.isClickable = false
+        } else {
+            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            tvRightContent.text = tvRightContent.context.getString(R.string.text_set_budget)
+            llRightContent.setOnClickListener {
+                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
+                        .start()
+            }
+        }
+
+        return pagerView!!
+    }
+
+    @SuppressLint("SetTextI18n", "InflateParams")
+    private fun getPagerView1(sumMoneyBean: List<SumMoneyBean>): View {
+        if (pagerView1 == null) {
+            pagerView1 = inflater.inflate(R.layout.layout_head_content, null)
+        }
+        val tvLeftTitle: TextView = pagerView1!!.findViewById(R.id.tvLeftTitle)
+        val tvLeftContent: TextView = pagerView1!!.findViewById(R.id.tvLeftContent)
+        val tvRightTitle: TextView = pagerView1!!.findViewById(R.id.tvRightTitle)
+        val tvRightContent: TextView = pagerView1!!.findViewById(R.id.tvRightContent)
+        val llRightContent: LinearLayout = pagerView1!!.findViewById(R.id.llRightContent)
+
+        val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
+        tvLeftTitle.text = context.getText(R.string.text_month_income).toString() + text
+        tvRightTitle.text = context.getText(R.string.text_assets).toString() + text
+
+        var incomeStr = "0"
+        if (sumMoneyBean.isNotEmpty()) {
+            for ((type, sumMoney) in sumMoneyBean) {
+                if (type == RecordType.TYPE_INCOME) {
+                    incomeStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                }
+            }
+        }
+        tvLeftContent.text = incomeStr
+
+
+        val assets = ConfigManager.assets
+        if (!TextUtils.equals(assets, "NaN")) {
+            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
+            tvRightContent.text = budgetStr
+            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
+            llRightContent.isClickable = false
+        } else {
+            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            tvRightContent.text = tvRightContent.context.getString(R.string.text_setting_assets)
+            llRightContent.setOnClickListener {
+                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
+                        .start()
+            }
+        }
+        return pagerView1!!
+    }
+
+    internal inner class HeadPagerAdapter(var mViews: List<View>) : PagerAdapter() {
 
         override fun getCount(): Int {
             return mViews.size

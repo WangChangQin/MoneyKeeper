@@ -16,11 +16,14 @@
 
 package me.bakumon.moneykeeper.ui.typesort
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import me.bakumon.moneykeeper.base.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
  * 类型排序 ViewModel
@@ -29,11 +32,21 @@ import me.bakumon.moneykeeper.datasource.AppDataSource
  */
 class TypeSortViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    fun getRecordTypes(type: Int): Flowable<List<RecordType>> {
+    fun getRecordTypes(type: Int): LiveData<List<RecordType>> {
         return mDataSource.getRecordTypes(type)
     }
 
-    fun sortRecordTypes(recordTypes: List<RecordType>): Completable {
-        return mDataSource.sortRecordTypes(recordTypes)
+    fun sortRecordTypes(recordTypes: List<RecordType>): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.sortRecordTypes(recordTypes)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
     }
 }
