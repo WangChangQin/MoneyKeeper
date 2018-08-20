@@ -222,5 +222,6 @@
     <string-array name="text_cloud_auto_backup_mode">
         <item>Do not automatically backup</item>
         <item>when opening app</item>
+        <item>when exit app</item>
     </string-array>
 </resources>

@@ -28,12 +28,13 @@ import java.math.BigDecimal
  */
 object ConfigManager {
 
-    @IntDef(MODE_NO, MODE_LAUNCHER_APP)
+    @IntDef(MODE_NO, MODE_LAUNCHER_APP, MODE_EXIT_APP)
     @Retention(AnnotationRetention.SOURCE)
     annotation class CloudBackupMode
 
     const val MODE_NO = 0L
     const val MODE_LAUNCHER_APP = 1L
+    const val MODE_EXIT_APP = 2L
 
     private const val SP_NAME = "config"
     private const val KEY_AUTO_BACKUP = "auto_backup"

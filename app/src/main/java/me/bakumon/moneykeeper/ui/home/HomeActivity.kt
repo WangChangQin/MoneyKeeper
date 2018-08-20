@@ -193,6 +193,14 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         mAdapter.notifyDataSetChanged()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        // 自动云备份
+        if (ConfigManager.cloudEnable && ConfigManager.cloudBackupMode == ConfigManager.MODE_EXIT_APP) {
+            CloudBackupService.startBackup(this)
+        }
+    }
+
     override fun indexKeyForStackTarget(): String? {
         return Router.IndexKey.INDEX_KEY_HOME
     }

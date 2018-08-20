@@ -222,5 +222,6 @@
     <string-array name="text_cloud_auto_backup_mode">
         <item>不自动备份</item>
         <item>打开应用时备份</item>
+        <item>退出应用时备份</item>
     </string-array>
 </resources>

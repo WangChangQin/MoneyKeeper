@@ -354,6 +354,7 @@ class BackupActivity : AbsListActivity() {
         val index = when (ConfigManager.cloudBackupMode) {
             ConfigManager.MODE_NO -> 0
             ConfigManager.MODE_LAUNCHER_APP -> 1
+            ConfigManager.MODE_EXIT_APP -> 2
             else -> 0
         }
         if (isDialogShow) {
@@ -367,6 +368,7 @@ class BackupActivity : AbsListActivity() {
                     when (which) {
                         0 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_NO)
                         1 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_LAUNCHER_APP)
+                        2 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_EXIT_APP)
                     }
                     updateCloudBackupItem()
                     true
@@ -391,7 +393,8 @@ class BackupActivity : AbsListActivity() {
         return when (ConfigManager.cloudBackupMode) {
             ConfigManager.MODE_NO -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[0]
             ConfigManager.MODE_LAUNCHER_APP -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[1]
-            else -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[3]
+            ConfigManager.MODE_EXIT_APP -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[2]
+            else -> resources.getStringArray(R.array.text_cloud_auto_backup_mode)[0]
         }
     }
 
