@@ -187,14 +187,13 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
      * 提示用户该记录的类型已经被删除
      */
     private fun showTypeNotExistTip() {
-        MaterialDialog.Builder(context)
-                .content(R.string.text_tip_type_delete)
-                .positiveText(R.string.text_know)
+        MaterialDialog(context)
+                .message(text = "\uD83D\uDC7A" + context.resources.getString(R.string.text_tip_type_delete))
+                .positiveButton(R.string.text_know)
                 .show()
     }
 
     companion object {
-
         private const val ROW = 2
         private const val COLUMN = 4
     }

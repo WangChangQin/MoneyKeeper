@@ -219,7 +219,8 @@ dependencies {
     // 时间格式化
     implementation deps.prettytime
     // 对话框
-    implementation deps.material_dialogs
+    implementation deps.material_dialogs_core
+    implementation deps.material_dialogs_input
     // aes 加密解密
     implementation deps.aes_crypto
     // 重启进程

@@ -70,12 +70,11 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
 
     private fun showOperateDialog(context: Context, record: RecordWithType) {
         val money = " (" + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(record.money) + ")"
-        MaterialDialog.Builder(context)
-                .title(record.mRecordTypes!![0].name + money)
-                .content(R.string.text_delete_record_note)
-                .positiveText(R.string.text_affirm_delete)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ -> onDeleteClickListener.invoke(record) }
+        MaterialDialog(context)
+                .title(text = record.mRecordTypes!![0].name + money)
+                .message(R.string.text_delete_record_note)
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm_delete) { onDeleteClickListener.invoke(record) }
                 .show()
     }
 

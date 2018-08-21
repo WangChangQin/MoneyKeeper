@@ -27,6 +27,9 @@ import android.text.InputType
 import android.text.TextUtils
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.EmptyResource
@@ -147,22 +150,25 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_set_budget)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .inputRange(0, 8)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_budget), oldBudget) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = oldBudget, maxLength = 8, hint = getString(R.string.hint_enter_budget), inputType = InputType.TYPE_CLASS_NUMBER) { _, input ->
                     if (!input.isEmpty()) {
-                        ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                        if (input.length > 8) {
+                            ConfigManager.setBudget(Integer.parseInt(input.substring(0, 8)))
+                        } else {
+                            ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                        }
                     } else {
                         ConfigManager.setBudget(0)
                     }
                     updateBudgetItem()
                     // 更新 widget
                     WidgetProvider.updateWidget(this)
-                }.dismissListener { isDialogShow = false }
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -189,14 +195,11 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_setting_assets)
-                .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
-                .inputRange(0, 10)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_assets), oldAssets
-                ) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = oldAssets, maxLength = 10, hint = getString(R.string.hint_enter_assets), inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL) { _, input ->
                     val text = input.toString()
                     if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
                         ConfigManager.setAssets("NaN")
@@ -205,7 +208,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                         ConfigManager.setAssets(saveStr)
                     }
                     updateAssetsItem()
-                }.dismissListener { isDialogShow = false }
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -243,10 +247,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_set_symbol)
-                .items(R.array.symbol)
-                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                .positiveButton(R.string.text_affirm)
+                .listItemsSingleChoice(R.array.symbol, initialSelection = index) { _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
@@ -254,10 +258,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     updateAssetsItem()
                     // 更新 widget
                     WidgetProvider.updateWidget(this)
-                    true
                 }
-                .positiveText(R.string.text_affirm)
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -267,10 +269,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_theme)
-                .items(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))
-                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                .positiveButton(R.string.text_affirm)
+                .listItemsSingleChoice(initialSelection = index, items = arrayListOf(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))) { _, which, _ ->
                     val theme = which == 0
                     if (theme) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -279,10 +281,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     }
                     ConfigManager.setIsThemeDark(theme)
                     finish()
-                    true
                 }
-                .positiveText(R.string.text_affirm)
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -367,20 +367,19 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_go_backup)
-                .content(R.string.text_backup_save, backupFilepath)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ ->
-                    mViewModel.backupDB().observe(this, Observer {
-                        when (it) {
+                .message(text = getString(R.string.text_backup_save, backupFilepath))
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm) {
+                    mViewModel.backupDB().observe(this, Observer { resource ->
+                        when (resource) {
                             is SuccessResource<Boolean> -> ToastUtils.show(R.string.toast_backup_success)
                             is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_backup_fail)
                         }
                     })
                 }
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -445,15 +444,12 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun restartApp() {
-        MaterialDialog.Builder(this)
-                .cancelable(false)
-                .title("\uD83D\uDC7A" + getString(R.string.text_error))
-                .content(R.string.text_restore_fail_rollback)
-                .positiveText(R.string.text_affirm)
-                .onPositive { _, _ ->
-                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
-                }
-                .show()
+        val dialog = MaterialDialog(this)
+                .title(text = "\uD83D\uDC7A" + getString(R.string.text_error))
+                .message(R.string.text_restore_fail_rollback)
+                .positiveButton(R.string.text_affirm) { ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java)) }
+        dialog.setCancelable(false)
+        dialog.show()
     }
 
     companion object {

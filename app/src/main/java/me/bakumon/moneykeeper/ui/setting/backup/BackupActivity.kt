@@ -20,9 +20,11 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.text.InputType
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jakewharton.processphoenix.ProcessPhoenix
 import me.bakumon.moneykeeper.CloudBackupService
 import me.bakumon.moneykeeper.ConfigManager
@@ -107,13 +109,11 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_webdav_url)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDavUrl
-                ) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = ConfigManager.webDavUrl) { _, input ->
                     val url = input.toString().trim()
                     when {
                         url.isEmpty() -> {
@@ -127,7 +127,8 @@ class BackupActivity : AbsListActivity() {
                             initDir()
                         }
                     }
-                }.dismissListener { isDialogShow = false }
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -144,18 +145,17 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_webdav_account)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDavAccount
-                ) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = ConfigManager.webDavAccount) { _, input ->
                     updateAccountItem(input.toString().trim())
                     // 更新网络配置
                     Network.updateDavServiceConfig()
                     initDir()
-                }.dismissListener { isDialogShow = false }
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -178,15 +178,14 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_webdav_password)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input("", ConfigManager.webDAVPsw
-                ) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = ConfigManager.webDAVPsw) { _, input ->
                     savePsw(input.toString())
-                }.dismissListener { isDialogShow = false }
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -264,15 +263,12 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_go_backup)
-                .content(R.string.text_backup_save, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ ->
-                    CloudBackupService.startBackup(this, true)
-                }
-                .dismissListener { isDialogShow = false }
+                .message(text = getString(R.string.text_backup_save, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE))
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm) { CloudBackupService.startBackup(this, true) }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -285,13 +281,12 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_restore)
-                .content(R.string.text_restore_content, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ -> restore() }
-                .dismissListener { isDialogShow = false }
+                .message(text = getString(R.string.text_restore_content, getString(R.string.text_webdav) + BackupConstant.BACKUP_FILE))
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm) { restore() }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -339,19 +334,16 @@ class BackupActivity : AbsListActivity() {
     }
 
     private fun restartApp() {
-        MaterialDialog.Builder(this)
-                .cancelable(false)
-                .title("\uD83D\uDC7A" + getString(R.string.text_error))
-                .content(R.string.text_restore_fail_rollback)
-                .positiveText(R.string.text_affirm)
-                .onPositive { _, _ ->
-                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
-                }
-                .show()
+        val dialog = MaterialDialog(this)
+                .title(text = "\uD83D\uDC7A" + getString(R.string.text_error))
+                .message(R.string.text_restore_fail_rollback)
+                .positiveButton(R.string.text_affirm) { ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java)) }
+        dialog.setCancelable(false)
+        dialog.show()
     }
 
     private fun chooseAutoBackupMode() {
-        val index = when (ConfigManager.cloudBackupMode) {
+        val initialSelection = when (ConfigManager.cloudBackupMode) {
             ConfigManager.MODE_NO -> 0
             ConfigManager.MODE_LAUNCHER_APP -> 1
             ConfigManager.MODE_EXIT_APP -> 2
@@ -361,20 +353,18 @@ class BackupActivity : AbsListActivity() {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_auto_backup_mode)
-                .items(R.array.text_cloud_auto_backup_mode)
-                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
-                    when (which) {
+                .listItemsSingleChoice(res = R.array.text_cloud_auto_backup_mode, initialSelection = initialSelection) { _, index, text ->
+                    when (index) {
                         0 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_NO)
                         1 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_LAUNCHER_APP)
                         2 -> ConfigManager.setCloudBackupMode(ConfigManager.MODE_EXIT_APP)
                     }
                     updateCloudBackupItem()
-                    true
                 }
-                .positiveText(R.string.text_affirm)
-                .dismissListener { isDialogShow = false }
+                .positiveButton(R.string.text_affirm)
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
