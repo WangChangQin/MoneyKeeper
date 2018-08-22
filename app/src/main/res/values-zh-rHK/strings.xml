@@ -46,6 +46,8 @@
     <string name="toast_success_record">記賬成功</string>
     <string name="toast_get_review_fail">獲取回顧數據失敗</string>
     <string name="toast_get_review_sum_money_fail">獲取回顧匯總數據失敗</string>
+    <string name="toast_move_backup_files_success">備份文件夾修改並遷移成功</string>
+    <string name="toast_move_backup_files_fail">修改文件夾失敗</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>
@@ -224,4 +226,11 @@
         <item>打開應用時備份</item>
         <item>退出應用時備份</item>
     </string-array>
+
+    <!-- 实验室 -->
+    <string name="text_other_setting">實驗室</string>
+    <string name="text_local_backup_path">本地備份文件夾</string>
+    <string name="text_local_backup_path_tip">重新選擇備份文件夾後，原有的備份文件夾會被遷移到新文件夾下</string>
+    <string name="text_choose">選擇</string>
+    <string name="text_folder_empty">沒有子目錄了</string>
 </resources>

@@ -17,7 +17,6 @@
 package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
@@ -31,13 +30,17 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jakewharton.processphoenix.ProcessPhoenix
-import me.bakumon.moneykeeper.*
+import me.bakumon.moneykeeper.ConfigManager
+import me.bakumon.moneykeeper.Constant
+import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.bakumon.moneykeeper.widget.WidgetProvider
@@ -80,8 +83,9 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
 
         items.add(Category(getString(R.string.text_backup)))
-        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir)))
-        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir)))
+        val backupFolder = BackupUtil.backupFolder
+        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupFolder)))
+        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupFolder)))
         items.add(CheckItem(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup))
 
         items.add(Category(getString(R.string.text_cloud_backup)))
@@ -92,7 +96,28 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
+        items.add(NormalItem(getString(R.string.text_other_setting), ""))
         items.add(NormalItem("", getString(R.string.text_privacy_policy)))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateBackupItem()
+        updateRestoreItem()
+    }
+
+    private fun updateBackupItem() {
+        val position = 8
+        (mAdapter.items[position] as NormalItem).content = getString(R.string.text_backup_save, BackupUtil.backupFolder)
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
+    }
+
+    private fun updateRestoreItem() {
+        val position = 9
+        (mAdapter.items[position] as NormalItem).content = getString(R.string.text_restore_content, BackupUtil.backupFolder)
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
@@ -113,6 +138,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.text_go_backup) -> showBackupDialog()
             getString(R.string.text_restore) -> showRestoreDialog()
             getString(R.string.text_theme) -> showChooseThemeDialog()
+            getString(R.string.text_other_setting) -> Floo.navigation(this, Router.Url.URL_OTHER_SETTING).start()
             getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
             "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }
@@ -369,7 +395,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         isDialogShow = true
         MaterialDialog(this)
                 .title(R.string.text_go_backup)
-                .message(text = getString(R.string.text_backup_save, backupFilepath))
+                .message(text = getString(R.string.text_backup_save, BackupUtil.userBackupPath))
                 .negativeButton(R.string.text_cancel)
                 .positiveButton(R.string.text_affirm) {
                     mViewModel.backupDB().observe(this, Observer { resource ->
@@ -450,12 +476,5 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                 .positiveButton(R.string.text_affirm) { ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java)) }
         dialog.setCancelable(false)
         dialog.show()
-    }
-
-    companion object {
-        @SuppressLint("SdCardPath")
-        val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
-        @SuppressLint("SdCardPath")
-        val backupFilepath = backupDir + if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug.db" else "MoneyKeeperBackupUser.db"
     }
 }

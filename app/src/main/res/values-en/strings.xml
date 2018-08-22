@@ -46,6 +46,8 @@
     <string name="toast_success_record">Accounting success</string>
     <string name="toast_get_review_fail">Failed to get review data</string>
     <string name="toast_get_review_sum_money_fail">Failed to get review summary data</string>
+    <string name="toast_move_backup_files_success">Backup folder modified and migrated successfully</string>
+    <string name="toast_move_backup_files_fail">Failed to modify folder</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>
@@ -224,4 +226,11 @@
         <item>when opening app</item>
         <item>when exit app</item>
     </string-array>
+
+    <!-- 实验室 -->
+    <string name="text_other_setting">Other</string>
+    <string name="text_local_backup_path">Local backup folder</string>
+    <string name="text_local_backup_path_tip">After re-selecting the backup folder, the original backup folder will be migrated to the new folder.</string>
+    <string name="text_choose">select</string>
+    <string name="text_folder_empty">This folder\'s empty!</string>
 </resources>

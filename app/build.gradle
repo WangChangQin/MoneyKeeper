@@ -221,6 +221,7 @@ dependencies {
     // 对话框
     implementation deps.material_dialogs_core
     implementation deps.material_dialogs_input
+    implementation deps.material_dialogs_files
     // aes 加密解密
     implementation deps.aes_crypto
     // 重启进程

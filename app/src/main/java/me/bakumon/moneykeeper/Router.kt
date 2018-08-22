@@ -39,6 +39,7 @@ object Router {
         const val URL_ABOUT = "about"
         const val URL_REVIEW = "review"
         const val URL_BACKUP = "backup"
+        const val URL_OTHER_SETTING = "other_setting"
     }
 
     /**
@@ -61,6 +62,5 @@ object Router {
         const val KEY_RECORD_TYPE_ID = "key_record_type_id"
         const val KEY_YEAR = "key_year"
         const val KEY_MONTH = "key_month"
-        const val KEY_SORT_TYPE = "key_sort_type"
     }
 }

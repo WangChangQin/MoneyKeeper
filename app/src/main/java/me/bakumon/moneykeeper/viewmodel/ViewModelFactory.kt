@@ -26,6 +26,7 @@ import me.bakumon.moneykeeper.ui.home.HomeViewModel
 import me.bakumon.moneykeeper.ui.review.ReviewViewModel
 import me.bakumon.moneykeeper.ui.setting.SettingViewModel
 import me.bakumon.moneykeeper.ui.setting.backup.BackupViewModel
+import me.bakumon.moneykeeper.ui.setting.other.OtherSettingViewModel
 import me.bakumon.moneykeeper.ui.statistics.bill.BillViewModel
 import me.bakumon.moneykeeper.ui.statistics.reports.ReportsViewModel
 import me.bakumon.moneykeeper.ui.typemanage.TypeManageViewModel
@@ -53,6 +54,7 @@ class ViewModelFactory(private val mDataSource: AppDataSource) : ViewModelProvid
             modelClass.isAssignableFrom(TypeRecordsViewModel::class.java) -> TypeRecordsViewModel(mDataSource) as T
             modelClass.isAssignableFrom(ReviewViewModel::class.java) -> ReviewViewModel(mDataSource) as T
             modelClass.isAssignableFrom(SettingViewModel::class.java) -> SettingViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(OtherSettingViewModel::class.java) -> OtherSettingViewModel(mDataSource) as T
             modelClass.isAssignableFrom(BackupViewModel::class.java) -> BackupViewModel(mDataSource) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

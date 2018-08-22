@@ -26,6 +26,7 @@ class NormalItemViewBinder constructor(private val onNormalItemClickListener: (N
         holder.tvTitle.text = item.title
         holder.tvTitle.visibility = if (item.title.isEmpty()) View.GONE else View.VISIBLE
         holder.tvContent.text = item.content
+        holder.tvContent.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
         holder.llItemSettingNormal.setOnClickListener { onNormalItemClickListener.invoke(item) }
         if (item.clickEnable) {
             holder.llItemSettingNormal.isClickable = true

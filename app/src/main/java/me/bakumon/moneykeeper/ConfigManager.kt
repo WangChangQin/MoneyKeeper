@@ -50,6 +50,7 @@ object ConfigManager {
     private const val KEY_CLOUD_ENABLE = "cloud_enable"
     private const val KEY_IS_THEME_DARK = "is_theme_dark"
     private const val KEY_WIDGET_ENABLE = "is_widget_enable"
+    private const val KEY_BACKUP_FOLDER = "backup_folder"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -92,6 +93,9 @@ object ConfigManager {
 
     val isWidgetEnable: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_WIDGET_ENABLE, false)
+
+    val backupFolder: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_BACKUP_FOLDER)
 
     /**
      * 自动备份
@@ -202,6 +206,13 @@ object ConfigManager {
      */
     fun setIsWidgetEnable(enable: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_WIDGET_ENABLE, enable)
+    }
+
+    /**
+     * 本地备份文件夹
+     */
+    fun setBackupFolder(folder: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_BACKUP_FOLDER, folder)
     }
 
 }
