@@ -108,7 +108,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     override fun onResume() {
         super.onResume()
-        // 设置了预算或者资产，返回首页需要更新
+        // 设置了预算，返回首页需要更新
         getCurrentMoneySumMonty()
         // 更新 widget
         WidgetProvider.updateWidget(this)
@@ -166,8 +166,10 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     }
 
     private fun getCurrentMoneySumMonty() {
-        mViewModel.currentMonthSumMoney.observe(this, Observer {
-            headPageView.setSumMoneyBeanList(it)
+        mViewModel.currentMonthSumMoney.observe(this, Observer { sumMoneyBeans ->
+            mViewModel.getAssetsMoney().observe(this, Observer { assetsMontyBean ->
+                headPageView.setSumMoneyBeanList(sumMoneyBeans, assetsMontyBean)
+            })
         })
     }
 

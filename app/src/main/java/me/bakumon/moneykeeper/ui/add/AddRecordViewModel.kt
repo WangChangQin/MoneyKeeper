@@ -39,12 +39,7 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
     val allRecordTypes: LiveData<List<RecordType>>
         get() = mDataSource.getAllRecordType()
 
-    fun insertRecord(record: Record, type: Int): LiveData<Resource<Boolean>> {
-        if (type == RecordType.TYPE_OUTLAY) {
-            ConfigManager.reduceAssets(record.money!!)
-        } else {
-            ConfigManager.addAssets(record.money!!)
-        }
+    fun insertRecord(record: Record): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
         mDisposable.add(mDataSource.insertRecord(record)
                 .subscribeOn(Schedulers.io())
@@ -58,18 +53,7 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
         return liveData
     }
 
-    fun updateRecord(record: Record, newType: Int, oldMoney: BigDecimal, oldType: Int): LiveData<Resource<Boolean>> {
-        if (oldType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.addAssets(oldMoney)
-        } else {
-            ConfigManager.reduceAssets(oldMoney)
-        }
-        if (newType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.reduceAssets(record.money!!)
-        } else {
-            ConfigManager.addAssets(record.money!!)
-        }
-
+    fun updateRecord(record: Record): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
         mDisposable.add(mDataSource.updateRecord(record)
                 .subscribeOn(Schedulers.io())

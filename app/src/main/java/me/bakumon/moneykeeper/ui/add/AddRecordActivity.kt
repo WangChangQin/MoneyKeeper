@@ -154,7 +154,7 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mViewModel.insertRecord(record, mCurrentType).observe(this, android.arch.lifecycle.Observer {
+        mViewModel.insertRecord(record).observe(this, android.arch.lifecycle.Observer {
             when (it) {
                 is SuccessResource<Boolean> -> insertRecordDone()
                 is ErrorResource<Boolean> -> {
@@ -186,10 +186,6 @@ class AddRecordActivity : BaseActivity() {
         // 防止重复提交
         keyboard.setAffirmEnable(false)
 
-        val oldType = mRecord!!.mRecordTypes!![0].type
-        val oldMoney = mRecord!!.money!!
-        val newType = mCurrentType
-
         mRecord!!.money = BigDecimalUtil.yuan2FenBD(text)
         mRecord!!.remark = edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
@@ -198,7 +194,7 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mViewModel.updateRecord(mRecord!!, newType, oldMoney, oldType).observe(this, Observer {
+        mViewModel.updateRecord(mRecord!!).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
                     // 更新 widget

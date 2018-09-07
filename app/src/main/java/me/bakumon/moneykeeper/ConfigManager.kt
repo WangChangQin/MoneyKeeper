@@ -17,9 +17,7 @@
 package me.bakumon.moneykeeper
 
 import android.support.annotation.IntDef
-import android.text.TextUtils
 import me.bakumon.moneykeeper.utill.SPUtils
-import java.math.BigDecimal
 
 /**
  * 管理本地配置
@@ -41,7 +39,6 @@ object ConfigManager {
     private const val KEY_SUCCESSIVE = "successive"
     private const val KEY_FAST = "fast"
     private const val KEY_BUDGET = "budget"
-    private const val KEY_ASSETS = "assets"
     private const val KEY_SYMBOL = "symbol"
     private const val KEY_WEBDAV_URL = "webDav_url"
     private const val KEY_WEBDAV_ACCOUNT = "webDav_account"
@@ -63,9 +60,6 @@ object ConfigManager {
 
     val budget: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_BUDGET, 0)
-
-    val assets: String
-        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_ASSETS, "NaN")
 
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
@@ -123,33 +117,6 @@ object ConfigManager {
      */
     fun setBudget(budget: Int): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_BUDGET, budget)
-    }
-
-    /**
-     * 资产余额
-     */
-    fun setAssets(assets: String): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS, assets)
-    }
-
-    /**
-     * 增加资产
-     */
-    fun addAssets(num: BigDecimal): Boolean {
-        if (TextUtils.equals(assets, "NaN")) {
-            return true
-        }
-        return setAssets(BigDecimal(assets).add(num).toPlainString())
-    }
-
-    /**
-     * 减少资产
-     */
-    fun reduceAssets(num: BigDecimal): Boolean {
-        if (TextUtils.equals(assets, "NaN")) {
-            return true
-        }
-        return setAssets(BigDecimal(assets).subtract(num).toPlainString())
     }
 
     /**

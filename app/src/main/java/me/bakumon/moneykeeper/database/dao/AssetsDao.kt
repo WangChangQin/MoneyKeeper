@@ -44,6 +44,6 @@ interface AssetsDao {
     @Delete
     fun deleteAssets(assets: Assets)
 
-    @Query("SELECT sum(Assets.money) as netAssets from Assets WHERE Assets.state=0")
+    @Query("select sum(Assets.money) as netAssets,sum(case when Assets.money>0 then Assets.money else 0 end) as allAssets,sum(case when Assets.money<0 then Assets.money else 0 end) as liabilityAssets from Assets WHERE Assets.state=0")
     fun getAssetsMoney(): LiveData<AssetsMoneyBean>
 }

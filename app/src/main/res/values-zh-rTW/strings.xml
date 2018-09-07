@@ -138,6 +138,8 @@
     <string name="text_set_budget">設置預算</string>
     <string name="hint_enter_budget">請輸入預算</string>
     <string name="hint_enter_assets">請輸入資產</string>
+    <string name="text_assets_manager">資產管理</string>
+    <string name="text_assets_manager_content">新建和修改資產賬戶</string>
     <string name="text_title_symbol">貨幣符號</string>
     <string name="text_set_symbol">選擇貨幣符號</string>
     <string name="text_content_symbol">只改變貨號，不轉換匯率</string>
@@ -278,4 +280,8 @@
     <string name="text_assets_no_account">還沒有資產</string>
     <string name="text_assets_balance">賬戶餘額</string>
     <string name="text_tip_delete_assets">確定要刪除該資產嗎，不會刪除該資產下的現有收支記錄</string>
+
+    <!-- 资产 -->
+    <string name="text_assets_all">總資產</string>
+    <string name="text_assets_liabilities">負資產</string>
 </resources>

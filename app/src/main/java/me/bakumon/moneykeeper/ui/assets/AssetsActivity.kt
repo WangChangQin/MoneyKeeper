@@ -90,6 +90,8 @@ class AssetsActivity : BaseActivity() {
 
     private fun setAssetsMoney(it: AssetsMoneyBean?) {
         tvNetAssetsMoney.text = BigDecimalUtil.fen2Yuan(it?.netAssets)
+        tvAllAssetsMoney.text = BigDecimalUtil.fen2Yuan(it?.allAssets)
+        tvLiabilitiesMoney.text = BigDecimalUtil.fen2Yuan(it?.liabilityAssets)
     }
 
     private fun getAssetsList() {

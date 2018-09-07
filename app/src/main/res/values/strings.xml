@@ -139,6 +139,8 @@
     <string name="text_monty_budget">月预算</string>
     <string name="text_set_budget">设置预算</string>
     <string name="hint_enter_budget">请输入预算</string>
+    <string name="text_assets_manager">资产管理</string>
+    <string name="text_assets_manager_content">新建和修改资产账户</string>
     <string name="hint_enter_assets">请输入资产</string>
     <string name="text_title_symbol">货币符号</string>
     <string name="text_set_symbol">选择货币符号</string>
@@ -280,4 +282,8 @@
     <string name="text_assets_no_account">还没有资产</string>
     <string name="text_assets_balance">账户余额</string>
     <string name="text_tip_delete_assets">确定要删除该资产吗，不会删除该资产下的现有收支记录</string>
+
+    <!-- 资产 -->
+    <string name="text_assets_all">总资产</string>
+    <string name="text_assets_liabilities">负资产</string>
 </resources>

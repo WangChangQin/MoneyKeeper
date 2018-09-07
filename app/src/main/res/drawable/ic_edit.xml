@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="15dp"
+    android:height="15dp"
+    android:viewportHeight="1024"
+    android:viewportWidth="1024">
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M319.2,751.7c0,26.9 -21.7,48.6 -48.6,48.6 -26.9,0 -48.6,-21.7 -48.6,-48.6 0,-26.9 21.7,-48.6 48.6,-48.6 26.9,-0.7 48.6,21.7 48.6,48.6zM319.2,751.7" />
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M939.9,273.1c-2.2,-5.2 -3.7,-10.5 -6,-15.7 -0.7,-6 -3.7,-11.2 -7.5,-15.7 -6.7,-8.2 -16.5,-13.5 -27.7,-13.5 -6,0 -12,1.5 -17.2,4.5l-47.1,47.1 -115.1,116c-12.7,12.7 -33.6,12.7 -46.4,0L625,347.9c-12.7,-12.7 -12.7,-33.7 0,-46.4l116,-115.9 30.7,-30.7 14.2,-14.2c3,-5.2 4.5,-10.5 4.5,-17.2 0,-11.2 -5.2,-21.7 -14.2,-28.4 -5.2,-3.7 -10.5,-6 -16.4,-6.7 -4.5,-2.2 -9,-3.7 -14.2,-5.2C713.3,72 678.2,66 642.3,66c-6.7,0 -12.7,0 -19.4,0.7C457.5,77.2 326.7,214 326.7,383.1c0,14.2 0.7,28.4 3,42.6L112,642.5c-64.3,65.1 -64.3,169.8 0,234.1l29.2,29.2c64.3,64.3 169.8,64.3 234.1,0l210.9,-211.6c18.7,3.7 37.4,5.2 56.1,5.2 166.8,0 303.6,-128.6 315.6,-292.4 0.7,-7.5 0.7,-15.7 0.7,-23.9 0.7,-38.9 -6,-75.6 -18.7,-110zM640,621.6c-24.7,0 -47.9,-3.7 -69.5,-9.7 -3.7,6.7 -9,12.7 -14.2,18.7L329.7,857.2c-38.1,38.1 -101,38.1 -139.1,0l-25.4,-25.4c-38.1,-38.9 -38.1,-101 0,-139.1l226.6,-226.6c5.2,-5.2 11.2,-9.7 17.2,-13.5 -7.5,-23.2 -11.2,-47.9 -11.2,-73.3v-1.5c0,-133.9 108.4,-241.5 242.3,-241.5 16.4,0 32.9,1.5 48.6,5.2L586.2,243.2c-45.6,45.6 -45.6,120.4 0,166l26.2,26.2c45.6,45.6 120.4,45.6 166,0l100.2,-100.2c2.2,14.2 3.7,29.2 3.7,44.1 0,133.9 -108.4,242.3 -242.3,242.3zM640,621.6" />
+</vector>

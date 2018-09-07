@@ -51,7 +51,6 @@ import me.drakeet.multitype.register
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-import java.math.BigDecimal
 
 /**
  * 设置
@@ -76,7 +75,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_money)))
         items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
-        items.add(NormalItem(getString(R.string.text_net_assets), getAssetsStr()))
+        items.add(NormalItem(getString(R.string.text_assets_manager), getString(R.string.text_assets_manager_content)))
         items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
         items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
         items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
@@ -132,7 +131,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     private fun onNormalItemClick(item: NormalItem) {
         when (item.title) {
             getString(R.string.text_monty_budget) -> setBudget()
-            getString(R.string.text_net_assets) -> setAssets()
+            getString(R.string.text_assets_manager) -> Floo.navigation(this, Router.Url.URL_ASSETS).start()
             getString(R.string.text_title_symbol) -> setSymbol()
             getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
             getString(R.string.text_go_backup) -> showBackupDialog()
@@ -205,60 +204,6 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         mAdapter.notifyItemChanged(position)
     }
 
-    private fun getAssetsStr(): String {
-        return if (TextUtils.equals(ConfigManager.assets, "NaN"))
-            getString(R.string.text_no_setting)
-        else
-            ConfigManager.symbol + BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
-    }
-
-    private fun setAssets() {
-        val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
-            null
-        else
-            BigDecimalUtil.fen2YuanNoSeparator(BigDecimal(ConfigManager.assets))
-        if (isDialogShow) {
-            return
-        }
-        isDialogShow = true
-        MaterialDialog(this)
-                .title(R.string.text_net_assets)
-                .negativeButton(R.string.text_cancel)
-                .positiveButton(R.string.text_affirm)
-                .input(prefill = oldAssets, maxLength = 10, hint = getString(R.string.hint_enter_assets), inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL) { _, input ->
-                    val text = input.toString()
-                    if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
-                        ConfigManager.setAssets("NaN")
-                    } else {
-                        val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
-                        ConfigManager.setAssets(saveStr)
-                    }
-                    updateAssetsItem()
-                }
-                .onDismiss { isDialogShow = false }
-                .show()
-    }
-
-    private fun inputFilter(text: String): String {
-        return if (text.contains(".")) {
-            val splitList = text.split(".")
-            if (splitList[1].length > 2) {
-                splitList[0] + "." + splitList[1].substring(0, 2)
-            } else {
-                text
-            }
-        } else {
-            text
-        }
-    }
-
-    private fun updateAssetsItem() {
-        val position = 2
-        (mAdapter.items[position] as NormalItem).content = getAssetsStr()
-        mRecyclerView.itemAnimator.changeDuration = 250
-        mAdapter.notifyItemChanged(position)
-    }
-
     private fun setSymbol() {
         var index = 0
         val symbolList = resources.getStringArray(R.array.simple_symbol)
@@ -281,7 +226,6 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
                     updateBudgetItem()
-                    updateAssetsItem()
                     // 更新 widget
                     WidgetProvider.updateWidget(this)
                 }

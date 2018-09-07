@@ -24,5 +24,7 @@ import java.math.BigDecimal
  * @author Bakumon https://bakumon.me
  */
 data class AssetsMoneyBean(
-        val netAssets: BigDecimal
+        val netAssets: BigDecimal,
+        val allAssets: BigDecimal,
+        val liabilityAssets: BigDecimal
 )

@@ -20,9 +20,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.Resource
-import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
@@ -46,12 +44,6 @@ class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource
     }
 
     fun deleteRecord(record: RecordWithType): LiveData<Resource<Boolean>> {
-        val oldType = record.mRecordTypes!![0].type
-        if (oldType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.addAssets(record.money!!)
-        } else {
-            ConfigManager.reduceAssets(record.money!!)
-        }
         val liveData = MutableLiveData<Resource<Boolean>>()
         mDisposable.add(mDataSource.deleteRecord(record)
                 .subscribeOn(Schedulers.io())
