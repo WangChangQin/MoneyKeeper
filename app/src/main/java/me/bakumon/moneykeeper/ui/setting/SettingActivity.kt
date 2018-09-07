@@ -76,7 +76,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_money)))
         items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
-        items.add(NormalItem(getString(R.string.text_setting_assets), getAssetsStr()))
+        items.add(NormalItem(getString(R.string.text_net_assets), getAssetsStr()))
         items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
         items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
         items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
@@ -132,7 +132,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     private fun onNormalItemClick(item: NormalItem) {
         when (item.title) {
             getString(R.string.text_monty_budget) -> setBudget()
-            getString(R.string.text_setting_assets) -> setAssets()
+            getString(R.string.text_net_assets) -> setAssets()
             getString(R.string.text_title_symbol) -> setSymbol()
             getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
             getString(R.string.text_go_backup) -> showBackupDialog()
@@ -222,7 +222,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         }
         isDialogShow = true
         MaterialDialog(this)
-                .title(R.string.text_setting_assets)
+                .title(R.string.text_net_assets)
                 .negativeButton(R.string.text_cancel)
                 .positiveButton(R.string.text_affirm)
                 .input(prefill = oldAssets, maxLength = 10, hint = getString(R.string.hint_enter_assets), inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL) { _, input ->

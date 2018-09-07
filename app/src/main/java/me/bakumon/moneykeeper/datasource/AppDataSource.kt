@@ -189,4 +189,40 @@ interface AppDataSource {
      * 获取今日支出
      */
     fun getCurrentOutlay(): List<SumMoneyBean>
+
+    /**
+     * 添加资产
+     *
+     * @param assets 资产
+     */
+    fun addAssets(assets: Assets): Completable
+
+    /**
+     * 修改资产
+     *
+     * @param assets 资产
+     */
+    fun updateAssets(assets: Assets): Completable
+
+    /**
+     * 删除资产
+     *
+     * @param assets 资产
+     */
+    fun deleteAssets(assets: Assets): Completable
+
+    /**
+     * 获取资产列表
+     */
+    fun getAssets(): LiveData<List<Assets>>
+
+    /**
+     * 获取资产
+     */
+    fun getAssetsById(id: Int): LiveData<Assets>
+
+    /**
+     * 获取资产汇总
+     */
+    fun getAssetsMoney(): LiveData<AssetsMoneyBean>
 }

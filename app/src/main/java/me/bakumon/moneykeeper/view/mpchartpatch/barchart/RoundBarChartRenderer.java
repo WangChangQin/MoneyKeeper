@@ -359,7 +359,7 @@ public class RoundBarChartRenderer extends BarLineScatterCandleBubbleRenderer {
                                 float y;
 
                                 if (value == 0.0f && (posY == 0.0f || negY == 0.0f)) {
-                                    // Take care of the situation of a 0.0 value, which overlaps a non-zero bar
+                                    // Take care of the situation of assets_jd 0.0 value, which overlaps assets_jd non-zero bar
                                     y = value;
                                 } else if (value >= 0.0f) {
                                     posY += value;

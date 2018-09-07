@@ -57,7 +57,7 @@
     <string name="text_month_income">Earn</string>
     <string name="text_month_remaining_budget">Remaining budget</string>
     <string name="text_assets">Net assets</string>
-    <string name="text_setting_assets">Adjust assets</string>
+    <string name="text_net_assets">Adjust assets</string>
     <string name="text_home_footer_tip">Statistics page can view previous month records</string>
     <string name="text_current_month_empty_tip">No bookkeeping started this month\n\nClick the button to start bookkeeping</string>
     <string name="shortcuts_add_record">add</string>
@@ -233,4 +233,49 @@
     <string name="text_local_backup_path_tip">After re-selecting the backup folder, the original backup folder will be migrated to the new folder.</string>
     <string name="text_choose">select</string>
     <string name="text_folder_empty">This folder\'s empty!</string>
+
+    <!-- 添加 -->
+    <string name="text_new_assets">Add assets</string>
+    <string name="text_account">assets</string>
+    <string name="text_invest">invest</string>
+    <string name="text_add_assets">Add account</string>
+    <string name="text_edit_assets">Edit account</string>
+    <string name="text_choose_bank">Choose bank</string>
+    <string name="hint_assets_name">Please enter an account name</string>
+    <string name="text_remark">Remark：</string>
+    <string name="hint_remark">Can not enter content</string>
+    <string name="text_balance">Balance：</string>
+    <string name="hint_balance">Accurate to two decimal places</string>
+    <string name="text_bank_zhaoshang">招商银行</string>
+    <string name="text_bank_icbc">工商银行</string>
+    <string name="text_bank_abchina">农业银行</string>
+    <string name="text_bank_boc">中国银行</string>
+    <string name="text_bank_ccb">建设银行</string>
+    <string name="text_bank_pingan">平安银行</string>
+    <string name="text_bank_bankcomm">交通银行</string>
+    <string name="text_bank_citicbank">中信银行</string>
+    <string name="text_bank_cib">兴业银行</string>
+    <string name="text_bank_cebbank">光大银行</string>
+    <string name="text_bank_cmbc">民生银行</string>
+    <string name="text_bank_chinapost">邮政储蓄银行</string>
+    <string name="text_assets_card">other banks</string>
+    <string name="text_assets_type_cash">cash</string>
+    <string name="text_assets_type_bank_card">back card</string>
+    <string name="text_assets_type_alipay">alipay</string>
+    <string name="text_assets_type_wechat">wechat</string>
+    <string name="text_assets_type_jd">JD wallet</string>
+    <string name="text_assets_type_rice_card">rice card</string>
+    <string name="text_assets_type_bus_card">traffic card</string>
+    <string name="text_assets_type_other">other</string>
+    <string name="text_assets_type_monetary">monetary fund</string>
+    <string name="text_assets_type_funding">funding</string>
+    <string name="text_assets_type_stock">stock</string>
+    <string name="text_assets_type_other_financial">other financial</string>
+
+    <!-- 资产详情 -->
+    <string name="text_assets_detail">Asset details</string>
+    <string name="text_assets_account">Asset account</string>
+    <string name="text_assets_no_account">No assets yet</string>
+    <string name="text_assets_balance">Account Balance</string>
+    <string name="text_tip_delete_assets">Are you sure you want to delete the asset, and the existing revenue and expenditure records under the asset will not be deleted?</string>
 </resources>

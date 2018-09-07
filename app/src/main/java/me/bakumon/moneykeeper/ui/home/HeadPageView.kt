@@ -161,14 +161,13 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
             val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
             tvRightContent.text = budgetStr
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
-            llRightContent.isClickable = false
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            tvRightContent.text = tvRightContent.context.getString(R.string.text_setting_assets)
-            llRightContent.setOnClickListener {
-                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
-                        .start()
-            }
+            tvRightContent.text = tvRightContent.context.getString(R.string.text_net_assets)
+        }
+        llRightContent.setOnClickListener {
+            Floo.navigation(llRightContent.context, Router.Url.URL_ASSETS)
+                    .start()
         }
         return pagerView1!!
     }

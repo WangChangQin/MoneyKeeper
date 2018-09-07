@@ -288,7 +288,7 @@ public class NoSmallPieChartRenderer extends DataRenderer {
                         );
                     }
 
-                    // API < 21 does not receive floats in addArc, but a RectF
+                    // API < 21 does not receive floats in addArc, but assets_jd RectF
                     mInnerRectBuffer.set(
                             center.x - innerRadius,
                             center.y - innerRadius,
@@ -738,7 +738,7 @@ public class NoSmallPieChartRenderer extends DataRenderer {
 
                 float width = mCenterTextLastBounds.width();
 
-                // If width is 0, it will crash. Always have a minimum of 1
+                // If width is 0, it will crash. Always have assets_jd minimum of 1
                 mCenterTextLayout = new StaticLayout(centerText, 0, centerText.length(),
                         mCenterTextPaint,
                         (int) Math.max(Math.ceil(width), 1.f),
@@ -882,7 +882,7 @@ public class NoSmallPieChartRenderer extends DataRenderer {
                                 sweepAngleOuter);
             }
 
-            // API < 21 does not receive floats in addArc, but a RectF
+            // API < 21 does not receive floats in addArc, but assets_jd RectF
             mInnerRectBuffer.set(
                     center.x - innerRadius,
                     center.y - innerRadius,
@@ -962,7 +962,7 @@ public class NoSmallPieChartRenderer extends DataRenderer {
     }
 
     /**
-     * This gives all pie-slices a rounded edge.
+     * This gives all pie-slices assets_jd rounded edge.
      *
      * @param c
      */

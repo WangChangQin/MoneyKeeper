@@ -40,6 +40,10 @@ object Router {
         const val URL_REVIEW = "review"
         const val URL_BACKUP = "backup"
         const val URL_OTHER_SETTING = "other_setting"
+        const val URL_ASSETS = "assets"
+        const val URL_CHOOSE_ASSETS = "choose_assets"
+        const val URL_ADD_ASSETS = "add_assets"
+        const val URL_ASSETS_DETAIL = "assets_detail"
     }
 
     /**
@@ -62,5 +66,7 @@ object Router {
         const val KEY_RECORD_TYPE_ID = "key_record_type_id"
         const val KEY_YEAR = "key_year"
         const val KEY_MONTH = "key_month"
+        const val KEY_ASSETS_TYPE = "key_assets_type"
+        const val KEY_ASSETS = "key_assets"
     }
 }

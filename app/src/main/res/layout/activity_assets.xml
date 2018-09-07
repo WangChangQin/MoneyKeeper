@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.bakumon.moneykeeper.ui.assets.AssetsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient"
+        android:paddingBottom="10dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_close" />
+
+        <LinearLayout
+            android:id="@+id/llRightContent"
+            style="@style/Head.Content.Click"
+            android:layout_width="match_parent"
+            android:paddingBottom="25dp"
+            android:paddingTop="15dp">
+
+            <TextView
+                android:id="@+id/tvNetAssetsTitle"
+                style="@style/Head.Title"
+                android:text="@string/text_assets"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvNetAssetsMoney"
+                style="@style/Head.Money"
+                android:text="0"
+                tools:ignore="HardcodedText"
+                tools:text="10,000" />
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvAssets"
+        style="@style/LinearRecyclerView"
+        android:clipToPadding="false"
+        android:paddingBottom="90dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_assets" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAdd"
+        style="@style/AddFAB" />
+</android.support.design.widget.CoordinatorLayout>

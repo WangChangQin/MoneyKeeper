@@ -16,24 +16,28 @@
 
 package me.bakumon.moneykeeper.database
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
-
+import android.arch.persistence.room.migration.Migration
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.database.converters.Converters
+import me.bakumon.moneykeeper.database.dao.AssetsDao
 import me.bakumon.moneykeeper.database.dao.RecordDao
 import me.bakumon.moneykeeper.database.dao.RecordTypeDao
+import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
+
 
 /**
  * 数据库
  *
  * @author Bakumon https:bakumon.me
  */
-@Database(entities = [Record::class, RecordType::class], version = 1)
+@Database(entities = [Record::class, RecordType::class, Assets::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -51,8 +55,15 @@ abstract class AppDatabase : RoomDatabase() {
      */
     abstract fun recordDao(): RecordDao
 
+    abstract fun assetsDao(): AssetsDao
+
     companion object {
         const val DB_NAME = "MoneyKeeper.db"
+        private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS `Assets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `img_name` TEXT NOT NULL, `type` INTEGER NOT NULL, `state` INTEGER NOT NULL, `remark` TEXT NOT NULL, `create_time` INTEGER NOT NULL, `money` INTEGER NOT NULL)")
+            }
+        }
         @Volatile
         private var INSTANCE: AppDatabase? = null
         val instance: AppDatabase?
@@ -61,6 +72,7 @@ abstract class AppDatabase : RoomDatabase() {
                     synchronized(AppDatabase::class) {
                         if (INSTANCE == null) {
                             INSTANCE = Room.databaseBuilder(App.instance, AppDatabase::class.java, DB_NAME)
+                                    .addMigrations(MIGRATION_1_2)
                                     .build()
                         }
                     }

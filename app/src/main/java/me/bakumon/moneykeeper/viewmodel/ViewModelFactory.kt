@@ -18,10 +18,12 @@ package me.bakumon.moneykeeper.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.add.AddRecordViewModel
 import me.bakumon.moneykeeper.ui.addtype.AddTypeViewModel
+import me.bakumon.moneykeeper.ui.assets.AssetsViewModel
+import me.bakumon.moneykeeper.ui.assets.add.AddAssetsViewModel
+import me.bakumon.moneykeeper.ui.assets.detail.AssetsDetailViewModel
 import me.bakumon.moneykeeper.ui.home.HomeViewModel
 import me.bakumon.moneykeeper.ui.review.ReviewViewModel
 import me.bakumon.moneykeeper.ui.setting.SettingViewModel
@@ -56,6 +58,9 @@ class ViewModelFactory(private val mDataSource: AppDataSource) : ViewModelProvid
             modelClass.isAssignableFrom(SettingViewModel::class.java) -> SettingViewModel(mDataSource) as T
             modelClass.isAssignableFrom(OtherSettingViewModel::class.java) -> OtherSettingViewModel(mDataSource) as T
             modelClass.isAssignableFrom(BackupViewModel::class.java) -> BackupViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(AssetsViewModel::class.java) -> AssetsViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(AddAssetsViewModel::class.java) -> AddAssetsViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(AssetsDetailViewModel::class.java) -> AssetsDetailViewModel(mDataSource) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

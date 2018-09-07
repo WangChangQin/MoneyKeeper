@@ -57,7 +57,7 @@
     <string name="text_month_income">本月收入</string>
     <string name="text_month_remaining_budget">剩餘預算</string>
     <string name="text_assets">淨資產</string>
-    <string name="text_setting_assets">調整資產</string>
+    <string name="text_net_assets">調整資產</string>
     <string name="text_home_footer_tip">統計頁面可以查看往月記錄</string>
     <string name="text_current_month_empty_tip">本月未開始記賬\n\n點擊加號，開始記賬</string>
     <string name="shortcuts_add_record">記一筆</string>
@@ -233,4 +233,49 @@
     <string name="text_local_backup_path_tip">重新選擇備份文件夾後，原有的備份文件夾會被遷移到新文件夾下</string>
     <string name="text_choose">選擇</string>
     <string name="text_folder_empty">沒有子目錄了</string>
+
+    <!-- 添加 -->
+    <string name="text_new_assets">添加資產</string>
+    <string name="text_account">資產</string>
+    <string name="text_invest">投資</string>
+    <string name="text_add_assets">新建資產賬戶</string>
+    <string name="text_edit_assets">修改資產賬戶</string>
+    <string name="text_choose_bank">選擇銀行</string>
+    <string name="hint_assets_name">請輸入賬戶名稱</string>
+    <string name="text_remark">備註：</string>
+    <string name="hint_remark">可不填</string>
+    <string name="text_balance">餘額：</string>
+    <string name="hint_balance">精確到小數點後兩位</string>
+    <string name="text_bank_zhaoshang">招商银行</string>
+    <string name="text_bank_icbc">工商银行</string>
+    <string name="text_bank_abchina">农业银行</string>
+    <string name="text_bank_boc">中国银行</string>
+    <string name="text_bank_ccb">建设银行</string>
+    <string name="text_bank_pingan">平安银行</string>
+    <string name="text_bank_bankcomm">交通银行</string>
+    <string name="text_bank_citicbank">中信银行</string>
+    <string name="text_bank_cib">兴业银行</string>
+    <string name="text_bank_cebbank">光大银行</string>
+    <string name="text_bank_cmbc">民生银行</string>
+    <string name="text_bank_chinapost">邮政储蓄银行</string>
+    <string name="text_assets_card">其他銀行</string>
+    <string name="text_assets_type_cash">现金</string>
+    <string name="text_assets_type_bank_card">银行卡</string>
+    <string name="text_assets_type_alipay">支付宝</string>
+    <string name="text_assets_type_wechat">微信钱包</string>
+    <string name="text_assets_type_jd">京东钱包</string>
+    <string name="text_assets_type_rice_card">饭卡</string>
+    <string name="text_assets_type_bus_card">公交卡</string>
+    <string name="text_assets_type_other">其他账户</string>
+    <string name="text_assets_type_monetary">货币基金</string>
+    <string name="text_assets_type_funding">基金</string>
+    <string name="text_assets_type_stock">股票</string>
+    <string name="text_assets_type_other_financial">其他理财</string>
+
+    <!-- 资产详情 -->
+    <string name="text_assets_detail">資產詳情</string>
+    <string name="text_assets_account">資產賬戶</string>
+    <string name="text_assets_no_account">還沒有資產</string>
+    <string name="text_assets_balance">賬戶餘額</string>
+    <string name="text_tip_delete_assets">確定要刪除該資產嗎，不會刪除該資產下的現有收支記錄</string>
 </resources>

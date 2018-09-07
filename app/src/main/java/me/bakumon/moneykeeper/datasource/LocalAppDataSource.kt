@@ -246,4 +246,37 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         val dateTo = DateUtils.getCurrentMonthEnd()
         return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
     }
+
+    override fun addAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().insertAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun updateAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().updateAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun deleteAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().deleteAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun getAssets(): LiveData<List<Assets>> {
+        return mAppDatabase.assetsDao().getAllAssets()
+    }
+
+    override fun getAssetsById(id: Int): LiveData<Assets> {
+        return mAppDatabase.assetsDao().getAssetsById(id)
+    }
+
+    override fun getAssetsMoney(): LiveData<AssetsMoneyBean> {
+        return mAppDatabase.assetsDao().getAssetsMoney()
+    }
 }

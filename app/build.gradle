@@ -121,7 +121,7 @@ andResGuard {
     whiteList = [
             // fabric
             "me.bakumon.moneykeeper.R.string.com.crashlytics.*",
-            // your icon
+            // 收支类型
             "R.mipmap.type_item_default",
             "R.mipmap.type_item_setting",
             "R.mipmap.type_3c",
@@ -149,6 +149,31 @@ andResGuard {
             "R.mipmap.type_outlay_red",
             "R.mipmap.type_adventure",
             "R.mipmap.type_movie",
+            // 资产类型
+            "R.mipmap.assets_alipay",
+            "R.mipmap.assets_bus_card",
+            "R.mipmap.assets_card",
+            "R.mipmap.assets_funding",
+            "R.mipmap.assets_jd",
+            "R.mipmap.assets_monetary",
+            "R.mipmap.assets_other",
+            "R.mipmap.assets_rice_card",
+            "R.mipmap.assets_stock",
+            "R.mipmap.assets_wallet",
+            "R.mipmap.assets_wechat",
+            // 银行
+            "R.mipmap.bank_abchina",
+            "R.mipmap.bank_bankcomm",
+            "R.mipmap.bank_boc",
+            "R.mipmap.bank_ccb",
+            "R.mipmap.bank_cebbank",
+            "R.mipmap.bank_chinapost",
+            "R.mipmap.bank_cib",
+            "R.mipmap.bank_citicbank",
+            "R.mipmap.bank_cmbc",
+            "R.mipmap.bank_icbc",
+            "R.mipmap.bank_pingan",
+            "R.mipmap.bank_zhaoshang",
     ]
     compressFilePattern = [
             "*.png",
