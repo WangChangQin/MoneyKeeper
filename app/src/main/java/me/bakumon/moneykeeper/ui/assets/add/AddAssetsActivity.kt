@@ -39,6 +39,7 @@ import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ResourcesUtil
 import me.bakumon.moneykeeper.utill.SoftInputUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -193,8 +194,7 @@ class AddAssetsActivity : BaseActivity() {
         liveData.observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
-                    ToastUtils.show(R.string.toast_save_assets_success)
-                    finish()
+                    Floo.stack(this).popCount(2).start()
                 }
                 is ErrorResource<Boolean> -> {
                     ToastUtils.show(R.string.toast_save_assets_fail)

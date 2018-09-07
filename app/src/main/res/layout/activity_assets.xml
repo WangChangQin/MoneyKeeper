@@ -66,5 +66,6 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnAdd"
-        style="@style/AddFAB" />
+        style="@style/AddFAB"
+        app:srcCompat="@drawable/ic_transfer" />
 </android.support.design.widget.CoordinatorLayout>
