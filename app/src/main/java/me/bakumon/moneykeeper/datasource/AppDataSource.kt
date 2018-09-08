@@ -225,4 +225,14 @@ interface AppDataSource {
      * 获取资产汇总
      */
     fun getAssetsMoney(): LiveData<AssetsMoneyBean>
+
+    /**
+     * 新增资产修改记录
+     */
+    fun insertAssetsRecord(assetsModifyRecord: AssetsModifyRecord): Completable
+
+    /**
+     * 获取资产修改记录列表
+     */
+    fun getAssetsRecordsById(id: Int): LiveData<List<AssetsModifyRecord>>
 }

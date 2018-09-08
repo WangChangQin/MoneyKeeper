@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,11 +33,19 @@ import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.ui.common.BaseActivity
+import me.bakumon.moneykeeper.ui.common.Empty
+import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
+import me.bakumon.moneykeeper.ui.setting.Category
+import me.bakumon.moneykeeper.ui.setting.CategoryViewBinder
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ResourcesUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 
 /**
  * AddAssetsActivity
@@ -47,6 +56,7 @@ class AssetsDetailActivity : BaseActivity() {
 
     private lateinit var mViewModel: AssetsDetailViewModel
     private lateinit var mAssets: Assets
+    private lateinit var mAdapter: MultiTypeAdapter
 
     override val layoutId: Int
         get() = R.layout.activity_assets_detail
@@ -59,6 +69,12 @@ class AssetsDetailActivity : BaseActivity() {
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
+        mAdapter = MultiTypeAdapter()
+        mAdapter.register(Category::class, CategoryViewBinder())
+        mAdapter.register(AssetsModifyRecord::class, AssetsRecordBinder())
+        mAdapter.register(Empty::class, EmptyViewBinder())
+        rvAssets.adapter = mAdapter
+
         val extra = intent.getSerializableExtra(Router.ExtraKey.KEY_ASSETS)
         if (extra == null) {
             finish()
@@ -67,6 +83,7 @@ class AssetsDetailActivity : BaseActivity() {
 
         mViewModel = getViewModel()
         getAssetsData(mAssets.id!!)
+        getAssetsRecord(mAssets.id!!)
     }
 
     /**
@@ -99,6 +116,26 @@ class AssetsDetailActivity : BaseActivity() {
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvMoneyTitle.text = getText(R.string.text_assets_balance).toString() + text
         tvMoney.text = BigDecimalUtil.fen2Yuan(assets.money)
+    }
+
+    private fun getAssetsRecord(id: Int) {
+        mViewModel.getAssetsRecordById(id).observe(this, Observer {
+            if (it != null) {
+                setItems(it)
+            }
+        })
+    }
+
+    private fun setItems(list: List<AssetsModifyRecord>) {
+        val items = Items()
+        if (list.isEmpty()) {
+            items.add(Empty(getString(R.string.text_adjust_record_no), Gravity.CENTER))
+        } else {
+            items.add(Category(getString(R.string.text_adjust_record)))
+            items.addAll(list)
+        }
+        mAdapter.items = items
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

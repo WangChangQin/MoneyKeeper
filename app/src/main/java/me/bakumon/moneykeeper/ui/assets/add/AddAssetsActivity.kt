@@ -181,15 +181,16 @@ class AddAssetsActivity : BaseActivity() {
 
         val liveData = if (mType == 0) {
             // 新增
-            val assets = Assets(name = typeName, imgName = mParamImgName, type = mAssetsType!!.type, remark = remark, money = money)
+            val assets = Assets(name = typeName, imgName = mParamImgName, type = mAssetsType!!.type, remark = remark, money = money, initMoney = money)
             mViewModel.addAssets(assets)
         } else {
             // 修改
             mAssets!!.name = typeName
             mAssets!!.imgName = mParamImgName
             mAssets!!.remark = remark
+            val moneyBefore = mAssets!!.money
             mAssets!!.money = money
-            mViewModel.updateAssets(mAssets!!)
+            mViewModel.updateAssets(moneyBefore, mAssets!!)
         }
         liveData.observe(this, Observer {
             when (it) {

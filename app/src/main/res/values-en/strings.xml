@@ -284,4 +284,7 @@
     <!-- 资产 -->
     <string name="text_assets_all">All assets</string>
     <string name="text_assets_liabilities">liabilities</string>
+    <string name="text_assets_adjust">adjustment</string>
+    <string name="text_adjust_record">record</string>
+    <string name="text_adjust_record_no">No modify record</string>
 </resources>

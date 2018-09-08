@@ -24,48 +24,44 @@ import java.math.BigDecimal
 import java.util.*
 
 /**
- * 资产
+ * 资产调整记录
  *
  * @author bakumon https://bakumon.me
  */
 @Entity
-open class Assets : Serializable {
+open class AssetsModifyRecord : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
-    @ColumnInfo(name = "name")
-    var name: String
-    @ColumnInfo(name = "img_name")
-    var imgName: String
-    @ColumnInfo(name = "type")
-    var type: Int
+
     /**
      * 状态
      * 0：正常
      * 1：已删除
      */
     @ColumnInfo(name = "state")
-    var state: Int
-    @ColumnInfo(name = "remark")
-    var remark: String
+    var state: Int = 0
+
     @ColumnInfo(name = "create_time")
-    var createTime: Date
+    var createTime: Date = Date()
+
+    @ColumnInfo(name = "assets_id")
+    var assetsId: Int
+
+    /**
+     * 调整余额前金额
+     */
+    @ColumnInfo(name = "money_before")
+    var moneyBefore: BigDecimal
+
+    /**
+     * 调整余额后金额
+     */
     @ColumnInfo(name = "money")
     var money: BigDecimal
 
-    /**
-     * 初始化金额
-     */
-    @ColumnInfo(name = "init_money")
-    var initMoney: BigDecimal
-
-    constructor(name: String, imgName: String, type: Int, remark: String, initMoney: BigDecimal, money: BigDecimal) {
-        this.name = name
-        this.imgName = imgName
-        this.type = type
-        this.state = 0
-        this.remark = remark
-        this.createTime = Date()
+    constructor(assetsId: Int, money: BigDecimal, moneyBefore: BigDecimal) {
+        this.assetsId = assetsId
         this.money = money
-        this.initMoney = initMoney
+        this.moneyBefore = moneyBefore
     }
 }

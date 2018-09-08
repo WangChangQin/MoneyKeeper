@@ -284,4 +284,7 @@
     <!-- 资产 -->
     <string name="text_assets_all">总资产</string>
     <string name="text_assets_liabilities">负资产</string>
+    <string name="text_assets_adjust">余额调整</string>
+    <string name="text_adjust_record">修改记录</string>
+    <string name="text_adjust_record_no">没有修改记录</string>
 </resources>

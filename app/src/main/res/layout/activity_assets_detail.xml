@@ -99,7 +99,7 @@
         android:id="@+id/rvAssets"
         style="@style/LinearRecyclerView"
         android:clipToPadding="false"
-        android:paddingBottom="90dp"
-        tools:listitem="@layout/item_record_sort_money" />
+        android:paddingBottom="20dp"
+        tools:listitem="@layout/item_assets_modify_record" />
 
 </LinearLayout>

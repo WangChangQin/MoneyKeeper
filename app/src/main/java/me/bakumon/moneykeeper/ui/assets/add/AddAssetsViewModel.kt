@@ -22,8 +22,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
+import java.math.BigDecimal
 
 /**
  * AddAssetsViewModel
@@ -47,9 +49,27 @@ class AddAssetsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
         return liveData
     }
 
-    fun updateAssets(assets: Assets): LiveData<Resource<Boolean>> {
+    fun updateAssets(moneyBefore: BigDecimal, assets: Assets): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
         mDisposable.add(mDataSource.updateAssets(assets)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (moneyBefore == assets.money) {
+                        liveData.value = Resource.create(true)
+                    } else {
+                        addAssetsModifyRecord(liveData, moneyBefore, assets)
+                    }
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
+
+    private fun addAssetsModifyRecord(liveData: MutableLiveData<Resource<Boolean>>, moneyBefore: BigDecimal, assets: Assets): LiveData<Resource<Boolean>> {
+        val modifyRecord = AssetsModifyRecord(assetsId = assets.id!!, moneyBefore = moneyBefore, money = assets.money)
+        mDisposable.add(mDataSource.insertAssetsRecord(modifyRecord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -60,6 +80,5 @@ class AddAssetsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                 })
         return liveData
     }
-
 
 }

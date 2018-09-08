@@ -105,6 +105,8 @@ class AssetsActivity : BaseActivity() {
     private fun setItems(list: List<Assets>) {
         if (list.size < 2) {
             btnAdd.visibility = View.GONE
+        } else {
+            btnAdd.visibility = View.VISIBLE
         }
         val items = Items()
         if (list.isEmpty()) {
