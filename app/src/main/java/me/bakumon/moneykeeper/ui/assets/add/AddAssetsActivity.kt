@@ -195,7 +195,11 @@ class AddAssetsActivity : BaseActivity() {
         liveData.observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
-                    Floo.stack(this).popCount(2).start()
+                    if (mType == 0) {
+                        Floo.stack(this).popCount(2).start()
+                    } else {
+                        finish()
+                    }
                 }
                 is ErrorResource<Boolean> -> {
                     ToastUtils.show(R.string.toast_save_assets_fail)
