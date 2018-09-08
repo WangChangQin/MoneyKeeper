@@ -36,7 +36,6 @@ object ConfigManager {
 
     private const val SP_NAME = "config"
     private const val KEY_AUTO_BACKUP = "auto_backup"
-    private const val KEY_SUCCESSIVE = "successive"
     private const val KEY_FAST = "fast"
     private const val KEY_BUDGET = "budget"
     private const val KEY_SYMBOL = "symbol"
@@ -54,9 +53,6 @@ object ConfigManager {
 
     val isFast: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_FAST)
-
-    val isSuccessive: Boolean
-        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_SUCCESSIVE, true)
 
     val budget: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_BUDGET, 0)
@@ -103,13 +99,6 @@ object ConfigManager {
      */
     fun setIsFast(isFast: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_FAST, isFast)
-    }
-
-    /**
-     * 连续记账
-     */
-    fun setIsSuccessive(isAutoBackup: Boolean): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_SUCCESSIVE, isAutoBackup)
     }
 
     /**

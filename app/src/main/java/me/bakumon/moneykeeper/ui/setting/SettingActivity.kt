@@ -79,7 +79,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
         items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
         items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
-        items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
+        items.add(NormalItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip)))
 
         items.add(Category(getString(R.string.text_backup)))
         val backupFolder = BackupUtil.backupFolder
@@ -146,7 +146,6 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     private fun onCheckItemCheckChange(item: CheckItem, isCheck: Boolean) {
         when (item.title) {
             getString(R.string.text_fast_accounting) -> ConfigManager.setIsFast(isCheck)
-            getString(R.string.text_successive_record) -> ConfigManager.setIsSuccessive(isCheck)
             getString(R.string.text_auto_backup) -> switchAutoBackup(isCheck)
         }
     }

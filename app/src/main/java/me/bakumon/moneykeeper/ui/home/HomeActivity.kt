@@ -72,11 +72,9 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         supportActionBar?.setDisplayShowTitleEnabled(false)
         btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ADD_RECORD).start() }
         btnAdd.setOnLongClickListener {
-            if (ConfigManager.isSuccessive) {
-                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
-                        .start()
-            }
+            Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                    .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
+                    .start()
             false
         }
     }
