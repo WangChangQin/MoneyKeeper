@@ -48,6 +48,7 @@
     <string name="toast_get_review_sum_money_fail">获取回顾汇总数据失败</string>
     <string name="toast_move_backup_files_success">备份文件夹修改并迁移成功</string>
     <string name="toast_move_backup_files_fail">修改失败</string>
+    <string name="toast_choose_account">请选择不同账户</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>
@@ -287,4 +288,7 @@
     <string name="text_assets_adjust">余额调整</string>
     <string name="text_adjust_record">修改记录</string>
     <string name="text_adjust_record_no">没有修改记录</string>
+    <string name="text_transfer">转账</string>
+    <string name="text_choose_out_account">选择转出账户</string>
+    <string name="text_choose_in_account">选择转入账户</string>
 </resources>

@@ -44,6 +44,7 @@ object Router {
         const val URL_CHOOSE_ASSETS = "choose_assets"
         const val URL_ADD_ASSETS = "add_assets"
         const val URL_ASSETS_DETAIL = "assets_detail"
+        const val URL_ASSETS_TRANSFER = "assets_transfer"
     }
 
     /**

@@ -28,10 +28,7 @@ import me.bakumon.moneykeeper.database.dao.AssetsDao
 import me.bakumon.moneykeeper.database.dao.AssetsModifyRecordDao
 import me.bakumon.moneykeeper.database.dao.RecordDao
 import me.bakumon.moneykeeper.database.dao.RecordTypeDao
-import me.bakumon.moneykeeper.database.entity.Assets
-import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
-import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
+import me.bakumon.moneykeeper.database.entity.*
 
 
 /**
@@ -39,7 +36,7 @@ import me.bakumon.moneykeeper.database.entity.RecordType
  *
  * @author Bakumon https:bakumon.me
  */
-@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class], version = 2)
+@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class, AssetsTransferRecord::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 

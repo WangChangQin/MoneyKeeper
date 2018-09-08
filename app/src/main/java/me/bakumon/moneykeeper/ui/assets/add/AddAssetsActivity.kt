@@ -35,10 +35,7 @@ import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.ui.assets.choose.AssetsType
 import me.bakumon.moneykeeper.ui.common.BaseActivity
-import me.bakumon.moneykeeper.utill.BigDecimalUtil
-import me.bakumon.moneykeeper.utill.ResourcesUtil
-import me.bakumon.moneykeeper.utill.SoftInputUtils
-import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.utill.*
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -168,8 +165,7 @@ class AddAssetsActivity : BaseActivity() {
             return
         }
         if (edtTypeName.text.isBlank()) {
-            val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
-            edtTypeName.startAnimation(animation)
+            ViewUtil.startShake(edtTypeName)
             return
         }
         isSaveEnable = false

@@ -48,6 +48,7 @@
     <string name="toast_get_review_sum_money_fail">獲取回顧匯總數據失敗</string>
     <string name="toast_move_backup_files_success">備份文件夾修改並遷移成功</string>
     <string name="toast_move_backup_files_fail">修改文件夾失敗</string>
+    <string name="toast_choose_account">請選擇不同賬戶</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>
@@ -287,4 +288,7 @@
     <string name="text_assets_adjust">餘額調整</string>
     <string name="text_adjust_record">修改記錄</string>
     <string name="text_adjust_record_no">沒有修改記錄</string>
+    <string name="text_transfer">轉賬</string>
+    <string name="text_choose_out_account">選擇轉出賬戶</string>
+    <string name="text_choose_in_account">選擇轉入賬戶</string>
 </resources>

@@ -34,6 +34,7 @@ import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.utill.ViewUtil
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -140,8 +141,7 @@ class AddTypeActivity : BaseActivity() {
         isSaveEnable = false
         val text = edt_type_name.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(text)) {
-            val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
-            edt_type_name.startAnimation(animation)
+            ViewUtil.startShake(edt_type_name)
             isSaveEnable = true
             return
         }

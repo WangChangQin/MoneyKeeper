@@ -35,7 +35,6 @@ import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.ui.setting.Category
 import me.bakumon.moneykeeper.ui.setting.CategoryViewBinder
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
-import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -64,7 +63,7 @@ class AssetsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        btnAdd.setOnClickListener { ToastUtils.show("转账") }
+        btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ASSETS_TRANSFER).start() }
 
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvNetAssetsTitle.text = getString(R.string.text_assets) + text

@@ -48,6 +48,7 @@
     <string name="toast_get_review_sum_money_fail">Failed to get review summary data</string>
     <string name="toast_move_backup_files_success">Backup folder modified and migrated successfully</string>
     <string name="toast_move_backup_files_fail">Failed to modify folder</string>
+    <string name="toast_choose_account">Please select a different account</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>
@@ -287,4 +288,7 @@
     <string name="text_assets_adjust">adjustment</string>
     <string name="text_adjust_record">record</string>
     <string name="text_adjust_record_no">No modify record</string>
+    <string name="text_transfer">transfer</string>
+    <string name="text_choose_out_account">account from</string>
+    <string name="text_choose_in_account">account to</string>
 </resources>

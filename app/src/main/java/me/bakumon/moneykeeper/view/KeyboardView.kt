@@ -24,13 +24,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.layout_keyboard.view.*
-import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.SoftInputUtils
+import me.bakumon.moneykeeper.utill.ViewUtil
 
 /**
  * 自定义键盘
@@ -95,8 +94,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     && !TextUtils.equals("0.0", text)
                     && !TextUtils.equals("0.00", text))
             if (!isDigital) {
-                val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
-                editInput.startAnimation(animation)
+                ViewUtil.startShake(editInput)
             } else {
                 mOnAffirmClickListener?.invoke(text)
             }
