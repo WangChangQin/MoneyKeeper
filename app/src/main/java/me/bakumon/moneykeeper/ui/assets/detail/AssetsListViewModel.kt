@@ -14,25 +14,26 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.database.dao
+package me.bakumon.moneykeeper.ui.assets.detail
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
+import me.bakumon.moneykeeper.datasource.AppDataSource
+import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
- * AssetsTransferRecordDao
+ * AssetsListViewModel
  *
  * @author Bakumon https://bakumon.me
  */
-@Dao
-interface AssetsTransferRecordDao {
+class AssetsListViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    @Query("SELECT * FROM AssetsTransferRecord WHERE state=0 AND (assets_id_form=:id OR assets_id_to=:id) ORDER BY time DESC, create_time DESC")
-    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>>
+    fun getModifyRecordById(id: Int): LiveData<List<AssetsModifyRecord>> {
+        return mDataSource.getAssetsRecordsById(id)
+    }
 
-    @Insert
-    fun insertTransferRecord(vararg assetsTransferRecord: AssetsTransferRecord)
+    fun getTransferRecordById(id: Int): LiveData<List<AssetsTransferRecord>> {
+        return mDataSource.getTransferRecordsById(id)
+    }
 }

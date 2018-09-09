@@ -289,8 +289,10 @@
     <string name="text_assets_all">All assets</string>
     <string name="text_assets_liabilities">liabilities</string>
     <string name="text_assets_adjust">adjustment</string>
+    <string name="text_assets_transfer">Transfer</string>
     <string name="text_adjust_record">record</string>
     <string name="text_adjust_record_no">No modify record</string>
+    <string name="text_transfer_record_no">No transfer record</string>
     <string name="text_transfer">transfer</string>
     <string name="text_choose_out_account">account from</string>
     <string name="text_choose_in_account">account to</string>

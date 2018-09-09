@@ -291,8 +291,10 @@
     <string name="text_assets_all">总资产</string>
     <string name="text_assets_liabilities">负资产</string>
     <string name="text_assets_adjust">余额调整</string>
+    <string name="text_assets_transfer">转账</string>
     <string name="text_adjust_record">修改记录</string>
     <string name="text_adjust_record_no">没有修改记录</string>
+    <string name="text_transfer_record_no">没有转账记录</string>
     <string name="text_transfer">转账</string>
     <string name="text_choose_out_account">选择转出账户</string>
     <string name="text_choose_in_account">选择转入账户</string>

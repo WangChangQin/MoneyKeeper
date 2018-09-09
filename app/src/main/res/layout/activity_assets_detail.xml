@@ -95,11 +95,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="5dp">
+        <include
+            android:id="@+id/typeChoose"
+            layout="@layout/layout_type_choose" />
+    </LinearLayout>
+
+    <me.bakumon.moneykeeper.view.NotPagingViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvAssets"
         style="@style/LinearRecyclerView"
         android:clipToPadding="false"
         android:paddingBottom="20dp"
-        tools:listitem="@layout/item_assets_modify_record" />
+        android:visibility="gone"
+        tools:listitem="@layout/item_assets_record" />
 
 </LinearLayout>

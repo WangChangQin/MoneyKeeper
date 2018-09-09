@@ -22,7 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.Assets
-import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
@@ -35,10 +34,6 @@ class AssetsDetailViewModel(dataSource: AppDataSource) : BaseViewModel(dataSourc
 
     fun getAssetsById(id: Int): LiveData<Assets> {
         return mDataSource.getAssetsById(id)
-    }
-
-    fun getAssetsRecordById(id: Int): LiveData<List<AssetsModifyRecord>> {
-        return mDataSource.getAssetsRecordsById(id)
     }
 
     fun deleteAssets(assets: Assets): LiveData<Resource<Boolean>> {

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.item_about_card_with_action.view.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -17,10 +16,10 @@ import me.drakeet.multitype.ItemViewBinder
 /**
  * @author Bakumon https://bakumon.me
  */
-class AssetsRecordBinder : ItemViewBinder<AssetsModifyRecord, AssetsRecordBinder.ViewHolder>() {
+class ModifyRecordBinder : ItemViewBinder<AssetsModifyRecord, ModifyRecordBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        val root = inflater.inflate(R.layout.item_assets_modify_record, parent, false)
+        val root = inflater.inflate(R.layout.item_assets_record, parent, false)
         return ViewHolder(root)
     }
 

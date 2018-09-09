@@ -297,4 +297,8 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
             autoBackup()
         }
     }
+
+    override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>> {
+        return mAppDatabase.assetsTransferRecordDao().getTransferRecordsById(id)
+    }
 }

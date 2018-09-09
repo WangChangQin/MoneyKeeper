@@ -33,7 +33,10 @@
         android:background="@drawable/selector_tab_left"
         android:button="@null"
         android:gravity="center"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
         android:textColor="@color/selector_tab_text_color"
         tools:text="@string/text_outlay" />
 
@@ -45,7 +48,10 @@
         android:background="@drawable/selector_tab_right"
         android:button="@null"
         android:gravity="center"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
         android:textColor="@color/selector_tab_text_color"
         tools:text="@string/text_income" />
 </RadioGroup>

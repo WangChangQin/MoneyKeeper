@@ -289,8 +289,10 @@
     <string name="text_assets_all">總資產</string>
     <string name="text_assets_liabilities">負資產</string>
     <string name="text_assets_adjust">餘額調整</string>
+    <string name="text_assets_transfer">轉賬</string>
     <string name="text_adjust_record">修改記錄</string>
     <string name="text_adjust_record_no">沒有修改記錄</string>
+    <string name="text_transfer_record_no">沒有轉賬記錄</string>
     <string name="text_transfer">轉賬</string>
     <string name="text_choose_out_account">選擇轉出賬戶</string>
     <string name="text_choose_in_account">選擇轉入賬戶</string>

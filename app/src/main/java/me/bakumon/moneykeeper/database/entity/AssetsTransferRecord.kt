@@ -30,11 +30,13 @@ import java.util.*
         foreignKeys = [ForeignKey(
                 entity = Assets::class,
                 parentColumns = ["id"],
+                onDelete = ForeignKey.CASCADE,
                 childColumns = ["assets_id_form"]
         ),
             ForeignKey(
                     entity = Assets::class,
                     parentColumns = ["id"],
+                    onDelete = ForeignKey.CASCADE,
                     childColumns = ["assets_id_to"]
             )],
         indices = [(Index(value = arrayOf("assets_id_form", "assets_id_to")))])

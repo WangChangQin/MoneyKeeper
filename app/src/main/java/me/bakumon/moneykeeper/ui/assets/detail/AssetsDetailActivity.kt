@@ -19,33 +19,30 @@ package me.bakumon.moneykeeper.ui.assets.detail
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RadioGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.activity_assets_detail.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
+import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Assets
-import me.bakumon.moneykeeper.database.entity.AssetsModifyRecord
 import me.bakumon.moneykeeper.ui.common.BaseActivity
-import me.bakumon.moneykeeper.ui.common.Empty
-import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
-import me.bakumon.moneykeeper.ui.setting.Category
-import me.bakumon.moneykeeper.ui.setting.CategoryViewBinder
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ResourcesUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
-import me.drakeet.multitype.Items
-import me.drakeet.multitype.MultiTypeAdapter
-import me.drakeet.multitype.register
+import java.util.*
 
 /**
  * AddAssetsActivity
@@ -56,7 +53,6 @@ class AssetsDetailActivity : BaseActivity() {
 
     private lateinit var mViewModel: AssetsDetailViewModel
     private lateinit var mAssets: Assets
-    private lateinit var mAdapter: MultiTypeAdapter
 
     override val layoutId: Int
         get() = R.layout.activity_assets_detail
@@ -66,24 +62,36 @@ class AssetsDetailActivity : BaseActivity() {
         setSupportActionBar(toolbarLayout as Toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        typeChoose.rbLeft.text = getString(R.string.text_transfer)
+        typeChoose.rbRight.text = getString(R.string.text_modify)
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
-        mAdapter = MultiTypeAdapter()
-        mAdapter.register(Category::class, CategoryViewBinder())
-        mAdapter.register(AssetsModifyRecord::class, AssetsRecordBinder())
-        mAdapter.register(Empty::class, EmptyViewBinder())
-        rvAssets.adapter = mAdapter
-
         val extra = intent.getSerializableExtra(Router.ExtraKey.KEY_ASSETS)
         if (extra == null) {
             finish()
         }
         mAssets = extra as Assets
 
+        val transferListFragment = TransferListFragment.newInstance(mAssets.id!!)
+        val modifyListFragment = ModifyListFragment.newInstance(mAssets.id!!)
+        val adapter = FragmentViewPagerAdapter(supportFragmentManager, arrayListOf(transferListFragment, modifyListFragment))
+
+        viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 2
+
+        (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbLeft) {
+                viewPager.setCurrentItem(0, false)
+            } else {
+                viewPager.setCurrentItem(1, false)
+            }
+        }
+        (typeChoose as RadioGroup).check(R.id.rbLeft)
+
         mViewModel = getViewModel()
         getAssetsData(mAssets.id!!)
-        getAssetsRecord(mAssets.id!!)
     }
 
     /**
@@ -116,26 +124,6 @@ class AssetsDetailActivity : BaseActivity() {
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvMoneyTitle.text = getText(R.string.text_assets_balance).toString() + text
         tvMoney.text = BigDecimalUtil.fen2Yuan(assets.money)
-    }
-
-    private fun getAssetsRecord(id: Int) {
-        mViewModel.getAssetsRecordById(id).observe(this, Observer {
-            if (it != null) {
-                setItems(it)
-            }
-        })
-    }
-
-    private fun setItems(list: List<AssetsModifyRecord>) {
-        val items = Items()
-        if (list.isEmpty()) {
-            items.add(Empty(getString(R.string.text_adjust_record_no), Gravity.CENTER))
-        } else {
-            items.add(Category(getString(R.string.text_adjust_record)))
-            items.addAll(list)
-        }
-        mAdapter.items = items
-        mAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -184,5 +172,16 @@ class AssetsDetailActivity : BaseActivity() {
                 }
             }
         })
+    }
+
+    inner class FragmentViewPagerAdapter(fm: FragmentManager, private val fragments: ArrayList<Fragment>) : FragmentPagerAdapter(fm) {
+        override fun getItem(position: Int): Fragment {
+            return fragments[position]
+        }
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
+
     }
 }

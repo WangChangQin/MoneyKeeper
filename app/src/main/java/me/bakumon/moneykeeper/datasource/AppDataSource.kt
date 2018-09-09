@@ -240,4 +240,9 @@ interface AppDataSource {
      * 新增转账记录
      */
     fun insertTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
+
+    /**
+     * 获取转账记录
+     */
+    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>>
 }
