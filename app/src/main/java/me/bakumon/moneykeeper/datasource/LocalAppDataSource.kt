@@ -290,4 +290,11 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
     override fun getAssetsRecordsById(id: Int): LiveData<List<AssetsModifyRecord>> {
         return mAppDatabase.assetsModifyRecordDao().getAssetsRecordsById(id)
     }
+
+    override fun insertTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().insertTransferRecord(assetsTransferRecord)
+            autoBackup()
+        }
+    }
 }

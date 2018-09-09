@@ -235,4 +235,9 @@ interface AppDataSource {
      * 获取资产修改记录列表
      */
     fun getAssetsRecordsById(id: Int): LiveData<List<AssetsModifyRecord>>
+
+    /**
+     * 新增转账记录
+     */
+    fun insertTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
 }

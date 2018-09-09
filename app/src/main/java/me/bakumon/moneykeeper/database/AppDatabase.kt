@@ -24,10 +24,7 @@ import android.arch.persistence.room.TypeConverters
 import android.arch.persistence.room.migration.Migration
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.database.converters.Converters
-import me.bakumon.moneykeeper.database.dao.AssetsDao
-import me.bakumon.moneykeeper.database.dao.AssetsModifyRecordDao
-import me.bakumon.moneykeeper.database.dao.RecordDao
-import me.bakumon.moneykeeper.database.dao.RecordTypeDao
+import me.bakumon.moneykeeper.database.dao.*
 import me.bakumon.moneykeeper.database.entity.*
 
 
@@ -54,9 +51,20 @@ abstract class AppDatabase : RoomDatabase() {
      */
     abstract fun recordDao(): RecordDao
 
+    /**
+     * 资产
+     */
     abstract fun assetsDao(): AssetsDao
 
+    /**
+     * 资产余额调整记录
+     */
     abstract fun assetsModifyRecordDao(): AssetsModifyRecordDao
+
+    /**
+     * 资产转账记录
+     */
+    abstract fun assetsTransferRecordDao(): AssetsTransferRecordDao
 
     companion object {
         const val DB_NAME = "MoneyKeeper.db"

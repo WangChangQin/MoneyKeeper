@@ -51,6 +51,9 @@
     <string name="toast_save_assets_success">保存成功</string>
     <string name="toast_save_assets_fail">保存失败</string>
     <string name="toast_choose_account">请选择不同账户</string>
+    <string name="toast_date_null">日期为空，请重新进入界面后尝试</string>
+    <string name="toast_transfer_fail">转账失败</string>
+    <string name="toast_transfer_now">正在转账操作，请稍等..</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>

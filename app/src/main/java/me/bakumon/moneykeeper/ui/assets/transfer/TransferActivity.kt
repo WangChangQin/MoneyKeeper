@@ -20,6 +20,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -29,12 +30,12 @@ import kotlinx.android.synthetic.main.activity_assets_transfer.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import kotlinx.android.synthetic.main.layout_transfer_account.view.*
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 import me.bakumon.moneykeeper.ui.common.BaseActivity
-import me.bakumon.moneykeeper.utill.DateUtils
-import me.bakumon.moneykeeper.utill.ResourcesUtil
-import me.bakumon.moneykeeper.utill.ToastUtils
-import me.bakumon.moneykeeper.utill.ViewUtil
+import me.bakumon.moneykeeper.utill.*
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -164,6 +165,11 @@ class TransferActivity : BaseActivity() {
         mDialog?.dismiss()
     }
 
+    /**
+     * 正在提交
+     */
+    private var isSubmitting = false
+
     private fun submit(input: String) {
         if (mOutAssets == null) {
             ViewUtil.startShake(outAccount)
@@ -177,7 +183,46 @@ class TransferActivity : BaseActivity() {
             ToastUtils.show(R.string.toast_choose_account)
             return
         }
-        ToastUtils.show(input)
+        if (mCurrentChooseDate == null) {
+            ToastUtils.show(R.string.toast_date_null)
+            return
+        }
+        // 防止修改过程中 dialog 自动弹起
+        isDialogShow = true
+        isSubmitting = true
+        // 防止重复提交
+        keyboard.setAffirmEnable(false)
+        val transferRecord = AssetsTransferRecord(mOutAssets!!.id!!, mInAssets!!.id!!,
+                BigDecimalUtil.yuan2FenBD(input), mCurrentChooseDate!!, edtRemark.text.toString())
+        mViewModel.addTransferRecord(mOutAssets!!, mInAssets!!, transferRecord).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    isSubmitting = false
+                    finish()
+                }
+                is ErrorResource<Boolean> -> {
+                    isDialogShow = false
+                    isSubmitting = false
+                    keyboard.setAffirmEnable(true)
+                    ToastUtils.show(R.string.toast_modify_record_fail)
+                }
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (isSubmitting) {
+            ToastUtils.show(R.string.toast_transfer_now)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

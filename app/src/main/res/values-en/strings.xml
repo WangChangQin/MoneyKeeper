@@ -49,6 +49,9 @@
     <string name="toast_move_backup_files_success">Backup folder modified and migrated successfully</string>
     <string name="toast_move_backup_files_fail">Failed to modify folder</string>
     <string name="toast_choose_account">Please select a different account</string>
+    <string name="toast_date_null">The date is empty, please try again after entering the interface.</string>
+    <string name="toast_transfer_fail">Transfer failed</string>
+    <string name="toast_transfer_now">Transferring operation, please wait..</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>

@@ -49,6 +49,9 @@
     <string name="toast_move_backup_files_success">備份文件夾修改並遷移成功</string>
     <string name="toast_move_backup_files_fail">修改文件夾失敗</string>
     <string name="toast_choose_account">請選擇不同賬戶</string>
+    <string name="toast_date_null">日期為空，請重新進入界面後嘗試</string>
+    <string name="toast_transfer_fail">轉賬失敗</string>
+    <string name="toast_transfer_now">正在轉賬操作，請稍等..</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>

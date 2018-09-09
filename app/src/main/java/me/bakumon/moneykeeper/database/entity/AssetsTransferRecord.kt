@@ -53,6 +53,9 @@ open class AssetsTransferRecord : Serializable {
     @ColumnInfo(name = "create_time")
     var createTime: Date = Date()
 
+    @ColumnInfo(name = "time")
+    var time: Date
+
     @ColumnInfo(name = "assets_id_form")
     var assetsIdFrom: Int
 
@@ -68,10 +71,11 @@ open class AssetsTransferRecord : Serializable {
     @ColumnInfo(name = "money")
     var money: BigDecimal
 
-    constructor(assetsIdFrom: Int, assetsIdTo: Int, money: BigDecimal, remark: String) {
+    constructor(assetsIdFrom: Int, assetsIdTo: Int, money: BigDecimal, time: Date, remark: String) {
         this.assetsIdFrom = assetsIdFrom
         this.assetsIdTo = assetsIdTo
         this.money = money
+        this.time = time
         this.remark = remark
     }
 }
