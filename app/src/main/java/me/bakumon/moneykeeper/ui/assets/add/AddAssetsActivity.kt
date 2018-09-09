@@ -22,12 +22,11 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AnimationUtils
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.list.customListAdapter
 import kotlinx.android.synthetic.main.activity_add_assets.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
-import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
@@ -133,17 +132,23 @@ class AddAssetsActivity : BaseActivity() {
         return true
     }
 
+    private var isDialogShow = false
+
     private fun chooseBank() {
         val adapter = MultiTypeAdapter()
         adapter.register(Bank::class, BankViewBinder { bankItemClick(it) })
         val items = Items()
         BankItemsCreator.addAll(items)
         adapter.items = items
-
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         mDialog = MaterialDialog(this)
                 .title(R.string.text_choose_bank)
                 .customListAdapter(adapter)
                 .positiveButton(res = R.string.text_cancel)
+                .onDismiss { isDialogShow = false }
         mDialog?.show()
     }
 

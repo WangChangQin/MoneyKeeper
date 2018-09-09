@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_assets_transfer.*
@@ -122,10 +123,15 @@ class TransferActivity : BaseActivity() {
         items.addAll(list)
         adapter.items = items
 
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
         mDialog = MaterialDialog(this)
                 .title(R.string.text_choose_bank)
                 .customListAdapter(adapter)
                 .positiveButton(res = R.string.text_cancel)
+                .onDismiss { isDialogShow = false }
         mDialog?.show()
     }
 
