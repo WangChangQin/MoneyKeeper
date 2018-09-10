@@ -70,7 +70,13 @@ abstract class AppDatabase : RoomDatabase() {
         const val DB_NAME = "MoneyKeeper.db"
         private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS `Assets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `img_name` TEXT NOT NULL, `type` INTEGER NOT NULL, `state` INTEGER NOT NULL, `remark` TEXT NOT NULL, `create_time` INTEGER NOT NULL, `money` INTEGER NOT NULL)")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `Assets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `img_name` TEXT NOT NULL, `type` INTEGER NOT NULL, `state` INTEGER NOT NULL, `remark` TEXT NOT NULL, `create_time` INTEGER NOT NULL, `money` INTEGER NOT NULL, `init_money` INTEGER NOT NULL)")
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS `AssetsModifyRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `state` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `assets_id` INTEGER NOT NULL, `money_before` INTEGER NOT NULL, `money` INTEGER NOT NULL, FOREIGN KEY(`assets_id`) REFERENCES `Assets`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+                database.execSQL("CREATE  INDEX `index_AssetsModifyRecord_assets_id_create_time` ON `AssetsModifyRecord` (`assets_id`, `create_time`)")
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS `AssetsTransferRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `state` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `time` INTEGER NOT NULL, `assets_id_form` INTEGER NOT NULL, `assets_id_to` INTEGER NOT NULL, `remark` TEXT NOT NULL, `money` INTEGER NOT NULL, FOREIGN KEY(`assets_id_form`) REFERENCES `Assets`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`assets_id_to`) REFERENCES `Assets`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+                database.execSQL("CREATE  INDEX `index_AssetsTransferRecord_assets_id_form_assets_id_to` ON `AssetsTransferRecord` (`assets_id_form`, `assets_id_to`)")
             }
         }
         @Volatile
