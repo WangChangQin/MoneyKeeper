@@ -111,6 +111,7 @@ class AssetsDetailActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setView(assets: Assets) {
+        mAssets = assets
         ivAssets.setImageResource(ResourcesUtil.getTypeImgId(this, assets.imgName))
         tvAssetsName.text = assets.name
         if (assets.remark.isBlank()) {

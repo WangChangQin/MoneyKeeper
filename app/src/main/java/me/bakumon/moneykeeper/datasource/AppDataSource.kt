@@ -244,5 +244,5 @@ interface AppDataSource {
     /**
      * 获取转账记录
      */
-    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>>
+    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>
 }

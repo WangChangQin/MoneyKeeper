@@ -20,7 +20,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 
 /**
  * AssetsTransferRecordDao
@@ -30,8 +32,9 @@ import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 @Dao
 interface AssetsTransferRecordDao {
 
-    @Query("SELECT * FROM AssetsTransferRecord WHERE state=0 AND (assets_id_form=:id OR assets_id_to=:id) ORDER BY time DESC, create_time DESC")
-    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>>
+    @Transaction
+    @Query("SELECT transfer_record.*, assets_from.name AS assetsNameFrom, assets_to.name AS assetsNameTo FROM Assets AS assets_from, Assets AS assets_to, AssetsTransferRecord AS transfer_record WHERE assets_from.id = transfer_record.assets_id_form AND assets_to.id = transfer_record.assets_id_to AND (transfer_record.assets_id_form=:id OR transfer_record.assets_id_to=:id) ORDER BY transfer_record.time DESC, transfer_record.create_time DESC")
+    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>
 
     @Insert
     fun insertTransferRecord(vararg assetsTransferRecord: AssetsTransferRecord)

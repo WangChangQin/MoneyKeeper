@@ -298,7 +298,7 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecord>> {
+    override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>> {
         return mAppDatabase.assetsTransferRecordDao().getTransferRecordsById(id)
     }
 }

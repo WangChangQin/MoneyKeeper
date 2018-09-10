@@ -23,6 +23,7 @@ import android.view.Gravity
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 import me.bakumon.moneykeeper.ui.common.AbsListFragment
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
@@ -41,7 +42,7 @@ class TransferListFragment : AbsListFragment() {
     private var mAssetsId: Int? = 0
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
-        adapter.register(AssetsTransferRecord::class, TransferRecordBinder())
+        adapter.register(AssetsTransferRecordWithAssets::class, TransferRecordBinder())
         mAdapter.register(Empty::class, EmptyViewBinder())
     }
 
@@ -68,7 +69,7 @@ class TransferListFragment : AbsListFragment() {
         })
     }
 
-    private fun setItems(list: List<AssetsTransferRecord>) {
+    private fun setItems(list: List<AssetsTransferRecordWithAssets>) {
         val items = Items()
         if (list.isEmpty()) {
             items.add(Empty(getString(R.string.text_transfer_record_no), Gravity.CENTER))

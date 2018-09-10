@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "c1bece9bf8e4e40aae92be254be0d41d",
+    "identityHash": "0de8da823fa280c170d5769577b59b22",
     "entities": [
       {
         "tableName": "Record",
@@ -254,7 +254,17 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_AssetsModifyRecord_assets_id_create_time",
+            "unique": false,
+            "columnNames": [
+              "assets_id",
+              "create_time"
+            ],
+            "createSql": "CREATE  INDEX `index_AssetsModifyRecord_assets_id_create_time` ON `${TABLE_NAME}` (`assets_id`, `create_time`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Assets",
@@ -367,7 +377,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c1bece9bf8e4e40aae92be254be0d41d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0de8da823fa280c170d5769577b59b22\")"
     ]
   }
 }

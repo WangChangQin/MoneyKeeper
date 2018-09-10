@@ -32,14 +32,17 @@ import java.util.*
                 parentColumns = ["id"],
                 onDelete = ForeignKey.CASCADE,
                 childColumns = ["assets_id_form"]
-        ),
-            ForeignKey(
+        )
+            , ForeignKey(
                     entity = Assets::class,
                     parentColumns = ["id"],
                     onDelete = ForeignKey.CASCADE,
                     childColumns = ["assets_id_to"]
-            )],
-        indices = [(Index(value = arrayOf("assets_id_form", "assets_id_to")))])
+            )
+        ],
+        indices = [(Index(value = arrayOf("assets_id_form", "assets_id_to")))]
+
+)
 open class AssetsTransferRecord : Serializable {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
@@ -72,6 +75,15 @@ open class AssetsTransferRecord : Serializable {
      */
     @ColumnInfo(name = "money")
     var money: BigDecimal
+
+    @Ignore
+    constructor() {
+        this.assetsIdFrom = 0
+        this.assetsIdTo = 0
+        this.money = BigDecimal(0)
+        this.time = Date()
+        this.remark = ""
+    }
 
     constructor(assetsIdFrom: Int, assetsIdTo: Int, money: BigDecimal, time: Date, remark: String) {
         this.assetsIdFrom = assetsIdFrom
