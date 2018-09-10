@@ -247,6 +247,7 @@
     <string name="text_add_assets">Add account</string>
     <string name="text_edit_assets">Edit account</string>
     <string name="text_choose_bank">Choose bank</string>
+    <string name="text_choose_account">Choose account</string>
     <string name="hint_assets_name">Please enter an account name</string>
     <string name="text_remark">Remark：</string>
     <string name="hint_remark">Can not enter content</string>

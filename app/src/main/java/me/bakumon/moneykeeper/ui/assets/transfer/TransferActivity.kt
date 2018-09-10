@@ -129,7 +129,7 @@ class TransferActivity : BaseActivity() {
         }
         isDialogShow = true
         mDialog = MaterialDialog(this)
-                .title(R.string.text_choose_bank)
+                .title(R.string.text_choose_account)
                 .customListAdapter(adapter)
                 .positiveButton(res = R.string.text_cancel)
                 .onDismiss { isDialogShow = false }

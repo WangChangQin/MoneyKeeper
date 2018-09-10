@@ -247,6 +247,7 @@
     <string name="text_add_assets">新建資產賬戶</string>
     <string name="text_edit_assets">修改資產賬戶</string>
     <string name="text_choose_bank">選擇銀行</string>
+    <string name="text_choose_account">選擇賬戶</string>
     <string name="hint_assets_name">請輸入賬戶名稱</string>
     <string name="text_remark">備註：</string>
     <string name="hint_remark">可不填</string>
