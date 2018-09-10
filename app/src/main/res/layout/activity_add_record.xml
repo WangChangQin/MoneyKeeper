@@ -73,8 +73,9 @@
 
             <EditText
                 android:id="@+id/edtRemark"
-                android:layout_width="155dp"
+                android:layout_width="115dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/bg_date"
                 android:hint="@string/hint_enter_remark"
@@ -88,6 +89,35 @@
                 android:textColor="@color/colorText"
                 android:textColorHint="@color/colorTextHint"
                 android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/llAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_date"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:gravity="center_vertical"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp">
+
+                <ImageView
+                    android:id="@+id/ivAccount"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    tools:src="@mipmap/assets_alipay" />
+
+                <TextView
+                    android:id="@+id/tvAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:maxLength="20"
+                    android:textColor="@color/colorText"
+                    tools:text="支付宝" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 

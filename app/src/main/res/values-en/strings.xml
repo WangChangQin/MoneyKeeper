@@ -51,7 +51,7 @@
     <string name="toast_choose_account">Please select a different account</string>
     <string name="toast_date_null">The date is empty, please try again after entering the interface.</string>
     <string name="toast_transfer_fail">Transfer failed</string>
-    <string name="toast_transfer_now">Transferring operation, please wait..</string>
+    <string name="toast_submit_now">Submitting, please wait..</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>
@@ -248,6 +248,9 @@
     <string name="text_edit_assets">Edit account</string>
     <string name="text_choose_bank">Choose bank</string>
     <string name="text_choose_account">Choose account</string>
+    <string name="text_no_choose_account">Do not Choose account</string>
+    <string name="text_no_choose_account_tip">Only included in bill</string>
+    <string name="text_new_choose_account">New account</string>
     <string name="hint_assets_name">Please enter an account name</string>
     <string name="text_remark">Remark：</string>
     <string name="hint_remark">Can not enter content</string>

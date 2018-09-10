@@ -20,25 +20,33 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import android.widget.RadioGroup
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.list.customListAdapter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_add_record.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
 import kotlinx.android.synthetic.main.layout_type_choose.view.*
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
+import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
+import me.bakumon.moneykeeper.ui.assets.transfer.AssetsChooseViewBinder
 import me.bakumon.moneykeeper.ui.common.BaseActivity
-import me.bakumon.moneykeeper.utill.BigDecimalUtil
-import me.bakumon.moneykeeper.utill.DateUtils
-import me.bakumon.moneykeeper.utill.SoftInputUtils
-import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.utill.*
 import me.bakumon.moneykeeper.widget.WidgetProvider
+import me.drakeet.floo.Floo
+import me.drakeet.multitype.Items
+import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.register
 import java.util.*
 
 /**
@@ -55,6 +63,10 @@ class AddRecordActivity : BaseActivity() {
     private var mCurrentType: Int = 0
 
     private var mRecord: RecordWithType? = null
+
+    private var mAssets: Assets? = null
+    private var mOldAssets: Assets? = null
+
     /**
      * 连续记账
      */
@@ -73,6 +85,7 @@ class AddRecordActivity : BaseActivity() {
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
+        mViewModel = getViewModel()
         mRecord = intent.getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
         mIsSuccessive = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false)
 
@@ -83,9 +96,17 @@ class AddRecordActivity : BaseActivity() {
         }
 
         if (mRecord == null) {
+            // 新建
             mCurrentType = RecordType.TYPE_OUTLAY
             toolbarLayout.tvTitle.text = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
+            val assetsId = ConfigManager.assetId
+            if (assetsId == -1) {
+                updateAccountView(name = getString(R.string.text_no_choose_account))
+            } else {
+                getAssetsAccount(assetsId)
+            }
         } else {
+            // 修改
             mCurrentType = mRecord!!.mRecordTypes!![0].type
             toolbarLayout.tvTitle.text = getString(R.string.text_modify_record)
             edtRemark.setText(mRecord!!.remark)
@@ -93,6 +114,11 @@ class AddRecordActivity : BaseActivity() {
             mCurrentChooseDate = mRecord!!.time
             mCurrentChooseCalendar.time = mCurrentChooseDate
             tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
+            if (mRecord!!.assetsId == -1) {
+                updateAccountView(name = getString(R.string.text_no_choose_account))
+            } else {
+                getAssetsAccount(mRecord!!.assetsId)
+            }
         }
 
         keyboard.mOnAffirmClickListener = {
@@ -117,8 +143,86 @@ class AddRecordActivity : BaseActivity() {
             }
         }
 
-        mViewModel = getViewModel()
+        llAccount.setOnClickListener { chooseAccount() }
+
         getAllRecordTypes()
+    }
+
+    private fun getAssetsAccount(id: Int) {
+        mViewModel.getAssetsById(id).observe(this, Observer {
+            if (it == null) {
+                updateAccountView(name = getString(R.string.text_no_choose_account))
+            } else {
+                mAssets = it
+                if (mRecord != null) {
+                    // 修改记录
+                    mOldAssets = it
+                }
+                updateAccountView(it.imgName, it.name)
+            }
+        })
+    }
+
+    private fun chooseAccount() {
+        mViewModel.getAssets().observe(this, Observer {
+            if (it != null) {
+                showListDialog(it)
+            }
+        })
+    }
+
+    private var mDialog: MaterialDialog? = null
+    private fun showListDialog(list: List<Assets>) {
+        val adapter = MultiTypeAdapter()
+        adapter.register(Assets::class, AssetsChooseViewBinder { assetsItemClick(it) })
+        adapter.register(NoAccount::class, AssetsNoChooseViewBinder { noAssetsItemClick(it) })
+        val items = Items()
+        items.addAll(list)
+        items.add(NoAccount(0, getString(R.string.text_no_choose_account), getString(R.string.text_no_choose_account_tip)))
+        items.add(NoAccount(1, getString(R.string.text_new_choose_account)))
+        adapter.items = items
+
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        mDialog = MaterialDialog(this)
+                .title(R.string.text_choose_account)
+                .customListAdapter(adapter)
+                .positiveButton(res = R.string.text_cancel)
+                .onDismiss { isDialogShow = false }
+        mDialog?.show()
+    }
+
+    private fun assetsItemClick(assets: Assets) {
+        mAssets = assets
+        updateAccountView(assets.imgName, assets.name)
+        mDialog?.dismiss()
+    }
+
+    private fun noAssetsItemClick(noAccount: NoAccount) {
+        if (noAccount.type == 0) {
+            // 不选择账户
+            mAssets = null
+            updateAccountView(name = getString(R.string.text_no_choose_account))
+        } else {
+            // 添加账户
+            Floo.navigation(this, Router.Url.URL_CHOOSE_ASSETS).start()
+        }
+        mDialog?.dismiss()
+    }
+
+    private fun updateAccountView(imgName: String = "", name: String) {
+        if (isSubmitting) {
+            return
+        }
+        if (imgName.isBlank()) {
+            ivAccount.visibility = View.GONE
+        } else {
+            ivAccount.visibility = View.VISIBLE
+            ivAccount.setImageResource(ResourcesUtil.getTypeImgId(this, imgName))
+        }
+        tvAccount.text = name
     }
 
     private var isDialogShow = false
@@ -141,9 +245,17 @@ class AddRecordActivity : BaseActivity() {
         dpd.setOnDismissListener { isDialogShow = false }
     }
 
+    /**
+     * 正在提交
+     */
+    private var isSubmitting = false
+
     private fun insertRecord(text: String) {
         // 防止重复提交
         keyboard.setAffirmEnable(false)
+        // 防止修改过程中 dialog 自动弹起
+        isDialogShow = true
+        isSubmitting = true
         val record = Record()
         record.money = BigDecimalUtil.yuan2FenBD(text)
         record.remark = edtRemark.text.toString().trim { it <= ' ' }
@@ -154,11 +266,13 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mViewModel.insertRecord(record).observe(this, android.arch.lifecycle.Observer {
+        mViewModel.insertRecord(mCurrentType, mAssets, record).observe(this, android.arch.lifecycle.Observer {
             when (it) {
                 is SuccessResource<Boolean> -> insertRecordDone()
                 is ErrorResource<Boolean> -> {
                     keyboard.setAffirmEnable(true)
+                    isDialogShow = false
+                    isSubmitting = false
                     ToastUtils.show(R.string.toast_add_record_fail)
                 }
             }
@@ -169,6 +283,10 @@ class AddRecordActivity : BaseActivity() {
      * 新增记账记录完成
      */
     private fun insertRecordDone() {
+        isSubmitting = false
+        // 更新上次使用的 assets id
+        val assetsId = if (mAssets == null) -1 else mAssets!!.id!!
+        ConfigManager.setAssetsId(assetsId)
         // 更新 widget
         WidgetProvider.updateWidget(this)
         if (mIsSuccessive) {
@@ -176,6 +294,7 @@ class AddRecordActivity : BaseActivity() {
             keyboard.setText("")
             edtRemark.setText("")
             keyboard.setAffirmEnable(true)
+            isDialogShow = false
             ToastUtils.show(R.string.toast_success_record)
         } else {
             finish()
@@ -185,7 +304,10 @@ class AddRecordActivity : BaseActivity() {
     private fun modifyRecord(text: String) {
         // 防止重复提交
         keyboard.setAffirmEnable(false)
-
+        // 防止修改过程中 dialog 自动弹起
+        isDialogShow = true
+        isSubmitting = true
+        val oldType = mRecord!!.mRecordTypes!![0].type
         mRecord!!.money = BigDecimalUtil.yuan2FenBD(text)
         mRecord!!.remark = edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
@@ -194,15 +316,18 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mViewModel.updateRecord(mRecord!!).observe(this, Observer {
+        mViewModel.updateRecord(oldType, mCurrentType, mOldAssets, mAssets, mRecord!!).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
                     // 更新 widget
                     WidgetProvider.updateWidget(this)
+                    isSubmitting = false
                     finish()
                 }
                 is ErrorResource<Boolean> -> {
                     keyboard.setAffirmEnable(true)
+                    isDialogShow = false
+                    isSubmitting = false
                     ToastUtils.show(R.string.toast_modify_record_fail)
                 }
             }
@@ -219,6 +344,21 @@ class AddRecordActivity : BaseActivity() {
             typePageOutlay.setItems(it, RecordType.TYPE_OUTLAY, mRecord)
             typePageIncome.setItems(it, RecordType.TYPE_INCOME, mRecord)
         })
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (isSubmitting) {
+            ToastUtils.show(R.string.toast_submit_now)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

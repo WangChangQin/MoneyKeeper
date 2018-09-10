@@ -51,7 +51,7 @@
     <string name="toast_choose_account">請選擇不同賬戶</string>
     <string name="toast_date_null">日期為空，請重新進入界面後嘗試</string>
     <string name="toast_transfer_fail">轉賬失敗</string>
-    <string name="toast_transfer_now">正在轉賬操作，請稍等..</string>
+    <string name="toast_submit_now">正在提交，請稍等..</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>
@@ -248,6 +248,9 @@
     <string name="text_edit_assets">修改資產賬戶</string>
     <string name="text_choose_bank">選擇銀行</string>
     <string name="text_choose_account">選擇賬戶</string>
+    <string name="text_no_choose_account">不選擇賬戶</string>
+    <string name="text_no_choose_account_tip">僅計入收支賬單</string>
+    <string name="text_new_choose_account">新建賬戶</string>
     <string name="hint_assets_name">請輸入賬戶名稱</string>
     <string name="text_remark">備註：</string>
     <string name="hint_remark">可不填</string>

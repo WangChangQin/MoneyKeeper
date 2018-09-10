@@ -219,7 +219,7 @@ class TransferActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (isSubmitting) {
-            ToastUtils.show(R.string.toast_transfer_now)
+            ToastUtils.show(R.string.toast_submit_now)
         } else {
             super.onBackPressed()
         }

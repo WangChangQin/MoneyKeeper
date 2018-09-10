@@ -176,6 +176,8 @@ andResGuard {
             "R.mipmap.bank_zhaoshang",
             // 其他
             "R.mipmap.ic_balance",
+            "R.mipmap.ic_no_account",
+            "R.mipmap.ic_add_account"
     ]
     compressFilePattern = [
             "*.png",

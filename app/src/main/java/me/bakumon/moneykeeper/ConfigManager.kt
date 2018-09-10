@@ -47,6 +47,7 @@ object ConfigManager {
     private const val KEY_IS_THEME_DARK = "is_theme_dark"
     private const val KEY_WIDGET_ENABLE = "is_widget_enable"
     private const val KEY_BACKUP_FOLDER = "backup_folder"
+    private const val KEY_ASSETS_ID = "assets_id"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -86,6 +87,9 @@ object ConfigManager {
 
     val backupFolder: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_BACKUP_FOLDER)
+
+    val assetId: Int
+        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_ASSETS_ID, -1)
 
     /**
      * 自动备份
@@ -169,6 +173,13 @@ object ConfigManager {
      */
     fun setBackupFolder(folder: String): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_BACKUP_FOLDER, folder)
+    }
+
+    /**
+     * 记账，上次使用的账户名
+     */
+    fun setAssetsId(id: Int): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS_ID, id)
     }
 
 }
