@@ -97,6 +97,15 @@ object TypeImgListCreator {
 
             bean = TypeImgBean("type_movie")
             list.add(bean)
+
+            bean = TypeImgBean("type_reduce")
+            list.add(bean)
+
+            bean = TypeImgBean("type_shopping")
+            list.add(bean)
+
+            bean = TypeImgBean("type_handling_fee")
+            list.add(bean)
         } else {
             bean = TypeImgBean("type_salary")
             list.add(bean)
@@ -108,6 +117,15 @@ object TypeImgListCreator {
             list.add(bean)
 
             bean = TypeImgBean("type_income_red")
+            list.add(bean)
+
+            bean = TypeImgBean("type_back_money")
+            list.add(bean)
+
+            bean = TypeImgBean("type_unexpected_income")
+            list.add(bean)
+
+            bean = TypeImgBean("type_interest")
             list.add(bean)
         }
         return list

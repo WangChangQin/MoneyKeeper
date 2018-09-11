@@ -149,6 +149,12 @@ andResGuard {
             "R.mipmap.type_outlay_red",
             "R.mipmap.type_adventure",
             "R.mipmap.type_movie",
+            "R.mipmap.type_back_money",
+            "R.mipmap.type_handling_fee",
+            "R.mipmap.type_interest",
+            "R.mipmap.type_unexpected_income",
+            "R.mipmap.type_reduce",
+            "R.mipmap.type_shopping",
             // 资产类型
             "R.mipmap.assets_alipay",
             "R.mipmap.assets_bus_card",
