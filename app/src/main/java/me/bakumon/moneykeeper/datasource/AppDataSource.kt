@@ -222,6 +222,11 @@ interface AppDataSource {
     fun getAssetsById(id: Int): LiveData<Assets>
 
     /**
+     * 获取资产
+     */
+    fun getAssetsBeanById(id: Int): Assets?
+
+    /**
      * 获取资产汇总
      */
     fun getAssetsMoney(): LiveData<AssetsMoneyBean>

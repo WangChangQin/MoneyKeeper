@@ -35,6 +35,9 @@ interface AssetsDao {
     @Query("SELECT * FROM Assets WHERE state=0 AND id=:id")
     fun getAssetsById(id: Int): LiveData<Assets>
 
+    @Query("SELECT * FROM Assets WHERE state=0 AND id=:id")
+    fun getAssetsBeanById(id: Int): Assets?
+
     @Insert
     fun insertAssets(vararg assets: Assets)
 

@@ -18,12 +18,13 @@ package me.bakumon.moneykeeper.ui.statistics.bill
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.FlowableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.base.Resource
-import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.database.entity.SumMoneyBean
+import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import me.bakumon.moneykeeper.utill.DateUtils
@@ -57,12 +58,55 @@ class BillViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    liveData.value = Resource.create(true)
+                    getAssets(liveData, record)
                 }
                 ) { throwable ->
                     liveData.value = Resource.create(throwable)
                 })
         return liveData
+    }
+
+    private fun getAssets(liveData: MutableLiveData<Resource<Boolean>>, record: RecordWithType) {
+        if (record.assetsId == -1) {
+            liveData.value = Resource.create(true)
+        } else {
+            Flowable.create(FlowableOnSubscribe<Assets?> {
+                val assets = mDataSource.getAssetsBeanById(record.assetsId)
+                if (assets != null) {
+                    it.onNext(assets)
+                }
+                it.onComplete()
+            }, BackpressureStrategy.BUFFER)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        if (it == null) {
+                            liveData.value = Resource.create(true)
+                        } else {
+                            updateAssets(liveData, record, it)
+                        }
+                    }
+                    ) { throwable ->
+                        liveData.value = Resource.create(throwable)
+                    }
+        }
+    }
+
+    private fun updateAssets(liveData: MutableLiveData<Resource<Boolean>>, record: RecordWithType, assets: Assets) {
+        if (record.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
+            assets.money = assets.money.add(record.money)
+        } else {
+            assets.money = assets.money.subtract(record.money)
+        }
+        mDisposable.add(mDataSource.updateAssets(assets)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
     }
 
 }

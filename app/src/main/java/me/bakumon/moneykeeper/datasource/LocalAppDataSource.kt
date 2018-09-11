@@ -276,6 +276,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.assetsDao().getAssetsById(id)
     }
 
+    override fun getAssetsBeanById(id: Int): Assets? {
+        return mAppDatabase.assetsDao().getAssetsBeanById(id)
+    }
+
     override fun getAssetsMoney(): LiveData<AssetsMoneyBean> {
         return mAppDatabase.assetsDao().getAssetsMoney()
     }
