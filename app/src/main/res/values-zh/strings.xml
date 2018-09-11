@@ -48,6 +48,8 @@
     <string name="toast_get_review_sum_money_fail">获取回顾汇总数据失败</string>
     <string name="toast_move_backup_files_success">备份文件夹修改并迁移成功</string>
     <string name="toast_move_backup_files_fail">修改失败</string>
+    <string name="toast_save_assets_success">保存成功</string>
+    <string name="toast_save_assets_fail">保存失败</string>
     <string name="toast_choose_account">请选择不同账户</string>
     <string name="toast_date_null">日期为空，请重新进入界面后尝试</string>
     <string name="toast_transfer_fail">转账失败</string>

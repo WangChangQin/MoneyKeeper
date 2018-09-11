@@ -48,6 +48,8 @@
     <string name="toast_get_review_sum_money_fail">獲取回顧匯總數據失敗</string>
     <string name="toast_move_backup_files_success">備份文件夾修改並遷移成功</string>
     <string name="toast_move_backup_files_fail">修改文件夾失敗</string>
+    <string name="toast_save_assets_success">保存成功</string>
+    <string name="toast_save_assets_fail">保存失敗</string>
     <string name="toast_choose_account">請選擇不同賬戶</string>
     <string name="toast_date_null">日期為空，請重新進入界面後嘗試</string>
     <string name="toast_transfer_fail">轉賬失敗</string>
