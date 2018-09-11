@@ -63,11 +63,11 @@ class TypeRecordsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource
     }
 
     private fun getAssets(liveData: MutableLiveData<Resource<Boolean>>, record: RecordWithType) {
-        if (record.assetsId == -1) {
+        if (record.assetsId == -1 || record.assetsId == null) {
             liveData.value = Resource.create(true)
         } else {
             Flowable.create(FlowableOnSubscribe<Assets?> {
-                val assets = mDataSource.getAssetsBeanById(record.assetsId)
+                val assets = mDataSource.getAssetsBeanById(record.assetsId!!)
                 if (assets != null) {
                     it.onNext(assets)
                 }

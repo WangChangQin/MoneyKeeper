@@ -114,10 +114,10 @@ class AddRecordActivity : BaseActivity() {
             mCurrentChooseDate = mRecord!!.time
             mCurrentChooseCalendar.time = mCurrentChooseDate
             tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
-            if (mRecord!!.assetsId == -1) {
+            if (mRecord!!.assetsId == -1 || mRecord!!.assetsId == null) {
                 updateAccountView(name = getString(R.string.text_no_choose_account))
             } else {
-                getAssetsAccount(mRecord!!.assetsId)
+                getAssetsAccount(mRecord!!.assetsId!!)
             }
         }
 

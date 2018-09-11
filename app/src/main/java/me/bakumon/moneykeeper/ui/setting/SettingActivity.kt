@@ -406,10 +406,11 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun backHome() {
-        Floo.stack(this)
-                .target(Router.IndexKey.INDEX_KEY_HOME)
-                .result("refresh")
-                .start()
+//        Floo.stack(this)
+//                .target(Router.IndexKey.INDEX_KEY_HOME)
+//                .result("refresh")
+//                .start()
+        ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
     }
 
     private fun restartApp() {

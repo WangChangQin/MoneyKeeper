@@ -70,6 +70,9 @@ abstract class AppDatabase : RoomDatabase() {
         const val DB_NAME = "MoneyKeeper.db"
         private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                // Record 表中添加字段 assets_id
+                database.execSQL("ALTER TABLE `Record` ADD COLUMN `assets_id` INTEGER")
+
                 database.execSQL("CREATE TABLE IF NOT EXISTS `Assets` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `img_name` TEXT NOT NULL, `type` INTEGER NOT NULL, `state` INTEGER NOT NULL, `remark` TEXT NOT NULL, `create_time` INTEGER NOT NULL, `money` INTEGER NOT NULL, `init_money` INTEGER NOT NULL)")
 
                 database.execSQL("CREATE TABLE IF NOT EXISTS `AssetsModifyRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `state` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `assets_id` INTEGER NOT NULL, `money_before` INTEGER NOT NULL, `money` INTEGER NOT NULL, FOREIGN KEY(`assets_id`) REFERENCES `Assets`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")

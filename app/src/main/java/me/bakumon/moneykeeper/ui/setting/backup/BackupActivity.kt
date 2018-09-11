@@ -327,10 +327,11 @@ class BackupActivity : AbsListActivity() {
     }
 
     private fun backHome() {
-        Floo.stack(this)
-                .popCount(2)
-                .result("refresh")
-                .start()
+//        Floo.stack(this)
+//                .popCount(2)
+//                .result("refresh")
+//                .start()
+        ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
     }
 
     private fun restartApp() {
