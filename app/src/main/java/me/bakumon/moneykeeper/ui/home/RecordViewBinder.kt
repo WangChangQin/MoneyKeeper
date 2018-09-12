@@ -46,7 +46,14 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
         holder.tvRemark.visibility = if (item.remark.isNullOrEmpty()) View.GONE else View.VISIBLE
 
         // 费用
-        holder.tvMoney.text = getMoneyText(item)
+        val money = if (item.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
+            holder.tvMoney.setTextColor(holder.tvMoney.context.resources.getColor(R.color.colorOutlay))
+            "-" + BigDecimalUtil.fen2Yuan(item.money)
+        } else {
+            holder.tvMoney.setTextColor(holder.tvMoney.context.resources.getColor(R.color.colorIncome))
+            "+" + BigDecimalUtil.fen2Yuan(item.money)
+        }
+        holder.tvMoney.text = money
 
         holder.llItemClick.setOnClickListener {
             Floo.navigation(holder.llItemClick.context, Router.Url.URL_ADD_RECORD)
@@ -57,14 +64,6 @@ class RecordViewBinder constructor(private val onDeleteClickListener: ((RecordWi
         holder.llItemClick.setOnLongClickListener {
             showOperateDialog(holder.tvMoney.context, item)
             true
-        }
-    }
-
-    private fun getMoneyText(item: RecordWithType): String {
-        return if (item.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
-            "-" + BigDecimalUtil.fen2Yuan(item.money)
-        } else {
-            "+" + BigDecimalUtil.fen2Yuan(item.money)
         }
     }
 
