@@ -308,6 +308,7 @@ class AddRecordActivity : BaseActivity() {
         isDialogShow = true
         isSubmitting = true
         val oldType = mRecord!!.mRecordTypes!![0].type
+        val oldMoney = mRecord!!.money!!
         mRecord!!.money = BigDecimalUtil.yuan2FenBD(text)
         mRecord!!.remark = edtRemark.text.toString().trim { it <= ' ' }
         mRecord!!.time = mCurrentChooseDate
@@ -316,7 +317,7 @@ class AddRecordActivity : BaseActivity() {
         else
             typePageIncome.currentItem!!.id
 
-        mViewModel.updateRecord(oldType, mCurrentType, mOldAssets, mAssets, mRecord!!).observe(this, Observer {
+        mViewModel.updateRecord(oldMoney, oldType, mCurrentType, mOldAssets, mAssets, mRecord!!).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
                     // 更新 widget

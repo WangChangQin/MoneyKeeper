@@ -26,6 +26,7 @@ import me.bakumon.moneykeeper.database.entity.Record
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
+import java.math.BigDecimal
 
 /**
  * 记一笔界面 ViewModel
@@ -74,7 +75,7 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                 })
     }
 
-    fun updateRecord(oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): LiveData<Resource<Boolean>> {
+    fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
 
         record.assetsId = if (assets == null) -1 else assets.id!!
@@ -82,7 +83,7 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    updateAssetsForModify(liveData, oldType, type, oldAssets, assets, record)
+                    updateAssetsForModify(liveData, oldMoney, oldType, type, oldAssets, assets, record)
                 }
                 ) { throwable ->
                     liveData.value = Resource.create(throwable)
@@ -90,7 +91,7 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
         return liveData
     }
 
-    private fun updateAssetsForModify(liveData: MutableLiveData<Resource<Boolean>>, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record) {
+    private fun updateAssetsForModify(liveData: MutableLiveData<Resource<Boolean>>, oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record) {
         // 太灾难了
         if (oldType == type) {
             if (oldAssets == null) {
@@ -111,26 +112,21 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                 if (assets == null) {
                     if (type == RecordType.TYPE_OUTLAY) {
                         // 更新 oldAssets，加
-                        oldAssets.money = oldAssets.money.add(record.money)
+                        oldAssets.money = oldAssets.money.add(oldMoney)
                         updateAssets(assets = oldAssets, liveData = liveData)
                     } else {
-                        oldAssets.money = oldAssets.money.subtract(record.money)
+                        oldAssets.money = oldAssets.money.subtract(oldMoney)
                         updateAssets(assets = oldAssets, liveData = liveData)
                     }
                 } else {
-                    if (oldAssets.id == assets.id) {
-                        // 不用更新资产
-                        liveData.value = Resource.create(true)
+                    if (type == RecordType.TYPE_OUTLAY) {
+                        oldAssets.money = oldAssets.money.add(oldMoney)
+                        assets.money = assets.money.subtract(record.money)
+                        updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
                     } else {
-                        if (type == RecordType.TYPE_OUTLAY) {
-                            oldAssets.money = oldAssets.money.add(record.money)
-                            assets.money = assets.money.subtract(record.money)
-                            updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
-                        } else {
-                            oldAssets.money = oldAssets.money.subtract(record.money)
-                            assets.money = assets.money.add(record.money)
-                            updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
-                        }
+                        oldAssets.money = oldAssets.money.subtract(oldMoney)
+                        assets.money = assets.money.add(record.money)
+                        updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
                     }
                 }
             }
@@ -151,20 +147,20 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
             } else {
                 if (assets == null) {
                     if (oldType == RecordType.TYPE_OUTLAY) {
-                        oldAssets.money = oldAssets.money.add(record.money)
+                        oldAssets.money = oldAssets.money.add(oldMoney)
                         updateAssets(assets = oldAssets, liveData = liveData)
                     } else {
-                        oldAssets.money = oldAssets.money.subtract(record.money)
+                        oldAssets.money = oldAssets.money.subtract(oldMoney)
                         updateAssets(assets = oldAssets, liveData = liveData)
                     }
                 } else {
                     if (type == RecordType.TYPE_OUTLAY) {
                         // oldType==RecordType.TYPE_INCOME
-                        oldAssets.money = oldAssets.money.subtract(record.money)
+                        oldAssets.money = oldAssets.money.subtract(oldMoney)
                         assets.money = assets.money.subtract(record.money)
                         updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
                     } else {
-                        oldAssets.money = oldAssets.money.add(record.money)
+                        oldAssets.money = oldAssets.money.add(oldMoney)
                         assets.money = assets.money.add(record.money)
                         updateAssets(assets = oldAssets, otherAssets = assets, liveData = liveData)
                     }
