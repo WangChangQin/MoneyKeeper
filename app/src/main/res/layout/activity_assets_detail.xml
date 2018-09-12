@@ -100,9 +100,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="5dp">
+
         <include
             android:id="@+id/typeChoose"
-            layout="@layout/layout_type_choose" />
+            layout="@layout/layout_three_choose" />
     </LinearLayout>
 
     <me.bakumon.moneykeeper.view.NotPagingViewPager

@@ -14,20 +14,21 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.typerecords
+package me.bakumon.moneykeeper.ui.assets.detail
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.Gravity
-import kotlinx.android.synthetic.main.layout_list.*
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.ui.common.BaseFragment
+import me.bakumon.moneykeeper.ui.common.AbsListFragment
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
+import me.bakumon.moneykeeper.ui.typerecords.RecordByMoneyViewBinder
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.multitype.Items
@@ -35,40 +36,18 @@ import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
 
 /**
- * 某一类型记账记录
- * 按时间排序
+ * OrderListFragment
  *
  * @author Bakumon https://bakumon.me
  */
-class TypeRecordsByMoneyFragment : BaseFragment() {
+class OrderListFragment : AbsListFragment() {
 
-    private lateinit var mViewModel: TypeRecordsViewModel
-    private lateinit var mAdapter: MultiTypeAdapter
+    private lateinit var mViewModel: AssetsListViewModel
+    private var mAssetsId: Int? = 0
 
-    private var mRecordType: Int = 0
-    private var mRecordTypeId: Int = 0
-    private var mYear: Int = 0
-    private var mMonth: Int = 0
-
-    override val layoutId: Int
-        get() = R.layout.layout_list
-
-    override fun onInit(savedInstanceState: Bundle?) {
-        val bundle = arguments
-        if (bundle != null) {
-            mRecordType = bundle.getInt(Router.ExtraKey.KEY_RECORD_TYPE)
-            mRecordTypeId = bundle.getInt(Router.ExtraKey.KEY_RECORD_TYPE_ID)
-            mYear = bundle.getInt(Router.ExtraKey.KEY_YEAR)
-            mMonth = bundle.getInt(Router.ExtraKey.KEY_MONTH)
-        }
-
-        mAdapter = MultiTypeAdapter()
-        mAdapter.register(RecordWithType::class, RecordByMoneyViewBinder { deleteRecord(it) })
+    override fun onAdapterCreated(adapter: MultiTypeAdapter) {
+        adapter.register(RecordWithType::class, RecordByMoneyViewBinder { deleteRecord(it) })
         mAdapter.register(Empty::class, EmptyViewBinder())
-        recyclerView.adapter = mAdapter
-
-        mViewModel = getViewModel()
-        getData()
     }
 
     private fun deleteRecord(record: RecordWithType) {
@@ -85,39 +64,45 @@ class TypeRecordsByMoneyFragment : BaseFragment() {
         })
     }
 
+    override fun onItemsCreated(items: Items) {
+
+    }
+
+    override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
+        mAssetsId = arguments?.getInt(Router.ExtraKey.KEY_ASSETS_ID)
+
+        mViewModel = getViewModel()
+        initData()
+    }
+
     override fun lazyInitData() {
 
     }
 
-    private fun getData() {
-        mViewModel.getRecordWithTypes(1, mRecordType, mRecordTypeId, mYear, mMonth).observe(this, Observer {
+    private fun initData() {
+        mViewModel.getRecordWithTypesByAssetsId(mAssetsId!!).observe(this, Observer {
             if (it != null) {
                 setItems(it)
             }
         })
     }
 
-    private fun setItems(recordWithTypes: List<RecordWithType>) {
+    private fun setItems(list: List<RecordWithType>) {
         val items = Items()
-        if (recordWithTypes.isEmpty()) {
-            items.add(Empty(getString(R.string.text_empty_tip), Gravity.CENTER))
+        if (list.isEmpty()) {
+            items.add(Empty(getString(R.string.text_order_record_no), Gravity.CENTER))
         } else {
-            items.addAll(recordWithTypes)
+            items.addAll(list)
         }
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
     }
 
     companion object {
-        private val TAG = TypeRecordsByMoneyFragment::class.java.simpleName
-
-        fun newInstance(recordType: Int, recordTypeId: Int, year: Int, month: Int): TypeRecordsByMoneyFragment {
-            val fragment = TypeRecordsByMoneyFragment()
+        fun newInstance(assetsId: Int): OrderListFragment {
+            val fragment = OrderListFragment()
             val bundle = Bundle()
-            bundle.putInt(Router.ExtraKey.KEY_RECORD_TYPE, recordType)
-            bundle.putInt(Router.ExtraKey.KEY_RECORD_TYPE_ID, recordTypeId)
-            bundle.putInt(Router.ExtraKey.KEY_YEAR, year)
-            bundle.putInt(Router.ExtraKey.KEY_MONTH, month)
+            bundle.putInt(Router.ExtraKey.KEY_ASSETS_ID, assetsId)
             fragment.arguments = bundle
             return fragment
         }

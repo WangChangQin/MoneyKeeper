@@ -29,8 +29,8 @@ import android.view.View
 import android.widget.RadioGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.activity_assets_detail.*
+import kotlinx.android.synthetic.main.layout_three_choose.view.*
 import kotlinx.android.synthetic.main.layout_tool_bar.view.*
-import kotlinx.android.synthetic.main.layout_type_choose.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
@@ -64,6 +64,7 @@ class AssetsDetailActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         typeChoose.rbLeft.text = getString(R.string.text_transfer)
+        typeChoose.rbMiddle.text = getString(R.string.text_order)
         typeChoose.rbRight.text = getString(R.string.text_modify)
     }
 
@@ -75,20 +76,21 @@ class AssetsDetailActivity : BaseActivity() {
         mAssets = extra as Assets
 
         val transferListFragment = TransferListFragment.newInstance(mAssets.id!!)
+        val orderListFragment = OrderListFragment.newInstance(mAssets.id!!)
         val modifyListFragment = ModifyListFragment.newInstance(mAssets.id!!)
-        val adapter = FragmentViewPagerAdapter(supportFragmentManager, arrayListOf(transferListFragment, modifyListFragment))
+        val adapter = FragmentViewPagerAdapter(supportFragmentManager, arrayListOf(transferListFragment, orderListFragment, modifyListFragment))
 
         viewPager.adapter = adapter
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 3
 
         (typeChoose as RadioGroup).setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rbLeft) {
-                viewPager.setCurrentItem(0, false)
-            } else {
-                viewPager.setCurrentItem(1, false)
+            when (checkedId) {
+                R.id.rbLeft -> viewPager.setCurrentItem(0, false)
+                R.id.rbMiddle -> viewPager.setCurrentItem(1, false)
+                R.id.rbRight -> viewPager.setCurrentItem(2, false)
             }
         }
-        (typeChoose as RadioGroup).check(R.id.rbLeft)
+        (typeChoose as RadioGroup).check(R.id.rbMiddle)
 
         mViewModel = getViewModel()
         getAssetsData(mAssets.id!!)

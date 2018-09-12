@@ -131,6 +131,11 @@ interface AppDataSource {
     fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>>
 
     /**
+     * 获取某个资产的记账记录
+     */
+    fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>>
+
+    /**
      * 根据类型获取某段时间的记账记录数据
      *
      * @return 包含记录数据的 Flowable 对象

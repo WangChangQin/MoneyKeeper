@@ -299,6 +299,7 @@
     <string name="text_adjust_record">修改記錄</string>
     <string name="text_adjust_record_no">沒有修改記錄</string>
     <string name="text_transfer_record_no">沒有轉賬記錄</string>
+    <string name="text_order_record_no">沒有賬單記錄</string>
     <string name="text_transfer">轉賬</string>
     <string name="text_choose_out_account">選擇轉出賬戶</string>
     <string name="text_choose_in_account">選擇轉入賬戶</string>

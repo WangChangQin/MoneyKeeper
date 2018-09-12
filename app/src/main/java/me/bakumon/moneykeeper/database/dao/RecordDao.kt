@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.database.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.*
 import java.util.*
 
@@ -33,6 +32,10 @@ interface RecordDao {
     @Transaction
     @Query("SELECT * from Record WHERE time BETWEEN :from AND :to ORDER BY time DESC, create_time DESC")
     fun getRangeRecordWithTypes(from: Date, to: Date): LiveData<List<RecordWithType>>
+
+    @Transaction
+    @Query("SELECT * from Record WHERE assets_id=:assetsId ORDER BY time DESC, create_time DESC LIMIT :limit")
+    fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>>
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
