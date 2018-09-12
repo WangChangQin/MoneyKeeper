@@ -17,8 +17,6 @@
 package me.bakumon.moneykeeper.ui.common
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
@@ -130,15 +128,5 @@ abstract class BaseActivity : AppCompatActivity() {
     inline fun <reified T : BaseViewModel> getViewModel(): T {
         val viewModelFactory = Injection.provideViewModelFactory()
         return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
-    }
-
-    @Suppress("DEPRECATION")
-    override fun getResources(): Resources {
-        // 固定字体大小，不随系统字体大小改变
-        val res = super.getResources()
-        val config = Configuration()
-        config.setToDefaults()
-        res.updateConfiguration(config, res.displayMetrics)
-        return res
     }
 }
