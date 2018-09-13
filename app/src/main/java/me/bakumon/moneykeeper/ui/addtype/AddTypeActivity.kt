@@ -76,7 +76,7 @@ class AddTypeActivity : BaseActivity() {
         edt_type_name.setSelection(edt_type_name.text.length)
 
         adapter = MultiTypeAdapter()
-        adapter.register(TypeImgBean::class, TypeImgViewBinder({ checkedItem(it) }))
+        adapter.register(TypeImgBean::class, TypeImgViewBinder { checkedItem(it) })
         rv_type.adapter = adapter
 
         mViewModel = getViewModel()

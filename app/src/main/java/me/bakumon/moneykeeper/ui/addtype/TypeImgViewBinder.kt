@@ -24,7 +24,9 @@ class TypeImgViewBinder constructor(private val onClickItemListener: ((Int) -> U
         holder.ivTypeImg.setImageResource(ResourcesUtil.getTypeImgId(holder.ivTypeImg.context, item.imgName))
         holder.ivCheck.visibility = if (item.isChecked) View.VISIBLE else View.GONE
         holder.llItemTypeImg.setOnClickListener {
-            onClickItemListener.invoke(holder.adapterPosition)
+            if (holder.adapterPosition != -1) {
+                onClickItemListener.invoke(holder.adapterPosition)
+            }
         }
     }
 
