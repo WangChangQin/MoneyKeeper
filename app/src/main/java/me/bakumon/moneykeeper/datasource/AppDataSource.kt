@@ -92,6 +92,11 @@ interface AppDataSource {
     fun sortRecordTypes(recordTypes: List<RecordType>): Completable
 
     /**
+     * 资产排序
+     */
+    fun sortAssets(assets: List<Assets>): Completable
+
+    /**
      * 获取类型图片数据
      *
      * @param type 收入或支出类型

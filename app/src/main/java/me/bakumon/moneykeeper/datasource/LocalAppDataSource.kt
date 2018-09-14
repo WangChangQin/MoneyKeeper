@@ -168,6 +168,23 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
+    override fun sortAssets(assets: List<Assets>): Completable {
+        return Completable.fromAction {
+            if (assets.size > 1) {
+                val sortAssets = ArrayList<Assets>()
+                for (i in assets.indices) {
+                    val type = assets[i]
+                    if (type.ranking != i) {
+                        type.ranking = i
+                        sortAssets.add(type)
+                    }
+                }
+                mAppDatabase.assetsDao().updateAssets(*sortAssets.toTypedArray())
+                autoBackup()
+            }
+        }
+    }
+
     override fun getAllTypeImgBeans(type: Int): List<TypeImgBean> {
         return TypeImgListCreator.createTypeImgBeanData(type)
     }

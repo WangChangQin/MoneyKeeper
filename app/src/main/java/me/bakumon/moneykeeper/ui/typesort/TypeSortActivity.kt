@@ -30,6 +30,7 @@ import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.ui.common.AbsListActivity
+import me.bakumon.moneykeeper.ui.common.SortDragCallback
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -84,11 +85,18 @@ class TypeSortActivity : AbsListActivity() {
         return true
     }
 
+    private var isSaving = false
+
     private fun sortRecordTypes() {
+        if (isSaving) {
+            return
+        }
+        isSaving = true
         mViewModel.sortRecordTypes(mAdapter.items as List<RecordType>).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> finish()
                 is ErrorResource<Boolean> -> {
+                    isSaving = false
                     ToastUtils.show(R.string.toast_sort_fail)
                 }
             }
@@ -108,9 +116,5 @@ class TypeSortActivity : AbsListActivity() {
         items.addAll(data)
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
-    }
-
-    companion object {
-        private val TAG = TypeSortActivity::class.java.simpleName
     }
 }

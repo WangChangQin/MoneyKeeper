@@ -53,6 +53,12 @@ open class Assets : Serializable {
     var money: BigDecimal
 
     /**
+     * 排序
+     */
+    @ColumnInfo(name = "ranking")
+    var ranking: Int? = 0
+
+    /**
      * 初始化金额
      */
     @ColumnInfo(name = "init_money")

@@ -29,7 +29,7 @@ import me.bakumon.moneykeeper.database.entity.AssetsMoneyBean
 @Dao
 interface AssetsDao {
 
-    @Query("SELECT * FROM Assets WHERE state=0")
+    @Query("SELECT * FROM Assets WHERE state=0 ORDER BY ranking, create_time DESC")
     fun getAllAssets(): LiveData<List<Assets>>
 
     @Query("SELECT * FROM Assets WHERE state=0 AND id=:id")

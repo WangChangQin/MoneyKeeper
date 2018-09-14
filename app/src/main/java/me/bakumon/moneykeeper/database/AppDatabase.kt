@@ -33,7 +33,7 @@ import me.bakumon.moneykeeper.database.entity.*
  *
  * @author Bakumon https:bakumon.me
  */
-@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class, AssetsTransferRecord::class], version = 2)
+@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class, AssetsTransferRecord::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -82,6 +82,14 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE  INDEX `index_AssetsTransferRecord_assets_id_form_assets_id_to` ON `AssetsTransferRecord` (`assets_id_form`, `assets_id_to`)")
             }
         }
+
+        private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Assets 表中添加字段 ranking
+                database.execSQL("ALTER TABLE `Assets` ADD COLUMN `ranking` INTEGER")
+            }
+        }
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
         val instance: AppDatabase?
@@ -90,7 +98,7 @@ abstract class AppDatabase : RoomDatabase() {
                     synchronized(AppDatabase::class) {
                         if (INSTANCE == null) {
                             INSTANCE = Room.databaseBuilder(App.instance, AppDatabase::class.java, DB_NAME)
-                                    .addMigrations(MIGRATION_1_2)
+                                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                                     .build()
                         }
                     }

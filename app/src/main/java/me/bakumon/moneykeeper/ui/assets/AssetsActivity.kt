@@ -19,22 +19,26 @@ package me.bakumon.moneykeeper.ui.assets
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_assets.*
+import kotlinx.android.synthetic.main.layout_sort_tip.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.database.entity.AssetsMoneyBean
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
-import me.bakumon.moneykeeper.ui.setting.Category
-import me.bakumon.moneykeeper.ui.setting.CategoryViewBinder
+import me.bakumon.moneykeeper.ui.common.SortDragCallback
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
+import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -67,14 +71,25 @@ class AssetsActivity : BaseActivity() {
 
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvNetAssetsTitle.text = getString(R.string.text_assets) + text
+
+        category.text = getString(R.string.text_assets_account)
     }
 
     override fun onInit(savedInstanceState: Bundle?) {
         mAdapter = MultiTypeAdapter()
-        mAdapter.register(Category::class, CategoryViewBinder())
         mAdapter.register(Assets::class, AssetsViewBinder())
         mAdapter.register(Empty::class, EmptyViewBinder())
         rvAssets.adapter = mAdapter
+
+        val callback = SortDragCallback(mAdapter) {
+            tvSave.visibility = View.VISIBLE
+            sortTip.visibility = View.GONE
+            ConfigManager.setIsShowSortTip(false)
+        }
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(rvAssets)
+
+        tvSave.setOnClickListener { saveSort() }
 
         mViewModel = getViewModel()
         getAssetsMoney()
@@ -104,18 +119,50 @@ class AssetsActivity : BaseActivity() {
     private fun setItems(list: List<Assets>) {
         if (list.size < 2) {
             btnAdd.visibility = View.GONE
+            sortTip.visibility = View.GONE
         } else {
             btnAdd.visibility = View.VISIBLE
+            // 排序提示在用户点击或用户手动排序一次后隐藏，并且将不会显示
+            if (ConfigManager.isShowSortTip) {
+                sortTip.visibility = View.VISIBLE
+                sortTip.ivClear.setOnClickListener {
+                    sortTip.visibility = View.GONE
+                    ConfigManager.setIsShowSortTip(false)
+                }
+            } else {
+                sortTip.visibility = View.GONE
+            }
         }
         val items = Items()
         if (list.isEmpty()) {
             items.add(Empty(getString(R.string.text_assets_no_account), Gravity.CENTER))
         } else {
-            items.add(Category(getString(R.string.text_assets_account)))
             items.addAll(list)
         }
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
+    }
+
+    private var isSaving = false
+
+    private fun saveSort() {
+        if (isSaving) {
+            return
+        }
+        isSaving = true
+
+        mViewModel.sortAssets(mAdapter.items as List<Assets>).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    tvSave.visibility = View.GONE
+                    isSaving = false
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(R.string.toast_sort_fail)
+                    isSaving = false
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
