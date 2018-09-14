@@ -16,7 +16,9 @@
 
 package me.bakumon.moneykeeper
 
+import android.app.Activity
 import android.app.Application
+import android.os.Bundle
 import com.squareup.leakcanary.LeakCanary
 import me.drakeet.floo.Floo
 import me.drakeet.floo.Target
@@ -27,7 +29,7 @@ import java.util.*
 /**
  * @author Bakumon https://bakumon.me
  */
-class App : Application() {
+class App : Application(), Application.ActivityLifecycleCallbacks {
 
     override fun onCreate() {
         super.onCreate()
@@ -67,6 +69,42 @@ class App : Application() {
                 .addTargetNotFoundHandler(OpenDirectlyHandler())
 
         Floo.apply(mappings)
+
+        registerActivityLifecycleCallbacks(this)
+    }
+
+    private var foregroundActivityCount = 0
+
+    override fun onActivityPaused(activity: Activity?) {
+
+    }
+
+    override fun onActivityResumed(activity: Activity?) {
+
+    }
+
+    override fun onActivityStarted(activity: Activity?) {
+        foregroundActivityCount++
+    }
+
+    override fun onActivityDestroyed(activity: Activity?) {
+
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+
+    }
+
+    override fun onActivityStopped(activity: Activity?) {
+        foregroundActivityCount--
+    }
+
+    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+
+    }
+
+    fun isAppForeground(): Boolean {
+        return foregroundActivityCount > 0
     }
 
     companion object {

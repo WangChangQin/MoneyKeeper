@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
@@ -81,8 +82,10 @@ class UpdateWidgetService : IntentService("UpdateWidgetService") {
 
     companion object {
         fun updateWidget(context: Context) {
-            val intent = Intent(context, UpdateWidgetService::class.java)
-            context.startService(intent)
+            if (App.instance.isAppForeground()) {
+                val intent = Intent(context, UpdateWidgetService::class.java)
+                context.startService(intent)
+            }
         }
     }
 }
