@@ -22,6 +22,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActionBar">false</item>
         <!-- 影响 checkbox 等的次颜色 -->
         <item name="android:textColorSecondary">#b3b0b0</item>
         <item name="android:navigationBarColor">@color/colorWindowBackground</item>
