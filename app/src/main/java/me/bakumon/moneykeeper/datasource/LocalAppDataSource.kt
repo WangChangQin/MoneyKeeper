@@ -27,6 +27,7 @@ import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.DateUtils
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -189,16 +190,102 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return TypeImgListCreator.createTypeImgBeanData(type)
     }
 
-    override fun insertRecord(record: Record): Completable {
+    override fun insertRecord(type: Int, assets: Assets?, record: Record): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().insertRecord(record)
+            if (assets != null) {
+                if (type == RecordType.TYPE_OUTLAY) {
+                    assets.money = assets.money.subtract(record.money)
+                } else {
+                    assets.money = assets.money.add(record.money)
+                }
+                mAppDatabase.assetsDao().updateAssets(assets)
+            }
             autoBackup()
         }
     }
 
-    override fun updateRecord(record: Record): Completable {
+    override fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().updateRecords(record)
+            // 太灾难了
+            if (oldType == type) {
+                if (oldAssets == null) {
+                    if (assets == null) {
+                        // 不用更新资产
+
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // 更新 assets，减
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                } else {
+                    if (assets == null) {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // 更新 oldAssets，加
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        }
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                }
+            } else {
+                if (oldAssets == null) {
+                    if (assets == null) {
+                        // 不用更新资产
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                } else {
+                    if (assets == null) {
+                        if (oldType == RecordType.TYPE_OUTLAY) {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        }
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // oldType==RecordType.TYPE_INCOME
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                }
+            }
             autoBackup()
         }
     }

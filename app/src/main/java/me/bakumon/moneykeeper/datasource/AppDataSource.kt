@@ -20,6 +20,7 @@ import android.arch.lifecycle.LiveData
 import io.reactivex.Completable
 import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -112,14 +113,14 @@ interface AppDataSource {
      *
      * @param record 记账记录实体
      */
-    fun insertRecord(record: Record): Completable
+    fun insertRecord(type: Int, assets: Assets?, record: Record): Completable
 
     /**
      * 更新一条记账记录
      *
      * @param record 记录对象
      */
-    fun updateRecord(record: Record): Completable
+    fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): Completable
 
     /**
      * 删除一天记账记录
