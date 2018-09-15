@@ -203,9 +203,18 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun deleteRecord(record: Record): Completable {
+    override fun deleteRecord(record: RecordWithType): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().deleteRecord(record)
+            val assets = mAppDatabase.assetsDao().getAssetsBeanById(record.assetsId!!)
+            if (assets != null) {
+                if (record.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
+                    assets.money = assets.money.add(record.money)
+                } else {
+                    assets.money = assets.money.subtract(record.money)
+                }
+                mAppDatabase.assetsDao().updateAssets(assets)
+            }
             autoBackup()
         }
     }

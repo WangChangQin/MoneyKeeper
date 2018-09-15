@@ -126,7 +126,7 @@ interface AppDataSource {
      *
      * @param record 要删除的记账记录
      */
-    fun deleteRecord(record: Record): Completable
+    fun deleteRecord(record: RecordWithType): Completable
 
     /**
      * 获取当前月份的记账记录数据
