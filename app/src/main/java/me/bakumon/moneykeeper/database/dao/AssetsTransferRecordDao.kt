@@ -17,10 +17,7 @@
 package me.bakumon.moneykeeper.database.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import android.arch.persistence.room.*
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 
@@ -38,4 +35,7 @@ interface AssetsTransferRecordDao {
 
     @Insert
     fun insertTransferRecord(vararg assetsTransferRecord: AssetsTransferRecord)
+
+    @Delete
+    fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord)
 }

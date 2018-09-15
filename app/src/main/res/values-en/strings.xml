@@ -54,6 +54,7 @@
     <string name="toast_date_null">The date is empty, please try again after entering the interface.</string>
     <string name="toast_transfer_fail">Transfer failed</string>
     <string name="toast_submit_now">Submitting, please wait..</string>
+    <string name="toast_delete_transfer_fail">Deleting transfer record failed</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>

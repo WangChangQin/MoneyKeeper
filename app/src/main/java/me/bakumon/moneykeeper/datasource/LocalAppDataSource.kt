@@ -326,4 +326,21 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
     override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>> {
         return mAppDatabase.assetsTransferRecordDao().getTransferRecordsById(id)
     }
+
+    override fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().deleteTransferRecord(assetsTransferRecord)
+            val assetsFrom = mAppDatabase.assetsDao().getAssetsBeanById(assetsTransferRecord.assetsIdFrom)
+            val assetsTo = mAppDatabase.assetsDao().getAssetsBeanById(assetsTransferRecord.assetsIdTo)
+            if (assetsFrom != null) {
+                assetsFrom.money = assetsFrom.money.add(assetsTransferRecord.money)
+                mAppDatabase.assetsDao().updateAssets(assetsFrom)
+            }
+            if (assetsTo != null) {
+                assetsTo.money = assetsTo.money.subtract(assetsTransferRecord.money)
+                mAppDatabase.assetsDao().updateAssets(assetsTo)
+            }
+            autoBackup()
+        }
+    }
 }

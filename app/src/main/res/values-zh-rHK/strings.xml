@@ -54,6 +54,7 @@
     <string name="toast_date_null">日期為空，請重新進入界面後嘗試</string>
     <string name="toast_transfer_fail">轉賬失敗</string>
     <string name="toast_submit_now">正在提交，請稍等..</string>
+    <string name="toast_delete_transfer_fail">刪除轉賬記錄失敗</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>

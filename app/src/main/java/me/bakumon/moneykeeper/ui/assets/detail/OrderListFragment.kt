@@ -42,7 +42,7 @@ import me.drakeet.multitype.register
  */
 class OrderListFragment : AbsListFragment() {
 
-    private lateinit var mViewModel: AssetsListViewModel
+    private lateinit var mViewModel: OrderListViewModel
     private var mAssetsId: Int? = 0
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {

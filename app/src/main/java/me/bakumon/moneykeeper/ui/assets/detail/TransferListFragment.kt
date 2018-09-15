@@ -22,11 +22,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
-import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
+import me.bakumon.moneykeeper.base.ErrorResource
+import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 import me.bakumon.moneykeeper.ui.common.AbsListFragment
 import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
+import me.bakumon.moneykeeper.utill.ToastUtils
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -38,11 +40,11 @@ import me.drakeet.multitype.register
  */
 class TransferListFragment : AbsListFragment() {
 
-    private lateinit var mViewModel: AssetsListViewModel
+    private lateinit var mViewModel: TransferRecordViewModel
     private var mAssetsId: Int? = 0
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
-        adapter.register(AssetsTransferRecordWithAssets::class, TransferRecordBinder())
+        adapter.register(AssetsTransferRecordWithAssets::class, TransferRecordBinder { deleteItem(it) })
         mAdapter.register(Empty::class, EmptyViewBinder())
     }
 
@@ -78,6 +80,18 @@ class TransferListFragment : AbsListFragment() {
         }
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
+    }
+
+    private fun deleteItem(item: AssetsTransferRecordWithAssets) {
+        mViewModel.deleteTransferRecord(item).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                }
+                is ErrorResource<Boolean> -> {
+                    ToastUtils.show(if (it.errorMessage.isEmpty()) " " else it.errorMessage)
+                }
+            }
+        })
     }
 
     companion object {

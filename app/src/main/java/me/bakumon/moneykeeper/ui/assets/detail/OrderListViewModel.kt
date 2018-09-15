@@ -24,25 +24,18 @@ import io.reactivex.FlowableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.base.Resource
-import me.bakumon.moneykeeper.database.entity.*
+import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.RecordType
+import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
- * AssetsListViewModel
+ * OrderListViewModel
  *
  * @author Bakumon https://bakumon.me
  */
-class AssetsListViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
-
-    fun getModifyRecordById(id: Int): LiveData<List<AssetsModifyRecord>> {
-        return mDataSource.getAssetsRecordsById(id)
-    }
-
-    fun getTransferRecordById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>> {
-        return mDataSource.getTransferRecordsById(id)
-    }
-
+class OrderListViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
     fun getRecordWithTypesByAssetsId(id: Int): LiveData<List<RecordWithType>> {
         return mDataSource.getRecordWithTypesByAssetsId(id, 100)
     }

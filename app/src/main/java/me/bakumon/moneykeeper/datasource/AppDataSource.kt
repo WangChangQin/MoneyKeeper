@@ -260,4 +260,9 @@ interface AppDataSource {
      * 获取转账记录
      */
     fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>
+
+    /**
+     * 删除转账记录
+     */
+    fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
 }

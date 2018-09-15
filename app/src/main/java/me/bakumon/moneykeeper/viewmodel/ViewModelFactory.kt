@@ -24,7 +24,9 @@ import me.bakumon.moneykeeper.ui.addtype.AddTypeViewModel
 import me.bakumon.moneykeeper.ui.assets.AssetsViewModel
 import me.bakumon.moneykeeper.ui.assets.add.AddAssetsViewModel
 import me.bakumon.moneykeeper.ui.assets.detail.AssetsDetailViewModel
-import me.bakumon.moneykeeper.ui.assets.detail.AssetsListViewModel
+import me.bakumon.moneykeeper.ui.assets.detail.ModifyListViewModel
+import me.bakumon.moneykeeper.ui.assets.detail.OrderListViewModel
+import me.bakumon.moneykeeper.ui.assets.detail.TransferRecordViewModel
 import me.bakumon.moneykeeper.ui.assets.transfer.TransferViewModel
 import me.bakumon.moneykeeper.ui.home.HomeViewModel
 import me.bakumon.moneykeeper.ui.review.ReviewViewModel
@@ -64,7 +66,9 @@ class ViewModelFactory(private val mDataSource: AppDataSource) : ViewModelProvid
             modelClass.isAssignableFrom(AddAssetsViewModel::class.java) -> AddAssetsViewModel(mDataSource) as T
             modelClass.isAssignableFrom(AssetsDetailViewModel::class.java) -> AssetsDetailViewModel(mDataSource) as T
             modelClass.isAssignableFrom(TransferViewModel::class.java) -> TransferViewModel(mDataSource) as T
-            modelClass.isAssignableFrom(AssetsListViewModel::class.java) -> AssetsListViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(ModifyListViewModel::class.java) -> ModifyListViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(TransferRecordViewModel::class.java) -> TransferRecordViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(OrderListViewModel::class.java) -> OrderListViewModel(mDataSource) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

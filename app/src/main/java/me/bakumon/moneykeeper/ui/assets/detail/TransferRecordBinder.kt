@@ -1,11 +1,15 @@
 package me.bakumon.moneykeeper.ui.assets.detail
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -16,7 +20,7 @@ import me.drakeet.multitype.ItemViewBinder
 /**
  * @author Bakumon https://bakumon.me
  */
-class TransferRecordBinder : ItemViewBinder<AssetsTransferRecordWithAssets, TransferRecordBinder.ViewHolder>() {
+class TransferRecordBinder constructor(private val onDeleteClickListener: ((AssetsTransferRecordWithAssets) -> Unit)) : ItemViewBinder<AssetsTransferRecordWithAssets, TransferRecordBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         val root = inflater.inflate(R.layout.item_assets_record, parent, false)
@@ -33,9 +37,25 @@ class TransferRecordBinder : ItemViewBinder<AssetsTransferRecordWithAssets, Tran
         holder.tvMoney.visibility = View.VISIBLE
         holder.tvMoney.text = BigDecimalUtil.fen2Yuan(item.money)
         holder.tvTime.text = DateUtils.date2MonthDay(item.time)
+
+        holder.llItemClick.setOnLongClickListener {
+            showOperateDialog(holder.tvMoney.context, item)
+            true
+        }
+    }
+
+    private fun showOperateDialog(context: Context, item: AssetsTransferRecordWithAssets) {
+        val money = " (" + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(item.money) + ")"
+        MaterialDialog(context)
+                .title(text = context.getString(R.string.text_transfer) + money)
+                .message(R.string.text_delete_record_note)
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm_delete) { onDeleteClickListener.invoke(item) }
+                .show()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val llItemClick: LinearLayout = itemView.findViewById(R.id.llItemClick)
         val ivTypeImg: ImageView = itemView.findViewById(R.id.ivTypeImg)
         val tvTypeName: TextView = itemView.findViewById(R.id.tvTypeName)
         val tvSubtitle: TextView = itemView.findViewById(R.id.tvSubtitle)
