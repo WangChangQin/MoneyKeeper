@@ -412,9 +412,13 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         return mAppDatabase.assetsModifyRecordDao().getAssetsRecordsById(id)
     }
 
-    override fun insertTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable {
+    override fun insertTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable {
         return Completable.fromAction {
-            mAppDatabase.assetsTransferRecordDao().insertTransferRecord(assetsTransferRecord)
+            mAppDatabase.assetsTransferRecordDao().insertTransferRecord(transferRecord)
+            outAssets.money = outAssets.money.subtract(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(outAssets)
+            inAssets.money = inAssets.money.add(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(inAssets)
             autoBackup()
         }
     }

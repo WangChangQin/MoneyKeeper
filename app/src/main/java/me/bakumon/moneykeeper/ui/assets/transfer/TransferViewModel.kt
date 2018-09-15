@@ -39,34 +39,7 @@ class TransferViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
     fun addTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
-        mDisposable.add(mDataSource.insertTransferRecord(transferRecord)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    updateOutAssets(liveData, outAssets, inAssets, transferRecord)
-                }
-                ) { throwable ->
-                    liveData.value = Resource.create(throwable)
-                })
-        return liveData
-    }
-
-    private fun updateOutAssets(liveData: MutableLiveData<Resource<Boolean>>, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord) {
-        outAssets.money = outAssets.money.subtract(transferRecord.money)
-        mDisposable.add(mDataSource.updateAssets(outAssets)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    updateInAssets(liveData, inAssets, transferRecord)
-                }
-                ) { throwable ->
-                    liveData.value = Resource.create(throwable)
-                })
-    }
-
-    private fun updateInAssets(liveData: MutableLiveData<Resource<Boolean>>, inAssets: Assets, transferRecord: AssetsTransferRecord) {
-        inAssets.money = inAssets.money.add(transferRecord.money)
-        mDisposable.add(mDataSource.updateAssets(inAssets)
+        mDisposable.add(mDataSource.insertTransferRecord(outAssets, inAssets, transferRecord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -75,5 +48,6 @@ class TransferViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 ) { throwable ->
                     liveData.value = Resource.create(throwable)
                 })
+        return liveData
     }
 }

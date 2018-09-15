@@ -255,7 +255,7 @@ interface AppDataSource {
     /**
      * 新增转账记录
      */
-    fun insertTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
+    fun insertTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable
 
     /**
      * 获取转账记录
