@@ -29,12 +29,14 @@ import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 @Dao
 interface AssetsTransferRecordDao {
 
-    @Transaction
     @Query("SELECT transfer_record.*, assets_from.name AS assetsNameFrom, assets_to.name AS assetsNameTo FROM Assets AS assets_from, Assets AS assets_to, AssetsTransferRecord AS transfer_record WHERE assets_from.id = transfer_record.assets_id_form AND assets_to.id = transfer_record.assets_id_to AND (transfer_record.assets_id_form=:id OR transfer_record.assets_id_to=:id) ORDER BY transfer_record.time DESC, transfer_record.create_time DESC")
     fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>
 
     @Insert
     fun insertTransferRecord(vararg assetsTransferRecord: AssetsTransferRecord)
+
+    @Update
+    fun updateTransferRecord(assetsTransferRecord: AssetsTransferRecord)
 
     @Delete
     fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord)

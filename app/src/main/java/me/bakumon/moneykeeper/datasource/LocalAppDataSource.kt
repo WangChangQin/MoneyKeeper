@@ -423,6 +423,38 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
+    override fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().updateTransferRecord(transferRecord)
+
+            oldOutAssets.money = oldOutAssets.money.add(oldMoney)
+            mAppDatabase.assetsDao().updateAssets(oldOutAssets)
+            if (oldOutAssets.id == outAssets.id) {
+                outAssets.money = oldOutAssets.money
+            }
+            if (oldOutAssets.id == inAssets.id) {
+                inAssets.money = oldOutAssets.money
+            }
+
+            oldInAssets.money = oldInAssets.money.subtract(oldMoney)
+            mAppDatabase.assetsDao().updateAssets(oldInAssets)
+            if (oldInAssets.id == outAssets.id) {
+                outAssets.money = oldInAssets.money
+            }
+            if (oldInAssets.id == inAssets.id) {
+                inAssets.money = oldInAssets.money
+            }
+
+            outAssets.money = outAssets.money.subtract(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(outAssets)
+
+            inAssets.money = inAssets.money.add(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(inAssets)
+
+            autoBackup()
+        }
+    }
+
     override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>> {
         return mAppDatabase.assetsTransferRecordDao().getTransferRecordsById(id)
     }

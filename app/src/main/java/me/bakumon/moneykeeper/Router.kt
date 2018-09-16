@@ -70,5 +70,6 @@ object Router {
         const val KEY_ASSETS_TYPE = "key_assets_type"
         const val KEY_ASSETS = "key_assets"
         const val KEY_ASSETS_ID = "key_assets_id"
+        const val KEY_TRANSFER = "key_transfer"
     }
 }

@@ -25,6 +25,7 @@ import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
+import java.math.BigDecimal
 
 /**
  * TransferViewModel
@@ -40,6 +41,24 @@ class TransferViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
     fun addTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
         mDisposable.add(mDataSource.insertTransferRecord(outAssets, inAssets, transferRecord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
+
+    fun getAssetsById(id: Int): LiveData<Assets> {
+        return mDataSource.getAssetsById(id)
+    }
+
+    fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.updateTransferRecord(oldMoney, oldOutAssets, oldInAssets, outAssets, inAssets, transferRecord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

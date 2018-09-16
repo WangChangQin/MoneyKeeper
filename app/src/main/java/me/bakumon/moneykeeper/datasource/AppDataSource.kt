@@ -258,6 +258,11 @@ interface AppDataSource {
     fun insertTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable
 
     /**
+     * 新增转账记录
+     */
+    fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable
+
+    /**
      * 获取转账记录
      */
     fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>

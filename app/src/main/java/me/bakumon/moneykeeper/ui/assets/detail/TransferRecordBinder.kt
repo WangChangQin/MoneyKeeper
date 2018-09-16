@@ -11,10 +11,12 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ResourcesUtil
+import me.drakeet.floo.Floo
 import me.drakeet.multitype.ItemViewBinder
 
 /**
@@ -41,6 +43,12 @@ class TransferRecordBinder constructor(private val onDeleteClickListener: ((Asse
         holder.llItemClick.setOnLongClickListener {
             showOperateDialog(holder.tvMoney.context, item)
             true
+        }
+
+        holder.llItemClick.setOnClickListener {
+            Floo.navigation(holder.llItemClick.context, Router.Url.URL_ASSETS_TRANSFER)
+                    .putExtra(Router.ExtraKey.KEY_TRANSFER, item)
+                    .start()
         }
     }
 
