@@ -171,14 +171,15 @@
     <string name="text_about_and_more">About | More</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
-        <item>RMB(¥)</item>
-        <item>Hong Kong dollar(HK$)</item>
+        <item>RMB (¥)</item>
+        <item>Hong Kong dollar (HK$)</item>
         <item>MOP(MOP$)</item>
-        <item>New Taiwan dollar(NT$)</item>
-        <item>dollar($)</item>
-        <item>euro(€)</item>
-        <item>pound(£)</item>
-        <item>General purpose(¤)</item>
+        <item>New Taiwan dollar (NT$)</item>
+        <item>dollar ($)</item>
+        <item>euro (€)</item>
+        <item>pound (£)</item>
+        <item>Indian rupee (₹)</item>
+        <item>General purpose (¤)</item>
         <item>Do not show</item>
     </string-array>
     <string-array name="simple_symbol">
@@ -189,6 +190,7 @@
         <item>$</item>
         <item>€</item>
         <item>£</item>
+        <item>₹</item>
         <item>¤</item>
         <item />
     </string-array>
