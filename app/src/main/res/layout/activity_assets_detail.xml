@@ -110,13 +110,4 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvAssets"
-        style="@style/LinearRecyclerView"
-        android:clipToPadding="false"
-        android:paddingBottom="20dp"
-        android:visibility="gone"
-        tools:listitem="@layout/item_assets_record" />
-
 </LinearLayout>

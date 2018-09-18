@@ -304,4 +304,5 @@
     <string name="text_transfer">轉賬</string>
     <string name="text_choose_out_account">選擇轉出賬戶</string>
     <string name="text_choose_in_account">選擇轉入賬戶</string>
+    <string name="text_tip_transfer">提示：在資產詳情查看轉賬記錄</string>
 </resources>

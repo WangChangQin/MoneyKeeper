@@ -20,6 +20,9 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.add.AddRecordViewModel
+import me.bakumon.moneykeeper.ui.add.OptionViewModel
+import me.bakumon.moneykeeper.ui.add.RecordTypeViewModel
+import me.bakumon.moneykeeper.ui.add.TransferAssetsViewModel
 import me.bakumon.moneykeeper.ui.addtype.AddTypeViewModel
 import me.bakumon.moneykeeper.ui.assets.AssetsViewModel
 import me.bakumon.moneykeeper.ui.assets.add.AddAssetsViewModel
@@ -51,6 +54,9 @@ class ViewModelFactory(private val mDataSource: AppDataSource) : ViewModelProvid
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(AddRecordViewModel::class.java) -> AddRecordViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(RecordTypeViewModel::class.java) -> RecordTypeViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(TransferAssetsViewModel::class.java) -> TransferAssetsViewModel(mDataSource) as T
+            modelClass.isAssignableFrom(OptionViewModel::class.java) -> OptionViewModel(mDataSource) as T
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(mDataSource) as T
             modelClass.isAssignableFrom(TypeManageViewModel::class.java) -> TypeManageViewModel(mDataSource) as T
             modelClass.isAssignableFrom(TypeSortViewModel::class.java) -> TypeSortViewModel(mDataSource) as T

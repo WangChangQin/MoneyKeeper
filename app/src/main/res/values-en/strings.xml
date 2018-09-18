@@ -304,4 +304,5 @@
     <string name="text_transfer">transfer</string>
     <string name="text_choose_out_account">account from</string>
     <string name="text_choose_in_account">account to</string>
+    <string name="text_tip_transfer">Tip: View transfer records in asset details</string>
 </resources>

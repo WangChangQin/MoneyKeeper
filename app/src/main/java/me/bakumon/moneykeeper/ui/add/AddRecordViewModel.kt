@@ -22,8 +22,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import java.math.BigDecimal
@@ -35,14 +35,25 @@ import java.math.BigDecimal
  */
 class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val allRecordTypes: LiveData<List<RecordType>>
-        get() = mDataSource.getAllRecordType()
-
     fun insertRecord(type: Int, assets: Assets?, record: Record): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
 
         record.assetsId = if (assets == null) -1 else assets.id!!
         mDisposable.add(mDataSource.insertRecord(type, assets, record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
+
+    fun addTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.insertTransferRecord(outAssets, inAssets, transferRecord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -68,13 +79,5 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                     liveData.value = Resource.create(throwable)
                 })
         return liveData
-    }
-
-    fun getAssets(): LiveData<List<Assets>> {
-        return mDataSource.getAssets()
-    }
-
-    fun getAssetsById(id: Int): LiveData<Assets> {
-        return mDataSource.getAssetsById(id)
     }
 }
