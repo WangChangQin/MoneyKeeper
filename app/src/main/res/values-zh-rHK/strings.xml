@@ -171,14 +171,15 @@
     <string name="text_about_and_more">關於 | 更多</string>
     <string name="text_about_content">了解我們的設計理念</string>
     <string-array name="symbol">
-        <item>人民幣(¥)</item>
-        <item>港幣(HK$)</item>
-        <item>澳門幣(MOP$)</item>
-        <item>新台幣(NT$)</item>
-        <item>美元($)</item>
-        <item>歐元(€)</item>
-        <item>英鎊(£)</item>
-        <item>貨幣(¤)</item>
+        <item>人民幣 (¥)</item>
+        <item>港幣 (HK$)</item>
+        <item>澳門幣 (MOP$)</item>
+        <item>新台幣 (NT$)</item>
+        <item>美元 ($)</item>
+        <item>歐元 (€)</item>
+        <item>英鎊 (£)</item>
+        <item>印度盧比 (₹)</item>
+        <item>貨幣 (¤)</item>
         <item>不顯示</item>
     </string-array>
     <string-array name="simple_symbol">
@@ -189,6 +190,7 @@
         <item>$</item>
         <item>€</item>
         <item>£</item>
+        <item>₹</item>
         <item>¤</item>
         <item />
     </string-array>
