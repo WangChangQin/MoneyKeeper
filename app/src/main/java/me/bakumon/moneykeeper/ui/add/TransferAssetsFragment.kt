@@ -75,12 +75,12 @@ class TransferAssetsFragment : BaseFragment() {
 
     }
 
-    private lateinit var assetsLiveData: LiveData<List<Assets>>
+    private var assetsLiveData: LiveData<List<Assets>>? = null
 
     private fun chooseAccount(type: String) {
         mCurrentType = type
         assetsLiveData = mViewModel.getAssets()
-        assetsLiveData.observe(this, Observer {
+        assetsLiveData!!.observe(this, Observer {
             if (it != null) {
                 showListDialog(it)
             }
@@ -106,7 +106,7 @@ class TransferAssetsFragment : BaseFragment() {
                 .positiveButton(res = R.string.text_cancel)
                 .onDismiss {
                     isDialogShow = false
-                    assetsLiveData.removeObservers(this)
+                    assetsLiveData?.removeObservers(this)
                 }
         mDialog?.show()
     }

@@ -128,11 +128,11 @@ class OptionFragment : BaseFragment() {
         dpd.setOnDismissListener { isDialogShow = false }
     }
 
-    private lateinit var assetsLiveData: LiveData<Assets>
+    private var assetsLiveData: LiveData<Assets>? = null
 
     private fun getAssetsAccount(id: Int) {
         assetsLiveData = mViewModel.getAssetsById(id)
-        assetsLiveData.observe(this, Observer {
+        assetsLiveData!!.observe(this, Observer {
             if (it == null) {
                 updateAccountView(name = getString(R.string.text_no_choose_account))
             } else {
@@ -156,14 +156,14 @@ class OptionFragment : BaseFragment() {
         tvRecordAccount.text = name
 
         // 防止数据库改变 assetsLiveData 自动 observe，导致 账户显示 oldAssets 的 name
-        assetsLiveData.removeObservers(this)
+        assetsLiveData?.removeObservers(this)
     }
 
-    private lateinit var assetsListLiveData: LiveData<List<Assets>>
+    private var assetsListLiveData: LiveData<List<Assets>>? = null
 
     private fun chooseAccount() {
         assetsListLiveData = mViewModel.getAssets()
-        assetsListLiveData.observe(this, Observer {
+        assetsListLiveData!!.observe(this, Observer {
             if (it != null) {
                 showListDialog(it)
             }
@@ -192,7 +192,7 @@ class OptionFragment : BaseFragment() {
                 .onDismiss {
                     isDialogShow = false
                     // 防止数据库改变 assetsListLiveData 自动 observe，导致 dialog 重复弹起
-                    assetsListLiveData.removeObservers(this)
+                    assetsListLiveData?.removeObservers(this)
                 }
         mDialog?.show()
     }
