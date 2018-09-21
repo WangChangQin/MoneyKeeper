@@ -307,4 +307,5 @@
     <string name="text_choose_out_account">選擇轉出賬戶</string>
     <string name="text_choose_in_account">選擇轉入賬戶</string>
     <string name="text_tip_transfer">提示：在資產詳情查看轉賬記錄</string>
+    <string name="text_remark_tip">還沒有常用備註，記賬完成後自動保存已輸入備註，最多保存15個</string>
 </resources>

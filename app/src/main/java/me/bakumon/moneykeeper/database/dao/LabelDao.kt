@@ -14,30 +14,26 @@
  *  limitations under the License.
  */
 
-package me.bakumon.moneykeeper.ui.add
+package me.bakumon.moneykeeper.database.dao
 
 import android.arch.lifecycle.LiveData
-import me.bakumon.moneykeeper.database.entity.Assets
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
 import me.bakumon.moneykeeper.database.entity.Label
-import me.bakumon.moneykeeper.datasource.AppDataSource
-import me.bakumon.moneykeeper.ui.common.BaseViewModel
 
 /**
- * OptionViewModel
+ * LabelDao
  *
  * @author Bakumon https://bakumon.me
  */
-class OptionViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
+@Dao
+interface LabelDao {
 
-    fun getAssetsById(id: Int): LiveData<Assets> {
-        return mDataSource.getAssetsById(id)
-    }
+    @Query("SELECT * FROM Label WHERE state=0 ORDER BY create_time DESC LIMIT 15")
+    fun getLabels(): LiveData<List<Label>>
 
-    fun getAssets(): LiveData<List<Assets>> {
-        return mDataSource.getAssets()
-    }
-
-    fun getLabels(): LiveData<List<Label>> {
-        return mDataSource.getLabels()
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLabel(vararg label: Label)
 }

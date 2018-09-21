@@ -20,6 +20,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
+import android.support.v7.widget.PopupMenu
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -30,6 +31,7 @@ import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.Label
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.ui.assets.transfer.AssetsChooseViewBinder
 import me.bakumon.moneykeeper.ui.common.BaseFragment
@@ -104,6 +106,53 @@ class OptionFragment : BaseFragment() {
             tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
         }
         llRecordAccount.setOnClickListener { chooseAccount() }
+        ivRemark.setOnClickListener { showPopup() }
+    }
+
+    private var labelsLiveData: LiveData<List<Label>>? = null
+    private fun showPopup() {
+        if (isDialogShow) {
+            return
+        }
+        isDialogShow = true
+        labelsLiveData = mViewModel.getLabels()
+        labelsLiveData!!.observe(this, Observer { list ->
+            if (list == null || list.isEmpty()) {
+                showLabelTip()
+            } else {
+                showPopupMenu(list)
+            }
+        })
+    }
+
+    private fun showLabelTip() {
+        MaterialDialog(context!!)
+                .message(R.string.text_remark_tip)
+                .positiveButton(R.string.text_know)
+                .onDismiss {
+                    isDialogShow = false
+                    labelsLiveData?.removeObservers(this)
+                }
+                .show()
+    }
+
+    private fun showPopupMenu(list: List<Label>) {
+        val popupMenu = PopupMenu(context!!, edtRemark)
+        list.forEach {
+            popupMenu.menu.add(it.name)
+        }
+        popupMenu.setOnMenuItemClickListener {
+            edtRemark.setText(it.title)
+            edtRemark.setSelection(edtRemark.text.length)
+            SoftInputUtils.hideSoftInput(edtRemark)
+            mOnEditDoneListener?.invoke()
+            false
+        }
+        popupMenu.setOnDismissListener {
+            labelsLiveData?.removeObservers(this)
+            isDialogShow = false
+        }
+        popupMenu.show()
     }
 
     private var isDialogShow = false

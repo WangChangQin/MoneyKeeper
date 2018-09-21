@@ -201,6 +201,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                 }
                 mAppDatabase.assetsDao().updateAssets(assets)
             }
+            // 保存常用备注
+            if (!TextUtils.isEmpty(record.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(record.remark!!))
+            }
             autoBackup()
         }
     }
@@ -285,6 +289,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
                         }
                     }
                 }
+            }
+            // 保存常用备注
+            if (!TextUtils.isEmpty(record.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(record.remark!!))
             }
             autoBackup()
         }
@@ -419,6 +427,10 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
             mAppDatabase.assetsDao().updateAssets(outAssets)
             inAssets.money = inAssets.money.add(transferRecord.money)
             mAppDatabase.assetsDao().updateAssets(inAssets)
+            // 保存常用备注
+            if (!TextUtils.isEmpty(transferRecord.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(transferRecord.remark))
+            }
             autoBackup()
         }
     }
@@ -474,5 +486,9 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
             }
             autoBackup()
         }
+    }
+
+    override fun getLabels(): LiveData<List<Label>> {
+        return mAppDatabase.labelDao().getLabels()
     }
 }

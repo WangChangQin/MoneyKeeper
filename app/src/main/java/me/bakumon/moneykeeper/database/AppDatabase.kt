@@ -33,7 +33,7 @@ import me.bakumon.moneykeeper.database.entity.*
  *
  * @author Bakumon https:bakumon.me
  */
-@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class, AssetsTransferRecord::class], version = 3)
+@Database(entities = [Record::class, RecordType::class, Assets::class, AssetsModifyRecord::class, AssetsTransferRecord::class, Label::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -66,6 +66,11 @@ abstract class AppDatabase : RoomDatabase() {
      */
     abstract fun assetsTransferRecordDao(): AssetsTransferRecordDao
 
+    /**
+     * 资产转账记录
+     */
+    abstract fun labelDao(): LabelDao
+
     companion object {
         const val DB_NAME = "MoneyKeeper.db"
         private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
@@ -90,6 +95,14 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // 增加标签表
+                database.execSQL("CREATE TABLE IF NOT EXISTS `Label` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `state` INTEGER NOT NULL, `create_time` INTEGER NOT NULL, `ranking` INTEGER)")
+                database.execSQL("CREATE UNIQUE INDEX `index_Label_name` ON `Label` (`name`)")
+            }
+        }
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
         val instance: AppDatabase?
@@ -98,7 +111,7 @@ abstract class AppDatabase : RoomDatabase() {
                     synchronized(AppDatabase::class) {
                         if (INSTANCE == null) {
                             INSTANCE = Room.databaseBuilder(App.instance, AppDatabase::class.java, DB_NAME)
-                                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                                     .build()
                         }
                     }

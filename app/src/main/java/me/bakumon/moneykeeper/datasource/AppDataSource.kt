@@ -271,4 +271,9 @@ interface AppDataSource {
      * 删除转账记录
      */
     fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
+
+    /**
+     * 获取标签列表
+     */
+    fun getLabels(): LiveData<List<Label>>
 }

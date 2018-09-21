@@ -35,24 +35,42 @@
         android:text="@string/text_today"
         android:textColor="@color/colorText" />
 
-    <EditText
-        android:id="@+id/edtRemark"
-        android:layout_width="115dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/bg_date"
-        android:hint="@string/hint_enter_remark"
-        android:imeOptions="actionDone"
-        android:maxLength="50"
-        android:paddingBottom="3dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="3dp"
-        android:singleLine="true"
-        android:textColor="@color/colorText"
-        android:textColorHint="@color/colorTextHint"
-        android:textSize="14sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp">
+
+        <EditText
+            android:id="@+id/edtRemark"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/hint_enter_remark"
+            android:imeOptions="actionDone"
+            android:maxLength="50"
+            android:paddingBottom="3dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:singleLine="true"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorTextHint"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ivRemark"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:src="@drawable/ic_arrow_down" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llRecordAccount"
