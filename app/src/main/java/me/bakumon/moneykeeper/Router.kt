@@ -44,7 +44,7 @@ object Router {
         const val URL_CHOOSE_ASSETS = "choose_assets"
         const val URL_ADD_ASSETS = "add_assets"
         const val URL_ASSETS_DETAIL = "assets_detail"
-        const val URL_ASSETS_TRANSFER = "assets_transfer"
+//        const val URL_ASSETS_TRANSFER = "assets_transfer"
     }
 
     /**
@@ -59,6 +59,7 @@ object Router {
      */
     object ExtraKey {
         const val KEY_IS_SUCCESSIVE = "key_is_successive"
+        const val KEY_IS_TRANSFER = "key_is_transfer"
         const val KEY_RECORD_BEAN = "key_record_bean"
         const val KEY_TYPE = "key_type"
         const val KEY_TYPE_BEAN = "key_type_bean"
@@ -71,5 +72,9 @@ object Router {
         const val KEY_ASSETS = "key_assets"
         const val KEY_ASSETS_ID = "key_assets_id"
         const val KEY_TRANSFER = "key_transfer"
+        const val KEY_IS_SHOW_CHOOSE_ASSETS = "key_is_show_choose_assets"
+        const val KEY_IS_MODIFY = "key_is_option_modify"
+        const val KEY_DATE = "key_date"
+        const val KEY_REMARK = "key_remark"
     }
 }

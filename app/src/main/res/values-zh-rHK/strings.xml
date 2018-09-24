@@ -55,6 +55,8 @@
     <string name="toast_transfer_fail">轉賬失敗</string>
     <string name="toast_submit_now">正在提交，請稍等..</string>
     <string name="toast_delete_transfer_fail">刪除轉賬記錄失敗</string>
+    <string name="toast_out_assets_null">修改前轉出賬戶為空，請重試</string>
+    <string name="toast_in_assets_null">修改前轉入賬戶為空，請重試</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>

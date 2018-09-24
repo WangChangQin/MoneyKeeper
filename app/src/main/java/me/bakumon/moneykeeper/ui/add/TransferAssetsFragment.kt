@@ -26,8 +26,9 @@ import com.afollestad.materialdialogs.list.customListAdapter
 import kotlinx.android.synthetic.main.fragment_transfer_assets.*
 import kotlinx.android.synthetic.main.layout_transfer_account.view.*
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.Assets
-import me.bakumon.moneykeeper.ui.assets.transfer.AssetsChooseViewBinder
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecordWithAssets
 import me.bakumon.moneykeeper.ui.common.BaseFragment
 import me.bakumon.moneykeeper.utill.ResourcesUtil
 import me.bakumon.moneykeeper.utill.ViewUtil
@@ -47,28 +48,53 @@ class TransferAssetsFragment : BaseFragment() {
 
     private lateinit var mViewModel: TransferAssetsViewModel
 
+    private var mTransfer: AssetsTransferRecordWithAssets? = null
     private lateinit var mCurrentType: String
     private var mOutAssets: Assets? = null
     private var mInAssets: Assets? = null
+
+    private var mOldOutAssets: Assets? = null
+    private var mOldInAssets: Assets? = null
 
     override val layoutId: Int
         get() = R.layout.fragment_transfer_assets
 
     override fun onInit(savedInstanceState: Bundle?) {
-        outAccount.ivAccount.visibility = View.GONE
-        outAccount.tvAccountName.text = getString(R.string.text_choose_out_account)
-        outAccount.tvAccountName.setTextColor(resources.getColor(R.color.colorTextHint))
-        outAccount.tvAccountRemark.visibility = View.GONE
+        mViewModel = getViewModel()
+        mTransfer = arguments?.getSerializable(Router.ExtraKey.KEY_TRANSFER) as AssetsTransferRecordWithAssets?
 
-        inAccount.ivAccount.visibility = View.GONE
-        inAccount.tvAccountName.text = getString(R.string.text_choose_in_account)
-        inAccount.tvAccountName.setTextColor(resources.getColor(R.color.colorTextHint))
-        inAccount.tvAccountRemark.visibility = View.GONE
+        if (mTransfer == null) {
+            outAccount.ivAccount.visibility = View.GONE
+            outAccount.tvAccountName.text = getString(R.string.text_choose_out_account)
+            outAccount.tvAccountName.setTextColor(resources.getColor(R.color.colorTextHint))
+            outAccount.tvAccountRemark.visibility = View.GONE
+
+            inAccount.ivAccount.visibility = View.GONE
+            inAccount.tvAccountName.text = getString(R.string.text_choose_in_account)
+            inAccount.tvAccountName.setTextColor(resources.getColor(R.color.colorTextHint))
+            inAccount.tvAccountRemark.visibility = View.GONE
+        } else {
+            mViewModel.getAssetsById(mTransfer!!.assetsIdFrom).observe(this, Observer {
+                if (it != null) {
+                    mOldOutAssets = it
+                    mOutAssets = it
+                    setOutAssetsView(it)
+                }
+            })
+            mViewModel.getAssetsById(mTransfer!!.assetsIdTo).observe(this, Observer {
+                if (it != null) {
+                    mOldInAssets = it
+                    mInAssets = it
+                    setInAssetsView(it)
+                }
+            })
+        }
+
 
         outAccount.setOnClickListener { chooseAccount(TYPE_OUT_ACCOUNT) }
         inAccount.setOnClickListener { chooseAccount(TYPE_IN_ACCOUNT) }
 
-        mViewModel = getViewModel()
+
     }
 
     override fun lazyInitData() {
@@ -162,11 +188,23 @@ class TransferAssetsFragment : BaseFragment() {
         return mInAssets
     }
 
+    fun getOldOutAssets(): Assets? {
+        return mOldOutAssets
+    }
+
+    fun getOldInAssets(): Assets? {
+        return mOldInAssets
+    }
+
     companion object {
         private const val TYPE_OUT_ACCOUNT = "type_out_account"
         private const val TYPE_IN_ACCOUNT = "type_in_account"
-        fun newInstance(): TransferAssetsFragment {
-            return TransferAssetsFragment()
+        fun newInstance(transfer: AssetsTransferRecordWithAssets? = null): TransferAssetsFragment {
+            val fragment = TransferAssetsFragment()
+            val bundle = Bundle()
+            bundle.putSerializable(Router.ExtraKey.KEY_TRANSFER, transfer)
+            fragment.arguments = bundle
+            return fragment
         }
     }
 }

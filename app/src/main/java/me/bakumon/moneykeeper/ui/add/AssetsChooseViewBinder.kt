@@ -1,4 +1,4 @@
-package me.bakumon.moneykeeper.ui.assets.transfer
+package me.bakumon.moneykeeper.ui.add
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

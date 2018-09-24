@@ -80,4 +80,18 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
                 })
         return liveData
     }
+
+    fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.updateTransferRecord(oldMoney, oldOutAssets, oldInAssets, outAssets, inAssets, transferRecord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
 }

@@ -46,7 +46,8 @@ class TransferRecordBinder constructor(private val onDeleteClickListener: ((Asse
         }
 
         holder.llItemClick.setOnClickListener {
-            Floo.navigation(holder.llItemClick.context, Router.Url.URL_ASSETS_TRANSFER)
+            Floo.navigation(holder.llItemClick.context, Router.Url.URL_ADD_RECORD)
+                    .putExtra(Router.ExtraKey.KEY_IS_TRANSFER, true)
                     .putExtra(Router.ExtraKey.KEY_TRANSFER, item)
                     .start()
         }

@@ -32,8 +32,6 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.database.entity.Label
-import me.bakumon.moneykeeper.database.entity.RecordWithType
-import me.bakumon.moneykeeper.ui.assets.transfer.AssetsChooseViewBinder
 import me.bakumon.moneykeeper.ui.common.BaseFragment
 import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ResourcesUtil
@@ -60,7 +58,11 @@ class OptionFragment : BaseFragment() {
 
     private var mCurrentChooseDate: Date? = DateUtils.getTodayDate()
     private val mCurrentChooseCalendar = Calendar.getInstance()
-    private var mRecord: RecordWithType? = null
+
+    /**
+     * 是否修改
+     */
+    private var mIsModify = false
 
     private var mOnEditDoneListener: (() -> Unit)? = null
 
@@ -73,38 +75,45 @@ class OptionFragment : BaseFragment() {
     override fun lazyInitData() {}
 
     override fun onInit(savedInstanceState: Bundle?) {
+        mViewModel = getViewModel()
         // 选择日期
         tvDate.setOnClickListener { showDatePickerDialog() }
-        mRecord = arguments?.getSerializable(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
-        mViewModel = getViewModel()
+        mIsModify = arguments?.getBoolean(Router.ExtraKey.KEY_IS_MODIFY)!!
+        val assetsId = arguments?.getInt(Router.ExtraKey.KEY_ASSETS_ID, -1)
+        val remark = arguments?.getString(Router.ExtraKey.KEY_REMARK)
+        val date = arguments?.getSerializable(Router.ExtraKey.KEY_DATE) as Date
+
+        val isShowChooseAssets = arguments?.getBoolean(Router.ExtraKey.KEY_IS_SHOW_CHOOSE_ASSETS)!!
+        llRecordAccount.visibility = if (isShowChooseAssets) View.VISIBLE else View.GONE
+
+
         edtRemark.setOnEditorActionListener { _, _, _ ->
             SoftInputUtils.hideSoftInput(edtRemark)
             mOnEditDoneListener?.invoke()
             false
         }
-        if (mRecord == null) {
-            // 新增
-            // 设置资产
-            val assetsId = ConfigManager.assetId
-            if (assetsId == -1) {
+
+        if (!mIsModify) {
+            val savedAssetsId = ConfigManager.assetId
+            if (savedAssetsId == -1) {
                 updateAccountView(name = getString(R.string.text_no_choose_account))
             } else {
-                getAssetsAccount(assetsId)
+                getAssetsAccount(savedAssetsId)
             }
         } else {
-            // 修改
-            // 设置资产
-            if (mRecord!!.assetsId == -1 || mRecord!!.assetsId == null) {
-                updateAccountView(name = getString(R.string.text_no_choose_account))
-            } else {
-                getAssetsAccount(mRecord!!.assetsId!!)
+            if (isShowChooseAssets) {
+                if (assetsId == null || assetsId == -1) {
+                    updateAccountView(name = getString(R.string.text_no_choose_account))
+                } else {
+                    getAssetsAccount(assetsId)
+                }
             }
-            // 回显数据
-            edtRemark.setText(mRecord!!.remark)
-            mCurrentChooseDate = mRecord!!.time
+            edtRemark.setText(remark)
+            mCurrentChooseDate = date
             mCurrentChooseCalendar.time = mCurrentChooseDate
             tvDate.text = DateUtils.getWordTime(mCurrentChooseDate!!)
         }
+
         llRecordAccount.setOnClickListener { chooseAccount() }
         ivRemark.setOnClickListener { showPopup() }
     }
@@ -186,7 +195,7 @@ class OptionFragment : BaseFragment() {
                 updateAccountView(name = getString(R.string.text_no_choose_account))
             } else {
                 mAssets = it
-                if (mRecord != null) {
+                if (mIsModify) {
                     // 修改
                     mOldAssets = it
                 }
@@ -300,10 +309,18 @@ class OptionFragment : BaseFragment() {
 
     companion object {
         private const val TAG_PICKER_DIALOG = "Datepickerdialog"
-        fun newInstance(record: RecordWithType? = null): OptionFragment {
+        fun newInstance(isShowChooseAssets: Boolean = true,
+                        isModify: Boolean = false,
+                        assetsId: Int = -1,
+                        date: Date? = DateUtils.getTodayDate(),
+                        remark: String = ""): OptionFragment {
             val fragment = OptionFragment()
             val bundle = Bundle()
-            bundle.putSerializable(Router.ExtraKey.KEY_RECORD_BEAN, record)
+            bundle.putBoolean(Router.ExtraKey.KEY_IS_SHOW_CHOOSE_ASSETS, isShowChooseAssets)
+            bundle.putBoolean(Router.ExtraKey.KEY_IS_MODIFY, isModify)
+            bundle.putInt(Router.ExtraKey.KEY_ASSETS_ID, assetsId)
+            bundle.putSerializable(Router.ExtraKey.KEY_DATE, date)
+            bundle.putString(Router.ExtraKey.KEY_REMARK, remark)
             fragment.arguments = bundle
             return fragment
         }

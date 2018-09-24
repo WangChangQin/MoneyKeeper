@@ -39,4 +39,8 @@ class TransferAssetsViewModel(dataSource: AppDataSource) : BaseViewModel(dataSou
         return mDataSource.getAssets()
     }
 
+    fun getAssetsById(id: Int): LiveData<Assets> {
+        return mDataSource.getAssetsById(id)
+    }
+
 }

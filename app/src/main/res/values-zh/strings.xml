@@ -55,6 +55,8 @@
     <string name="toast_transfer_fail">转账失败</string>
     <string name="toast_submit_now">正在提交，请稍等..</string>
     <string name="toast_delete_transfer_fail">删除转账记录失败</string>
+    <string name="toast_out_assets_null">修改前转出账户为空，请重试</string>
+    <string name="toast_in_assets_null">修改前转入账户为空，请重试</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">今日支出</string>

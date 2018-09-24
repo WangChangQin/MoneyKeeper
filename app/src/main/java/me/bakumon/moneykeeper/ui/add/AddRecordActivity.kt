@@ -29,13 +29,11 @@ import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
-import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
-import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
-import me.bakumon.moneykeeper.database.entity.RecordWithType
+import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.ui.common.FragmentViewPagerAdapter
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
+import me.bakumon.moneykeeper.utill.DateUtils
 import me.bakumon.moneykeeper.utill.ToastUtils
 import me.bakumon.moneykeeper.widget.WidgetProvider
 import java.util.*
@@ -57,10 +55,15 @@ class AddRecordActivity : BaseActivity() {
     private var mCurrentType: Int = RecordType.TYPE_OUTLAY
 
     private var mRecord: RecordWithType? = null
+    private var mTransfer: AssetsTransferRecordWithAssets? = null
     /**
      * 连续记账
      */
     private var mIsSuccessive: Boolean = false
+    /**
+     * 只转账
+     */
+    private var mIsTransfer: Boolean = false
 
     override val layoutId: Int
         get() = R.layout.activity_add_record
@@ -77,10 +80,46 @@ class AddRecordActivity : BaseActivity() {
 
     override fun onInit(savedInstanceState: Bundle?) {
         mViewModel = getViewModel()
-        mRecord = intent.getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
-        mIsSuccessive = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false)
 
-        mOptionFragment = OptionFragment.newInstance(record = mRecord)
+        mIsSuccessive = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, false)
+        mRecord = intent.getSerializableExtra(Router.ExtraKey.KEY_RECORD_BEAN) as RecordWithType?
+        mTransfer = intent.getSerializableExtra(Router.ExtraKey.KEY_TRANSFER) as AssetsTransferRecordWithAssets?
+
+
+        mIsTransfer = intent.getBooleanExtra(Router.ExtraKey.KEY_IS_TRANSFER, false)
+
+
+        val isModify: Boolean
+        val assetsId: Int
+        val date: Date?
+        val remark: String
+
+        when {
+            mRecord != null -> {
+                isModify = true
+                assetsId = mRecord!!.assetsId!!
+                date = mRecord!!.time
+                remark = mRecord!!.remark!!
+            }
+            mTransfer != null -> {
+                isModify = true
+                assetsId = -1
+                date = mTransfer!!.time
+                remark = mTransfer!!.remark
+            }
+            else -> {
+                isModify = false
+                assetsId = -1
+                date = DateUtils.getTodayDate()
+                remark = ""
+            }
+        }
+
+        mOptionFragment = OptionFragment.newInstance(isShowChooseAssets = !mIsTransfer,
+                isModify = isModify,
+                assetsId = assetsId,
+                date = date,
+                remark = remark)
         mOptionFragment.setEditDoneListener { keyboard.setEditTextFocus() }
         supportFragmentManager.beginTransaction()
                 .add(R.id.flOptions, mOptionFragment)
@@ -108,14 +147,18 @@ class AddRecordActivity : BaseActivity() {
         }
         // 提交
         keyboard.mOnAffirmClickListener = {
-            if (mRecord == null) {
+            if (mRecord == null && mTransfer == null) {
                 if (mCurrentType == TYPE_TRANSFER) {
                     insertTransfer(it)
                 } else {
                     insertRecord(it)
                 }
             } else {
-                modifyRecord(it)
+                if (mRecord != null) {
+                    modifyRecord(it)
+                } else if (mTransfer != null) {
+                    modifyTransfer(it)
+                }
             }
         }
 
@@ -125,8 +168,14 @@ class AddRecordActivity : BaseActivity() {
             toolbarLayout.tvTitle.text = getString(if (mIsSuccessive) R.string.text_add_record_successive else R.string.text_add_record)
             // 设置 fragment
             mOutlayTypeFragment = RecordTypeFragment.newInstance(RecordType.TYPE_OUTLAY)
-            mTransferAssetsFragment = TransferAssetsFragment.newInstance()
             mIncomeTypeFragment = RecordTypeFragment.newInstance(RecordType.TYPE_INCOME)
+            if (mTransfer != null) {
+                mTransferAssetsFragment = TransferAssetsFragment.newInstance(mTransfer)
+                // 回显数据
+                keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mTransfer!!.money))
+            } else {
+                mTransferAssetsFragment = TransferAssetsFragment.newInstance()
+            }
             val adapter = FragmentViewPagerAdapter(supportFragmentManager, arrayListOf(mOutlayTypeFragment, mTransferAssetsFragment, mIncomeTypeFragment))
             viewPager.adapter = adapter
             viewPager.offscreenPageLimit = 3
@@ -150,6 +199,12 @@ class AddRecordActivity : BaseActivity() {
             (typeChoose as RadioGroup).check(if (mRecord!!.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) R.id.rbLeft else R.id.rbRight)
             // 回显数据
             keyboard.setText(BigDecimalUtil.fen2YuanNoSeparator(mRecord!!.money))
+        }
+
+        if (mIsTransfer) {
+            (typeChoose as RadioGroup).check(R.id.rbMiddle)
+            typeChoose.visibility = View.GONE
+            toolbarLayout.tvTitle.text = getString(R.string.text_transfer)
         }
     }
 
@@ -247,6 +302,58 @@ class AddRecordActivity : BaseActivity() {
         } else {
             finish()
         }
+    }
+
+    private fun modifyTransfer(text: String) {
+        if (mTransferAssetsFragment.getOutAssets() == null) {
+            return
+        }
+        if (mTransferAssetsFragment.getInAssets() == null) {
+            return
+        }
+        if (mTransferAssetsFragment.getOldOutAssets() == null) {
+            ToastUtils.show(R.string.toast_out_assets_null)
+            return
+        }
+        if (mTransferAssetsFragment.getOldInAssets() == null) {
+            ToastUtils.show(R.string.toast_in_assets_null)
+            return
+        }
+        if (mTransferAssetsFragment.getOutAssets()!!.id!! == mTransferAssetsFragment.getInAssets()!!.id!!) {
+            ToastUtils.show(R.string.toast_choose_account)
+            return
+        }
+        if (mOptionFragment.getDate() == null) {
+            ToastUtils.show(R.string.toast_date_null)
+            return
+        }
+        isSubmitting = true
+        keyboard.setAffirmEnable(false)
+        val oldMoney = mTransfer!!.money
+        mTransfer!!.time = mOptionFragment.getDate()!!
+        mTransfer!!.assetsIdFrom = mTransferAssetsFragment.getOutAssets()!!.id!!
+        mTransfer!!.assetsIdTo = mTransferAssetsFragment.getInAssets()!!.id!!
+        mTransfer!!.money = BigDecimalUtil.yuan2FenBD(text)
+        mTransfer!!.remark = mOptionFragment.getRemark()
+
+        mViewModel.updateTransferRecord(oldMoney = oldMoney,
+                oldOutAssets = mTransferAssetsFragment.getOldOutAssets()!!,
+                oldInAssets = mTransferAssetsFragment.getOldInAssets()!!,
+                outAssets = mTransferAssetsFragment.getOutAssets()!!,
+                inAssets = mTransferAssetsFragment.getInAssets()!!,
+                transferRecord = mTransfer!!).observe(this, Observer {
+            when (it) {
+                is SuccessResource<Boolean> -> {
+                    isSubmitting = false
+                    finish()
+                }
+                is ErrorResource<Boolean> -> {
+                    isSubmitting = false
+                    keyboard.setAffirmEnable(true)
+                    ToastUtils.show(R.string.toast_move_backup_files_fail)
+                }
+            }
+        })
     }
 
     private fun modifyRecord(text: String) {

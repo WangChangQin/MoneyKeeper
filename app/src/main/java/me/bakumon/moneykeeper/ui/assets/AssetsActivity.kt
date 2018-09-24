@@ -67,7 +67,11 @@ class AssetsActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ASSETS_TRANSFER).start() }
+        btnAdd.setOnClickListener {
+            Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                    .putExtra(Router.ExtraKey.KEY_IS_TRANSFER, true)
+                    .start()
+        }
 
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvNetAssetsTitle.text = getString(R.string.text_assets) + text

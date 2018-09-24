@@ -55,6 +55,8 @@
     <string name="toast_transfer_fail">Transfer failed</string>
     <string name="toast_submit_now">Submitting, please wait..</string>
     <string name="toast_delete_transfer_fail">Deleting transfer record failed</string>
+    <string name="toast_out_assets_null">The account before the modification is empty, please try again</string>
+    <string name="toast_in_assets_null">The account is not empty before the modification, please try again</string>
 
     <!-- 首页 -->
     <string name="text_widget_today_outlay">Today</string>
