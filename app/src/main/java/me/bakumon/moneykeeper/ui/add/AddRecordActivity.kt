@@ -97,7 +97,7 @@ class AddRecordActivity : BaseActivity() {
         when {
             mRecord != null -> {
                 isModify = true
-                assetsId = mRecord!!.assetsId!!
+                assetsId = if (mRecord!!.assetsId == null) -1 else mRecord!!.assetsId!!
                 date = mRecord!!.time
                 remark = mRecord!!.remark!!
             }
