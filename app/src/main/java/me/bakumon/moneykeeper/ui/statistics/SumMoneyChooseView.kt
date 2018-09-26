@@ -96,13 +96,13 @@ class SumMoneyChooseView @JvmOverloads constructor(context: Context, attrs: Attr
                 }
             }
         }
-        rbOutlay.text = context.getString(R.string.text_outlay) + " " + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(outlay)
-        rbIncome.text = context.getString(R.string.text_income) + " " + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(income)
+        rbOutlay.text = context.getString(R.string.text_outlay) + " " + ConfigManager.symbol + BigDecimalUtil.fen2YuanWithText(outlay)
+        rbIncome.text = context.getString(R.string.text_income) + " " + ConfigManager.symbol + BigDecimalUtil.fen2YuanWithText(income)
 
         if (income > BigDecimal(0)) {
             tvOverage.visibility = View.VISIBLE
             val prefix2 = tvOverage.context.getString(R.string.text_overage) + " " + ConfigManager.symbol
-            val overage = prefix2 + BigDecimalUtil.fen2Yuan(income.subtract(outlay))
+            val overage = prefix2 + BigDecimalUtil.fen2YuanWithText(income.subtract(outlay))
             tvOverage.text = overage
         } else {
             tvOverage.visibility = View.GONE

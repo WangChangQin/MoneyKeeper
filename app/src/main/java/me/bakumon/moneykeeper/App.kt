@@ -58,7 +58,6 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
         mappings[Router.Url.URL_CHOOSE_ASSETS] = Target("mk://bakumon.me/choose_assets")
         mappings[Router.Url.URL_ADD_ASSETS] = Target("mk://bakumon.me/add_assets")
         mappings[Router.Url.URL_ASSETS_DETAIL] = Target("mk://bakumon.me/assets_detail")
-//        mappings[Router.Url.URL_ASSETS_TRANSFER] = Target("mk://bakumon.me/assets_transfer")
 
         Floo.configuration()
                 .setDebugEnabled(BuildConfig.DEBUG)

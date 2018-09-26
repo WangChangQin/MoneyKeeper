@@ -310,4 +310,8 @@
     <string name="text_choose_in_account">选择转入账户</string>
     <string name="text_tip_transfer">提示：在资产详情查看转账记录</string>
     <string name="text_remark_tip">还没有常用备注，记账完成后自动保存已输入备注，最多保存15个</string>
+    <string name="text_ten_thousand">万</string>
+    <string name="text_million">百万</string>
+    <string name="text_ten_million">千万</string>
+    <string name="text_hundred_million">亿</string>
 </resources>

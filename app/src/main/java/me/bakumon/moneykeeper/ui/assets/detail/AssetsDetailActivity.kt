@@ -126,7 +126,7 @@ class AssetsDetailActivity : BaseActivity() {
         }
         val text = if (ConfigManager.symbol.isEmpty()) "" else "(" + ConfigManager.symbol + ")"
         tvMoneyTitle.text = getText(R.string.text_assets_balance).toString() + text
-        tvMoney.text = BigDecimalUtil.fen2Yuan(assets.money)
+        tvMoney.text = BigDecimalUtil.fen2YuanWithText(assets.money)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

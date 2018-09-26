@@ -97,7 +97,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
                 if (type == RecordType.TYPE_OUTLAY) {
-                    outlayStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                    outlayStr = BigDecimalUtil.fen2YuanWithText(sumMoney)
                 }
             }
         }
@@ -114,7 +114,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
         val budget = ConfigManager.budget
         if (budget > 0) {
-            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
+            val budgetStr = BigDecimalUtil.fen2YuanWithText(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
             tvRightContent.text = budgetStr
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
         } else {
@@ -147,13 +147,13 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
                 if (type == RecordType.TYPE_INCOME) {
-                    incomeStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                    incomeStr = BigDecimalUtil.fen2YuanWithText(sumMoney)
                 }
             }
         }
         tvLeftContent.text = incomeStr
 
-        tvRightContent.text = BigDecimalUtil.fen2Yuan(assetsMontyBean.netAssets)
+        tvRightContent.text = BigDecimalUtil.fen2YuanWithText(assetsMontyBean.netAssets)
         llRightContent.setOnClickListener {
             Floo.navigation(llRightContent.context, Router.Url.URL_ASSETS)
                     .start()
