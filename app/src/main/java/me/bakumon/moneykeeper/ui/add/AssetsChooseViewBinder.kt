@@ -1,13 +1,16 @@
 package me.bakumon.moneykeeper.ui.add
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ResourcesUtil
 import me.drakeet.multitype.ItemViewBinder
 
@@ -21,6 +24,7 @@ class AssetsChooseViewBinder constructor(private val onClickListener: ((Assets) 
         return ViewHolder(root)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, item: Assets) {
 
         holder.ivAccount.setImageResource(ResourcesUtil.getTypeImgId(holder.ivAccount.context, item.imgName))
@@ -32,7 +36,7 @@ class AssetsChooseViewBinder constructor(private val onClickListener: ((Assets) 
             holder.tvAccountRemark.text = item.remark
             holder.tvAccountRemark.visibility = View.VISIBLE
         }
-
+        holder.tvMoney.text = ConfigManager.symbol + BigDecimalUtil.fen2Yuan(item.money)
         holder.llAccount.setOnClickListener {
             onClickListener.invoke(item)
         }
@@ -42,6 +46,7 @@ class AssetsChooseViewBinder constructor(private val onClickListener: ((Assets) 
         val ivAccount: ImageView = itemView.findViewById(R.id.ivAccount)
         val tvAccountName: TextView = itemView.findViewById(R.id.tvAccountName)
         val tvAccountRemark: TextView = itemView.findViewById(R.id.tvAccountRemark)
+        val tvMoney: TextView = itemView.findViewById(R.id.tvMoney)
         val llAccount: View = itemView.findViewById(R.id.llAccount)
     }
 }
