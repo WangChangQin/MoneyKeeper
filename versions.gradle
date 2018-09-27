@@ -57,6 +57,7 @@ versions.about = "2.1.1"
 versions.multitype = "3.4.4"
 versions.picasso = "2.5.2"
 versions.moshi = "1.5.0"
+versions.flexbox = "0.2.5"
 
 def deps = [:]
 
@@ -124,6 +125,7 @@ deps.multitype = "me.drakeet.multitype:multitype:$versions.multitype"
 deps.multitype_kotlin = "me.drakeet.multitype:multitype-kotlin:$versions.multitype"
 deps.picasso = "com.squareup.picasso:picasso:$versions.picasso"
 deps.moshi = "com.squareup.moshi:moshi:$versions.moshi"
+deps.flexbox = "com.google.android:flexbox:$versions.flexbox"
 
 ext.deps = deps
 

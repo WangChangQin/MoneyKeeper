@@ -47,9 +47,9 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-        ndk {
-            abiFilters 'armeabi-v7a'
-        }
+//        ndk {
+//            abiFilters 'armeabi-v7a'
+//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -276,4 +276,5 @@ dependencies {
     implementation deps.picasso
     // json 解析
     implementation deps.moshi
+    implementation deps.flexbox
 }
