@@ -27,6 +27,7 @@ import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.utill.StatusBarUtil
 
+
 /**
  * 1.沉浸式状态栏
  * 2.mDisposable
@@ -61,6 +62,13 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         onInitView(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        // 一个不太好的方案
+        // 解决 AddRecordActivity 长时间处于后台，被系统回收后，重新打开恢复 AddRecordActivity 后
+        // RecordTypeFragment#getType() 方法 view typePage 为空的问题
+        // 也就是 RecordTypeFragment getView 为空
     }
 
     /**
