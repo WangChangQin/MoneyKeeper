@@ -16,6 +16,7 @@
 
 package me.bakumon.moneykeeper.ui.common
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.LayoutRes
@@ -64,6 +65,7 @@ abstract class BaseActivity : AppCompatActivity() {
         onInitView(savedInstanceState)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onSaveInstanceState(outState: Bundle) {
         // 一个不太好的方案
         // 解决 AddRecordActivity 长时间处于后台，被系统回收后，重新打开恢复 AddRecordActivity 后
