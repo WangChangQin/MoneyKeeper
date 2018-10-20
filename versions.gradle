@@ -57,6 +57,7 @@ versions.about = "2.1.1"
 versions.multitype = "3.4.4"
 versions.picasso = "2.5.2"
 versions.moshi = "1.5.0"
+// flex 布局
 versions.flexbox = "0.2.5"
 
 def deps = [:]
