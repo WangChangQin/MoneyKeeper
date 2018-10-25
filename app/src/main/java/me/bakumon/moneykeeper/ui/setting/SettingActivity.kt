@@ -17,13 +17,17 @@
 package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
+import android.app.KeyguardManager
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
+import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -67,7 +71,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
-        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(NormalItem::class, NormalItemViewBinder { normalItem: NormalItem, view: View -> onNormalItemClick(normalItem, view) })
         adapter.register(CheckItem::class, CheckItemViewBinder { item, isCheck -> onCheckItemCheckChange(item, isCheck) })
         adapter.register(ImgItem::class, ImgItemViewBinder { onImgItemClick(it) })
     }
@@ -92,6 +96,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
         items.add(Category(getString(R.string.text_display)))
         items.add(NormalItem(getString(R.string.text_theme), getThemeStr()))
+        items.add(NormalItem(getString(R.string.text_luck_screen), getLockScreenState()))
 
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
@@ -128,7 +133,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-    private fun onNormalItemClick(item: NormalItem) {
+    private fun onNormalItemClick(item: NormalItem, view: View) {
         when (item.title) {
             getString(R.string.text_monty_budget) -> setBudget()
             getString(R.string.text_assets_manager) -> Floo.navigation(this, Router.Url.URL_ASSETS).start()
@@ -139,6 +144,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.text_theme) -> showChooseThemeDialog()
             getString(R.string.text_other_setting) -> Floo.navigation(this, Router.Url.URL_OTHER_SETTING).start()
             getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+            getString(R.string.text_luck_screen) -> chooseLockScreen(view)
             "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }
     }
@@ -154,6 +160,63 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         when (item.title) {
             getString(R.string.text_cloud_backup_title) -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
         }
+    }
+
+    private fun getLockScreenState(): String {
+        return when (ConfigManager.lockScreenState) {
+            0 -> getString(R.string.text_luck_screen_off)
+            1 -> {
+                val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                    getString(R.string.text_luck_screen_system)
+                } else {
+                    ConfigManager.setLockScreenState(0)
+                    getString(R.string.text_luck_screen_off)
+                }
+            }
+            2 -> getString(R.string.text_luck_screen_custom)
+            else -> getString(R.string.text_luck_screen_off)
+        }
+    }
+
+    private fun chooseLockScreen(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.menu.add(getString(R.string.text_luck_screen_off))
+        popupMenu.menu.add(getString(R.string.text_luck_screen_system))
+        popupMenu.menu.add(getString(R.string.text_luck_screen_custom))
+        popupMenu.setOnMenuItemClickListener {
+            when (it.title) {
+                getString(R.string.text_luck_screen_off) -> {
+                    ConfigManager.setLockScreenState(0)
+                    updateLockItem(it.title)
+                }
+                getString(R.string.text_luck_screen_system) -> {
+                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                    if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                        ConfigManager.setLockScreenState(1)
+                        updateLockItem(it.title)
+                    } else {
+                        ToastUtils.show(R.string.text_unlock_tip)
+                    }
+                }
+                getString(R.string.text_luck_screen_custom) -> {
+                    ConfigManager.setLockScreenState(2)
+                    updateLockItem(it.title)
+                }
+            }
+            false
+        }
+        popupMenu.setOnDismissListener {
+            isDialogShow = false
+        }
+        popupMenu.show()
+    }
+
+    private fun updateLockItem(lockTitle: CharSequence) {
+        val position = 15
+        (mAdapter.items[position] as NormalItem).content = lockTitle.toString()
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun getBudgetStr(): String {

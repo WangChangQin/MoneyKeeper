@@ -20,6 +20,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -65,7 +66,7 @@ class BackupActivity : AbsListActivity() {
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
-        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(NormalItem::class, NormalItemViewBinder { normalItem: NormalItem, view: View -> onNormalItemClick(normalItem, view) })
     }
 
     override fun onItemsCreated(items: Items) {
@@ -84,7 +85,7 @@ class BackupActivity : AbsListActivity() {
         initDir()
     }
 
-    private fun onNormalItemClick(item: NormalItem) {
+    private fun onNormalItemClick(item: NormalItem, view: View) {
         when (item.title) {
             getString(R.string.text_webdav_url) -> setUrl()
             getString(R.string.text_webdav_account) -> setAccount()

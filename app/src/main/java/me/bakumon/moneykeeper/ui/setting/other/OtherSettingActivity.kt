@@ -21,6 +21,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -56,7 +57,7 @@ class OtherSettingActivity : AbsListActivity(), EasyPermissions.PermissionCallba
     }
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
-        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(NormalItem::class, NormalItemViewBinder { normalItem: NormalItem, view: View -> onNormalItemClick(normalItem, view) })
     }
 
     override fun onItemsCreated(items: Items) {
@@ -67,7 +68,7 @@ class OtherSettingActivity : AbsListActivity(), EasyPermissions.PermissionCallba
         mViewModel = getViewModel()
     }
 
-    private fun onNormalItemClick(item: NormalItem) {
+    private fun onNormalItemClick(item: NormalItem, view: View) {
         when (item.title) {
             getString(R.string.text_local_backup_path) -> chooseFolder()
         }

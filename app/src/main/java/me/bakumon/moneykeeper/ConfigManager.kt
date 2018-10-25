@@ -49,6 +49,7 @@ object ConfigManager {
     private const val KEY_BACKUP_FOLDER = "backup_folder"
     private const val KEY_ASSETS_ID = "assets_id"
     private const val KEY_IS_SHOW_SORT_TIP = "is_show_sort_tip"
+    private const val KEY_LOCK_SCREEN = "lock_screen"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -94,6 +95,9 @@ object ConfigManager {
 
     val isShowSortTip: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_IS_SHOW_SORT_TIP, true)
+
+    val lockScreenState: Int
+        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_LOCK_SCREEN, 0)
 
     /**
      * 自动备份
@@ -191,6 +195,16 @@ object ConfigManager {
      */
     fun setIsShowSortTip(isShow: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_IS_SHOW_SORT_TIP, isShow)
+    }
+
+    /**
+     * 锁屏方式
+     * 0：关闭
+     * 1：系统锁屏
+     * 2：自定义锁屏
+     */
+    fun setLockScreenState(state: Int): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_LOCK_SCREEN, state)
     }
 
 }

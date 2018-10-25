@@ -216,6 +216,10 @@
     <string name="text_theme">主題</string>
     <string name="text_theme_dark">暗色主題</string>
     <string name="text_theme_light">亮色主題</string>
+    <string name="text_luck_screen">打開應用時鎖屏</string>
+    <string name="text_luck_screen_off">關閉</string>
+    <string name="text_luck_screen_system">使用系統解鎖界面</string>
+    <string name="text_luck_screen_custom">使用自定義解鎖界面</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV雲盤</string>
@@ -314,4 +318,9 @@
     <string name="text_million">百萬</string>
     <string name="text_ten_million">千萬</string>
     <string name="text_hundred_million">億</string>
+
+    <!-- 锁屏 -->
+    <string name="text_unlock">解鎖</string>
+    <string name="text_unlock_to_billing">解鎖後記賬</string>
+    <string name="text_unlock_tip">請先啟用手機系統解鎖功能</string>
 </resources>

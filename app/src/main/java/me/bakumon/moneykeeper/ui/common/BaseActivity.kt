@@ -17,7 +17,11 @@
 package me.bakumon.moneykeeper.ui.common
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.KeyguardManager
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
@@ -26,7 +30,9 @@ import android.view.View
 import android.view.ViewGroup
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
+import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.StatusBarUtil
+import me.bakumon.moneykeeper.utill.ToastUtils
 
 
 /**
@@ -63,6 +69,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         onInitView(savedInstanceState)
+        lockScreen()
     }
 
     @SuppressLint("MissingSuperCall")
@@ -138,5 +145,52 @@ abstract class BaseActivity : AppCompatActivity() {
     inline fun <reified T : BaseViewModel> getViewModel(): T {
         val viewModelFactory = Injection.provideViewModelFactory()
         return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    }
+
+    // 锁屏
+    private fun lockScreen() {
+        createCount++
+        if (createCount == 1) {
+
+            when (ConfigManager.lockScreenState) {
+                0 -> {
+                }
+                1 -> {
+                    // 系统解锁界面
+                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                    if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                        val intent = keyguardManager.createConfirmDeviceCredentialIntent(getString(R.string.text_unlock), getString(R.string.text_unlock_to_billing))
+                        startActivityForResult(intent, REQUEST_CODE_KEYGUARD)
+                    }
+                }
+                2 -> {
+                    ToastUtils.show("自定义解锁 TODO")
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        createCount--
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_KEYGUARD) {
+            // 系统解锁界面，解锁结果
+            if (resultCode != Activity.RESULT_OK) {
+                // 解锁失败
+                finish()
+            }
+        }
+    }
+
+    companion object {
+        // activity 数量
+        private var createCount = 0
+        private const val REQUEST_CODE_KEYGUARD = 12
     }
 }
