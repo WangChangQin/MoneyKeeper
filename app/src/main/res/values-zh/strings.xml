@@ -171,6 +171,8 @@
     <string name="text_cloud_backup_title">云盘备份</string>
     <string name="text_cloud_backup_content">WebDAV</string>
     <string name="text_about_and_more">关于 | 更多</string>
+    <string name="text_feedback">反馈</string>
+    <string name="text_feedback_help">反馈问题、获取帮助</string>
     <string name="text_about_content">了解我们的设计理念</string>
     <string-array name="symbol">
         <item>人民币 (¥)</item>

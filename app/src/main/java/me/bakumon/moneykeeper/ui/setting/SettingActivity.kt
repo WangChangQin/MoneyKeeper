@@ -100,6 +100,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
+        items.add(NormalItem(getString(R.string.text_feedback), getString(R.string.text_feedback_help)))
         items.add(NormalItem(getString(R.string.text_other_setting), ""))
         items.add(NormalItem("", getString(R.string.text_privacy_policy)))
     }
@@ -144,6 +145,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.text_theme) -> showChooseThemeDialog()
             getString(R.string.text_other_setting) -> Floo.navigation(this, Router.Url.URL_OTHER_SETTING).start()
             getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+            getString(R.string.text_feedback) -> AndroidUtil.openWeb(this, Constant.getUrlTucao())
             getString(R.string.text_luck_screen) -> chooseLockScreen(view)
             "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }

@@ -171,6 +171,8 @@
     <string name="text_cloud_backup_title">Cloud disk backup</string>
     <string name="text_cloud_backup_content">WebDAV</string>
     <string name="text_about_and_more">About | More</string>
+    <string name="text_feedback">Feedback</string>
+    <string name="text_feedback_help">Feedback questions and getting help</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
         <item>RMB (¥)</item>
