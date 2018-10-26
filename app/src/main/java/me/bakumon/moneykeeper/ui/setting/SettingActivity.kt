@@ -34,10 +34,8 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jakewharton.processphoenix.ProcessPhoenix
-import me.bakumon.moneykeeper.ConfigManager
-import me.bakumon.moneykeeper.Constant
-import me.bakumon.moneykeeper.R
-import me.bakumon.moneykeeper.Router
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
+import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
 import me.bakumon.moneykeeper.base.SuccessResource
@@ -173,10 +171,20 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     getString(R.string.text_luck_screen_system)
                 } else {
                     ConfigManager.setLockScreenState(0)
+                    ToastUtils.show(R.string.text_unlock_close_system)
                     getString(R.string.text_luck_screen_off)
                 }
             }
-            2 -> getString(R.string.text_luck_screen_custom)
+            2 -> {
+                val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                if (fingerprintIdentify.isFingerprintEnable) {
+                    getString(R.string.text_luck_screen_custom)
+                } else {
+                    ConfigManager.setLockScreenState(0)
+                    ToastUtils.show(R.string.text_unlock_close_customer)
+                    getString(R.string.text_luck_screen_off)
+                }
+            }
             else -> getString(R.string.text_luck_screen_off)
         }
     }
@@ -202,8 +210,13 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     }
                 }
                 getString(R.string.text_luck_screen_custom) -> {
-                    ConfigManager.setLockScreenState(2)
-                    updateLockItem(it.title)
+                    val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                    if (fingerprintIdentify.isFingerprintEnable) {
+                        ConfigManager.setLockScreenState(2)
+                        updateLockItem(it.title)
+                    } else {
+                        ToastUtils.show(R.string.text_unlock_finger_print)
+                    }
                 }
             }
             false

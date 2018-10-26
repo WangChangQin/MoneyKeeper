@@ -324,5 +324,12 @@
     <!-- 锁屏 -->
     <string name="text_unlock">解锁</string>
     <string name="text_unlock_to_billing">解锁后记账</string>
-    <string name="text_unlock_tip">请先启用手机系统解锁功能</string>
+    <string name="text_unlock_tip">请先启用手机解锁功能</string>
+    <string name="text_unlock_finger_print">请先启用手机指纹功能</string>
+    <string name="text_unlock_to_start">请输入指纹以开始记账</string>
+    <string name="text_unlock_notMatch">无法识别，还有%1$d次机会</string>
+    <string name="text_unlock_failed">尝试次数过多，请稍后重试</string>
+    <string name="text_unlock_failed_device_locked">设备指纹被暂时锁定，请稍后重试</string>
+    <string name="text_unlock_close_system">系统解锁不可用，已关闭锁屏功能</string>
+    <string name="text_unlock_close_customer">系统指纹不可用，已关闭锁屏功能</string>
 </resources>

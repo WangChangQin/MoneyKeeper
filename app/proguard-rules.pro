@@ -226,3 +226,9 @@
 # fabric crashlytics
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+# MeiZuFingerprint
+-keep class com.fingerprints.service.** { *; }
+
+# SmsungFingerprint
+-keep class com.samsung.android.sdk.** { *; }

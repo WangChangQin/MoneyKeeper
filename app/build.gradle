@@ -277,4 +277,5 @@ dependencies {
     // json 解析
     implementation deps.moshi
     implementation deps.flexbox
+    implementation deps.fingerprintidentify
 }

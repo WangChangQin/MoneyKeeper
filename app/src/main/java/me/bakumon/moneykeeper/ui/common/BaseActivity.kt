@@ -28,9 +28,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.ViewGroup
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.ui.UnlockActivity
 import me.bakumon.moneykeeper.utill.StatusBarUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 
@@ -161,10 +164,19 @@ abstract class BaseActivity : AppCompatActivity() {
                     if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
                         val intent = keyguardManager.createConfirmDeviceCredentialIntent(getString(R.string.text_unlock), getString(R.string.text_unlock_to_billing))
                         startActivityForResult(intent, REQUEST_CODE_KEYGUARD)
+                    } else {
+                        ConfigManager.setLockScreenState(0)
+                        ToastUtils.show(R.string.text_unlock_close_system)
                     }
                 }
                 2 -> {
-                    ToastUtils.show("自定义解锁 TODO")
+                    val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                    if (fingerprintIdentify.isFingerprintEnable) {
+                        startActivityForResult(Intent(this, UnlockActivity::class.java), REQUEST_CODE_CUSTOMER)
+                    } else {
+                        ConfigManager.setLockScreenState(0)
+                        ToastUtils.show(R.string.text_unlock_close_customer)
+                    }
                 }
                 else -> {
                 }
@@ -185,6 +197,13 @@ abstract class BaseActivity : AppCompatActivity() {
                 // 解锁失败
                 finish()
             }
+        } else if (requestCode == REQUEST_CODE_CUSTOMER) {
+            // 自定义指纹解锁
+            if (resultCode != Activity.RESULT_OK) {
+                // 解锁失败
+                // TODO
+                finish()
+            }
         }
     }
 
@@ -192,5 +211,6 @@ abstract class BaseActivity : AppCompatActivity() {
         // activity 数量
         private var createCount = 0
         private const val REQUEST_CODE_KEYGUARD = 12
+        private const val REQUEST_CODE_CUSTOMER = 13
     }
 }

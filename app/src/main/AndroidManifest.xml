@@ -21,6 +21,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 指纹 -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="com.fingerprints.service.ACCESS_FINGERPRINT_MANAGER"/>
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"/>
 
     <application
         android:name=".App"
@@ -47,6 +51,10 @@
         <activity
             android:name=".ui.LauncherActivity"
             android:theme="@style/AppTheme.Launcher" />
+
+        <activity
+            android:name=".ui.UnlockActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 设置成 singleTask 是因为恢复备份失败，使用 process_phoenix 重新启动进程，HomeActivity 会存在两个 -->
         <activity

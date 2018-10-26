@@ -325,4 +325,11 @@
     <string name="text_unlock">Unlock</string>
     <string name="text_unlock_to_billing">Unlock before you can start billing</string>
     <string name="text_unlock_tip">Please enable the phone system unlock function first.</string>
+    <string name="text_unlock_finger_print">Please enable the phone fingerprint function first.</string>
+    <string name="text_unlock_to_start">Please enter your fingerprint to unlock</string>
+    <string name="text_unlock_notMatch">Unrecognized, and %1$d chance</string>
+    <string name="text_unlock_failed">Too many attempts, please try again later</string>
+    <string name="text_unlock_failed_device_locked">The device fingerprint is temporarily locked. Please try again later</string>
+    <string name="text_unlock_close_system">System unlock is not available, lock screen is turned off</string>
+    <string name="text_unlock_close_customer">The system fingerprint is not available and the lock screen function is turned off.</string>
 </resources>
