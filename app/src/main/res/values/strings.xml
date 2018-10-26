@@ -221,7 +221,7 @@
     <string name="text_luck_screen">打开应用时锁屏</string>
     <string name="text_luck_screen_off">关闭</string>
     <string name="text_luck_screen_system">使用系统解锁界面</string>
-    <string name="text_luck_screen_custom">使用自定义解锁界面</string>
+    <string name="text_luck_screen_custom">使用指纹解锁界面</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV云盘</string>
