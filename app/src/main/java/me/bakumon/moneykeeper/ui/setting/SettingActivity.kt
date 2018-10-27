@@ -94,7 +94,9 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
         items.add(Category(getString(R.string.text_display)))
         items.add(NormalItem(getString(R.string.text_theme), getThemeStr()))
+        items.add(Category(getString(R.string.text_luck)))
         items.add(NormalItem(getString(R.string.text_luck_screen), getLockScreenState()))
+        items.add(CheckItem(getString(R.string.text_luck_screen_add), getString(R.string.text_luck_screen_add_tip), ConfigManager.lockAdd))
 
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
@@ -153,6 +155,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         when (item.title) {
             getString(R.string.text_fast_accounting) -> ConfigManager.setIsFast(isCheck)
             getString(R.string.text_auto_backup) -> switchAutoBackup(isCheck)
+            getString(R.string.text_luck_screen_add) -> ConfigManager.setLockAdd(isCheck)
         }
     }
 
@@ -161,6 +164,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             getString(R.string.text_cloud_backup_title) -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
         }
     }
+
+
 
     private fun getLockScreenState(): String {
         return when (ConfigManager.lockScreenState) {
@@ -228,7 +233,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun updateLockItem(lockTitle: CharSequence) {
-        val position = 15
+        val position = 16
         (mAdapter.items[position] as NormalItem).content = lockTitle.toString()
         mRecyclerView.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)

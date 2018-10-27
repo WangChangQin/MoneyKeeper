@@ -218,10 +218,13 @@
     <string name="text_theme">主題</string>
     <string name="text_theme_dark">暗色主題</string>
     <string name="text_theme_light">亮色主題</string>
+    <string name="text_luck">鎖屏</string>
     <string name="text_luck_screen">打開應用時鎖屏</string>
     <string name="text_luck_screen_off">關閉</string>
     <string name="text_luck_screen_system">使用系統解鎖界面</string>
     <string name="text_luck_screen_custom">使用指紋解鎖界面</string>
+    <string name="text_luck_screen_add">直接進入記一筆界面</string>
+    <string name="text_luck_screen_add_tip">關閉後從 Shortcut 進入，需要解鎖</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV雲盤</string>

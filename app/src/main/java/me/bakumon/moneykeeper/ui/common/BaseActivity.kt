@@ -34,6 +34,7 @@ import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.ui.UnlockActivity
+import me.bakumon.moneykeeper.ui.add.AddRecordActivity
 import me.bakumon.moneykeeper.utill.StatusBarUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
 
@@ -160,22 +161,28 @@ abstract class BaseActivity : AppCompatActivity() {
                 }
                 1 -> {
                     // 系统解锁界面
-                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
-                    if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
-                        val intent = keyguardManager.createConfirmDeviceCredentialIntent(getString(R.string.text_unlock), getString(R.string.text_unlock_to_billing))
-                        startActivityForResult(intent, REQUEST_CODE_KEYGUARD)
-                    } else {
-                        ConfigManager.setLockScreenState(0)
-                        ToastUtils.show(R.string.text_unlock_close_system)
+                    if (!(this is AddRecordActivity && ConfigManager.lockAdd)) {
+                        // 自定义指纹解锁
+                        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                        if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                            val intent = keyguardManager.createConfirmDeviceCredentialIntent(getString(R.string.text_unlock), getString(R.string.text_unlock_to_billing))
+                            startActivityForResult(intent, REQUEST_CODE_KEYGUARD)
+                        } else {
+                            ConfigManager.setLockScreenState(0)
+                            ToastUtils.show(R.string.text_unlock_close_system)
+                        }
                     }
                 }
                 2 -> {
-                    val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
-                    if (fingerprintIdentify.isFingerprintEnable) {
-                        startActivityForResult(Intent(this, UnlockActivity::class.java), REQUEST_CODE_CUSTOMER)
-                    } else {
-                        ConfigManager.setLockScreenState(0)
-                        ToastUtils.show(R.string.text_unlock_close_customer)
+                    // 自定义指纹解锁
+                    if (!(this is AddRecordActivity && ConfigManager.lockAdd)) {
+                        val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                        if (fingerprintIdentify.isFingerprintEnable) {
+                            startActivityForResult(Intent(this, UnlockActivity::class.java), REQUEST_CODE_CUSTOMER)
+                        } else {
+                            ConfigManager.setLockScreenState(0)
+                            ToastUtils.show(R.string.text_unlock_close_customer)
+                        }
                     }
                 }
                 else -> {
@@ -186,6 +193,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // 存在问题：因为在 finish 后，onDestroy 不会及时执行，导致关闭锁屏界面后，迅速打开app，会直接进入应用
         createCount--
     }
 
@@ -201,7 +209,6 @@ abstract class BaseActivity : AppCompatActivity() {
             // 自定义指纹解锁
             if (resultCode != Activity.RESULT_OK) {
                 // 解锁失败
-                // TODO
                 finish()
             }
         }

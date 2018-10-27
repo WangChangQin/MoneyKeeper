@@ -50,6 +50,7 @@ object ConfigManager {
     private const val KEY_ASSETS_ID = "assets_id"
     private const val KEY_IS_SHOW_SORT_TIP = "is_show_sort_tip"
     private const val KEY_LOCK_SCREEN = "lock_screen"
+    private const val KEY_LOCK_ADD = "lock_add"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -98,6 +99,9 @@ object ConfigManager {
 
     val lockScreenState: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_LOCK_SCREEN, 0)
+
+    val lockAdd: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_LOCK_ADD, true)
 
     /**
      * 自动备份
@@ -205,6 +209,13 @@ object ConfigManager {
      */
     fun setLockScreenState(state: Int): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_LOCK_SCREEN, state)
+    }
+
+    /**
+     * 直接进入记一笔界面
+     */
+    fun setLockAdd(lockAdd: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_LOCK_ADD, lockAdd)
     }
 
 }

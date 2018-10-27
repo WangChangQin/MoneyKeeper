@@ -218,10 +218,13 @@
     <string name="text_theme">Theme</string>
     <string name="text_theme_dark">Dark theme</string>
     <string name="text_theme_light">Light theme</string>
+    <string name="text_luck">Luck screen</string>
     <string name="text_luck_screen">Must be unlocked when opening an app</string>
     <string name="text_luck_screen_off">Turn-off</string>
     <string name="text_luck_screen_system">Use the system to unlock the interface</string>
     <string name="text_luck_screen_custom">Use a custom unlock interface</string>
+    <string name="text_luck_screen_add">Directly enter the "Record"</string>
+    <string name="text_luck_screen_add_tip">After turn off, enter from Shortcut and need to unlock</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV</string>
