@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="6dp"
-                android:singleLine="true"
+                android:maxLines="2"
                 android:textColor="@color/colorHeadTextContent"
                 android:textSize="13sp"
                 tools:text="这是备注" />
