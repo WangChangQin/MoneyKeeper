@@ -314,10 +314,8 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
-    override fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>> {
-        val dateFrom = DateUtils.getCurrentMonthStart()
-        val dateTo = DateUtils.getCurrentMonthEnd()
-        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
+    override fun getRecordWithTypesRecent(): LiveData<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRecordWithTypesWithCount(100)
     }
 
     override fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>> {

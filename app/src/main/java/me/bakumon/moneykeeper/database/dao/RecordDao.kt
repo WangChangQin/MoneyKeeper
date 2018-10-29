@@ -34,6 +34,10 @@ interface RecordDao {
     fun getRangeRecordWithTypes(from: Date, to: Date): LiveData<List<RecordWithType>>
 
     @Transaction
+    @Query("SELECT * from Record ORDER BY time DESC, create_time DESC LIMIT :count")
+    fun getRecordWithTypesWithCount(count: Int): LiveData<List<RecordWithType>>
+
+    @Transaction
     @Query("SELECT * from Record WHERE assets_id=:assetsId ORDER BY time DESC, create_time DESC LIMIT :limit")
     fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>>
 

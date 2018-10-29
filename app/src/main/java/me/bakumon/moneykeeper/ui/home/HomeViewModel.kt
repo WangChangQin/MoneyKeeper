@@ -68,7 +68,7 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
     }
 
     val currentMonthRecordWithTypes: LiveData<List<RecordWithType>>
-        get() = mDataSource.getCurrentMonthRecordWithTypes()
+        get() = mDataSource.getRecordWithTypesRecent()
 
     val currentMonthSumMoney: LiveData<List<SumMoneyBean>>
         get() = mDataSource.getCurrentMonthSumMoneyLiveData()
