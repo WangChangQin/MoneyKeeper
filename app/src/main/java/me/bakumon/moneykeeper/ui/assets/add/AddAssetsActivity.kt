@@ -35,6 +35,7 @@ import me.bakumon.moneykeeper.database.entity.Assets
 import me.bakumon.moneykeeper.ui.assets.choose.AssetsType
 import me.bakumon.moneykeeper.ui.common.BaseActivity
 import me.bakumon.moneykeeper.utill.*
+import me.bakumon.moneykeeper.view.KeyboardDialog
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -117,6 +118,21 @@ class AddAssetsActivity : BaseActivity() {
         }
         edtRemark.setText(remark)
         edtMoney.setText(money)
+
+        val keyboardDialog = KeyboardDialog(this, edtMoney.text.toString()) {
+            edtMoney.setText(it)
+            edtMoney.setSelection(edtMoney.text.length)
+            SoftInputUtils.hideSoftInput(edtMoney)
+            if (!edtMoney.isFocused) {
+                edtMoney.requestFocus()
+            }
+        }
+
+        edtMoney.setOnTouchListener { _, _ ->
+            SoftInputUtils.hideSoftInput(edtMoney)
+            keyboardDialog.show()
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

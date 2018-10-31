@@ -40,6 +40,13 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     var mOnAffirmClickListener: ((String) -> Unit)? = null
 
+    var maxIntegerNumber = 6
+
+    var isShowMinus = false
+        set(value) {
+            tvMinus.visibility = if (value) View.VISIBLE else View.GONE
+        }
+
     init {
         init(context)
     }
@@ -85,6 +92,14 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 tvNum8, tvNum9,
                 tvPoint)
         setDeleteView(llDelete)
+
+        tvMinus.setOnClickListener {
+            when {
+                editInput.text.isEmpty() -> setText("-")
+                TextUtils.equals(editInput.text.first().toString(), "-") -> setText(editInput.text.toString().replace("-", ""))
+                else -> setText("-" + editInput.text.toString())
+            }
+        }
 
         tvAffirm.setOnClickListener {
             val text = editInput.text.toString()
@@ -154,7 +169,12 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (TextUtils.equals(".", text)) {
                 sb.insert(sb.length, text)
             } else {
-                if (sb.length < MAX_INTEGER_NUMBER) {
+                val maxIntNumber = if (TextUtils.equals(editInput.text.first().toString(), "-")) {
+                    maxIntegerNumber + 1
+                } else {
+                    maxIntegerNumber
+                }
+                if (sb.length < maxIntNumber) {
                     sb.insert(sb.length, text)
                 }
             }
@@ -181,9 +201,5 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
             true
         }
-    }
-
-    companion object {
-        private const val MAX_INTEGER_NUMBER = 6
     }
 }

@@ -118,7 +118,6 @@
             android:background="@drawable/bg_item"
             android:hint="@string/hint_balance"
             android:inputType="numberSigned|numberDecimal"
-            android:maxLength="7"
             android:padding="6dp"
             android:singleLine="true"
             android:textColor="@color/colorText"

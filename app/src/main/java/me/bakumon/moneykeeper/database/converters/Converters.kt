@@ -40,13 +40,13 @@ object Converters {
 
     @JvmStatic
     @TypeConverter
-    fun stringToBig(intDecimal: Int): BigDecimal {
+    fun stringToBig(intDecimal: Long): BigDecimal {
         return BigDecimal(intDecimal)
     }
 
     @JvmStatic
     @TypeConverter
-    fun bigToString(bigDecimal: BigDecimal): Int {
-        return bigDecimal.toInt()
+    fun bigToString(bigDecimal: BigDecimal): Long {
+        return bigDecimal.toLong()
     }
 }

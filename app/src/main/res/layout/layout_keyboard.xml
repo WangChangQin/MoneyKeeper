@@ -124,6 +124,13 @@
                 android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/tvMinus"
+                    style="@style/text_view_input_num"
+                    android:text="-"
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
                     android:id="@+id/tvPoint"
                     style="@style/text_view_input_num"
                     android:text="."
