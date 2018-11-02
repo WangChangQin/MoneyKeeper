@@ -8,6 +8,8 @@ import android.os.Build
  */
 object Constant {
     const val AUTHOR_EMAIL = "bakumon.me@gmail.com"
+    const val QQ_GROUP = "945643665"
+    const val TG_GROUP = "https://t.me/moneykeep"
     const val ALIPAY_CODE = "aex01251c8foqaprudcp503"
     const val URL_PRIVACY = "https://github.com/Bakumon/MoneyKeeper/blob/master/PrivacyPolicy.md"
     const val URL_HELP = "http://t.cn/Re07fFB"
