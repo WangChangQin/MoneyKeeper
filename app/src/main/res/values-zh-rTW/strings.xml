@@ -225,6 +225,8 @@
     <string name="text_luck_screen_custom">使用指紋解鎖界面</string>
     <string name="text_luck_screen_add">直接進入記一筆界面</string>
     <string name="text_luck_screen_add_tip">關閉後從 Shortcut 進入，需要解鎖</string>
+    <string name="text_statement">聲明</string>
+    <string name="text_statement_tip">「那樣記賬」為開源軟件，本人編譯上架的市場只有酷安和Google Play，包名都為me.bakumon.moneykeeper，其他市場或者不同名稱和包名的相似應用多數是其他人獲取源碼後修改的版本，可能存在風險，請謹慎使用。</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV雲盤</string>

@@ -225,6 +225,8 @@
     <string name="text_luck_screen_custom">Use a custom unlock interface</string>
     <string name="text_luck_screen_add">Directly enter the "Record"</string>
     <string name="text_luck_screen_add_tip">After turn off, enter from Shortcut and need to unlock</string>
+    <string name="text_statement">Statement</string>
+    <string name="text_statement_tip">"ThatMoney" is open source software. The only market that I compiled on the market is coolapk.com and Google Play. The package name is me.bakumon.moneykeeper. Other markets or similar applications with different names and package names are mostly modified by others after obtaining the source code. The version may be at risk, please use it with caution.</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV</string>

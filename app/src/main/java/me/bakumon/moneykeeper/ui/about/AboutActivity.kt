@@ -89,6 +89,9 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
                 Constant.URL_GREEN_ANDROID)
         items.add(Card(linksText))
 
+        items.add(Category(getString(R.string.text_statement)))
+        items.add(Card(getString(R.string.text_statement_tip)))
+
         // Android 应用友链
         RecommendedLoaderDelegate.attach(this, items.size, MoshiJsonConverter())
 
