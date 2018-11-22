@@ -67,7 +67,7 @@
     <string name="text_month_remaining_budget">剩餘預算</string>
     <string name="text_assets">淨資產</string>
     <string name="text_net_assets">調整資產</string>
-    <string name="text_home_footer_tip">統計頁面可以查看往月記錄</string>
+    <string name="text_home_footer_tip">只顯示最近100條記錄，統計頁面可以查看更多數據</string>
     <string name="text_current_month_empty_tip">本月未開始記賬\n\n點擊加號，開始記賬</string>
     <string name="shortcuts_add_record">記一筆</string>
     <string name="shortcuts_statistics">歷史統計</string>
@@ -226,7 +226,7 @@
     <string name="text_luck_screen_add">直接進入記一筆界面</string>
     <string name="text_luck_screen_add_tip">關閉後從 Shortcut 進入，需要解鎖</string>
     <string name="text_statement">聲明</string>
-    <string name="text_statement_tip">「那樣記賬」為開源軟件，本人編譯上架的市場只有酷安和Google Play，包名都為me.bakumon.moneykeeper，其他市場或者不同名稱和包名的相似應用多數是其他人獲取源碼後修改的版本，可能存在風險，請謹慎使用。</string>
+    <string name="text_statement_tip">「那樣記賬」為開源軟件，本人編譯上架的市場目前只有酷安和Google Play，包名都為me.bakumon.moneykeeper，其他市場不同名稱或包名的極相似應用可能是其他人獲取源碼後修改的版本。</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV雲盤</string>

@@ -67,7 +67,7 @@
     <string name="text_month_remaining_budget">剩余预算</string>
     <string name="text_assets">净资产</string>
     <string name="text_net_assets">设置资产</string>
-    <string name="text_home_footer_tip">统计页面可以查看往月记录</string>
+    <string name="text_home_footer_tip">只显示最近100条记录，统计页面可以查看更多数据</string>
     <string name="text_current_month_empty_tip">本月未开始记账\n\n点击加号，开始记账</string>
     <string name="shortcuts_add_record">记一笔</string>
     <string name="shortcuts_statistics">历史统计</string>
@@ -226,7 +226,7 @@
     <string name="text_luck_screen_add">直接进入记一笔界面</string>
     <string name="text_luck_screen_add_tip">关闭后从 Shortcut 进入，需要解锁</string>
     <string name="text_statement">声明</string>
-    <string name="text_statement_tip">「那样记账」为开源软件，本人编译上架的市场只有酷安和 Google Play，包名都为 me.bakumon.moneykeeper，其他市场或者不同名称和包名的相似应用多数是其他人获取源码后修改的版本，可能存在风险，请谨慎使用。</string>
+    <string name="text_statement_tip">「那样记账」为开源软件，本人编译上架的市场目前只有酷安和 Google Play，包名都为 me.bakumon.moneykeeper，其他市场不同名称或包名的极相似应用可能是其他人获取源码后修改的版本。</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV云盘</string>
