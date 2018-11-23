@@ -88,8 +88,8 @@ This is my first work of heart, which originated from an "unbelievable" from sma
 There are no unnecessary permissions, no advertisements, no user system, no information stored by the user, just a simple record of revenue and expenditure.
    
 The name "Moneykeeper" is taken from the homonym of a person's name "Na".
-   
-   [more help] (https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md)
+
+[more help](https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md)
 
 ## Features
 
@@ -108,7 +108,7 @@ Published on the following platforms:
 | ---- | ---- |
 | Google Play | <a href='https://play.google.com/store/apps/details?id=me.bakumon.moneykeeper&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515 -1'><img alt='Get it on Google Play' src='https://i.loli.net/2018/06/27/5b32eac49f930.png' height="60"/>
 </a> |
-| 酷安 | <a href='https://www.coolapk.com/apk/me.bakumon.moneykeeper'><img alt='Go to Coolan Download' src='https://ws4.sinaimg.cn /large/006tNc79ly1fsphx16ybdj30go06st8q.jpg' height="60"/>
+| Coolapk | <a href='https://www.coolapk.com/apk/me.bakumon.moneykeeper'><img alt='Go to Coolapk Download' src='https://ws4.sinaimg.cn/large/006tNc79ly1fsphx16ybdj30go06st8q.jpg' height="60"/>
 </a> |
 
 Preview:
