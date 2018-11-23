@@ -18,26 +18,26 @@
     <string name="app_name">ThatMoney</string>
 
     <string name="toast_add_record_fail">Billing failed, please try again</string>
-    <string name="toast_modify_record_fail">Failed to modify record</string>
+    <string name="toast_modify_record_fail">Failed to modify the record</string>
     <string name="toast_sort_fail">Failed to sort</string>
-    <string name="toast_least_one_type">Please keep at least one type</string>
-    <string name="toast_delete_fail">failed to delete</string>
-    <string name="toast_type_img_fail">Failed to get type picture</string>
-    <string name="toast_type_save_fail">Failed to save the type</string>
-    <string name="toast_type_is_exist" formatted="true">%1$s&#160;The type already exists</string>
+    <string name="toast_least_one_type">Please keep at least one value</string>
+    <string name="toast_delete_fail">Failed to delete</string>
+    <string name="toast_type_img_fail">Failed to get the picture</string>
+    <string name="toast_type_save_fail">Failed to save the value</string>
+    <string name="toast_type_is_exist" formatted="true">%1$s&#160;The value already exists</string>
     <string name="toast_record_delete_fail">Failed to delete record</string>
     <string name="toast_current_sum_money_fail">Failed to obtain the total amount of expenditure income this month</string>
-    <string name="toast_records_fail">Failed to get list data</string>
-    <string name="toast_init_types_fail">Failed to initialize type data</string>
-    <string name="toast_get_types_fail">Failed to get type data</string>
+    <string name="toast_records_fail">Failed to get the list data</string>
+    <string name="toast_init_types_fail">Failed to initialize data</string>
+    <string name="toast_get_types_fail">Failed to get data</string>
     <string name="toast_get_statistics_fail">Failed to get statistics</string>
     <string name="toast_get_month_summary_fail">Failed to get summary data for the month</string>
     <string name="toast_get_type_summary_fail">Failed to get type summary data</string>
-    <string name="toast_not_install_market">Your phone does not have an Android app market installed</string>
-    <string name="toast_not_install_email">Your phone does not have a mail app installed</string>
+    <string name="toast_not_install_market">Your phone does not have an Android market app installed</string>
+    <string name="toast_not_install_email">Your phone does not have an e-mail app installed</string>
     <string name="toast_not_install_alipay">Thank you, you did not install Alipay application</string>
     <string name="toast_is_not_writable_external">Backup failed, external storage is unavailable</string>
-    <string name="toast_restore_fail">Failed to restore the backup</string>
+    <string name="toast_restore_fail">Failed to restore the backup database</string>
     <string name="toast_restore_success">Restore backup success</string>
     <string name="toast_backup_list_fail">Failed to get backup file list</string>
     <string name="toast_open_auto_backup">Automatic backup is turned off. You can go to settings to reopen</string>
@@ -124,7 +124,7 @@
     <!-- 统计 -->
     <string name="text_order">Bill</string>
     <string name="text_reports">Reports</string>
-    <string name="text_overage">Lave</string>
+    <string name="text_overage">Have</string>
     <string name="text_day" />
     <string name="text_unit_account" />
     <string name="text_choose_month">Select month</string>
@@ -247,8 +247,8 @@
     <string name="text_auto_backup_fail">Cloud backup failed!</string>
     <string-array name="text_cloud_auto_backup_mode">
         <item>Do not automatically backup</item>
-        <item>when opening app</item>
-        <item>when exit app</item>
+        <item>when opening the app</item>
+        <item>when exiting the app</item>
     </string-array>
 
     <!-- 实验室 -->
