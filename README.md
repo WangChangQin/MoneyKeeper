@@ -47,15 +47,37 @@
 架构使用了 Google 官方的 [Architecture Components](https://developer.android.com/topic/libraries/architecture/)，包括 Lifecycle、LiveData 和 ViewModel，数据库使用 [Room](https://developer.android.com/topic/libraries/architecture/room)。
 这里有一篇介绍 Architecture Components 的[文章](https://medium.com/google-developers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54)。
 
+
+![Architecture Components](https://ws1.sinaimg.cn/large/006tKfTcly1fs7957cwd7j31di0gumxz.jpg)
+
+### 其他技术
+
+- AES 加密
+- WebDAV
+
+## 开源库
+
+- [[ProcessPhoenix]-JakeWharton](https://github.com/JakeWharton/ProcessPhoenix)
+- [[java-aes-crypto]-tozny](https://github.com/tozny/java-aes-crypto)
+- [[Cipher.so]-MEiDIK](https://github.com/MEiDIK/Cipher.so)
+- [[okhttp-digest]-rburgst](https://github.com/rburgst/okhttp-digest)
+- [[android-storage]-sromku](https://github.com/sromku/android-storage)
+- [[prettytime]-ocpsoft](https://github.com/ocpsoft/prettytime)
+- [[Floo]-drakeet](https://github.com/drakeet/Floo)
+
+## 相关链接：
+
+1. [App下载地址](https://www.coolapk.com/apk/188475)
+2. [设计稿](https://www.zcool.com.cn/work/ZMjExOTI4OTY=.html)
+3. [Architecture Components](https://developer.android.com/topic/libraries/architecture/)
+4. [Room](https://developer.android.com/topic/libraries/architecture/room)
+
 -------
 
-# English
 
 # MoneyKeeper
 
 >The more complicated life, the more useful the MoneyKeeper.
-
-## Description 
 
 A lightweight billing tool.
 
@@ -100,12 +122,12 @@ Here is an article [Introduction to Architecture Components] (https://medium.com
 
 ![Architecture Components](https://ws1.sinaimg.cn/large/006tKfTcly1fs7957cwd7j31di0gumxz.jpg)
 
-### 其他技术
+### Other technology
 
-- AES 加密
+- AES encryption 
 - WebDAV
 
-## 开源库
+## Open source library
 
 - [[ProcessPhoenix]-JakeWharton](https://github.com/JakeWharton/ProcessPhoenix)
 - [[java-aes-crypto]-tozny](https://github.com/tozny/java-aes-crypto)
@@ -115,7 +137,7 @@ Here is an article [Introduction to Architecture Components] (https://medium.com
 - [[prettytime]-ocpsoft](https://github.com/ocpsoft/prettytime)
 - [[Floo]-drakeet](https://github.com/drakeet/Floo)
 
-## 相关链接：
+## Related Links：
 
 1. [App下载地址](https://www.coolapk.com/apk/188475)
 2. [设计稿](https://www.zcool.com.cn/work/ZMjExOTI4OTY=.html)
