@@ -124,7 +124,7 @@
     <!-- 统计 -->
     <string name="text_order">Bill</string>
     <string name="text_reports">Reports</string>
-    <string name="text_overage">Lave</string>
+    <string name="text_overage">Have</string>
     <string name="text_day" />
     <string name="text_unit_account" />
     <string name="text_choose_month">Select month</string>
