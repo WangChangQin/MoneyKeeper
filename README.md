@@ -1,5 +1,7 @@
 # 那样记账
 
+[English Version](#moneykeeper) | 中文版
+
 <img alt='那样记账' src='https://i.loli.net/2018/06/27/5b33a4e2e7cb0.png' height="70"/>
 
 >生活越复杂，记账越有用。
@@ -7,13 +9,13 @@
 ## 诞生记
 
    一款轻量级的记账工具。
-   
+
    这是我第一个用心的作品，起源于从小到大的一个「不可思议」（钱到底花在了哪儿），工作以后尤为明显。于是「那样记账」诞生了，目的是让大家以最简单、直接的方式来记账，让这个「不可思议」不再不可思议，慢慢建立起良好的消费习惯。
-   
+
    没有任何多余的权限，没有广告，没有用户系统，不保存用户任何信息，只是单纯的记录收支情况。
-   
+
    「那样记账」名称取自一个人名字「娜」的谐音。
-   
+
    [更多帮助](https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md)
 
 ## 特点
@@ -76,6 +78,8 @@
 
 
 # MoneyKeeper
+
+English Version | [中文版](#那样记账)
 
 <img alt='MoneyKeeper' src='https://i.loli.net/2018/06/27/5b33a4e2e7cb0.png' height="70"/>
 
