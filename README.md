@@ -47,11 +47,15 @@
 架构使用了 Google 官方的 [Architecture Components](https://developer.android.com/topic/libraries/architecture/)，包括 Lifecycle、LiveData 和 ViewModel，数据库使用 [Room](https://developer.android.com/topic/libraries/architecture/room)。
 这里有一篇介绍 Architecture Components 的[文章](https://medium.com/google-developers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54)。
 
-#English
+-------
 
-#MoneyKeeper
+# English
+
+# MoneyKeeper
 
 >The more complicated life, the more useful the MoneyKeeper.
+
+## Description 
 
 A lightweight billing tool.
 
