@@ -77,15 +77,17 @@
 
 # MoneyKeeper
 
+<img alt='MoneyKeeper' src='https://i.loli.net/2018/06/27/5b33a4e2e7cb0.png' height="70"/>
+
 >The more complicated life, the more useful the MoneyKeeper.
 
 A lightweight billing tool.
 
 This is my first work of heart, which originated from an "unbelievable" from small to large (where the money was spent), especially after work. So "the bookkeeping" was born, the purpose is to let everyone in the simplest and direct way to keep accounts, so that this "unbelievable" is no longer incredible, and slowly establish good consumption habits.
+
+There are no unnecessary permissions, no advertisements, no user system, no information stored by the user, just a simple record of revenue and expenditure.
    
-   There are no unnecessary permissions, no advertisements, no user system, no information stored by the user, just a simple record of revenue and expenditure.
-   
-   The name "Moneykeeper" is taken from the homonym of a person's name "Na".
+The name "Moneykeeper" is taken from the homonym of a person's name "Na".
    
    [more help] (https://github.com/Bakumon/MoneyKeeper/blob/master/Help.md)
 
