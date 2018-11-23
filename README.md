@@ -93,12 +93,12 @@ The name "Moneykeeper" is taken from the homonym of a person's name "Na".
 
 ## Features
 
-- [Quick Bookkeeping]: Multiple direct billing methods
-- [Custom]: Customize revenue and expenditure classification, billing time, modify at any time
-- [Multi-dimensional statistics]: multi-dimensional statistical revenue and expenditure flow
-- [Budget function]: Control consumption and reduce expenses
-- [Cloud Backup]: Local backup/cloud backup data to ensure data is not lost
-- [Remaining assets]: Show the amount of net assets
+- **Quick Bookkeeping**: Multiple direct billing methods
+- **Custom**: Customize revenue and expenditure classification, billing time, modify at any time
+- **Multi-dimensional statistics**: multi-dimensional statistical revenue and expenditure flow
+- **Budget function**: Control consumption and reduce expenses
+- **Cloud Backup**: Local backup/cloud backup data to ensure data is not lost
+- **Remaining assets**: Show the amount of net assets
 
 ## Download
 
@@ -119,8 +119,8 @@ Preview:
 
 ### Architecture
 
-The architecture uses Google's official [Architecture Components] (https://developer.android.com/topic/libraries/architecture/), including Lifecycle, LiveData, and ViewModel, and the database uses [Room] (https://developer.android. Com/topic/libraries/architecture/room).
-Here is an article [Introduction to Architecture Components] (https://medium.com/google-developers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54).
+The architecture uses Google's official [Architecture Components](https://developer.android.com/topic/libraries/architecture/), including Lifecycle, LiveData, and ViewModel, and the database uses [Room](https://developer.android.com/topic/libraries/architecture/room).
+Here is an article [Introduction to Architecture Components](https://medium.com/google-developers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54).
 
 ![Architecture Components](https://ws1.sinaimg.cn/large/006tKfTcly1fs7957cwd7j31di0gumxz.jpg)
 
