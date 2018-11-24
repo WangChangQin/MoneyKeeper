@@ -1,11 +1,11 @@
-package me.bakumon.moneykeeper.ui.typesort
+package me.bakumon.moneykeeper.ui.common
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import me.drakeet.multitype.MultiTypeAdapter
 import java.util.*
 
-class SortDragCallback constructor(private val adapter: MultiTypeAdapter) : ItemTouchHelper.SimpleCallback(
+class SortDragCallback constructor(private val adapter: MultiTypeAdapter, private val onMovedCallBack: (() -> Unit)? = null) : ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
 
@@ -29,6 +29,7 @@ class SortDragCallback constructor(private val adapter: MultiTypeAdapter) : Item
             }
         }
         adapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+        onMovedCallBack?.invoke()
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {

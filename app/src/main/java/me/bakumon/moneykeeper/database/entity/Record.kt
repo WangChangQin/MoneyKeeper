@@ -49,4 +49,7 @@ open class Record : Serializable {
 
     @ColumnInfo(name = "record_type_id")
     var recordTypeId: Int = 0
+
+    @ColumnInfo(name = "assets_id")
+    var assetsId: Int? = -1
 }

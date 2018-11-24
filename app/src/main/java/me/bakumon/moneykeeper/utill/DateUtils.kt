@@ -17,7 +17,6 @@
 package me.bakumon.moneykeeper.utill
 
 import android.annotation.SuppressLint
-import android.util.Log
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import java.text.DateFormat
@@ -276,14 +275,18 @@ object DateUtils {
      * @return 当前年开始的 Date
      */
     fun getYearStart(year: Int): Date {
+        val c = Calendar.getInstance()
+        c.clear()
+        c.set(Calendar.YEAR, year)
+
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
-        calendar.set(Calendar.MONTH, calendar.getActualMinimum(Calendar.MONTH))
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH))
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMinimum(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE))
-        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND))
-        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND))
+        calendar.set(Calendar.MONTH, c.getActualMinimum(Calendar.MONTH))
+        calendar.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, c.getActualMinimum(Calendar.MILLISECOND))
         return calendar.time
     }
 
@@ -294,23 +297,33 @@ object DateUtils {
      * @return 某年结束的 Date
      */
     fun getYearEnd(year: Int): Date {
+        val c = Calendar.getInstance()
+        c.clear()
+        c.set(Calendar.YEAR, year)
+
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
-        calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH))
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.getActualMaximum(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE))
-        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND))
-        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND))
+        calendar.set(Calendar.MONTH, c.getActualMaximum(Calendar.MONTH))
+        calendar.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY))
+        calendar.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE))
+        calendar.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND))
+        calendar.set(Calendar.MILLISECOND, c.getActualMaximum(Calendar.MILLISECOND))
         return calendar.time
     }
 
+    fun getTodayStart(): Date {
+        return Date(todayStartMillis)
+    }
+
+    fun getTodayEnd(): Date {
+        return Date(todayEndMillis)
+    }
+
     /**
-     * 获取当前月份开始时间戳
-     * 比如当前是 2018年4月24日
-     * 返回的时间是 2018年4月24日 零点整时间戳
+     * 获取今天开始时间戳
      *
-     * @return 当前月份开始时间戳
+     * @return 今天开始时间戳
      */
     private val todayStartMillis: Long
         get() {
@@ -323,11 +336,9 @@ object DateUtils {
         }
 
     /**
-     * 获取当前月份结束时间戳
-     * 比如当前是 2018年4月24日
-     * 返回的时间是 2018年4月24日 23:59:59:999
+     * 获取今天结束时间戳
      *
-     * @return 当前月份结束时间戳
+     * @return 今天结束时间戳
      */
     private val todayEndMillis: Long
         get() {

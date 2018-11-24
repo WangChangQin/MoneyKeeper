@@ -45,7 +45,15 @@ class RecordByMoneyViewBinder constructor(private val onDeleteClickListener: ((R
         holder.tvRemark.visibility = if (item.remark.isNullOrEmpty()) View.GONE else View.VISIBLE
 
         // 费用
-        holder.tvMoney.text = getMoneyText(item)
+        // 费用
+        val money = if (item.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
+            holder.tvMoney.setTextColor(holder.tvMoney.context.resources.getColor(R.color.colorOutlay))
+            "-" + BigDecimalUtil.fen2Yuan(item.money)
+        } else {
+            holder.tvMoney.setTextColor(holder.tvMoney.context.resources.getColor(R.color.colorIncome))
+            "+" + BigDecimalUtil.fen2Yuan(item.money)
+        }
+        holder.tvMoney.text = money
 
         holder.llItemClick.setOnClickListener {
             Floo.navigation(holder.llItemClick.context, Router.Url.URL_ADD_RECORD)
@@ -59,22 +67,13 @@ class RecordByMoneyViewBinder constructor(private val onDeleteClickListener: ((R
         }
     }
 
-    private fun getMoneyText(item: RecordWithType): String {
-        return if (item.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
-            "-" + BigDecimalUtil.fen2Yuan(item.money)
-        } else {
-            "+" + BigDecimalUtil.fen2Yuan(item.money)
-        }
-    }
-
     private fun showOperateDialog(context: Context, record: RecordWithType) {
         val money = " (" + ConfigManager.symbol + BigDecimalUtil.fen2Yuan(record.money) + ")"
-        MaterialDialog.Builder(context)
-                .title(record.mRecordTypes!![0].name + money)
-                .content(R.string.text_delete_record_note)
-                .positiveText(R.string.text_affirm_delete)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ -> onDeleteClickListener.invoke(record) }
+        MaterialDialog(context)
+                .title(text = record.mRecordTypes!![0].name + money)
+                .message(R.string.text_delete_record_note)
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm_delete) { onDeleteClickListener.invoke(record) }
                 .show()
     }
 

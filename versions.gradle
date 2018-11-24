@@ -48,7 +48,7 @@ versions.leakcanary = "1.5.4"
 versions.permission = "1.2.0"
 versions.storage = "2.1.0"
 versions.prettytime = "4.0.1.Final"
-versions.material_dialogs = "0.9.6.0"
+versions.material_dialogs = "2.0.0-alpha04"
 versions.aes_crypto = "1.1.0"
 versions.process_phoenix = "2.0.0"
 versions.okhttp_digest = "1.17"
@@ -57,6 +57,9 @@ versions.about = "2.1.1"
 versions.multitype = "3.4.4"
 versions.picasso = "2.5.2"
 versions.moshi = "1.5.0"
+// flex 布局
+versions.flexbox = "0.2.5"
+versions.fingerprintidentify = "1.2.1"
 
 def deps = [:]
 
@@ -111,7 +114,9 @@ deps.leakcanary_release = "com.squareup.leakcanary:leakcanary-android-no-op:$ver
 deps.permission = "pub.devrel:easypermissions:$versions.permission"
 deps.storage = "com.snatik:storage:$versions.storage"
 deps.prettytime = "org.ocpsoft.prettytime:prettytime:$versions.prettytime"
-deps.material_dialogs = "com.afollestad.material-dialogs:core:$versions.material_dialogs"
+deps.material_dialogs_core = "com.afollestad.material-dialogs:core:$versions.material_dialogs"
+deps.material_dialogs_input = "com.afollestad.material-dialogs:input:$versions.material_dialogs"
+deps.material_dialogs_files = "com.afollestad.material-dialogs:files:$versions.material_dialogs"
 deps.aes_crypto = "com.github.tozny:java-aes-crypto:$versions.aes_crypto"
 deps.process_phoenix = "com.jakewharton:process-phoenix:$versions.process_phoenix"
 deps.okhttp_digest = "com.burgstaller:okhttp-digest:$versions.okhttp_digest"
@@ -122,6 +127,8 @@ deps.multitype = "me.drakeet.multitype:multitype:$versions.multitype"
 deps.multitype_kotlin = "me.drakeet.multitype:multitype-kotlin:$versions.multitype"
 deps.picasso = "com.squareup.picasso:picasso:$versions.picasso"
 deps.moshi = "com.squareup.moshi:moshi:$versions.moshi"
+deps.flexbox = "com.google.android:flexbox:$versions.flexbox"
+deps.fingerprintidentify = "com.wei.android.lib:fingerprintidentify:$versions.fingerprintidentify"
 
 ext.deps = deps
 
@@ -137,6 +144,9 @@ def static addRepos(RepositoryHandler handler) {
     handler.mavenCentral()
     handler.maven {
         url "https://jitpack.io"
+    }
+    handler.maven {
+        url "https://dl.bintray.com/drummer-aidan/maven/"
     }
 }
 

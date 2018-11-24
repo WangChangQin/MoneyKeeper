@@ -13,6 +13,7 @@ import android.widget.TextView
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.TypeSumMoneyBean
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ResourcesUtil
@@ -43,6 +44,12 @@ class ReportsViewBinder constructor(private val onItemClickListener: ((TypeSumMo
         holder.ivTypeImg.setImageResource(ResourcesUtil.getTypeImgId(holder.ivTypeImg.context, item.imgName))
         holder.tvTypeName.text = item.typeName
         holder.tvSumMoney.text = ConfigManager.symbol + BigDecimalUtil.fen2Yuan(item.typeSumMoney)
+        val colorId = if (item.type == RecordType.TYPE_OUTLAY) {
+            R.color.colorOutlay
+        } else {
+            R.color.colorIncome
+        }
+        holder.tvSumMoney.setTextColor(holder.tvSumMoney.context.resources.getColor(colorId))
         holder.tvCount.text = item.count.toString() + holder.tvCount.context.getString(R.string.text_unit_account)
 
         holder.viewLength.layoutParams = LinearLayout.LayoutParams(0, 10,

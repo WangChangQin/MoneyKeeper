@@ -17,9 +17,7 @@
 package me.bakumon.moneykeeper
 
 import android.support.annotation.IntDef
-import android.text.TextUtils
 import me.bakumon.moneykeeper.utill.SPUtils
-import java.math.BigDecimal
 
 /**
  * 管理本地配置
@@ -28,19 +26,18 @@ import java.math.BigDecimal
  */
 object ConfigManager {
 
-    @IntDef(MODE_NO, MODE_LAUNCHER_APP)
+    @IntDef(MODE_NO, MODE_LAUNCHER_APP, MODE_EXIT_APP)
     @Retention(AnnotationRetention.SOURCE)
     annotation class CloudBackupMode
 
     const val MODE_NO = 0L
     const val MODE_LAUNCHER_APP = 1L
+    const val MODE_EXIT_APP = 2L
 
     private const val SP_NAME = "config"
     private const val KEY_AUTO_BACKUP = "auto_backup"
-    private const val KEY_SUCCESSIVE = "successive"
     private const val KEY_FAST = "fast"
     private const val KEY_BUDGET = "budget"
-    private const val KEY_ASSETS = "assets"
     private const val KEY_SYMBOL = "symbol"
     private const val KEY_WEBDAV_URL = "webDav_url"
     private const val KEY_WEBDAV_ACCOUNT = "webDav_account"
@@ -48,6 +45,12 @@ object ConfigManager {
     private const val KEY_CLOUD_BACKUP_MODE = "cloud_backup_mode"
     private const val KEY_CLOUD_ENABLE = "cloud_enable"
     private const val KEY_IS_THEME_DARK = "is_theme_dark"
+    private const val KEY_WIDGET_ENABLE = "is_widget_enable"
+    private const val KEY_BACKUP_FOLDER = "backup_folder"
+    private const val KEY_ASSETS_ID = "assets_id"
+    private const val KEY_IS_SHOW_SORT_TIP = "is_show_sort_tip"
+    private const val KEY_LOCK_SCREEN = "lock_screen"
+    private const val KEY_LOCK_ADD = "lock_add"
 
     val isAutoBackup: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_AUTO_BACKUP, true)
@@ -55,14 +58,8 @@ object ConfigManager {
     val isFast: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_FAST)
 
-    val isSuccessive: Boolean
-        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_SUCCESSIVE, true)
-
     val budget: Int
         get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_BUDGET, 0)
-
-    val assets: String
-        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_ASSETS, "NaN")
 
     val symbol: String
         get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_SYMBOL, App.instance.resources.getStringArray(R.array.simple_symbol)[0])
@@ -88,6 +85,24 @@ object ConfigManager {
     val isThemeDark: Boolean
         get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_IS_THEME_DARK, true)
 
+    val isWidgetEnable: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_WIDGET_ENABLE, false)
+
+    val backupFolder: String
+        get() = SPUtils.getInstance(SP_NAME)!!.getString(KEY_BACKUP_FOLDER)
+
+    val assetId: Int
+        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_ASSETS_ID, -1)
+
+    val isShowSortTip: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_IS_SHOW_SORT_TIP, true)
+
+    val lockScreenState: Int
+        get() = SPUtils.getInstance(SP_NAME)!!.getInt(KEY_LOCK_SCREEN, 0)
+
+    val lockAdd: Boolean
+        get() = SPUtils.getInstance(SP_NAME)!!.getBoolean(KEY_LOCK_ADD, true)
+
     /**
      * 自动备份
      */
@@ -103,44 +118,10 @@ object ConfigManager {
     }
 
     /**
-     * 连续记账
-     */
-    fun setIsSuccessive(isAutoBackup: Boolean): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_SUCCESSIVE, isAutoBackup)
-    }
-
-    /**
      * 月预算
      */
     fun setBudget(budget: Int): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_BUDGET, budget)
-    }
-
-    /**
-     * 资产余额
-     */
-    fun setAssets(assets: String): Boolean {
-        return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS, assets)
-    }
-
-    /**
-     * 增加资产
-     */
-    fun addAssets(num: BigDecimal): Boolean {
-        if (TextUtils.equals(assets, "NaN")) {
-            return true
-        }
-        return setAssets(BigDecimal(assets).add(num).toPlainString())
-    }
-
-    /**
-     * 减少资产
-     */
-    fun reduceAssets(num: BigDecimal): Boolean {
-        if (TextUtils.equals(assets, "NaN")) {
-            return true
-        }
-        return setAssets(BigDecimal(assets).subtract(num).toPlainString())
     }
 
     /**
@@ -190,6 +171,51 @@ object ConfigManager {
      */
     fun setIsThemeDark(isDark: Boolean): Boolean {
         return SPUtils.getInstance(SP_NAME)!!.put(KEY_IS_THEME_DARK, isDark)
+    }
+
+    /**
+     * 保存主题
+     */
+    fun setIsWidgetEnable(enable: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_WIDGET_ENABLE, enable)
+    }
+
+    /**
+     * 本地备份文件夹
+     */
+    fun setBackupFolder(folder: String): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_BACKUP_FOLDER, folder)
+    }
+
+    /**
+     * 记账，上次使用的账户名
+     */
+    fun setAssetsId(id: Int): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_ASSETS_ID, id)
+    }
+
+    /**
+     * 是否显示排序提示
+     */
+    fun setIsShowSortTip(isShow: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_IS_SHOW_SORT_TIP, isShow)
+    }
+
+    /**
+     * 锁屏方式
+     * 0：关闭
+     * 1：系统锁屏
+     * 2：自定义锁屏
+     */
+    fun setLockScreenState(state: Int): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_LOCK_SCREEN, state)
+    }
+
+    /**
+     * 直接进入记一笔界面
+     */
+    fun setLockAdd(lockAdd: Boolean): Boolean {
+        return SPUtils.getInstance(SP_NAME)!!.put(KEY_LOCK_ADD, lockAdd)
     }
 
 }

@@ -28,5 +28,6 @@ data class TypeSumMoneyBean(
         val typeName: String,
         val typeSumMoney: BigDecimal,
         val typeId: Int,
+        val type: Int,
         val count: Int
 )

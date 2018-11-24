@@ -24,13 +24,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.layout_keyboard.view.*
-import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.utill.SoftInputUtils
+import me.bakumon.moneykeeper.utill.ViewUtil
 
 /**
  * 自定义键盘
@@ -40,6 +39,13 @@ import me.bakumon.moneykeeper.utill.SoftInputUtils
 class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : LinearLayout(context, attrs, defStyleAttr) {
 
     var mOnAffirmClickListener: ((String) -> Unit)? = null
+
+    var maxIntegerNumber = 6
+
+    var isShowMinus = false
+        set(value) {
+            tvMinus.visibility = if (value) View.VISIBLE else View.GONE
+        }
 
     init {
         init(context)
@@ -87,6 +93,14 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 tvPoint)
         setDeleteView(llDelete)
 
+        tvMinus.setOnClickListener {
+            when {
+                editInput.text.isEmpty() -> setText("-")
+                TextUtils.equals(editInput.text.first().toString(), "-") -> setText(editInput.text.toString().replace("-", ""))
+                else -> setText("-" + editInput.text.toString())
+            }
+        }
+
         tvAffirm.setOnClickListener {
             val text = editInput.text.toString()
             val isDigital = (!TextUtils.isEmpty(text)
@@ -95,8 +109,7 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     && !TextUtils.equals("0.0", text)
                     && !TextUtils.equals("0.00", text))
             if (!isDigital) {
-                val animation = AnimationUtils.loadAnimation(App.instance, R.anim.shake)
-                editInput.startAnimation(animation)
+                ViewUtil.startShake(editInput)
             } else {
                 mOnAffirmClickListener?.invoke(text)
             }
@@ -156,7 +169,12 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (TextUtils.equals(".", text)) {
                 sb.insert(sb.length, text)
             } else {
-                if (sb.length < MAX_INTEGER_NUMBER) {
+                val maxIntNumber = if (TextUtils.equals(editInput.text.first().toString(), "-")) {
+                    maxIntegerNumber + 1
+                } else {
+                    maxIntegerNumber
+                }
+                if (sb.length < maxIntNumber) {
                     sb.insert(sb.length, text)
                 }
             }
@@ -183,9 +201,5 @@ class KeyboardView @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
             true
         }
-    }
-
-    companion object {
-        private const val MAX_INTEGER_NUMBER = 6
     }
 }

@@ -18,13 +18,12 @@ package me.bakumon.moneykeeper.ui.add
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.Resource
+import me.bakumon.moneykeeper.database.entity.Assets
+import me.bakumon.moneykeeper.database.entity.AssetsTransferRecord
 import me.bakumon.moneykeeper.database.entity.Record
-import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.datasource.AppDataSource
 import me.bakumon.moneykeeper.ui.common.BaseViewModel
 import java.math.BigDecimal
@@ -36,17 +35,11 @@ import java.math.BigDecimal
  */
 class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
-    val allRecordTypes: LiveData<List<RecordType>>
-        get() = mDataSource.getAllRecordType()
-
-    fun insertRecord(record: Record, type: Int): LiveData<Resource<Boolean>> {
-        if (type == RecordType.TYPE_OUTLAY) {
-            ConfigManager.reduceAssets(record.money!!)
-        } else {
-            ConfigManager.addAssets(record.money!!)
-        }
+    fun insertRecord(type: Int, assets: Assets?, record: Record): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
-        mDisposable.add(mDataSource.insertRecord(record)
+
+        record.assetsId = if (assets == null) -1 else assets.id!!
+        mDisposable.add(mDataSource.insertRecord(type, assets, record)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -58,20 +51,39 @@ class AddRecordViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) 
         return liveData
     }
 
-    fun updateRecord(record: Record, newType: Int, oldMoney: BigDecimal, oldType: Int): LiveData<Resource<Boolean>> {
-        if (oldType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.addAssets(oldMoney)
-        } else {
-            ConfigManager.reduceAssets(oldMoney)
-        }
-        if (newType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.reduceAssets(record.money!!)
-        } else {
-            ConfigManager.addAssets(record.money!!)
-        }
-
+    fun addTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
-        mDisposable.add(mDataSource.updateRecord(record)
+        mDisposable.add(mDataSource.insertTransferRecord(outAssets, inAssets, transferRecord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
+
+    fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+
+        record.assetsId = if (assets == null) -1 else assets.id!!
+        mDisposable.add(mDataSource.updateRecord(oldMoney, oldType, type, oldAssets, assets, record)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveData.value = Resource.create(true)
+                }
+                ) { throwable ->
+                    liveData.value = Resource.create(throwable)
+                })
+        return liveData
+    }
+
+    fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): LiveData<Resource<Boolean>> {
+        val liveData = MutableLiveData<Resource<Boolean>>()
+        mDisposable.add(mDataSource.updateTransferRecord(oldMoney, oldOutAssets, oldInAssets, outAssets, inAssets, transferRecord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

@@ -39,6 +39,7 @@ import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.utill.ShortcutUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.floo.Floo
 import me.drakeet.floo.StackCallback
 import me.drakeet.multitype.Items
@@ -71,11 +72,9 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         supportActionBar?.setDisplayShowTitleEnabled(false)
         btnAdd.setOnClickListener { Floo.navigation(this, Router.Url.URL_ADD_RECORD).start() }
         btnAdd.setOnLongClickListener {
-            if (ConfigManager.isSuccessive) {
-                Floo.navigation(this, Router.Url.URL_ADD_RECORD)
-                        .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
-                        .start()
-            }
+            Floo.navigation(this, Router.Url.URL_ADD_RECORD)
+                    .putExtra(Router.ExtraKey.KEY_IS_SUCCESSIVE, true)
+                    .start()
             false
         }
     }
@@ -107,8 +106,10 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
 
     override fun onResume() {
         super.onResume()
-        // 设置了预算或者资产，返回首页需要更新
+        // 设置了预算，返回首页需要更新
         getCurrentMoneySumMonty()
+        // 更新 widget
+        WidgetProvider.updateWidget(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -143,6 +144,8 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         mViewModel.deleteRecord(record).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
                 }
                 is ErrorResource<Boolean> -> {
                     ToastUtils.show(R.string.toast_record_delete_fail)
@@ -161,8 +164,10 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
     }
 
     private fun getCurrentMoneySumMonty() {
-        mViewModel.currentMonthSumMoney.observe(this, Observer {
-            headPageView.setSumMoneyBeanList(it)
+        mViewModel.currentMonthSumMoney.observe(this, Observer { sumMoneyBeans ->
+            mViewModel.getAssetsMoney().observe(this, Observer { assetsMontyBean ->
+                headPageView.setSumMoneyBeanList(sumMoneyBeans, assetsMontyBean)
+            })
         })
     }
 
@@ -186,6 +191,14 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         }
         mAdapter.items = items
         mAdapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 自动云备份
+        if (ConfigManager.cloudEnable && ConfigManager.cloudBackupMode == ConfigManager.MODE_EXIT_APP) {
+            CloudBackupService.startBackup(this)
+        }
     }
 
     override fun indexKeyForStackTarget(): String? {
@@ -255,7 +268,7 @@ class HomeActivity : BaseActivity(), StackCallback, EasyPermissions.PermissionCa
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {

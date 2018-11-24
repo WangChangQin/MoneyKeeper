@@ -17,17 +17,24 @@
 package me.bakumon.moneykeeper.ui.setting
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatDelegate
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.text.TextUtils
+import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.jakewharton.processphoenix.ProcessPhoenix
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import me.bakumon.moneykeeper.*
 import me.bakumon.moneykeeper.base.EmptyResource
 import me.bakumon.moneykeeper.base.ErrorResource
@@ -35,8 +42,10 @@ import me.bakumon.moneykeeper.base.SuccessResource
 import me.bakumon.moneykeeper.ui.common.AbsListActivity
 import me.bakumon.moneykeeper.ui.home.HomeActivity
 import me.bakumon.moneykeeper.utill.AndroidUtil
+import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.floo.Floo
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
@@ -44,7 +53,6 @@ import me.drakeet.multitype.register
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-import java.math.BigDecimal
 
 /**
  * 设置
@@ -61,7 +69,7 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onAdapterCreated(adapter: MultiTypeAdapter) {
         adapter.register(Category::class, CategoryViewBinder())
-        adapter.register(NormalItem::class, NormalItemViewBinder { onNormalItemClick(it) })
+        adapter.register(NormalItem::class, NormalItemViewBinder { normalItem: NormalItem, view: View -> onNormalItemClick(normalItem, view) })
         adapter.register(CheckItem::class, CheckItemViewBinder { item, isCheck -> onCheckItemCheckChange(item, isCheck) })
         adapter.register(ImgItem::class, ImgItemViewBinder { onImgItemClick(it) })
     }
@@ -69,15 +77,16 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     override fun onItemsCreated(items: Items) {
         items.add(Category(getString(R.string.text_money)))
         items.add(NormalItem(getString(R.string.text_monty_budget), getBudgetStr()))
-        items.add(NormalItem(getString(R.string.text_setting_assets), getAssetsStr()))
+        items.add(NormalItem(getString(R.string.text_assets_manager), getString(R.string.text_assets_manager_content)))
         items.add(NormalItem(getString(R.string.text_title_symbol), getString(R.string.text_content_symbol)))
         items.add(NormalItem(getString(R.string.text_setting_type_manage), getString(R.string.text_setting_type_manage_content)))
         items.add(CheckItem(getString(R.string.text_fast_accounting), getString(R.string.text_fast_tip), ConfigManager.isFast))
-        items.add(CheckItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip), ConfigManager.isSuccessive))
+        items.add(NormalItem(getString(R.string.text_successive_record), getString(R.string.text_successive_record_tip)))
 
         items.add(Category(getString(R.string.text_backup)))
-        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupDir)))
-        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupDir)))
+        val backupFolder = BackupUtil.backupFolder
+        items.add(NormalItem(getString(R.string.text_go_backup), getString(R.string.text_backup_save, backupFolder)))
+        items.add(NormalItem(getString(R.string.text_restore), getString(R.string.text_restore_content, backupFolder)))
         items.add(CheckItem(getString(R.string.text_auto_backup), getString(R.string.text_auto_backup_content), ConfigManager.isAutoBackup))
 
         items.add(Category(getString(R.string.text_cloud_backup)))
@@ -85,10 +94,35 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
 
         items.add(Category(getString(R.string.text_display)))
         items.add(NormalItem(getString(R.string.text_theme), getThemeStr()))
+        items.add(Category(getString(R.string.text_luck)))
+        items.add(NormalItem(getString(R.string.text_luck_screen), getLockScreenState()))
+        items.add(CheckItem(getString(R.string.text_luck_screen_add), getString(R.string.text_luck_screen_add_tip), ConfigManager.lockAdd))
 
         items.add(Category(getString(R.string.text_about_and_more)))
         items.add(NormalItem(getString(R.string.text_about), getString(R.string.text_about_content)))
+        items.add(NormalItem(getString(R.string.text_feedback), getString(R.string.text_feedback_help)))
+        items.add(NormalItem(getString(R.string.text_other_setting), ""))
         items.add(NormalItem("", getString(R.string.text_privacy_policy)))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateBackupItem()
+        updateRestoreItem()
+    }
+
+    private fun updateBackupItem() {
+        val position = 8
+        (mAdapter.items[position] as NormalItem).content = getString(R.string.text_backup_save, BackupUtil.backupFolder)
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
+    }
+
+    private fun updateRestoreItem() {
+        val position = 9
+        (mAdapter.items[position] as NormalItem).content = getString(R.string.text_restore_content, BackupUtil.backupFolder)
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     override fun onParentInitDone(recyclerView: RecyclerView, savedInstanceState: Bundle?) {
@@ -100,16 +134,19 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-    private fun onNormalItemClick(item: NormalItem) {
+    private fun onNormalItemClick(item: NormalItem, view: View) {
         when (item.title) {
             getString(R.string.text_monty_budget) -> setBudget()
-            getString(R.string.text_setting_assets) -> setAssets()
+            getString(R.string.text_assets_manager) -> Floo.navigation(this, Router.Url.URL_ASSETS).start()
             getString(R.string.text_title_symbol) -> setSymbol()
             getString(R.string.text_setting_type_manage) -> Floo.navigation(this, Router.Url.URL_TYPE_MANAGE).start()
             getString(R.string.text_go_backup) -> showBackupDialog()
             getString(R.string.text_restore) -> showRestoreDialog()
             getString(R.string.text_theme) -> showChooseThemeDialog()
+            getString(R.string.text_other_setting) -> Floo.navigation(this, Router.Url.URL_OTHER_SETTING).start()
             getString(R.string.text_about) -> Floo.navigation(this, Router.Url.URL_ABOUT).start()
+            getString(R.string.text_feedback) -> AndroidUtil.openWeb(this, Constant.getUrlTucao())
+            getString(R.string.text_luck_screen) -> chooseLockScreen(view)
             "" -> AndroidUtil.openWeb(this, Constant.URL_PRIVACY)
         }
     }
@@ -117,8 +154,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     private fun onCheckItemCheckChange(item: CheckItem, isCheck: Boolean) {
         when (item.title) {
             getString(R.string.text_fast_accounting) -> ConfigManager.setIsFast(isCheck)
-            getString(R.string.text_successive_record) -> ConfigManager.setIsSuccessive(isCheck)
             getString(R.string.text_auto_backup) -> switchAutoBackup(isCheck)
+            getString(R.string.text_luck_screen_add) -> ConfigManager.setLockAdd(isCheck)
         }
     }
 
@@ -126,6 +163,80 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
         when (item.title) {
             getString(R.string.text_cloud_backup_title) -> Floo.navigation(this, Router.Url.URL_BACKUP).start()
         }
+    }
+
+
+
+    private fun getLockScreenState(): String {
+        return when (ConfigManager.lockScreenState) {
+            0 -> getString(R.string.text_luck_screen_off)
+            1 -> {
+                val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                    getString(R.string.text_luck_screen_system)
+                } else {
+                    ConfigManager.setLockScreenState(0)
+                    ToastUtils.show(R.string.text_unlock_close_system)
+                    getString(R.string.text_luck_screen_off)
+                }
+            }
+            2 -> {
+                val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                if (fingerprintIdentify.isFingerprintEnable) {
+                    getString(R.string.text_luck_screen_custom)
+                } else {
+                    ConfigManager.setLockScreenState(0)
+                    ToastUtils.show(R.string.text_unlock_close_customer)
+                    getString(R.string.text_luck_screen_off)
+                }
+            }
+            else -> getString(R.string.text_luck_screen_off)
+        }
+    }
+
+    private fun chooseLockScreen(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.menu.add(getString(R.string.text_luck_screen_off))
+        popupMenu.menu.add(getString(R.string.text_luck_screen_system))
+        popupMenu.menu.add(getString(R.string.text_luck_screen_custom))
+        popupMenu.setOnMenuItemClickListener {
+            when (it.title) {
+                getString(R.string.text_luck_screen_off) -> {
+                    ConfigManager.setLockScreenState(0)
+                    updateLockItem(it.title)
+                }
+                getString(R.string.text_luck_screen_system) -> {
+                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                    if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                        ConfigManager.setLockScreenState(1)
+                        updateLockItem(it.title)
+                    } else {
+                        ToastUtils.show(R.string.text_unlock_tip)
+                    }
+                }
+                getString(R.string.text_luck_screen_custom) -> {
+                    val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                    if (fingerprintIdentify.isFingerprintEnable) {
+                        ConfigManager.setLockScreenState(2)
+                        updateLockItem(it.title)
+                    } else {
+                        ToastUtils.show(R.string.text_unlock_finger_print)
+                    }
+                }
+            }
+            false
+        }
+        popupMenu.setOnDismissListener {
+            isDialogShow = false
+        }
+        popupMenu.show()
+    }
+
+    private fun updateLockItem(lockTitle: CharSequence) {
+        val position = 16
+        (mAdapter.items[position] as NormalItem).content = lockTitle.toString()
+        mRecyclerView.itemAnimator.changeDuration = 250
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun getBudgetStr(): String {
@@ -146,82 +257,31 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_set_budget)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .inputRange(0, 8)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_budget), oldBudget) { _, input ->
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm)
+                .input(prefill = oldBudget, maxLength = 8, hint = getString(R.string.hint_enter_budget), inputType = InputType.TYPE_CLASS_NUMBER) { _, input ->
                     if (!input.isEmpty()) {
-                        ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                        if (input.length > 8) {
+                            ConfigManager.setBudget(Integer.parseInt(input.substring(0, 8)))
+                        } else {
+                            ConfigManager.setBudget(Integer.parseInt(input.toString()))
+                        }
                     } else {
                         ConfigManager.setBudget(0)
                     }
                     updateBudgetItem()
-                }.dismissListener { isDialogShow = false }
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
+                }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
     private fun updateBudgetItem() {
         val position = 1
         (mAdapter.items[position] as NormalItem).content = getBudgetStr()
-        mRecyclerView.itemAnimator.changeDuration = 250
-        mAdapter.notifyItemChanged(position)
-    }
-
-    private fun getAssetsStr(): String {
-        return if (TextUtils.equals(ConfigManager.assets, "NaN"))
-            getString(R.string.text_no_setting)
-        else
-            ConfigManager.symbol + BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
-    }
-
-    private fun setAssets() {
-        val oldAssets = if (TextUtils.equals(ConfigManager.assets, "NaN"))
-            null
-        else
-            BigDecimalUtil.fen2YuanNoSeparator(BigDecimal(ConfigManager.assets))
-        if (isDialogShow) {
-            return
-        }
-        isDialogShow = true
-        MaterialDialog.Builder(this)
-                .title(R.string.text_setting_assets)
-                .inputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
-                .inputRange(0, 10)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .input(getString(R.string.hint_enter_assets), oldAssets
-                ) { _, input ->
-                    val text = input.toString()
-                    if (TextUtils.isEmpty(text) || TextUtils.equals(text, ".")) {
-                        ConfigManager.setAssets("NaN")
-                    } else {
-                        val saveStr = BigDecimalUtil.yuan2FenBD(inputFilter(text)).toPlainString()
-                        ConfigManager.setAssets(saveStr)
-                    }
-                    updateAssetsItem()
-                }.dismissListener { isDialogShow = false }
-                .show()
-    }
-
-    private fun inputFilter(text: String): String {
-        return if (text.contains(".")) {
-            val splitList = text.split(".")
-            if (splitList[1].length > 2) {
-                splitList[0] + "." + splitList[1].substring(0, 2)
-            } else {
-                text
-            }
-        } else {
-            text
-        }
-    }
-
-    private fun updateAssetsItem() {
-        val position = 2
-        (mAdapter.items[position] as NormalItem).content = getAssetsStr()
         mRecyclerView.itemAnimator.changeDuration = 250
         mAdapter.notifyItemChanged(position)
     }
@@ -240,19 +300,18 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_set_symbol)
-                .items(R.array.symbol)
-                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                .positiveButton(R.string.text_affirm)
+                .listItemsSingleChoice(R.array.symbol, initialSelection = index) { _, which, _ ->
                     val simpleSymbol = resources.getStringArray(R.array.simple_symbol)[which]
                     ConfigManager.setSymbol(simpleSymbol)
                     // 更新预算和资产符号
                     updateBudgetItem()
-                    updateAssetsItem()
-                    true
+                    // 更新 widget
+                    WidgetProvider.updateWidget(this)
                 }
-                .positiveText(R.string.text_affirm)
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -262,10 +321,10 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_theme)
-                .items(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))
-                .itemsCallbackSingleChoice(index) { _, _, which, _ ->
+                .positiveButton(R.string.text_affirm)
+                .listItemsSingleChoice(initialSelection = index, items = arrayListOf(getString(R.string.text_theme_dark), getString(R.string.text_theme_light))) { _, which, _ ->
                     val theme = which == 0
                     if (theme) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -274,10 +333,8 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
                     }
                     ConfigManager.setIsThemeDark(theme)
                     finish()
-                    true
                 }
-                .positiveText(R.string.text_affirm)
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -362,20 +419,19 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
             return
         }
         isDialogShow = true
-        MaterialDialog.Builder(this)
+        MaterialDialog(this)
                 .title(R.string.text_go_backup)
-                .content(R.string.text_backup_save, backupFilepath)
-                .positiveText(R.string.text_affirm)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ ->
-                    mViewModel.backupDB().observe(this, Observer {
-                        when (it) {
+                .message(text = getString(R.string.text_backup_save, BackupUtil.userBackupPath))
+                .negativeButton(R.string.text_cancel)
+                .positiveButton(R.string.text_affirm) {
+                    mViewModel.backupDB().observe(this, Observer { resource ->
+                        when (resource) {
                             is SuccessResource<Boolean> -> ToastUtils.show(R.string.toast_backup_success)
                             is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_backup_fail)
                         }
                     })
                 }
-                .dismissListener { isDialogShow = false }
+                .onDismiss { isDialogShow = false }
                 .show()
     }
 
@@ -433,28 +489,19 @@ class SettingActivity : AbsListActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun backHome() {
-        Floo.stack(this)
-                .target(Router.IndexKey.INDEX_KEY_HOME)
-                .result("refresh")
-                .start()
+//        Floo.stack(this)
+//                .target(Router.IndexKey.INDEX_KEY_HOME)
+//                .result("refresh")
+//                .start()
+        ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
     }
 
     private fun restartApp() {
-        MaterialDialog.Builder(this)
-                .cancelable(false)
-                .title("\uD83D\uDC7A" + getString(R.string.text_error))
-                .content(R.string.text_restore_fail_rollback)
-                .positiveText(R.string.text_affirm)
-                .onPositive { _, _ ->
-                    ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java))
-                }
-                .show()
-    }
-
-    companion object {
-        @SuppressLint("SdCardPath")
-        val backupDir = "/sdcard" + if (BuildConfig.DEBUG) "/backup_moneykeeper_debug/" else "/backup_moneykeeper/"
-        @SuppressLint("SdCardPath")
-        val backupFilepath = backupDir + if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug.db" else "MoneyKeeperBackupUser.db"
+        val dialog = MaterialDialog(this)
+                .title(text = "\uD83D\uDC7A" + getString(R.string.text_error))
+                .message(R.string.text_restore_fail_rollback)
+                .positiveButton(R.string.text_affirm) { ProcessPhoenix.triggerRebirth(this, Intent(this, HomeActivity::class.java)) }
+        dialog.setCancelable(false)
+        dialog.show()
     }
 }

@@ -18,7 +18,6 @@ package me.bakumon.moneykeeper.database.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import io.reactivex.Flowable
 import me.bakumon.moneykeeper.database.entity.*
 import java.util.*
 
@@ -33,6 +32,14 @@ interface RecordDao {
     @Transaction
     @Query("SELECT * from Record WHERE time BETWEEN :from AND :to ORDER BY time DESC, create_time DESC")
     fun getRangeRecordWithTypes(from: Date, to: Date): LiveData<List<RecordWithType>>
+
+    @Transaction
+    @Query("SELECT * from Record ORDER BY time DESC, create_time DESC LIMIT :count")
+    fun getRecordWithTypesWithCount(count: Int): LiveData<List<RecordWithType>>
+
+    @Transaction
+    @Query("SELECT * from Record WHERE assets_id=:assetsId ORDER BY time DESC, create_time DESC LIMIT :limit")
+    fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>>
 
     @Transaction
     @Query("SELECT Record.* from Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE (RecordType.type=:type AND time BETWEEN :from AND :to) ORDER BY time DESC, create_time DESC")
@@ -56,7 +63,7 @@ interface RecordDao {
     fun deleteRecord(record: Record)
 
     @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
-    fun getSumMoney(from: Date, to: Date): Flowable<List<SumMoneyBean>>
+    fun getSumMoney(from: Date, to: Date): List<SumMoneyBean>
 
     @Query("SELECT RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type")
     fun getSumMoneyLiveData(from: Date, to: Date): LiveData<List<SumMoneyBean>>
@@ -74,9 +81,13 @@ interface RecordDao {
     @Query("SELECT RecordType.type AS type, Record.time AS time, sum(Record.money) AS daySumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id where (RecordType.type=:type and Record.time BETWEEN :from AND :to) GROUP BY Record.time")
     fun getDaySumMoney(from: Date, to: Date, type: Int): LiveData<List<DaySumMoneyBean>>
 
-    @Query("SELECT t_type.img_name AS imgName,t_type.name AS typeName, Record.record_type_id AS typeId,sum(Record.money) AS typeSumMoney, count(Record.record_type_id) AS count FROM Record LEFT JOIN RecordType AS t_type ON Record.record_type_id=t_type.id where (t_type.type=:type and Record.time BETWEEN :from AND :to) GROUP by Record.record_type_id Order by sum(Record.money) DESC")
+    @Query("SELECT t_type.type AS type, t_type.img_name AS imgName,t_type.name AS typeName, Record.record_type_id AS typeId,sum(Record.money) AS typeSumMoney, count(Record.record_type_id) AS count FROM Record LEFT JOIN RecordType AS t_type ON Record.record_type_id=t_type.id where (t_type.type=:type and Record.time BETWEEN :from AND :to) GROUP by Record.record_type_id Order by sum(Record.money) DESC")
     fun getTypeSumMoney(from: Date, to: Date, type: Int): LiveData<List<TypeSumMoneyBean>>
 
     @Query("SELECT substr(datetime(substr(Record.time, 1, 10), 'unixepoch', 'localtime'), 1, 7) as month, RecordType.type AS type, sum(Record.money) AS sumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id WHERE time BETWEEN :from AND :to GROUP BY RecordType.type, month ORDER BY Record.time DESC")
     fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
+
+    @Query("SELECT RecordType.type AS type, Record.time AS time, sum(Record.money) AS daySumMoney FROM Record LEFT JOIN RecordType ON Record.record_type_id=RecordType.id where (RecordType.type=:type and Record.time BETWEEN :from AND :to) GROUP BY Record.time")
+    fun getDaySumMoneyData(from: Date, to: Date, type: Int): List<DaySumMoneyBean>
+
 }

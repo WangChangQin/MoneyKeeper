@@ -16,7 +16,9 @@
 
 package me.bakumon.moneykeeper
 
+import android.app.Activity
 import android.app.Application
+import android.os.Bundle
 import com.squareup.leakcanary.LeakCanary
 import me.drakeet.floo.Floo
 import me.drakeet.floo.Target
@@ -27,7 +29,7 @@ import java.util.*
 /**
  * @author Bakumon https://bakumon.me
  */
-class App : Application() {
+class App : Application(), Application.ActivityLifecycleCallbacks {
 
     override fun onCreate() {
         super.onCreate()
@@ -39,7 +41,7 @@ class App : Application() {
         }
         LeakCanary.install(this)
         // Normal app init code...
-        val mappings = HashMap<String, Target>(11)
+        val mappings = HashMap<String, Target>(16)
         mappings[Router.Url.URL_HOME] = Target("mk://bakumon.me/home")
         mappings[Router.Url.URL_ADD_RECORD] = Target("mk://bakumon.me/addRecord")
         mappings[Router.Url.URL_TYPE_MANAGE] = Target("mk://bakumon.me/typeManage")
@@ -51,6 +53,11 @@ class App : Application() {
         mappings[Router.Url.URL_ABOUT] = Target("mk://bakumon.me/about")
         mappings[Router.Url.URL_REVIEW] = Target("mk://bakumon.me/review")
         mappings[Router.Url.URL_BACKUP] = Target("mk://bakumon.me/backup")
+        mappings[Router.Url.URL_OTHER_SETTING] = Target("mk://bakumon.me/other_setting")
+        mappings[Router.Url.URL_ASSETS] = Target("mk://bakumon.me/assets")
+        mappings[Router.Url.URL_CHOOSE_ASSETS] = Target("mk://bakumon.me/choose_assets")
+        mappings[Router.Url.URL_ADD_ASSETS] = Target("mk://bakumon.me/add_assets")
+        mappings[Router.Url.URL_ASSETS_DETAIL] = Target("mk://bakumon.me/assets_detail")
 
         Floo.configuration()
                 .setDebugEnabled(BuildConfig.DEBUG)
@@ -61,6 +68,42 @@ class App : Application() {
                 .addTargetNotFoundHandler(OpenDirectlyHandler())
 
         Floo.apply(mappings)
+
+        registerActivityLifecycleCallbacks(this)
+    }
+
+    private var foregroundActivityCount = 0
+
+    override fun onActivityPaused(activity: Activity?) {
+
+    }
+
+    override fun onActivityResumed(activity: Activity?) {
+
+    }
+
+    override fun onActivityStarted(activity: Activity?) {
+        foregroundActivityCount++
+    }
+
+    override fun onActivityDestroyed(activity: Activity?) {
+
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+
+    }
+
+    override fun onActivityStopped(activity: Activity?) {
+        foregroundActivityCount--
+    }
+
+    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+
+    }
+
+    fun isAppForeground(): Boolean {
+        return foregroundActivityCount > 0
     }
 
     companion object {

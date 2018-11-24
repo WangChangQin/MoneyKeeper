@@ -20,10 +20,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.Resource
 import me.bakumon.moneykeeper.database.entity.DaySumMoneyBean
-import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
@@ -55,12 +53,6 @@ class BillViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
     fun deleteRecord(record: RecordWithType): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
-        val oldType = record.mRecordTypes!![0].type
-        if (oldType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.addAssets(record.money!!)
-        } else {
-            ConfigManager.reduceAssets(record.money!!)
-        }
         mDisposable.add(mDataSource.deleteRecord(record)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,5 +64,4 @@ class BillViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                 })
         return liveData
     }
-
 }

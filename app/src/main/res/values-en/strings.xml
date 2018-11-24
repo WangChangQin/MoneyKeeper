@@ -18,26 +18,26 @@
     <string name="app_name">ThatMoney</string>
 
     <string name="toast_add_record_fail">Billing failed, please try again</string>
-    <string name="toast_modify_record_fail">Failed to modify record</string>
+    <string name="toast_modify_record_fail">Failed to modify the record</string>
     <string name="toast_sort_fail">Failed to sort</string>
-    <string name="toast_least_one_type">Please keep at least one type</string>
-    <string name="toast_delete_fail">failed to delete</string>
-    <string name="toast_type_img_fail">Failed to get type picture</string>
-    <string name="toast_type_save_fail">Failed to save the type</string>
-    <string name="toast_type_is_exist" formatted="true">%1$s&#160;The type already exists</string>
+    <string name="toast_least_one_type">Please keep at least one value</string>
+    <string name="toast_delete_fail">Failed to delete</string>
+    <string name="toast_type_img_fail">Failed to get the picture</string>
+    <string name="toast_type_save_fail">Failed to save the value</string>
+    <string name="toast_type_is_exist" formatted="true">%1$s&#160;The value already exists</string>
     <string name="toast_record_delete_fail">Failed to delete record</string>
     <string name="toast_current_sum_money_fail">Failed to obtain the total amount of expenditure income this month</string>
-    <string name="toast_records_fail">Failed to get list data</string>
-    <string name="toast_init_types_fail">Failed to initialize type data</string>
-    <string name="toast_get_types_fail">Failed to get type data</string>
+    <string name="toast_records_fail">Failed to get the list data</string>
+    <string name="toast_init_types_fail">Failed to initialize data</string>
+    <string name="toast_get_types_fail">Failed to get data</string>
     <string name="toast_get_statistics_fail">Failed to get statistics</string>
     <string name="toast_get_month_summary_fail">Failed to get summary data for the month</string>
     <string name="toast_get_type_summary_fail">Failed to get type summary data</string>
-    <string name="toast_not_install_market">Your phone does not have an Android app market installed</string>
-    <string name="toast_not_install_email">Your phone does not have a mail app installed</string>
+    <string name="toast_not_install_market">Your phone does not have an Android market app installed</string>
+    <string name="toast_not_install_email">Your phone does not have an e-mail app installed</string>
     <string name="toast_not_install_alipay">Thank you, you did not install Alipay application</string>
     <string name="toast_is_not_writable_external">Backup failed, external storage is unavailable</string>
-    <string name="toast_restore_fail">Failed to restore the backup</string>
+    <string name="toast_restore_fail">Failed to restore the backup database</string>
     <string name="toast_restore_success">Restore backup success</string>
     <string name="toast_backup_list_fail">Failed to get backup file list</string>
     <string name="toast_open_auto_backup">Automatic backup is turned off. You can go to settings to reopen</string>
@@ -46,14 +46,28 @@
     <string name="toast_success_record">Accounting success</string>
     <string name="toast_get_review_fail">Failed to get review data</string>
     <string name="toast_get_review_sum_money_fail">Failed to get review summary data</string>
+    <string name="toast_move_backup_files_success">Backup folder modified and migrated successfully</string>
+    <string name="toast_move_backup_files_fail">Failed to modify folder</string>
+    <string name="toast_save_assets_success">Saved successfully</string>
+    <string name="toast_save_assets_fail">Save failed</string>
+    <string name="toast_choose_account">Please select a different account</string>
+    <string name="toast_date_null">The date is empty, please try again after entering the interface.</string>
+    <string name="toast_transfer_fail">Transfer failed</string>
+    <string name="toast_submit_now">Submitting, please wait..</string>
+    <string name="toast_delete_transfer_fail">Deleting transfer record failed</string>
+    <string name="toast_out_assets_null">The account before the modification is empty, please try again</string>
+    <string name="toast_in_assets_null">The account is not empty before the modification, please try again</string>
 
     <!-- 首页 -->
+    <string name="text_widget_today_outlay">Today</string>
+    <string name="text_widget_month_outlay">Month</string>
+    <string name="text_widget_month_budget">Budget</string>
     <string name="text_month_outlay">Pay</string>
     <string name="text_month_income">Earn</string>
     <string name="text_month_remaining_budget">Remaining budget</string>
     <string name="text_assets">Net assets</string>
-    <string name="text_setting_assets">Adjust assets</string>
-    <string name="text_home_footer_tip">Statistics page can view previous month records</string>
+    <string name="text_net_assets">Adjust assets</string>
+    <string name="text_home_footer_tip">Show only the last 100 records</string>
     <string name="text_current_month_empty_tip">No bookkeeping started this month\n\nClick the button to start bookkeeping</string>
     <string name="shortcuts_add_record">add</string>
     <string name="shortcuts_statistics">statistics</string>
@@ -110,7 +124,7 @@
     <!-- 统计 -->
     <string name="text_order">Bill</string>
     <string name="text_reports">Reports</string>
-    <string name="text_overage">Lave</string>
+    <string name="text_overage">Have</string>
     <string name="text_day" />
     <string name="text_unit_account" />
     <string name="text_choose_month">Select month</string>
@@ -133,6 +147,8 @@
     <string name="text_set_budget">Set a budget</string>
     <string name="hint_enter_budget">Enter a budget</string>
     <string name="hint_enter_assets">Enter assets</string>
+    <string name="text_assets_manager">Asset Management</string>
+    <string name="text_assets_manager_content">Create and modify asset accounts</string>
     <string name="text_title_symbol">currency symbol</string>
     <string name="text_set_symbol">Select currency symbol</string>
     <string name="text_content_symbol">Only change the item number, do not convert the exchange rate</string>
@@ -155,16 +171,19 @@
     <string name="text_cloud_backup_title">Cloud disk backup</string>
     <string name="text_cloud_backup_content">WebDAV</string>
     <string name="text_about_and_more">About | More</string>
+    <string name="text_feedback">Feedback</string>
+    <string name="text_feedback_help">Feedback questions and getting help</string>
     <string name="text_about_content">Understand our design philosophy</string>
     <string-array name="symbol">
-        <item>RMB(¥)</item>
-        <item>Hong Kong dollar(HK$)</item>
-        <item>MOP(MOP$)</item>
-        <item>New Taiwan dollar(NT$)</item>
-        <item>dollar($)</item>
-        <item>euro(€)</item>
-        <item>pound(£)</item>
-        <item>General purpose(¤)</item>
+        <item>RMB (¥)</item>
+        <item>Hong Kong dollar (HK$)</item>
+        <item>MOP (MOP$)</item>
+        <item>New Taiwan dollar (NT$)</item>
+        <item>dollar ($)</item>
+        <item>euro (€)</item>
+        <item>pound (£)</item>
+        <item>Indian rupee (₹)</item>
+        <item>General purpose (¤)</item>
         <item>Do not show</item>
     </string-array>
     <string-array name="simple_symbol">
@@ -175,6 +194,7 @@
         <item>$</item>
         <item>€</item>
         <item>£</item>
+        <item>₹</item>
         <item>¤</item>
         <item />
     </string-array>
@@ -191,13 +211,22 @@
     <string name="text_links">more</string>
     <string name="text_score">score</string>
     <string name="text_donate">Donate</string>
-    <string name="text_contact_author" formatted="true">Contact author: %1$s \n\nmore help:%2$s \n\nThis application is open source and welcome to contribute code.\nOpen source Url:%3$s\n\n*Comply to "Convention of Green Apps for Android"\n %4$s</string>
+    <string name="text_contact_author" formatted="true">Join QQ group: %1$s \n\n Join Telegram group: %2$s \n\nContact author: %3$s \n\nmore help:%4$s \n\nThis application is open source and welcome to contribute code.\nOpen source Url:%5$s\n\n*Comply to "Convention of Green Apps for Android"\n %6$s</string>
     <string name="text_license">Open source license</string>
     <string name="text_privacy_policy">Privacy Policy</string>
     <string name="text_display">Display</string>
     <string name="text_theme">Theme</string>
     <string name="text_theme_dark">Dark theme</string>
     <string name="text_theme_light">Light theme</string>
+    <string name="text_luck">Luck screen</string>
+    <string name="text_luck_screen">Must be unlocked when opening an app</string>
+    <string name="text_luck_screen_off">Turn-off</string>
+    <string name="text_luck_screen_system">Use the system to unlock the interface</string>
+    <string name="text_luck_screen_custom">Use a custom unlock interface</string>
+    <string name="text_luck_screen_add">Directly enter the "Record"</string>
+    <string name="text_luck_screen_add_tip">After turn off, enter from Shortcut and need to unlock</string>
+    <string name="text_statement">Statement</string>
+    <string name="text_statement_tip">"ThatMoney" is open source software. The market that I compiled on the market is currently only Coolapk.com and Google Play. The package name is me.bakumon.moneykeeper. The very similar application in other markets may be the version modified by others after obtaining the source code.</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV</string>
@@ -218,6 +247,94 @@
     <string name="text_auto_backup_fail">Cloud backup failed!</string>
     <string-array name="text_cloud_auto_backup_mode">
         <item>Do not automatically backup</item>
-        <item>when opening app</item>
+        <item>when opening the app</item>
+        <item>when exiting the app</item>
     </string-array>
+
+    <!-- 实验室 -->
+    <string name="text_other_setting">Other</string>
+    <string name="text_local_backup_path">Local backup folder</string>
+    <string name="text_local_backup_path_tip">After re-selecting the backup folder, the original backup folder will be migrated to the new folder.</string>
+    <string name="text_choose">select</string>
+    <string name="text_folder_empty">This folder\'s empty!</string>
+
+    <!-- 添加 -->
+    <string name="text_new_assets">Add assets</string>
+    <string name="text_account">assets</string>
+    <string name="text_invest">invest</string>
+    <string name="text_add_assets">Add account</string>
+    <string name="text_edit_assets">Edit account</string>
+    <string name="text_choose_bank">Choose bank</string>
+    <string name="text_choose_account">Choose account</string>
+    <string name="text_no_choose_account">Do not Choose account</string>
+    <string name="text_no_choose_account_tip">Only included in bill</string>
+    <string name="text_new_choose_account">New account</string>
+    <string name="hint_assets_name">Please enter an account name</string>
+    <string name="text_remark">Remark：</string>
+    <string name="hint_remark">Can not enter content</string>
+    <string name="text_balance">Balance：</string>
+    <string name="hint_balance">Accurate to two decimal places</string>
+    <string name="text_bank_zhaoshang">招商银行</string>
+    <string name="text_bank_icbc">工商银行</string>
+    <string name="text_bank_abchina">农业银行</string>
+    <string name="text_bank_boc">中国银行</string>
+    <string name="text_bank_ccb">建设银行</string>
+    <string name="text_bank_pingan">平安银行</string>
+    <string name="text_bank_bankcomm">交通银行</string>
+    <string name="text_bank_citicbank">中信银行</string>
+    <string name="text_bank_cib">兴业银行</string>
+    <string name="text_bank_cebbank">光大银行</string>
+    <string name="text_bank_cmbc">民生银行</string>
+    <string name="text_bank_chinapost">邮政储蓄银行</string>
+    <string name="text_assets_card">other banks</string>
+    <string name="text_assets_type_cash">cash</string>
+    <string name="text_assets_type_bank_card">back card</string>
+    <string name="text_assets_type_alipay">alipay</string>
+    <string name="text_assets_type_wechat">wechat</string>
+    <string name="text_assets_type_jd">JD wallet</string>
+    <string name="text_assets_type_rice_card">rice card</string>
+    <string name="text_assets_type_bus_card">traffic card</string>
+    <string name="text_assets_type_other">other</string>
+    <string name="text_assets_type_monetary">monetary fund</string>
+    <string name="text_assets_type_funding">funding</string>
+    <string name="text_assets_type_stock">stock</string>
+    <string name="text_assets_type_other_financial">other financial</string>
+
+    <!-- 资产详情 -->
+    <string name="text_assets_detail">Asset details</string>
+    <string name="text_assets_account">Asset account</string>
+    <string name="text_assets_no_account">No assets yet</string>
+    <string name="text_assets_balance">Account Balance</string>
+    <string name="text_tip_delete_assets">Are you sure you want to delete the asset, and the existing revenue and expenditure records under the asset will not be deleted?</string>
+
+    <!-- 资产 -->
+    <string name="text_assets_all">All assets</string>
+    <string name="text_assets_liabilities">liabilities</string>
+    <string name="text_assets_adjust">adjustment</string>
+    <string name="text_assets_transfer">Transfer</string>
+    <string name="text_adjust_record">record</string>
+    <string name="text_adjust_record_no">No modify record</string>
+    <string name="text_transfer_record_no">No transfer record</string>
+    <string name="text_order_record_no">No order record</string>
+    <string name="text_transfer">transfer</string>
+    <string name="text_choose_out_account">account from</string>
+    <string name="text_choose_in_account">account to</string>
+    <string name="text_tip_transfer">Tip: View transfer records in asset details</string>
+    <string name="text_remark_tip">There are no common notes yet. After the accounting is completed, the saved notes are automatically saved, and up to 15 are saved.</string>
+    <string name="text_ten_thousand">万</string>
+    <string name="text_million">百万</string>
+    <string name="text_ten_million">千万</string>
+    <string name="text_hundred_million">亿</string>
+
+    <!-- 锁屏 -->
+    <string name="text_unlock">Unlock</string>
+    <string name="text_unlock_to_billing">Unlock before you can start billing</string>
+    <string name="text_unlock_tip">Please enable the phone system unlock function first.</string>
+    <string name="text_unlock_finger_print">Please enable the phone fingerprint function first.</string>
+    <string name="text_unlock_to_start">Please enter your fingerprint to unlock</string>
+    <string name="text_unlock_notMatch">Unrecognized, and %1$d chance</string>
+    <string name="text_unlock_failed">Too many attempts, please try again later</string>
+    <string name="text_unlock_failed_device_locked">The device fingerprint is temporarily locked. Please try again later</string>
+    <string name="text_unlock_close_system">System unlock is not available, lock screen is turned off</string>
+    <string name="text_unlock_close_customer">The system fingerprint is not available and the lock screen function is turned off.</string>
 </resources>

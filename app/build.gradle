@@ -34,8 +34,8 @@ android {
         applicationId "me.bakumon.moneykeeper"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 19
-        versionName "2.2.1"
+        versionCode 27
+        versionName "3.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // 指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -117,7 +117,7 @@ andResGuard {
     whiteList = [
             // fabric
             "me.bakumon.moneykeeper.R.string.com.crashlytics.*",
-            // your icon
+            // 收支类型
             "R.mipmap.type_item_default",
             "R.mipmap.type_item_setting",
             "R.mipmap.type_3c",
@@ -145,6 +145,42 @@ andResGuard {
             "R.mipmap.type_outlay_red",
             "R.mipmap.type_adventure",
             "R.mipmap.type_movie",
+            "R.mipmap.type_back_money",
+            "R.mipmap.type_handling_fee",
+            "R.mipmap.type_interest",
+            "R.mipmap.type_unexpected_income",
+            "R.mipmap.type_reduce",
+            "R.mipmap.type_shopping",
+            // 资产类型
+            "R.mipmap.assets_alipay",
+            "R.mipmap.assets_bus_card",
+            "R.mipmap.assets_card",
+            "R.mipmap.assets_funding",
+            "R.mipmap.assets_jd",
+            "R.mipmap.assets_monetary",
+            "R.mipmap.assets_other",
+            "R.mipmap.assets_rice_card",
+            "R.mipmap.assets_stock",
+            "R.mipmap.assets_wallet",
+            "R.mipmap.assets_wechat",
+            // 银行
+            "R.mipmap.bank_abchina",
+            "R.mipmap.bank_bankcomm",
+            "R.mipmap.bank_boc",
+            "R.mipmap.bank_ccb",
+            "R.mipmap.bank_cebbank",
+            "R.mipmap.bank_chinapost",
+            "R.mipmap.bank_cib",
+            "R.mipmap.bank_citicbank",
+            "R.mipmap.bank_cmbc",
+            "R.mipmap.bank_icbc",
+            "R.mipmap.bank_pingan",
+            "R.mipmap.bank_zhaoshang",
+            // 其他
+            "R.mipmap.ic_balance",
+            "R.mipmap.ic_transform",
+            "R.mipmap.ic_no_account",
+            "R.mipmap.ic_add_account"
     ]
     compressFilePattern = [
             "*.png",
@@ -215,7 +251,9 @@ dependencies {
     // 时间格式化
     implementation deps.prettytime
     // 对话框
-    implementation deps.material_dialogs
+    implementation deps.material_dialogs_core
+    implementation deps.material_dialogs_input
+    implementation deps.material_dialogs_files
     // aes 加密解密
     implementation deps.aes_crypto
     // 重启进程
@@ -234,4 +272,6 @@ dependencies {
     implementation deps.picasso
     // json 解析
     implementation deps.moshi
+    implementation deps.flexbox
+    implementation deps.fingerprintidentify
 }

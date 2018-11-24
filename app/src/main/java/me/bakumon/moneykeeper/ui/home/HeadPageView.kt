@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ import kotlinx.android.synthetic.main.layout_head_page.view.*
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.R
 import me.bakumon.moneykeeper.Router
+import me.bakumon.moneykeeper.database.entity.AssetsMoneyBean
 import me.bakumon.moneykeeper.database.entity.RecordType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.utill.BigDecimalUtil
@@ -68,11 +68,11 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         })
     }
 
-    fun setSumMoneyBeanList(beanList: List<SumMoneyBean>?) {
-        if (beanList == null) {
+    fun setSumMoneyBeanList(beanList: List<SumMoneyBean>?, assetsMontyBean: AssetsMoneyBean?) {
+        if (beanList == null || assetsMontyBean == null) {
             return
         }
-        val viewList = listOf(getPagerView(beanList), getPagerView1(beanList))
+        val viewList = listOf(getPagerView(beanList), getPagerView1(beanList, assetsMontyBean))
         mAdapter.mViews = viewList
         mAdapter.notifyDataSetChanged()
         indicator.setTotal(mAdapter.count, viewPager.currentItem)
@@ -97,7 +97,7 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
                 if (type == RecordType.TYPE_OUTLAY) {
-                    outlayStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                    outlayStr = BigDecimalUtil.fen2YuanWithText(sumMoney)
                 }
             }
         }
@@ -114,24 +114,22 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
         val budget = ConfigManager.budget
         if (budget > 0) {
-            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
+            val budgetStr = BigDecimalUtil.fen2YuanWithText(BigDecimal(ConfigManager.budget).multiply(BigDecimal(100)).subtract(outlay))
             tvRightContent.text = budgetStr
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
-            llRightContent.isClickable = false
         } else {
             tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             tvRightContent.text = tvRightContent.context.getString(R.string.text_set_budget)
-            llRightContent.setOnClickListener {
-                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
-                        .start()
-            }
         }
-
+        llRightContent.setOnClickListener {
+            Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
+                    .start()
+        }
         return pagerView!!
     }
 
     @SuppressLint("SetTextI18n", "InflateParams")
-    private fun getPagerView1(sumMoneyBean: List<SumMoneyBean>): View {
+    private fun getPagerView1(sumMoneyBean: List<SumMoneyBean>, assetsMontyBean: AssetsMoneyBean): View {
         if (pagerView1 == null) {
             pagerView1 = inflater.inflate(R.layout.layout_head_content, null)
         }
@@ -149,26 +147,16 @@ class HeadPageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (sumMoneyBean.isNotEmpty()) {
             for ((type, sumMoney) in sumMoneyBean) {
                 if (type == RecordType.TYPE_INCOME) {
-                    incomeStr = BigDecimalUtil.fen2Yuan(sumMoney)
+                    incomeStr = BigDecimalUtil.fen2YuanWithText(sumMoney)
                 }
             }
         }
         tvLeftContent.text = incomeStr
 
-
-        val assets = ConfigManager.assets
-        if (!TextUtils.equals(assets, "NaN")) {
-            val budgetStr = BigDecimalUtil.fen2Yuan(BigDecimal(ConfigManager.assets))
-            tvRightContent.text = budgetStr
-            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
-            llRightContent.isClickable = false
-        } else {
-            tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-            tvRightContent.text = tvRightContent.context.getString(R.string.text_setting_assets)
-            llRightContent.setOnClickListener {
-                Floo.navigation(llRightContent.context, Router.Url.URL_SETTING)
-                        .start()
-            }
+        tvRightContent.text = BigDecimalUtil.fen2YuanWithText(assetsMontyBean.netAssets)
+        llRightContent.setOnClickListener {
+            Floo.navigation(llRightContent.context, Router.Url.URL_ASSETS)
+                    .start()
         }
         return pagerView1!!
     }

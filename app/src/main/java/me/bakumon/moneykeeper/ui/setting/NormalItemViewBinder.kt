@@ -15,7 +15,7 @@ import me.drakeet.multitype.ItemViewBinder
 /**
  * @author Bakumon https://bakumon.me
  */
-class NormalItemViewBinder constructor(private val onNormalItemClickListener: (NormalItem) -> Unit) : ItemViewBinder<NormalItem, NormalItemViewBinder.ViewHolder>() {
+class NormalItemViewBinder constructor(private val onNormalItemClickListener: (NormalItem, View) -> Unit) : ItemViewBinder<NormalItem, NormalItemViewBinder.ViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         val root = inflater.inflate(R.layout.item_setting_normal, parent, false)
@@ -26,7 +26,8 @@ class NormalItemViewBinder constructor(private val onNormalItemClickListener: (N
         holder.tvTitle.text = item.title
         holder.tvTitle.visibility = if (item.title.isEmpty()) View.GONE else View.VISIBLE
         holder.tvContent.text = item.content
-        holder.llItemSettingNormal.setOnClickListener { onNormalItemClickListener.invoke(item) }
+        holder.tvContent.visibility = if (item.content.isEmpty()) View.GONE else View.VISIBLE
+        holder.llItemSettingNormal.setOnClickListener { onNormalItemClickListener.invoke(item, holder.tvTitle) }
         if (item.clickEnable) {
             holder.llItemSettingNormal.isClickable = true
             holder.tvTitle.setTextColor(ContextCompat.getColor(holder.tvTitle.context, R.color.colorTextSettingItemTitle))

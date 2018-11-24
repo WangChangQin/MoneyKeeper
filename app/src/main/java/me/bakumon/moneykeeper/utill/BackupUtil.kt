@@ -19,6 +19,7 @@ package me.bakumon.moneykeeper.utill
 import com.snatik.storage.Storage
 import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.BuildConfig
+import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.database.AppDatabase
 import me.bakumon.moneykeeper.ui.setting.BackupBean
 import org.ocpsoft.prettytime.PrettyTime
@@ -36,9 +37,48 @@ object BackupUtil {
     private val USER_BACKUP_PREFIX = if (BuildConfig.DEBUG) "MoneyKeeperBackupUserDebug" else "MoneyKeeperBackupUser"
     private const val SUFFIX = ".db"
 
+    val backupFolder
+        get() = getRootPath()
+
+    val userBackupPath
+        get() = getRootPath() + File.separator + USER_BACKUP_PREFIX + SUFFIX
+
+    fun moveAllBackupFile(newFolder: String): Boolean {
+        val storage = Storage(App.instance)
+        if (!storage.isDirectoryExists(newFolder)) {
+            val createResult = storage.createDirectory(newFolder)
+            if (!createResult) {
+                return false
+            }
+        }
+        val oldFolder = BackupUtil.backupFolder
+        val dbFiles = storage.getFiles(oldFolder, "[\\S]*\\.db")
+        for (file in dbFiles) {
+            val moveResult = storage.move(file.absolutePath, newFolder + File.separator + file.name)
+            if (!moveResult) {
+                return false
+            }
+        }
+        // 如果旧备份文件夹为空，删除
+        if (storage.getNestedFiles(oldFolder).isEmpty()) {
+            storage.deleteDirectory(oldFolder)
+        }
+        return true
+    }
+
+    private fun getRootPath(): String {
+        val storage = Storage(App.instance)
+        val backupPath = ConfigManager.backupFolder
+        return if (backupPath.isEmpty()) {
+            storage.externalStorageDirectory + File.separator + BACKUP_DIR
+        } else {
+            backupPath
+        }
+    }
+
     fun getBackupFiles(): List<BackupBean> {
         val storage = Storage(App.instance)
-        val dir = storage.externalStorageDirectory + File.separator + BACKUP_DIR
+        val dir = getRootPath()
         val backupBeans = ArrayList<BackupBean>()
         var bean: BackupBean
         val files = storage.getFiles(dir, "[\\S]*\\.db") ?: return backupBeans
@@ -63,7 +103,7 @@ object BackupUtil {
         if (!isWritable) {
             return false
         }
-        val path = storage.externalStorageDirectory + File.separator + BACKUP_DIR
+        val path = getRootPath()
         if (!storage.isDirectoryExists(path)) {
             storage.createDirectory(path)
         }

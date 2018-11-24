@@ -30,6 +30,7 @@ import me.bakumon.moneykeeper.ui.common.Empty
 import me.bakumon.moneykeeper.ui.common.EmptyViewBinder
 import me.bakumon.moneykeeper.ui.home.RecordViewBinder
 import me.bakumon.moneykeeper.utill.ToastUtils
+import me.bakumon.moneykeeper.widget.WidgetProvider
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import me.drakeet.multitype.register
@@ -75,6 +76,10 @@ class TypeRecordsByTimeFragment : BaseFragment() {
         mViewModel.deleteRecord(record).observe(this, Observer {
             when (it) {
                 is SuccessResource<Boolean> -> {
+                    // 更新 widget
+                    if (context != null) {
+                        WidgetProvider.updateWidget(context!!)
+                    }
                 }
                 is ErrorResource<Boolean> -> ToastUtils.show(R.string.toast_record_delete_fail)
             }

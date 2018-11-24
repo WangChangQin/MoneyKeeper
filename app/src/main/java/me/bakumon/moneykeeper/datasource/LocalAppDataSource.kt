@@ -27,6 +27,7 @@ import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
 import me.bakumon.moneykeeper.utill.BackupUtil
 import me.bakumon.moneykeeper.utill.DateUtils
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -168,35 +169,157 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
         }
     }
 
+    override fun sortAssets(assets: List<Assets>): Completable {
+        return Completable.fromAction {
+            if (assets.size > 1) {
+                val sortAssets = ArrayList<Assets>()
+                for (i in assets.indices) {
+                    val type = assets[i]
+                    if (type.ranking != i) {
+                        type.ranking = i
+                        sortAssets.add(type)
+                    }
+                }
+                mAppDatabase.assetsDao().updateAssets(*sortAssets.toTypedArray())
+                autoBackup()
+            }
+        }
+    }
+
     override fun getAllTypeImgBeans(type: Int): List<TypeImgBean> {
         return TypeImgListCreator.createTypeImgBeanData(type)
     }
 
-    override fun insertRecord(record: Record): Completable {
+    override fun insertRecord(type: Int, assets: Assets?, record: Record): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().insertRecord(record)
+            if (assets != null) {
+                if (type == RecordType.TYPE_OUTLAY) {
+                    assets.money = assets.money.subtract(record.money)
+                } else {
+                    assets.money = assets.money.add(record.money)
+                }
+                mAppDatabase.assetsDao().updateAssets(assets)
+            }
+            // 保存常用备注
+            if (!TextUtils.isEmpty(record.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(record.remark!!))
+            }
             autoBackup()
         }
     }
 
-    override fun updateRecord(record: Record): Completable {
+    override fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().updateRecords(record)
+            // 太灾难了
+            if (oldType == type) {
+                if (oldAssets == null) {
+                    if (assets == null) {
+                        // 不用更新资产
+
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // 更新 assets，减
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                } else {
+                    if (assets == null) {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // 更新 oldAssets，加
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        }
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                }
+            } else {
+                if (oldAssets == null) {
+                    if (assets == null) {
+                        // 不用更新资产
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                } else {
+                    if (assets == null) {
+                        if (oldType == RecordType.TYPE_OUTLAY) {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        } else {
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                        }
+                    } else {
+                        if (type == RecordType.TYPE_OUTLAY) {
+                            // oldType==RecordType.TYPE_INCOME
+                            oldAssets.money = oldAssets.money.subtract(oldMoney)
+                            assets.money = assets.money.subtract(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        } else {
+                            oldAssets.money = oldAssets.money.add(oldMoney)
+                            assets.money = assets.money.add(record.money)
+                            mAppDatabase.assetsDao().updateAssets(oldAssets)
+                            mAppDatabase.assetsDao().updateAssets(assets)
+                        }
+                    }
+                }
+            }
+            // 保存常用备注
+            if (!TextUtils.isEmpty(record.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(record.remark!!))
+            }
             autoBackup()
         }
     }
 
-    override fun deleteRecord(record: Record): Completable {
+    override fun deleteRecord(record: RecordWithType): Completable {
         return Completable.fromAction {
             mAppDatabase.recordDao().deleteRecord(record)
+            val assets = mAppDatabase.assetsDao().getAssetsBeanById(record.assetsId!!)
+            if (assets != null) {
+                if (record.mRecordTypes!![0].type == RecordType.TYPE_OUTLAY) {
+                    assets.money = assets.money.add(record.money)
+                } else {
+                    assets.money = assets.money.subtract(record.money)
+                }
+                mAppDatabase.assetsDao().updateAssets(assets)
+            }
             autoBackup()
         }
     }
 
-    override fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>> {
-        val dateFrom = DateUtils.getCurrentMonthStart()
-        val dateTo = DateUtils.getCurrentMonthEnd()
-        return mAppDatabase.recordDao().getRangeRecordWithTypes(dateFrom, dateTo)
+    override fun getRecordWithTypesRecent(): LiveData<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRecordWithTypesWithCount(100)
+    }
+
+    override fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>> {
+        return mAppDatabase.recordDao().getRecordWithTypesByAssetsId(assetsId, limit)
     }
 
     override fun getRecordWithTypes(dateFrom: Date, dateTo: Date, type: Int): LiveData<List<RecordWithType>> {
@@ -233,5 +356,141 @@ class LocalAppDataSource(private val mAppDatabase: AppDatabase) : AppDataSource 
 
     override fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>> {
         return mAppDatabase.recordDao().getMonthOfYearSumMoney(from, to)
+    }
+
+    override fun getTodayOutlay(): List<DaySumMoneyBean> {
+        val dateFrom = DateUtils.getTodayStart()
+        val dateTo = DateUtils.getTodayEnd()
+        return mAppDatabase.recordDao().getDaySumMoneyData(dateFrom, dateTo, RecordType.TYPE_OUTLAY)
+    }
+
+    override fun getCurrentOutlay(): List<SumMoneyBean> {
+        val dateFrom = DateUtils.getCurrentMonthStart()
+        val dateTo = DateUtils.getCurrentMonthEnd()
+        return mAppDatabase.recordDao().getSumMoney(dateFrom, dateTo)
+    }
+
+    override fun addAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().insertAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun updateAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().updateAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun deleteAssets(assets: Assets): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsDao().deleteAssets(assets)
+            autoBackup()
+        }
+    }
+
+    override fun getAssets(): LiveData<List<Assets>> {
+        return mAppDatabase.assetsDao().getAllAssets()
+    }
+
+    override fun getAssetsById(id: Int): LiveData<Assets> {
+        return mAppDatabase.assetsDao().getAssetsById(id)
+    }
+
+    override fun getAssetsBeanById(id: Int): Assets? {
+        return mAppDatabase.assetsDao().getAssetsBeanById(id)
+    }
+
+    override fun getAssetsMoney(): LiveData<AssetsMoneyBean> {
+        return mAppDatabase.assetsDao().getAssetsMoney()
+    }
+
+    override fun insertAssetsRecord(assetsModifyRecord: AssetsModifyRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsModifyRecordDao().insertAssetsRecord(assetsModifyRecord)
+            autoBackup()
+        }
+    }
+
+    override fun getAssetsRecordsById(id: Int): LiveData<List<AssetsModifyRecord>> {
+        return mAppDatabase.assetsModifyRecordDao().getAssetsRecordsById(id)
+    }
+
+    override fun insertTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().insertTransferRecord(transferRecord)
+            outAssets.money = outAssets.money.subtract(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(outAssets)
+            inAssets.money = inAssets.money.add(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(inAssets)
+            // 保存常用备注
+            if (!TextUtils.isEmpty(transferRecord.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(transferRecord.remark))
+            }
+            autoBackup()
+        }
+    }
+
+    override fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().updateTransferRecord(transferRecord)
+
+            oldOutAssets.money = oldOutAssets.money.add(oldMoney)
+            mAppDatabase.assetsDao().updateAssets(oldOutAssets)
+            if (oldOutAssets.id == outAssets.id) {
+                outAssets.money = oldOutAssets.money
+            }
+            if (oldOutAssets.id == inAssets.id) {
+                inAssets.money = oldOutAssets.money
+            }
+
+            oldInAssets.money = oldInAssets.money.subtract(oldMoney)
+            mAppDatabase.assetsDao().updateAssets(oldInAssets)
+            if (oldInAssets.id == outAssets.id) {
+                outAssets.money = oldInAssets.money
+            }
+            if (oldInAssets.id == inAssets.id) {
+                inAssets.money = oldInAssets.money
+            }
+
+            outAssets.money = outAssets.money.subtract(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(outAssets)
+
+            inAssets.money = inAssets.money.add(transferRecord.money)
+            mAppDatabase.assetsDao().updateAssets(inAssets)
+
+            // 保存常用备注
+            if (!TextUtils.isEmpty(transferRecord.remark)) {
+                mAppDatabase.labelDao().insertLabel(Label(transferRecord.remark))
+            }
+            autoBackup()
+        }
+    }
+
+    override fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>> {
+        return mAppDatabase.assetsTransferRecordDao().getTransferRecordsById(id)
+    }
+
+    override fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable {
+        return Completable.fromAction {
+            mAppDatabase.assetsTransferRecordDao().deleteTransferRecord(assetsTransferRecord)
+            val assetsFrom = mAppDatabase.assetsDao().getAssetsBeanById(assetsTransferRecord.assetsIdFrom)
+            val assetsTo = mAppDatabase.assetsDao().getAssetsBeanById(assetsTransferRecord.assetsIdTo)
+            if (assetsFrom != null) {
+                assetsFrom.money = assetsFrom.money.add(assetsTransferRecord.money)
+                mAppDatabase.assetsDao().updateAssets(assetsFrom)
+            }
+            if (assetsTo != null) {
+                assetsTo.money = assetsTo.money.subtract(assetsTransferRecord.money)
+                mAppDatabase.assetsDao().updateAssets(assetsTo)
+            }
+            autoBackup()
+        }
+    }
+
+    override fun getLabels(): LiveData<List<Label>> {
+        return mAppDatabase.labelDao().getLabels()
     }
 }

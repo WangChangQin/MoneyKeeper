@@ -16,18 +16,28 @@
 
 package me.bakumon.moneykeeper.ui.common
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.KeyguardManager
 import android.arch.lifecycle.ViewModelProviders
-import android.content.res.Configuration
-import android.content.res.Resources
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.ViewGroup
+import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
+import me.bakumon.moneykeeper.App
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.Injection
+import me.bakumon.moneykeeper.R
+import me.bakumon.moneykeeper.ui.UnlockActivity
+import me.bakumon.moneykeeper.ui.add.AddRecordActivity
 import me.bakumon.moneykeeper.utill.StatusBarUtil
+import me.bakumon.moneykeeper.utill.ToastUtils
+
 
 /**
  * 1.沉浸式状态栏
@@ -63,6 +73,15 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         onInitView(savedInstanceState)
+        lockScreen()
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onSaveInstanceState(outState: Bundle) {
+        // 一个不太好的方案
+        // 解决 AddRecordActivity 长时间处于后台，被系统回收后，重新打开恢复 AddRecordActivity 后
+        // RecordTypeFragment#getType() 方法 view typePage 为空的问题
+        // 也就是 RecordTypeFragment getView 为空
     }
 
     /**
@@ -132,13 +151,73 @@ abstract class BaseActivity : AppCompatActivity() {
         return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
     }
 
-    @Suppress("DEPRECATION")
-    override fun getResources(): Resources {
-        // 固定字体大小，不随系统字体大小改变
-        val res = super.getResources()
-        val config = Configuration()
-        config.setToDefaults()
-        res.updateConfiguration(config, res.displayMetrics)
-        return res
+    // 锁屏
+    private fun lockScreen() {
+        createCount++
+        if (createCount == 1) {
+
+            when (ConfigManager.lockScreenState) {
+                0 -> {
+                }
+                1 -> {
+                    // 系统解锁界面
+                    if (!(this is AddRecordActivity && ConfigManager.lockAdd)) {
+                        // 自定义指纹解锁
+                        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
+                        if (keyguardManager != null && keyguardManager.isKeyguardSecure) {
+                            val intent = keyguardManager.createConfirmDeviceCredentialIntent(getString(R.string.text_unlock), getString(R.string.text_unlock_to_billing))
+                            startActivityForResult(intent, REQUEST_CODE_KEYGUARD)
+                        } else {
+                            ConfigManager.setLockScreenState(0)
+                            ToastUtils.show(R.string.text_unlock_close_system)
+                        }
+                    }
+                }
+                2 -> {
+                    // 自定义指纹解锁
+                    if (!(this is AddRecordActivity && ConfigManager.lockAdd)) {
+                        val fingerprintIdentify = FingerprintIdentify(App.instance.applicationContext)
+                        if (fingerprintIdentify.isFingerprintEnable) {
+                            startActivityForResult(Intent(this, UnlockActivity::class.java), REQUEST_CODE_CUSTOMER)
+                        } else {
+                            ConfigManager.setLockScreenState(0)
+                            ToastUtils.show(R.string.text_unlock_close_customer)
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 存在问题：因为在 finish 后，onDestroy 不会及时执行，导致关闭锁屏界面后，迅速打开app，会直接进入应用
+        createCount--
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_KEYGUARD) {
+            // 系统解锁界面，解锁结果
+            if (resultCode != Activity.RESULT_OK) {
+                // 解锁失败
+                finish()
+            }
+        } else if (requestCode == REQUEST_CODE_CUSTOMER) {
+            // 自定义指纹解锁
+            if (resultCode != Activity.RESULT_OK) {
+                // 解锁失败
+                finish()
+            }
+        }
+    }
+
+    companion object {
+        // activity 数量
+        private var createCount = 0
+        private const val REQUEST_CODE_KEYGUARD = 12
+        private const val REQUEST_CODE_CUSTOMER = 13
     }
 }

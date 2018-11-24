@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="me.bakumon.moneykeeper.ui.assets.detail.AssetsDetailActivity">
+
+    <include
+        android:id="@+id/toolbarLayout"
+        layout="@layout/layout_tool_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/bg_assets"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivAssets"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                tools:src="@mipmap/assets_alipay" />
+
+            <TextView
+                android:id="@+id/tvAssetsName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:maxLength="10"
+                android:padding="6dp"
+                android:singleLine="true"
+                android:textColor="@color/colorHeadTextTitle"
+                android:textSize="17sp"
+                tools:text="支付宝" />
+
+            <View
+                android:id="@+id/vLine"
+                android:layout_width="1px"
+                android:layout_height="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorHeadTextContent" />
+
+            <TextView
+                android:id="@+id/tvRemark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:maxLines="2"
+                android:textColor="@color/colorHeadTextContent"
+                android:textSize="13sp"
+                tools:text="这是备注" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMoneyTitle"
+            style="@style/Head.Title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            tools:text="账户余额(¥)" />
+
+        <TextView
+            android:id="@+id/tvMoney"
+            style="@style/Head.Money"
+            android:layout_marginBottom="35dp"
+            android:layout_marginStart="10dp"
+            tools:text="10,000" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="5dp">
+
+        <include
+            android:id="@+id/typeChoose"
+            layout="@layout/layout_three_choose" />
+    </LinearLayout>
+
+    <me.bakumon.moneykeeper.view.NotPagingViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

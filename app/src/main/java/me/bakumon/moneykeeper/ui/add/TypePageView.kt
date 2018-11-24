@@ -126,14 +126,14 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
         adapter.items = items
         adapter.notifyDataSetChanged()
 
-        initCheckItem(record)
+        initCheckItem(type, record)
     }
 
     /**
      * 初始化选中某个 item
      * record 是空，选中第一个，否则选中对应的 item
      */
-    private fun initCheckItem(record: RecordWithType?) {
+    private fun initCheckItem(type: Int, record: RecordWithType?) {
         if (mCurrentTypeIndex == -1) {
             mCurrentTypeIndex = 0
             var isTypeExist = 0
@@ -150,7 +150,7 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
                     val pageIndex = mCurrentTypeIndex / (ROW * COLUMN)
                     post { mLayoutManager.smoothScrollToPage(pageIndex) }
                 } else {
-                    showTypeNotExistTip()
+                    showTypeNotExistTip(type, record)
                 }
             }
             // 选中某一个
@@ -186,15 +186,16 @@ class TypePageView @JvmOverloads constructor(context: Context, attrs: AttributeS
     /**
      * 提示用户该记录的类型已经被删除
      */
-    private fun showTypeNotExistTip() {
-        MaterialDialog.Builder(context)
-                .content(R.string.text_tip_type_delete)
-                .positiveText(R.string.text_know)
-                .show()
+    private fun showTypeNotExistTip(type: Int, record: RecordWithType) {
+        if (type == record.mRecordTypes!![0].type) {
+            MaterialDialog(context)
+                    .message(text = "\uD83D\uDC7A" + context.resources.getString(R.string.text_tip_type_delete))
+                    .positiveButton(R.string.text_know)
+                    .show()
+        }
     }
 
     companion object {
-
         private const val ROW = 2
         private const val COLUMN = 4
     }

@@ -16,6 +16,7 @@ object OpenSourceListCreator {
         items.add(License("android support libraries", "Google", License.APACHE_2, "https://source.android.com"))
         items.add(License("android arch lifecycle", "Google", License.APACHE_2, "https://source.android.com"))
         items.add(License("android arch room", "Google", License.APACHE_2, "https://source.android.com"))
+        items.add(License("flexbox-layout", "Google", License.APACHE_2, "https://github.com/google/flexbox-layout"))
         items.add(License("easypermissions", "googlesamples", License.APACHE_2, "https://github.com/googlesamples/easypermissions"))
 
         items.add(License("RxJava", "ReactiveX", License.APACHE_2, "https://github.com/ReactiveX/RxJava"))
@@ -54,5 +55,7 @@ object OpenSourceListCreator {
         items.add(License("LayoutManagerGroup", "DingMouRen", License.APACHE_2, "https://github.com/DingMouRen/LayoutManagerGroup"))
 
         items.add(License("AlipayZeroSdk", "fython", License.APACHE_2, "https://github.com/fython/AlipayZeroSdk"))
+
+        items.add(License("FingerprintIdentify", "uccmawei", License.MIT, "https://github.com/uccmawei/FingerprintIdentify"))
     }
 }

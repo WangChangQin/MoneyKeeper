@@ -20,6 +20,7 @@ import android.arch.lifecycle.LiveData
 import io.reactivex.Completable
 import me.bakumon.moneykeeper.database.entity.*
 import me.bakumon.moneykeeper.ui.addtype.TypeImgBean
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -92,6 +93,11 @@ interface AppDataSource {
     fun sortRecordTypes(recordTypes: List<RecordType>): Completable
 
     /**
+     * 资产排序
+     */
+    fun sortAssets(assets: List<Assets>): Completable
+
+    /**
      * 获取类型图片数据
      *
      * @param type 收入或支出类型
@@ -107,28 +113,34 @@ interface AppDataSource {
      *
      * @param record 记账记录实体
      */
-    fun insertRecord(record: Record): Completable
+    fun insertRecord(type: Int, assets: Assets?, record: Record): Completable
 
     /**
      * 更新一条记账记录
      *
      * @param record 记录对象
      */
-    fun updateRecord(record: Record): Completable
+    fun updateRecord(oldMoney: BigDecimal, oldType: Int, type: Int, oldAssets: Assets?, assets: Assets?, record: Record): Completable
 
     /**
      * 删除一天记账记录
      *
      * @param record 要删除的记账记录
      */
-    fun deleteRecord(record: Record): Completable
+    fun deleteRecord(record: RecordWithType): Completable
 
     /**
-     * 获取当前月份的记账记录数据
+     * 获取首页现实的记账记录数据
+     * 最近数据
      *
      * @return 当前月份的记录数据的 Flowable 对象
      */
-    fun getCurrentMonthRecordWithTypes(): LiveData<List<RecordWithType>>
+    fun getRecordWithTypesRecent(): LiveData<List<RecordWithType>>
+
+    /**
+     * 获取某个资产的记账记录
+     */
+    fun getRecordWithTypesByAssetsId(assetsId: Int, limit: Int): LiveData<List<RecordWithType>>
 
     /**
      * 根据类型获取某段时间的记账记录数据
@@ -179,4 +191,90 @@ interface AppDataSource {
      * 获取某年（或某段时间）内所有月份的收支总数
      */
     fun getMonthOfYearSumMoney(from: Date, to: Date): LiveData<List<MonthSumMoneyBean>>
+
+    /**
+     * 获取今日支出
+     */
+    fun getTodayOutlay(): List<DaySumMoneyBean>
+
+    /**
+     * 获取今日支出
+     */
+    fun getCurrentOutlay(): List<SumMoneyBean>
+
+    /**
+     * 添加资产
+     *
+     * @param assets 资产
+     */
+    fun addAssets(assets: Assets): Completable
+
+    /**
+     * 修改资产
+     *
+     * @param assets 资产
+     */
+    fun updateAssets(assets: Assets): Completable
+
+    /**
+     * 删除资产
+     *
+     * @param assets 资产
+     */
+    fun deleteAssets(assets: Assets): Completable
+
+    /**
+     * 获取资产列表
+     */
+    fun getAssets(): LiveData<List<Assets>>
+
+    /**
+     * 获取资产
+     */
+    fun getAssetsById(id: Int): LiveData<Assets>
+
+    /**
+     * 获取资产
+     */
+    fun getAssetsBeanById(id: Int): Assets?
+
+    /**
+     * 获取资产汇总
+     */
+    fun getAssetsMoney(): LiveData<AssetsMoneyBean>
+
+    /**
+     * 新增资产修改记录
+     */
+    fun insertAssetsRecord(assetsModifyRecord: AssetsModifyRecord): Completable
+
+    /**
+     * 获取资产修改记录列表
+     */
+    fun getAssetsRecordsById(id: Int): LiveData<List<AssetsModifyRecord>>
+
+    /**
+     * 新增转账记录
+     */
+    fun insertTransferRecord(outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable
+
+    /**
+     * 新增转账记录
+     */
+    fun updateTransferRecord(oldMoney: BigDecimal, oldOutAssets: Assets, oldInAssets: Assets, outAssets: Assets, inAssets: Assets, transferRecord: AssetsTransferRecord): Completable
+
+    /**
+     * 获取转账记录
+     */
+    fun getTransferRecordsById(id: Int): LiveData<List<AssetsTransferRecordWithAssets>>
+
+    /**
+     * 删除转账记录
+     */
+    fun deleteTransferRecord(assetsTransferRecord: AssetsTransferRecord): Completable
+
+    /**
+     * 获取标签列表
+     */
+    fun getLabels(): LiveData<List<Label>>
 }

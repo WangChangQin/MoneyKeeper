@@ -81,11 +81,16 @@ class AboutActivity : AbsAboutActivity(), OnRecommendedClickedListener, OnContri
 
         items.add(Category(getString(R.string.text_links)))
         val linksText = getString(R.string.text_contact_author,
+                Constant.QQ_GROUP,
+                Constant.TG_GROUP,
                 Constant.AUTHOR_EMAIL,
                 Constant.URL_HELP,
                 Constant.APP_OPEN_SOURCE_URL,
                 Constant.URL_GREEN_ANDROID)
         items.add(Card(linksText))
+
+        items.add(Category(getString(R.string.text_statement)))
+        items.add(Card(getString(R.string.text_statement_tip)))
 
         // Android 应用友链
         RecommendedLoaderDelegate.attach(this, items.size, MoshiJsonConverter())

@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright 2018 Bakumon. https://github.com/Bakumon
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="1024"
+    android:viewportWidth="1024">
+    <path
+        android:fillColor="#1296db"
+        android:pathData="M513.54,960c-13.31,0 -26.11,-4.61 -36.86,-13.82l-281.6,-245.25c-23.55,-20.48 -25.6,-55.81 -5.63,-78.85 20.48,-23.55 55.81,-25.6 78.85,-5.63l244.74,212.99 241.66,-210.43c23.04,-20.48 58.88,-17.92 78.85,5.63s17.92,58.88 -5.63,78.85l-278.53,242.69c-9.73,9.22 -23.04,13.82 -35.84,13.82z" />
+    <path
+        android:fillColor="#1296db"
+        android:pathData="M512,910.85c-30.72,0 -55.81,-25.09 -55.81,-55.81V119.81c0,-30.72 25.09,-55.81 55.81,-55.81s55.81,25.09 55.81,55.81V855.04c0,30.72 -25.09,55.81 -55.81,55.81z" />
+</vector>

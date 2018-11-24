@@ -52,6 +52,7 @@
         <TextView
             android:id="@+id/tvRightTitle"
             style="@style/Head.Title"
+            android:drawableEnd="@drawable/ic_edit"
             tools:text="@string/text_month_remaining_budget" />
 
         <TextView

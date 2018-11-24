@@ -25,7 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.bakumon.moneykeeper.ConfigManager
 import me.bakumon.moneykeeper.base.Resource
-import me.bakumon.moneykeeper.database.entity.RecordType
+import me.bakumon.moneykeeper.database.entity.AssetsMoneyBean
 import me.bakumon.moneykeeper.database.entity.RecordWithType
 import me.bakumon.moneykeeper.database.entity.SumMoneyBean
 import me.bakumon.moneykeeper.datasource.AppDataSource
@@ -68,7 +68,7 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
     }
 
     val currentMonthRecordWithTypes: LiveData<List<RecordWithType>>
-        get() = mDataSource.getCurrentMonthRecordWithTypes()
+        get() = mDataSource.getRecordWithTypesRecent()
 
     val currentMonthSumMoney: LiveData<List<SumMoneyBean>>
         get() = mDataSource.getCurrentMonthSumMoneyLiveData()
@@ -89,12 +89,6 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
 
     fun deleteRecord(record: RecordWithType): LiveData<Resource<Boolean>> {
         val liveData = MutableLiveData<Resource<Boolean>>()
-        val oldType = record.mRecordTypes!![0].type
-        if (oldType == RecordType.TYPE_OUTLAY) {
-            ConfigManager.addAssets(record.money!!)
-        } else {
-            ConfigManager.reduceAssets(record.money!!)
-        }
         mDisposable.add(mDataSource.deleteRecord(record)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,5 +99,9 @@ class HomeViewModel(dataSource: AppDataSource) : BaseViewModel(dataSource) {
                     liveData.value = Resource.create(throwable)
                 })
         return liveData
+    }
+
+    fun getAssetsMoney(): LiveData<AssetsMoneyBean> {
+        return mDataSource.getAssetsMoney()
     }
 }

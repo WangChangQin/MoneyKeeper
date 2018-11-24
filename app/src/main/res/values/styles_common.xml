@@ -16,10 +16,20 @@
 
 <resources>
 
-    <style name="AppCompatToolBar" parent="Theme.AppCompat.Light">
+    <style name="AppCompatToolBar" parent="AppTheme">
         <item name="android:textColorSecondary">@color/colorTextTitle</item>
         <item name="titleTextColor">@color/colorTextTitle</item>
         <item name="actionMenuTextColor">@color/colorTextTitle</item>
+        <item name="popupTheme">@style/ToolbarPopupTheme</item>
+    </style>
+
+    <style name="ToolbarPopupTheme" parent="AppTheme">
+        <item name="android:colorBackground">@color/colorBackgroundBottomSheetDialog</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+    </style>
+
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
     </style>
 
     <style name="ToolBar">

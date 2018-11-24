@@ -46,14 +46,28 @@
     <string name="toast_success_record">记账成功</string>
     <string name="toast_get_review_fail">获取回顾数据失败</string>
     <string name="toast_get_review_sum_money_fail">获取回顾汇总数据失败</string>
+    <string name="toast_move_backup_files_success">备份文件夹修改并迁移成功</string>
+    <string name="toast_move_backup_files_fail">修改失败</string>
+    <string name="toast_save_assets_success">保存成功</string>
+    <string name="toast_save_assets_fail">保存失败</string>
+    <string name="toast_choose_account">请选择不同账户</string>
+    <string name="toast_date_null">日期为空，请重新进入界面后尝试</string>
+    <string name="toast_transfer_fail">转账失败</string>
+    <string name="toast_submit_now">正在提交，请稍等..</string>
+    <string name="toast_delete_transfer_fail">删除转账记录失败</string>
+    <string name="toast_out_assets_null">修改前转出账户为空，请重试</string>
+    <string name="toast_in_assets_null">修改前转入账户为空，请重试</string>
 
     <!-- 首页 -->
+    <string name="text_widget_today_outlay">今日支出</string>
+    <string name="text_widget_month_outlay">本月支出</string>
+    <string name="text_widget_month_budget">剩余月预算</string>
     <string name="text_month_outlay">本月支出</string>
     <string name="text_month_income">本月收入</string>
     <string name="text_month_remaining_budget">剩余预算</string>
     <string name="text_assets">净资产</string>
-    <string name="text_setting_assets">调整资产</string>
-    <string name="text_home_footer_tip">统计页面可以查看往月记录</string>
+    <string name="text_net_assets">设置资产</string>
+    <string name="text_home_footer_tip">只显示最近100条记录，统计页面可以查看更多数据</string>
     <string name="text_current_month_empty_tip">本月未开始记账\n\n点击加号，开始记账</string>
     <string name="shortcuts_add_record">记一笔</string>
     <string name="shortcuts_statistics">历史统计</string>
@@ -132,6 +146,8 @@
     <string name="text_monty_budget">月预算</string>
     <string name="text_set_budget">设置预算</string>
     <string name="hint_enter_budget">请输入预算</string>
+    <string name="text_assets_manager">资产管理</string>
+    <string name="text_assets_manager_content">新建和修改资产账户</string>
     <string name="hint_enter_assets">请输入资产</string>
     <string name="text_title_symbol">货币符号</string>
     <string name="text_set_symbol">选择货币符号</string>
@@ -155,16 +171,19 @@
     <string name="text_cloud_backup_title">云盘备份</string>
     <string name="text_cloud_backup_content">WebDAV</string>
     <string name="text_about_and_more">关于 | 更多</string>
+    <string name="text_feedback">反馈</string>
+    <string name="text_feedback_help">反馈问题、获取帮助</string>
     <string name="text_about_content">了解我们的设计理念</string>
     <string-array name="symbol">
-        <item>人民币(¥)</item>
-        <item>港币(HK$)</item>
-        <item>澳门币(MOP$)</item>
-        <item>新台币(NT$)</item>
-        <item>美元($)</item>
-        <item>欧元(€)</item>
-        <item>英镑(£)</item>
-        <item>货币(¤)</item>
+        <item>人民币 (¥)</item>
+        <item>港币 (HK$)</item>
+        <item>澳门币 (MOP$)</item>
+        <item>新台币 (NT$)</item>
+        <item>美元 ($)</item>
+        <item>欧元 (€)</item>
+        <item>英镑 (£)</item>
+        <item>印度卢比 (₹)</item>
+        <item>货币 (¤)</item>
         <item>不显示</item>
     </string-array>
     <string-array name="simple_symbol">
@@ -175,6 +194,7 @@
         <item>$</item>
         <item>€</item>
         <item>£</item>
+        <item>₹</item>
         <item>¤</item>
         <item />
     </string-array>
@@ -191,13 +211,22 @@
     <string name="text_links">链接</string>
     <string name="text_score">评分</string>
     <string name="text_donate">捐赠作者</string>
-    <string name="text_contact_author" formatted="true">联系作者： %1$s \n\n更多帮助：%2$s \n\n本应用已开源，欢迎贡献代码。\n开源地址：%3$s\n\n*本应用遵循《Android绿色应用公约》\n %4$s</string>
+    <string name="text_contact_author" formatted="true">加入我们的 QQ 交流群： %1$s \n\n加入我们的 Telegram 交流群： %2$s \n\n联系作者： %3$s \n\n更多帮助：%4$s \n\n本应用已开源，欢迎贡献代码。\n开源地址：%5$s\n\n*本应用遵循《Android绿色应用公约》\n %6$s</string>
     <string name="text_license">开源许可证</string>
     <string name="text_privacy_policy">隐私政策</string>
     <string name="text_display">外观</string>
     <string name="text_theme">主题</string>
     <string name="text_theme_dark">暗色主题</string>
     <string name="text_theme_light">亮色主题</string>
+    <string name="text_luck">锁屏</string>
+    <string name="text_luck_screen">打开应用时锁屏</string>
+    <string name="text_luck_screen_off">关闭</string>
+    <string name="text_luck_screen_system">使用系统解锁界面</string>
+    <string name="text_luck_screen_custom">使用指纹解锁界面</string>
+    <string name="text_luck_screen_add">直接进入记一笔界面</string>
+    <string name="text_luck_screen_add_tip">关闭后从 Shortcut 进入，需要解锁</string>
+    <string name="text_statement">声明</string>
+    <string name="text_statement_tip">「那样记账」为开源软件，本人编译上架的市场目前只有酷安和 Google Play，包名都为 me.bakumon.moneykeeper，其他市场不同名称或包名的极相似应用可能是其他人获取源码后修改的版本。</string>
 
     <!-- 云备份 -->
     <string name="text_webdav">WebDAV云盘</string>
@@ -219,5 +248,93 @@
     <string-array name="text_cloud_auto_backup_mode">
         <item>不自动备份</item>
         <item>打开应用时备份</item>
+        <item>退出应用时备份</item>
     </string-array>
+
+    <!-- 实验室 -->
+    <string name="text_other_setting">实验室</string>
+    <string name="text_local_backup_path">本地备份文件夹</string>
+    <string name="text_local_backup_path_tip">重新选择备份文件夹后，原有的备份文件夹会被迁移到新文件夹下</string>
+    <string name="text_choose">选择</string>
+    <string name="text_folder_empty">没有子目录了</string>
+
+    <!-- 添加资产 -->
+    <string name="text_new_assets">添加资产</string>
+    <string name="text_account">资产</string>
+    <string name="text_invest">投资</string>
+    <string name="text_add_assets">新建资产账户</string>
+    <string name="text_edit_assets">修改资产账户</string>
+    <string name="text_choose_bank">选择银行</string>
+    <string name="text_choose_account">选择账户</string>
+    <string name="text_no_choose_account">不选择账户</string>
+    <string name="text_no_choose_account_tip">仅计入收支账单</string>
+    <string name="text_new_choose_account">新建账户</string>
+    <string name="hint_assets_name">请输入账户名称</string>
+    <string name="text_remark">备注：</string>
+    <string name="hint_remark">可不填</string>
+    <string name="text_balance">余额：</string>
+    <string name="hint_balance">精确到小数点后两位</string>
+    <string name="text_bank_zhaoshang">招商银行</string>
+    <string name="text_bank_icbc">工商银行</string>
+    <string name="text_bank_abchina">农业银行</string>
+    <string name="text_bank_boc">中国银行</string>
+    <string name="text_bank_ccb">建设银行</string>
+    <string name="text_bank_pingan">平安银行</string>
+    <string name="text_bank_bankcomm">交通银行</string>
+    <string name="text_bank_citicbank">中信银行</string>
+    <string name="text_bank_cib">兴业银行</string>
+    <string name="text_bank_cebbank">光大银行</string>
+    <string name="text_bank_cmbc">民生银行</string>
+    <string name="text_bank_chinapost">邮政储蓄银行</string>
+    <string name="text_assets_card">其他银行</string>
+    <string name="text_assets_type_cash">现金</string>
+    <string name="text_assets_type_bank_card">银行卡</string>
+    <string name="text_assets_type_alipay">支付宝</string>
+    <string name="text_assets_type_wechat">微信钱包</string>
+    <string name="text_assets_type_jd">京东钱包</string>
+    <string name="text_assets_type_rice_card">饭卡</string>
+    <string name="text_assets_type_bus_card">公交卡</string>
+    <string name="text_assets_type_other">其他账户</string>
+    <string name="text_assets_type_monetary">货币基金</string>
+    <string name="text_assets_type_funding">基金</string>
+    <string name="text_assets_type_stock">股票</string>
+    <string name="text_assets_type_other_financial">其他理财</string>
+
+    <!-- 资产详情 -->
+    <string name="text_assets_detail">资产详情</string>
+    <string name="text_assets_account">资产账户</string>
+    <string name="text_assets_no_account">还没有资产</string>
+    <string name="text_assets_balance">账户余额</string>
+    <string name="text_tip_delete_assets">确定要删除该资产吗，不会删除该资产下的现有收支记录</string>
+
+    <!-- 资产 -->
+    <string name="text_assets_all">总资产</string>
+    <string name="text_assets_liabilities">负资产</string>
+    <string name="text_assets_adjust">余额调整</string>
+    <string name="text_assets_transfer">转账</string>
+    <string name="text_adjust_record">修改记录</string>
+    <string name="text_adjust_record_no">没有修改记录</string>
+    <string name="text_transfer_record_no">没有转账记录</string>
+    <string name="text_order_record_no">没有账单记录</string>
+    <string name="text_transfer">转账</string>
+    <string name="text_choose_out_account">选择转出账户</string>
+    <string name="text_choose_in_account">选择转入账户</string>
+    <string name="text_tip_transfer">提示：在资产详情查看转账记录</string>
+    <string name="text_remark_tip">还没有常用备注，记账完成后自动保存已输入备注，最多保存15个</string>
+    <string name="text_ten_thousand">万</string>
+    <string name="text_million">百万</string>
+    <string name="text_ten_million">千万</string>
+    <string name="text_hundred_million">亿</string>
+
+    <!-- 锁屏 -->
+    <string name="text_unlock">解锁</string>
+    <string name="text_unlock_to_billing">解锁后记账</string>
+    <string name="text_unlock_tip">请先启用手机解锁功能</string>
+    <string name="text_unlock_finger_print">请先启用手机指纹功能</string>
+    <string name="text_unlock_to_start">请输入指纹以开始记账</string>
+    <string name="text_unlock_notMatch">无法识别，还有%1$d次机会</string>
+    <string name="text_unlock_failed">尝试次数过多，请稍后重试</string>
+    <string name="text_unlock_failed_device_locked">设备指纹被暂时锁定，请稍后重试</string>
+    <string name="text_unlock_close_system">系统解锁不可用，已关闭锁屏功能</string>
+    <string name="text_unlock_close_customer">系统指纹不可用，已关闭锁屏功能</string>
 </resources>

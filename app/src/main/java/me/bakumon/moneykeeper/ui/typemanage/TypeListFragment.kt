@@ -88,12 +88,11 @@ class TypeListFragment : AbsListFragment() {
         if (context == null) {
             return
         }
-        MaterialDialog.Builder(context!!)
-                .title(getString(R.string.text_delete) + recordType.name!!)
-                .content(R.string.text_delete_type_note)
-                .positiveText(R.string.text_affirm_delete)
-                .negativeText(R.string.text_cancel)
-                .onPositive { _, _ -> deleteType(recordType) }
+        MaterialDialog(context!!)
+                .title(text = getString(R.string.text_delete) + recordType.name!!)
+                .message(R.string.text_delete_type_note)
+                .positiveButton(R.string.text_affirm_delete) { deleteType(recordType) }
+                .negativeButton(R.string.text_cancel)
                 .show()
     }
 
